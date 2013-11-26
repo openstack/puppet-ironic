@@ -43,7 +43,7 @@ describe 'ironic::keystone::auth' do
 
     it { should contain_keystone_service('ironic').with(
       :ensure      => 'present',
-      :type        => 'network',
+      :type        => 'baremetal',
       :description => 'Ironic Networking Service'
     ) }
 
