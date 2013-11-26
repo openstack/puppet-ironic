@@ -20,27 +20,26 @@
 
 class ironic::params {
 
-  if($::osfamily == 'Redhat') {
+  case $::osfamily {
+    'Redhat': {
+      $package_name       = 'openstack-ironic'
+      $api_package        = false
+      $conductor_package  = false
+      $api_service        = 'ironic-api'
+      $conductor_service  = 'ironic-conductor'
+      $client_package     = 'python-ironicclient'
+    }
+    'Debian': {
+      $package_name       = 'ironic-common'
+      $api_service        = 'ironic-api'
+      $conductor_service  = 'ironic-conductor'
+      $api_package        = 'ironic-api'
+      $conductor_package  = 'ironic-conductor'
+      $client_package     = 'python-ironicclient'
+    }
+    default: {
+      fail("Unsupported osfamily ${::osfamily}")
+    }
+  } # Case $::osfamily
 
-    $package_name       = 'openstack-ironic'
-    $api_package        = false
-    $conductor_package  = false
-    $api_service        = 'ironic-api'
-    $conductor_service  = 'ironic-conductor'
-    $client_package     = 'python-ironicclient'
-
-  } elsif($::osfamily == 'Debian') {
-
-    $package_name       = 'ironic-common'
-    $api_service        = 'ironic-api'
-    $conductor_service  = 'ironic-conductor'
-    $api_package        = 'ironic-api'
-    $conductor_package  = 'ironic-conductor'
-    $client_package     = 'python-ironicclient'
-
-  } else {
-
-    fail("Unsupported osfamily ${::osfamily}")
-
-  }
 }
