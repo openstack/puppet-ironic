@@ -21,7 +21,7 @@
 class ironic::params {
 
   case $::osfamily {
-    'Redhat': {
+    'RedHat': {
       $package_name       = 'openstack-ironic'
       $api_package        = false
       $conductor_package  = false
