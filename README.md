@@ -3,9 +3,9 @@ puppet-ironic (Work in progress)
 
 #### Table of Contents
 
-1. [Overview - What is the nova module?](#overview)
+1. [Overview - What is the ironic module?](#overview)
 2. [Module Description - What does the module do?](#module-description)
-3. [Setup - The basics of getting started with nova](#setup)
+3. [Setup - The basics of getting started with ironic](#setup)
 4. [Implementation - An under-the-hood peek at what the module is doing](#implementation)
 5. [Limitations - OS compatibility, etc.](#limitations)
 6. [Development - Guide for contributing to the module](#development)
@@ -23,7 +23,7 @@ Module Description
 Setup
 -----
 
-**What the nova module affects:**
+**What the ironic module affects:**
 
 * ironic, the baremetal service for Openstack.
 
@@ -32,7 +32,7 @@ Implementation
 
 ### ironic
 
-nova is a combination of Puppet manifest and ruby code to delivery configuration and extra functionality through types and providers.
+ironic is a combination of Puppet manifest and ruby code to delivery configuration and extra functionality through types and providers.
 
 Limitations
 -----------
