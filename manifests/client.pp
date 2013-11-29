@@ -25,6 +25,7 @@
 #   (optional) The state of the package
 #   Defaults to present
 #
+
 class ironic::client (
   $package_ensure = present
 ) {

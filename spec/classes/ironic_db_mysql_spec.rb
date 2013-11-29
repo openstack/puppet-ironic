@@ -100,4 +100,3 @@ describe 'ironic::db::mysql' do
     )}
   end
 end
-

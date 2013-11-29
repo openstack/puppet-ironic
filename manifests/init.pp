@@ -17,3 +17,13 @@
 #
 # ironic
 #
+
+class ironic (
+  $enabled                  = true
+) {
+
+  include ironic::params
+
+  Package['ironic'] -> Ironic_config<||>
+
+}
