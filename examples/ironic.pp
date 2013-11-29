@@ -14,18 +14,12 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-
-# Ironic
 #
-# === Parameters
+# Deploy Ironic on a single node
 #
 
-class ironic (
-  $enabled                  = true
-) {
-
-  include ironic::params
-
-  Package['ironic'] -> Ironic_config<||>
-
-}
+class { 'ironic': }
+class { 'ironic::api': }
+class { 'ironic::conductor': }
+class { 'ironic::drivers::pxe': }
+class { 'ironic::drivers::ipmi': }

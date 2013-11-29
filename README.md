@@ -1,6 +1,10 @@
 puppet-ironic (Work in progress)
 ===================================
 
+ToDo:
+- init.pp + init unit tests
+- move to Stackforge
+
 #### Table of Contents
 
 1. [Overview - What is the ironic module?](#overview)

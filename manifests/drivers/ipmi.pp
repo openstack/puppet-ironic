@@ -15,17 +15,23 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-# Ironic
+# Configure the IPMI driver in Ironic
 #
 # === Parameters
 #
+# [*retry_timeout*]
+#   (optional) Maximum time in seconds to retry IPMI operations.
+#   Should be an interger value
+#   Defaults to '10'.
+#
 
-class ironic (
-  $enabled                  = true
+class ironic::drivers::ipmi (
+  $retry_timeout = '10'
 ) {
 
-  include ironic::params
-
-  Package['ironic'] -> Ironic_config<||>
+  # Configure ironic.conf
+  ironic_config {
+    'ipmi/retry_timeout': value => $retry_timeout;
+  }
 
 }

@@ -40,6 +40,6 @@ class ironic::params {
     default: {
       fail("Unsupported osfamily ${::osfamily}")
     }
-  } # Case $::osfamily
+  }
 
 }
