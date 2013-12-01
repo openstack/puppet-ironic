@@ -1,10 +1,7 @@
 puppet-ironic
 =============
 
-|BuildStatus|_
-
-.. |BuildStatus| image:: https://travis-ci.org/enovance/puppet-ironic.png?branch=master
-.. _BuildStatus: https://travis-ci.org/enovance/puppet-ironic
+[![Build Status](https://travis-ci.org/enovance/puppet-ironic.png)](https://travis-ci.org/enovance/puppet-ironic)
 
 #### Table of Contents
 
