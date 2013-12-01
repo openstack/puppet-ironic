@@ -1,6 +1,11 @@
 puppet-ironic
 =============
 
+|BuildStatus|_
+
+.. |BuildStatus| image:: https://travis-ci.org/enovance/puppet-ironic.png?branch=master
+.. _BuildStatus: https://travis-ci.org/enovance/puppet-ironic
+
 #### Table of Contents
 
 1. [Overview - What is the ironic module?](#overview)
