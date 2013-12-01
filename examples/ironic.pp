@@ -15,11 +15,67 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# Deploy Ironic on a single node
+# Deploy Ironic
 #
 
-class { 'ironic': }
-class { 'ironic::api': }
-class { 'ironic::conductor': }
-class { 'ironic::drivers::pxe': }
-class { 'ironic::drivers::ipmi': }
+$db_host     = 'db'
+$db_username = 'nova'
+$db_name     = 'nova'
+$db_password = 'password'
+$rabbit_user     = 'nova'
+$rabbit_password = 'nova'
+$rabbit_vhost    = '/'
+$rabbit_hosts    = ['rabbitmq:5672']
+$rabbit_port     = '5672'
+$glance_api_servers = 'glance:9292'
+$deploy_kernel  = 'glance://deploy_kernel_uuid'
+$deploy_ramdisk = 'glance://deploy_ramdisk_uuid'
+
+node db {
+
+  class { 'mysql::server':
+    config_hash => {
+      'bind_address' => '0.0.0.0'
+    }
+  }
+
+  class { 'mysql::ruby': }
+
+  class { 'nova::db::mysql':
+    password      => $db_password,
+    dbname        => $db_name,
+    user          => $db_username,
+    host          => $clientcert,
+    allowed_hosts => ['controller'],
+  }
+
+}
+
+node controller {
+
+  class { 'nova':
+    db_password         => $db_password,
+    db_name             => $db_name,
+    db_user             => $db_username,
+    db_host             => $db_host,
+
+    rabbit_password     => $rabbit_password,
+    rabbit_userid       => $rabbit_user,
+    rabbit_virtual_host => $rabbit_vhost,
+    rabbit_hosts        => $rabbit_hosts,
+
+    glance_api_servers  => $glance_api_servers,
+  }
+
+  class { 'ironic::api': }
+
+  class { 'ironic::conductor': }
+
+  class { 'ironic::drivers::ipmi': }
+
+  class { 'ironic::drivers::pxe':
+    deploy_kernel  => $deploy_kernel,
+    deploy_ramdisk => $deploy_ramdisk,
+  }
+
+}

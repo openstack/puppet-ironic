@@ -44,21 +44,6 @@
 #   Should be an valid integer
 #   Defaults to '0' for unlimited.
 #
-# [*pxe_config_template*]
-#   (optional) Template file for PXE configuration.
-#   Should be an valid template file
-#   Defaults to undef.
-#
-# [*pxe_config_template*]
-#   (optional) Template file for PXE configuration.
-#   Should be an valid template file
-#   Defaults to undef.
-#
-# [*pxe_config_template*]
-#   (optional) Template file for PXE configuration.
-#   Should be an valid template file
-#   Defaults to undef.
-#
 # [*tftp_server*]
 #   (optional) IP address of Ironic compute node's tftp server.
 #   Should be an valid IP address

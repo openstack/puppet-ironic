@@ -1,12 +1,5 @@
-puppet-ironic (Work in progress)
-===================================
-
-ToDo:
-- init.pp + init unit tests
-- fix red hat packages
-- Gerrt <-> Launchpad (needs review)
-- move to Stackforge (needs review)
-- send mail to puppet-openstack ML (written)
+puppet-ironic
+=============
 
 #### Table of Contents
 
