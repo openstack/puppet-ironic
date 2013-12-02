@@ -19,11 +19,11 @@
 #
 
 $db_host     = 'db'
-$db_username = 'nova'
-$db_name     = 'nova'
+$db_username = 'ironic'
+$db_name     = 'ironic'
 $db_password = 'password'
-$rabbit_user     = 'nova'
-$rabbit_password = 'nova'
+$rabbit_user     = 'ironic'
+$rabbit_password = 'ironic'
 $rabbit_vhost    = '/'
 $rabbit_hosts    = ['rabbitmq:5672']
 $rabbit_port     = '5672'
@@ -41,7 +41,7 @@ node db {
 
   class { 'mysql::ruby': }
 
-  class { 'nova::db::mysql':
+  class { 'ironic::db::mysql':
     password      => $db_password,
     dbname        => $db_name,
     user          => $db_username,
@@ -53,7 +53,7 @@ node db {
 
 node controller {
 
-  class { 'nova':
+  class { 'ironic':
     db_password         => $db_password,
     db_name             => $db_name,
     db_user             => $db_username,
