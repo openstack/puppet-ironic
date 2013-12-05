@@ -56,7 +56,6 @@ describe 'ironic::conductor' do
 
     it 'configures ironic.conf' do
       should contain_ironic_config('conductor/max_time_interval').with_value(p[:max_time_interval])
-
     end
 
     context 'when overriding parameters' do

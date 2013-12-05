@@ -60,19 +60,20 @@ describe 'ironic::api' do
       should contain_ironic_config('api/port').with_value(p[:port])
       should contain_ironic_config('api/host_ip').with_value(p[:host_ip])
       should contain_ironic_config('api/max_limit').with_value(p[:max_limit])
-
     end
 
     context 'when overriding parameters' do
       before :each do
-        params.merge!(:port => '3430')
-        params.merge!(:host_ip => '127.0.0.1')
-        params.merge!(:max_limit => '10')
+        params.merge!(
+          :port => '3430',
+          :host_ip => '127.0.0.1',
+          :max_limit => '10'
+        )
       end
       it 'should replace default parameter with new value' do
-      should contain_ironic_config('api/port').with_value(p[:port])
-      should contain_ironic_config('api/host_ip').with_value(p[:host_ip])
-      should contain_ironic_config('api/max_limit').with_value(p[:max_limit])
+        should contain_ironic_config('api/port').with_value(p[:port])
+        should contain_ironic_config('api/host_ip').with_value(p[:host_ip])
+        should contain_ironic_config('api/max_limit').with_value(p[:max_limit])
       end
     end
 

@@ -23,7 +23,7 @@ require 'spec_helper'
 describe 'ironic::drivers::ipmi' do
 
   let :default_params do
-    {:retry_timeout => '10' }
+    { :retry_timeout => '10' }
   end
 
   let :params do
@@ -40,7 +40,7 @@ describe 'ironic::drivers::ipmi' do
     end
 
     context 'when overriding parameters' do
-      before :each do
+      before do
         params.merge!(:retry_timeout => '50')
       end
       it 'should replace default parameter with new value' do

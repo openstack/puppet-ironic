@@ -22,12 +22,14 @@ require 'spec_helper'
 
 describe 'ironic::keystone::auth' do
 
+  let :facts do
+    { :osfamily => 'Debian' }
+  end
+
   describe 'with default class parameters' do
     let :params do
-      {
-        :password => 'ironic_password',
-        :tenant   => 'foobar'
-      }
+      { :password => 'ironic_password',
+        :tenant   => 'foobar' }
     end
 
     it { should contain_keystone_user('ironic').with(
@@ -53,7 +55,6 @@ describe 'ironic::keystone::auth' do
       :admin_url    => "http://127.0.0.1:6385/",
       :internal_url => "http://127.0.0.1:6385/"
     ) }
-
   end
 
   describe 'when configuring ironic-server' do
@@ -61,32 +62,23 @@ describe 'ironic::keystone::auth' do
       "class { 'ironic::server': auth_password => 'test' }"
     end
 
-    let :facts do
-      { :osfamily => 'Debian' }
-    end
-
     let :params do
-      {
-        :password => 'ironic_password',
-        :tenant   => 'foobar'
-      }
+      { :password => 'ironic_password',
+        :tenant   => 'foobar' }
     end
 
     #FIXME it { should contain_keystone_endpoint('RegionOne/ironic').with_notify('Service[ironic-server]') }
   end
 
   describe 'when overriding public_protocol, public_port and public address' do
-
     let :params do
-      {
-        :password         => 'ironic_password',
+      { :password         => 'ironic_password',
         :public_protocol  => 'https',
         :public_port      => '80',
         :public_address   => '10.10.10.10',
         :port             => '81',
         :internal_address => '10.10.10.11',
-        :admin_address    => '10.10.10.12'
-      }
+        :admin_address    => '10.10.10.12' }
     end
 
     it { should contain_keystone_endpoint('RegionOne/ironic').with(
@@ -95,26 +87,17 @@ describe 'ironic::keystone::auth' do
       :internal_url => "http://10.10.10.11:81/",
       :admin_url    => "http://10.10.10.12:81/"
     ) }
-
   end
 
   describe 'when overriding auth name' do
-
     let :params do
-      {
-        :password => 'foo',
-        :auth_name => 'ironicy'
-      }
+      { :password => 'foo',
+        :auth_name => 'ironicy' }
     end
 
     it { should contain_keystone_user('ironicy') }
-
     it { should contain_keystone_user_role('ironicy@services') }
-
     it { should contain_keystone_service('ironicy') }
-
     it { should contain_keystone_endpoint('RegionOne/ironicy') }
-
   end
-
 end
