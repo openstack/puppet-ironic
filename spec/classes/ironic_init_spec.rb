@@ -151,9 +151,7 @@ describe 'ironic' do
 
   shared_examples_for 'with syslog enabled' do
     before do
-      params.merge!(
-        :use_syslog => 'true'
-      )
+      params.merge!( :use_syslog => true )
     end
 
     it do
@@ -165,7 +163,7 @@ describe 'ironic' do
   shared_examples_for 'with syslog enabled and custom settings' do
     before do
       params.merge!(
-        :use_syslog    => 'true',
+        :use_syslog    => true,
         :log_facility  => 'LOG_LOCAL0'
       )
     end
@@ -180,6 +178,7 @@ describe 'ironic' do
     before do
       params.merge!(:glance_api_servers => '10.0.0.1:9292')
     end
+
     it 'should configure one glance server' do
       should contain_ironic_config('glance/glance_api_servers').with_value(p[:glance_api_servers])
     end
@@ -189,6 +188,7 @@ describe 'ironic' do
     before do
       params.merge!(:glance_api_servers => ['10.0.0.1:9292','10.0.0.2:9292'])
     end
+
     it 'should configure one glance server' do
        should contain_ironic_config('glance/glance_api_servers').with_value(p[:glance_api_servers].join(','))
     end

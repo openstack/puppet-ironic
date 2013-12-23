@@ -23,14 +23,14 @@ require 'spec_helper'
 describe 'ironic::drivers::pxe' do
 
   let :default_params do
-    {:pxe_append_params    => 'nofb nomodeset vga=normal',
-     :pxe_config_template  => '$pybasedir/drivers/modules/pxe_config.template',
-     :pxe_deploy_timeout   => '0',
-     :tftp_server          => '$my_ip',
-     :tftp_root            => '/tftpboot',
-     :images_path          => '/var/lib/ironic/images/',
-     :tftp_master_path     => '/tftpboot/master_images',
-     :instance_master_path => '/var/lib/ironic/master_images'}
+    { :pxe_append_params    => 'nofb nomodeset vga=normal',
+      :pxe_config_template  => '$pybasedir/drivers/modules/pxe_config.template',
+      :pxe_deploy_timeout   => '0',
+      :tftp_server          => '$my_ip',
+      :tftp_root            => '/tftpboot',
+      :images_path          => '/var/lib/ironic/images/',
+      :tftp_master_path     => '/tftpboot/master_images',
+      :instance_master_path => '/var/lib/ironic/master_images' }
   end
 
   let :params do
@@ -54,29 +54,32 @@ describe 'ironic::drivers::pxe' do
     end
 
     context 'when overriding parameters' do
-      before :each do
-        params.merge!(:deploy_kernel        => 'foo')
-        params.merge!(:deploy_ramdisk       => 'bar')
-        params.merge!(:pxe_append_params    => 'foo')
-        params.merge!(:pxe_config_template  => 'bar')
-        params.merge!(:pxe_deploy_timeout   => '40')
-        params.merge!(:tftp_server          => '192.168.0.1')
-        params.merge!(:tftp_root            => '/mnt/ftp')
-        params.merge!(:images_path          => '/mnt/images')
-        params.merge!(:tftp_master_path     => '/mnt/master_images')
-        params.merge!(:instance_master_path => '/mnt/ironic/master_images')
+      before do
+        params.merge!(
+          :deploy_kernel        => 'foo',
+          :deploy_ramdisk       => 'bar',
+          :pxe_append_params    => 'foo',
+          :pxe_config_template  => 'bar',
+          :pxe_deploy_timeout   => '40',
+          :tftp_server          => '192.168.0.1',
+          :tftp_root            => '/mnt/ftp',
+          :images_path          => '/mnt/images',
+          :tftp_master_path     => '/mnt/master_images',
+          :instance_master_path => '/mnt/ironic/master_images'
+        )
       end
+
       it 'should replace default parameter with new value' do
-      should contain_ironic_config('pxe/deploy_kernel').with_value(p[:deploy_kernel])
-      should contain_ironic_config('pxe/deploy_ramdisk').with_value(p[:deploy_ramdisk])
-      should contain_ironic_config('pxe/pxe_append_params').with_value(p[:pxe_append_params])
-      should contain_ironic_config('pxe/pxe_config_template').with_value(p[:pxe_config_template])
-      should contain_ironic_config('pxe/pxe_deploy_timeout').with_value(p[:pxe_deploy_timeout])
-      should contain_ironic_config('pxe/tftp_server').with_value(p[:tftp_server])
-      should contain_ironic_config('pxe/tftp_root').with_value(p[:tftp_root])
-      should contain_ironic_config('pxe/images_path').with_value(p[:images_path])
-      should contain_ironic_config('pxe/tftp_master_path').with_value(p[:tftp_master_path])
-      should contain_ironic_config('pxe/instance_master_path').with_value(p[:instance_master_path])
+        should contain_ironic_config('pxe/deploy_kernel').with_value(p[:deploy_kernel])
+        should contain_ironic_config('pxe/deploy_ramdisk').with_value(p[:deploy_ramdisk])
+        should contain_ironic_config('pxe/pxe_append_params').with_value(p[:pxe_append_params])
+        should contain_ironic_config('pxe/pxe_config_template').with_value(p[:pxe_config_template])
+        should contain_ironic_config('pxe/pxe_deploy_timeout').with_value(p[:pxe_deploy_timeout])
+        should contain_ironic_config('pxe/tftp_server').with_value(p[:tftp_server])
+        should contain_ironic_config('pxe/tftp_root').with_value(p[:tftp_root])
+        should contain_ironic_config('pxe/images_path').with_value(p[:images_path])
+        should contain_ironic_config('pxe/tftp_master_path').with_value(p[:tftp_master_path])
+        should contain_ironic_config('pxe/instance_master_path').with_value(p[:instance_master_path])
       end
     end
 
