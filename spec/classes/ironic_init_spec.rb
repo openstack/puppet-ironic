@@ -67,6 +67,27 @@ describe 'ironic' do
       end
     end
 
+    context 'with mysql database backend' do
+      before do
+        params.merge!(:database_connection => 'mysql://ironic:ironic@localhost/ironic')
+      end
+      it { should contain_class('Mysql::Python') }
+    end
+
+    context 'with sqlite database backend' do
+      before do
+        params.merge!(:database_connection => 'sqlite:////var/lib/ironic/ironic.sqlite')
+      end
+      it { should contain_package('ironic-database-backend').with_name('python-pysqlite2')}
+    end
+
+    context 'with postgresql database backend' do
+      before do
+        params.merge!(:database_connection => 'postgresql://ironic:ironic@localhost/ironic')
+      end
+      it { should contain_package('ironic-database-backend').with_name('python-psycopg2')}
+    end
+
     it_configures 'with syslog disabled'
     it_configures 'with syslog enabled'
     it_configures 'with syslog enabled and custom settings'

@@ -181,16 +181,24 @@ class ironic (
 
   case $database_connection {
     /mysql:\/\/\S+:\S+@\S+\/\S+/: {
+      $database_backend_package = false
       require 'mysql::python'
     }
     /postgresql:\/\/\S+:\S+@\S+\/\S+/: {
-      $backend_package = 'python-psycopg2'
+      $database_backend_package = 'python-psycopg2'
     }
     /sqlite:\/\//: {
-      $backend_package = 'python-pysqlite2'
+      $database_backend_package = 'python-pysqlite2'
     }
     default: {
       fail("Invalid database connection: ${database_connection}")
+    }
+  }
+
+  if $database_backend_package and !defined(Package[$database_backend_package]) {
+    package { 'ironic-database-backend':
+      ensure => present,
+      name   => $database_backend_package,
     }
   }
 
