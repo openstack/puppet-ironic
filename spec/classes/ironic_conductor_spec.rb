@@ -37,7 +37,7 @@ describe 'ironic::conductor' do
       default_params.merge(params)
     end
 
-    it { should include_class('ironic::params') }
+    it { should contain_class('ironic::params') }
 
     it 'installs ironic conductor package' do
       if platform_params.has_key?(:conductor_package)

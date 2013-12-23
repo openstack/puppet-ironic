@@ -39,7 +39,7 @@ describe 'ironic::api' do
       default_params.merge(params)
     end
 
-    it { should include_class('ironic::params') }
+    it { should contain_class('ironic::params') }
 
     it 'installs ironic api package' do
       if platform_params.has_key?(:api_package)

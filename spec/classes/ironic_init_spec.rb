@@ -77,7 +77,7 @@ describe 'ironic' do
 
   shared_examples_for 'a ironic base installation' do
 
-    it { should include_class('ironic::params') }
+    it { should contain_class('ironic::params') }
 
     it 'configures ironic configuration folder' do
       should contain_file('/etc/ironic/').with(
