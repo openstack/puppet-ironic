@@ -23,25 +23,22 @@ require 'spec_helper'
 describe 'ironic' do
 
   let :params do
-    { :package_ensure      => 'present',
-      :verbose             => false,
-      :debug               => false,
-      :rabbit_host         => '127.0.0.1',
-      :rabbit_port         => 5672,
-      :rabbit_hosts        => false,
-      :rabbit_user         => 'guest',
-      :rabbit_password     => 'guest',
-      :rabbit_virtual_host => '/',
-      :sql_connection      => 'sqlite:////var/lib/ironic/ironic.sqlite',
-      :connection          => 'sqlite:////var/lib/ironic/ironic.sqlite',
-      :sql_max_retries     => '10',
-      :max_retries         => '10',
-      :sql_idle_timeout    => '3600',
-      :idle_timeout        => '3600',
-      :reconnect_interval  => '10',
-      :retry_interval      => '10',
-      :glance_num_retries  => '0',
-      :glance_api_insecure => false
+    { :package_ensure              => 'present',
+      :verbose                     => false,
+      :debug                       => false,
+      :rabbit_host                 => '127.0.0.1',
+      :rabbit_port                 => 5672,
+      :rabbit_hosts                => false,
+      :rabbit_user                 => 'guest',
+      :rabbit_password             => 'guest',
+      :rabbit_virtual_host         => '/',
+      :database_connection         => 'sqlite:////var/lib/ironic/ironic.sqlite',
+      :database_max_retries        => 10,
+      :database_idle_timeout       => 3600,
+      :database_reconnect_interval => 10,
+      :database_retry_interval     => 10,
+      :glance_num_retries          => 0,
+      :glance_api_insecure         => false
     }
   end
 
@@ -112,10 +109,10 @@ describe 'ironic' do
     end
 
     it 'should perform default database configuration' do
-      should contain_ironic_config('database/connection').with_value(params[:connection])
-      should contain_ironic_config('database/max_retries').with_value(params[:max_retries])
-      should contain_ironic_config('database/idle_timeout').with_value(params[:idle_timeout])
-      should contain_ironic_config('database/retry_interval').with_value(params[:retry_interval])
+      should contain_ironic_config('database/connection').with_value(params[:database_connection])
+      should contain_ironic_config('database/max_retries').with_value(params[:database_max_retries])
+      should contain_ironic_config('database/idle_timeout').with_value(params[:database_idle_timeout])
+      should contain_ironic_config('database/retry_interval').with_value(params[:database_retry_interval])
     end
 
     it 'configures glance connection' do

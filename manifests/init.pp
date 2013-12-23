@@ -85,24 +85,20 @@
 #   (optional) Syslog facility to receive log lines
 #   Defaults to LOG_USER
 #
-# [*connection*]
+# [*database_connection*]
 #   (optional) Connection url for the ironic database.
-#   Deprecates sql_connection
 #   Defaults to: sqlite:////var/lib/ironic/ironic.sqlite
 #
-# [*max_retries*]
+# [*database_max_retries*]
 #   (optional) Database reconnection retry times.
-#   Deprecates sql_max_retries
 #   Defaults to: 10
 #
-# [*idle_timeout*]
+# [*database_idle_timeout*]
 #   (optional) Timeout before idle db connections are reaped.
-#   Deprecates sql_idle_timeout
 #   Defaults to: 3600
 #
-# [*retry_interval*]
+# [*database_retry_interval*]
 #   (optional) Database reconnection interval in seconds.
-#   Deprecates reconnect_interval
 #   Defaults to: 10
 #
 # [*glance_api_servers*]
@@ -148,17 +144,14 @@ class ironic (
   $qpid_reconnect_interval     = 0,
   $use_syslog                  = false,
   $log_facility                = 'LOG_USER',
-  $sql_connection              = 'sqlite:////var/lib/ironic/ovs.sqlite',
-  $connection                  = 'sqlite:////var/lib/ironic/ovs.sqlite',
-  $max_retries                 = '10',
-  $sql_max_retries             = '10',
-  $sql_idle_timeout            = '3600',
-  $idle_timeout                = '3600',
-  $reconnect_interval          = '10',
-  $retry_interval              = '10',
-  $glance_api_servers         = undef,
-  $glance_num_retries         = '0',
-  $glance_api_insecure        = false
+  $database_connection         = 'sqlite:////var/lib/ironic/ovs.sqlite',
+  $database_max_retries        = '10',
+  $database_idle_timeout       = '3600',
+  $database_reconnect_interval = '10',
+  $database_retry_interval     = '10',
+  $glance_api_servers          = undef,
+  $glance_num_retries          = '0',
+  $glance_api_insecure         = false
 ) {
 
   include ironic::params
@@ -184,37 +177,9 @@ class ironic (
     name   => $::ironic::params::package_name,
   }
 
-  if $sql_connection {
-    warning('sql_connection deprecated for connection')
-    $connection_real = $sql_connection
-  } else {
-    $connection_real = $connection
-  }
+  validate_re($database_connection, '(sqlite|mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
 
-  if $sql_max_retries {
-    warning('sql_max_retries deprecated for max_retries')
-    $max_retries_real = $sql_max_retries
-  } else {
-    $max_retries_real = $max_retries
-  }
-
-  if $sql_idle_timeout {
-    warning('sql_idle_timeout deprecated for idle_timeout')
-    $idle_timeout_real = $sql_idle_timeout
-  } else {
-    $idle_timeout_real = $idle_timeout
-  }
-
-  if $reconnect_interval {
-    warning('reconnect_interval deprecated for retry_interval')
-    $retry_interval_real = $reconnect_interval
-  } else {
-    $retry_interval_real = $retry_interval
-  }
-
-  validate_re($connection_real, '(sqlite|mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
-
-  case $connection_real {
+  case $database_connection {
     /mysql:\/\/\S+:\S+@\S+\/\S+/: {
       require 'mysql::python'
     }
@@ -225,7 +190,7 @@ class ironic (
       $backend_package = 'python-pysqlite2'
     }
     default: {
-      fail("Invalid sql connection: ${connection_real}")
+      fail("Invalid database connection: ${database_connection}")
     }
   }
 
@@ -245,10 +210,10 @@ class ironic (
     'DEFAULT/auth_strategy':           value => $auth_strategy;
     'DEFAULT/control_exchange':        value => $control_exchange;
     'DEFAULT/rpc_backend':             value => $rpc_backend;
-    'database/connection':             value => $connection_real;
-    'database/idle_timeout':           value => $idle_timeout_real;
-    'database/retry_interval':         value => $retry_interval_real;
-    'database/max_retries':            value => $max_retries_real;
+    'database/connection':             value => $database_connection;
+    'database/idle_timeout':           value => $database_idle_timeout;
+    'database/retry_interval':         value => $database_retry_interval;
+    'database/max_retries':            value => $database_max_retries;
     'glance/glance_num_retries':       value => $glance_num_retries;
     'glance/glance_api_insecure':      value => $glance_api_insecure;
   }
