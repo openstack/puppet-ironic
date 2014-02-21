@@ -30,9 +30,9 @@ Setup
 Implementation
 --------------
 
-### ironic
+### puppet-ironic
 
-ironic is a combination of Puppet manifest and ruby code to delivery configuration and extra functionality through types and providers.
+puppet-ironic is a combination of Puppet manifest and ruby code to delivery configuration and extra functionality through types and providers.
 
 Limitations
 -----------
