@@ -47,7 +47,7 @@ Developer documentation for the entire puppet-openstack project.
 Contributors
 ------------
 
-* https://github.com/enovance/puppet-ironic/graphs/contributors
+* https://github.com/stackforge/puppet-ironic/graphs/contributors
 
 Release Notes
 -------------
