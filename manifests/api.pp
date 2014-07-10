@@ -77,7 +77,6 @@ class ironic::api (
     name      => $::ironic::params::api_service,
     enable    => $enabled,
     hasstatus => true,
-    require   => Class['api'],
   }
 
 }

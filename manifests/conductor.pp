@@ -62,7 +62,6 @@ class ironic::conductor (
     name      => $::ironic::params::conductor_service,
     enable    => $enabled,
     hasstatus => true,
-    require   => Class['conductor'],
   }
 
 }
