@@ -127,6 +127,7 @@ describe 'ironic' do
       should contain_ironic_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_user] )
       should contain_ironic_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
       should contain_ironic_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
+      should contain_ironic_config('DEFAULT/rabbit_password').with_secret( true )
     end
 
     it 'should perform default database configuration' do
