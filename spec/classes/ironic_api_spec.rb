@@ -27,11 +27,13 @@ describe 'ironic::api' do
       :enabled        => true,
       :port           => '6385',
       :max_limit      => '1000',
-      :host_ip        => '0.0.0.0' }
+      :host_ip        => '0.0.0.0',
+      :admin_user     => 'ironic',
+    }
   end
 
   let :params do
-    {}
+    { :admin_password => 'thepassword' }
   end
 
   shared_examples_for 'ironic api' do
@@ -60,6 +62,9 @@ describe 'ironic::api' do
       should contain_ironic_config('api/port').with_value(p[:port])
       should contain_ironic_config('api/host_ip').with_value(p[:host_ip])
       should contain_ironic_config('api/max_limit').with_value(p[:max_limit])
+      should contain_ironic_config('keystone_authtoken/admin_password').with_value(p[:admin_password])
+      should contain_ironic_config('keystone_authtoken/admin_user').with_value(p[:admin_user])
+      should contain_ironic_config('keystone_authtoken/auth_uri').with_value('http://127.0.0.1:5000/')
     end
 
     context 'when overriding parameters' do
@@ -67,13 +72,16 @@ describe 'ironic::api' do
         params.merge!(
           :port => '3430',
           :host_ip => '127.0.0.1',
-          :max_limit => '10'
+          :max_limit => '10',
+		  :auth_protocol => 'https',
+		  :auth_host => '1.2.3.4'
         )
       end
       it 'should replace default parameter with new value' do
         should contain_ironic_config('api/port').with_value(p[:port])
         should contain_ironic_config('api/host_ip').with_value(p[:host_ip])
         should contain_ironic_config('api/max_limit').with_value(p[:max_limit])
+        should contain_ironic_config('keystone_authtoken/auth_uri').with_value('https://1.2.3.4:5000/')
       end
     end
 
