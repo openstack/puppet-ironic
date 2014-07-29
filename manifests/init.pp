@@ -218,7 +218,7 @@ class ironic (
     'DEFAULT/auth_strategy':           value => $auth_strategy;
     'DEFAULT/control_exchange':        value => $control_exchange;
     'DEFAULT/rpc_backend':             value => $rpc_backend;
-    'database/connection':             value => $database_connection;
+    'database/connection':             value => $database_connection, secret => true;
     'database/idle_timeout':           value => $database_idle_timeout;
     'database/retry_interval':         value => $database_retry_interval;
     'database/max_retries':            value => $database_max_retries;
@@ -242,7 +242,7 @@ class ironic (
 
     ironic_config {
       'DEFAULT/rabbit_userid':       value => $rabbit_user;
-      'DEFAULT/rabbit_password':     value => $rabbit_password;
+      'DEFAULT/rabbit_password':     value => $rabbit_password, secret => true;
       'DEFAULT/rabbit_virtual_host': value => $rabbit_virtual_host;
     }
   }
@@ -252,7 +252,7 @@ class ironic (
       'DEFAULT/qpid_hostname':               value => $qpid_hostname;
       'DEFAULT/qpid_port':                   value => $qpid_port;
       'DEFAULT/qpid_username':               value => $qpid_username;
-      'DEFAULT/qpid_password':               value => $qpid_password;
+      'DEFAULT/qpid_password':               value => $qpid_password, secret => true;
       'DEFAULT/qpid_heartbeat':              value => $qpid_heartbeat;
       'DEFAULT/qpid_protocol':               value => $qpid_protocol;
       'DEFAULT/qpid_tcp_nodelay':            value => $qpid_tcp_nodelay;
