@@ -9,5 +9,5 @@ source       'https://github.com/stackforge/puppet-ironic'
 
 dependency 'puppetlabs/inifile', '>=1.0.0 <2.0.0'
 dependency 'puppetlabs/keystone', '>=2.0.0 <3.0.0'
-dependency 'puppetlabs/mysql', '>=0.6.1 <1.0.0'
 dependency 'puppetlabs/stdlib', '>=2.3.0'
+dependency 'stackforge/openstacklib', '>=5.0.0'

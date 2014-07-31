@@ -39,7 +39,11 @@ describe 'ironic::db::mysql' do
       { :osfamily => 'Debian' }
     end
 
-    it { should contain_class('ironic::db::mysql') }
+    it { should contain_openstacklib__db__mysql('ironic').with(
+      :user          => 'ironic',
+      :password_hash => '*74B1C21ACE0C2D6B0678A5E503D2A60E8F9651A3',
+      :charset       => 'utf8'
+    )}
   end
 
   context 'on RedHat platforms' do
@@ -47,50 +51,37 @@ describe 'ironic::db::mysql' do
       { :osfamily => 'RedHat' }
     end
 
-    it { should contain_class('ironic::db::mysql') }
+    it { should contain_openstacklib__db__mysql('ironic').with(
+      :user          => 'ironic',
+      :password_hash => '*74B1C21ACE0C2D6B0678A5E503D2A60E8F9651A3',
+      :charset       => 'utf8'
+    )}
   end
 
   describe "overriding allowed_hosts param to array" do
     let :params do
-      { :password      => 'ironicpass',
-        :allowed_hosts => ['127.0.0.1','%'] }
+      {
+        :allowed_hosts => ['127.0.0.1','%']
+      }
     end
 
-    it {should_not contain_ironic__db__mysql__host_access("127.0.0.1").with(
-      :user     => 'ironic',
-      :password => 'ironicpass',
-      :database => 'ironic'
-    )}
-    it {should contain_ironic__db__mysql__host_access("%").with(
-      :user     => 'ironic',
-      :password => 'ironicpass',
-      :database => 'ironic'
-    )}
   end
 
   describe "overriding allowed_hosts param to string" do
     let :params do
-      { :password       => 'ironicpass2',
-        :allowed_hosts  => '192.168.1.1' }
+      {
+        :allowed_hosts  => '192.168.1.1'
+      }
     end
 
-    it {should contain_ironic__db__mysql__host_access("192.168.1.1").with(
-      :user     => 'ironic',
-      :password => 'ironicpass2',
-      :database => 'ironic'
-    )}
   end
 
   describe "overriding allowed_hosts param equals to host param " do
     let :params do
-      { :password       => 'ironicpass2',
-        :allowed_hosts  => '127.0.0.1' }
+      {
+        :allowed_hosts  => '127.0.0.1'
+      }
     end
 
-    it {should_not contain_ironic__db__mysql__host_access("127.0.0.1").with(
-      :user     => 'ironic',
-      :password => 'ironicpass2',
-      :database => 'ironic'
-    )}
   end
 end

@@ -71,7 +71,6 @@ describe 'ironic' do
       before do
         params.merge!(:database_connection => 'mysql://ironic:ironic@localhost/ironic')
       end
-      it { should contain_class('Mysql::Python') }
     end
 
     context 'with sqlite database backend' do
