@@ -42,6 +42,7 @@ describe 'ironic::api' do
     end
 
     it { should contain_class('ironic::params') }
+    it { should contain_class('ironic::policy') }
 
     it 'installs ironic api package' do
       if platform_params.has_key?(:api_package)
