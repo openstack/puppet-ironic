@@ -90,8 +90,10 @@ class ironic::api (
 ) {
 
   include ironic::params
+  include ironic::policy
 
   Ironic_config<||> ~> Service['ironic-api']
+  Class['ironic::policy'] ~> Service['ironic-api']
 
   # Configure ironic.conf
   ironic_config {
@@ -102,6 +104,7 @@ class ironic::api (
 
   # Install package
   if $::ironic::params::api_package {
+    Package['ironic-api'] -> Class['ironic::policy']
     Package['ironic-api'] -> Service['ironic-api']
     Package['ironic-api'] -> Ironic_config<||>
     package { 'ironic-api':
