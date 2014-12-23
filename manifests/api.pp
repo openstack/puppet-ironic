@@ -68,6 +68,10 @@
 #   (optional) The name of the user to create in keystone for use by the ironic services
 #   Defaults to 'ironic'
 #
+# [*neutron_url*]
+#   (optional) The Neutron URL to be used for requests from ironic
+#   Defaults to false
+#
 # [*admin_password*]
 #   (required) The password to set for the ironic admin user in keystone
 #
@@ -79,13 +83,14 @@ class ironic::api (
   $port              = '6385',
   $max_limit         = '1000',
   $auth_host         = '127.0.0.1',
-  $auth_port         = 35357,
+  $auth_port         = '35357',
   $auth_protocol     = 'http',
   $auth_uri          = false,
   $auth_admin_prefix = false,
   $auth_version      = false,
   $admin_tenant_name = 'services',
   $admin_user        = 'ironic',
+  $neutron_url       = false,
   $admin_password,
 ) {
 
@@ -97,8 +102,8 @@ class ironic::api (
 
   # Configure ironic.conf
   ironic_config {
-    'api/host_ip': value   => $host_ip;
-    'api/port': value      => $port;
+    'api/host_ip':   value => $host_ip;
+    'api/port':      value => $port;
     'api/max_limit': value => $max_limit;
   }
 
@@ -125,6 +130,12 @@ class ironic::api (
     name      => $::ironic::params::api_service,
     enable    => $enabled,
     hasstatus => true,
+  }
+
+  if $neutron_url {
+    ironic_config { 'neutron/url': value => $neutron_url; }
+  } else {
+    ironic_config { 'neutron/url': value => "${auth_protocol}://${auth_host}:9696/"; }
   }
 
   if $auth_uri {
@@ -158,6 +169,5 @@ class ironic::api (
       'keystone_authtoken/auth_admin_prefix': ensure => absent;
     }
   }
-
 
 }

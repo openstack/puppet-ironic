@@ -31,7 +31,7 @@ $glance_api_servers = 'glance:9292'
 $deploy_kernel  = 'glance://deploy_kernel_uuid'
 $deploy_ramdisk = 'glance://deploy_ramdisk_uuid'
 
-node db {
+node 'db' {
 
   class { 'mysql::server':
     config_hash => {

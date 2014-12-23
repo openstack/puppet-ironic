@@ -156,25 +156,27 @@ class ironic (
 
   include ironic::params
 
-  Package['ironic'] -> Ironic_config<||>
+  Package['ironic-common'] -> Ironic_config<||>
 
-  File {
-    require => Package['ironic'],
+  file { '/etc/ironic':
+    ensure  => directory,
+    require => Package['ironic-common'],
+    owner   => 'root',
+    group   => 'ironic',
+    mode    => '0750',
+  }
+
+  file { '/etc/ironic/ironic.conf':
+    require => Package['ironic-common'],
     owner   => 'root',
     group   => 'ironic',
     mode    => '0640',
   }
 
-  file { '/etc/ironic':
-    ensure  => directory,
-    mode    => '0750',
-  }
-
-  file { '/etc/ironic/ironic.conf': }
-
-  package { 'ironic':
-    ensure => $package_ensure,
-    name   => $::ironic::params::package_name,
+  package { 'ironic-common':
+    ensure  => $package_ensure,
+    name    => $::ironic::params::common_package_name,
+    notify  => Exec['ironic-dbsync'],
   }
 
   validate_re($database_connection, '(sqlite|mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
@@ -182,7 +184,8 @@ class ironic (
   case $database_connection {
     /mysql:\/\/\S+:\S+@\S+\/\S+/: {
       $database_backend_package = false
-      require 'mysql::python'
+      require 'mysql::bindings'
+      require 'mysql::bindings::python'
     }
     /postgresql:\/\/\S+:\S+@\S+\/\S+/: {
       $database_backend_package = 'python-psycopg2'
@@ -224,6 +227,16 @@ class ironic (
     'database/max_retries':            value => $database_max_retries;
     'glance/glance_num_retries':       value => $glance_num_retries;
     'glance/glance_api_insecure':      value => $glance_api_insecure;
+  }
+
+  Ironic_config['database/connection'] ~> Exec['ironic-dbsync']
+
+  exec { 'ironic-dbsync':
+    command     => $::ironic::params::dbsync_command,
+    path        => '/usr/bin',
+    user        => 'ironic',
+    refreshonly => true,
+    logoutput   => on_failure,
   }
 
   if $rpc_backend == 'ironic.openstack.common.rpc.impl_kombu' {
