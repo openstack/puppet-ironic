@@ -20,22 +20,25 @@
 
 class ironic::params {
 
+  $dbsync_command =
+    'ironic-dbsync --config-file /etc/ironic/ironic.conf'
+
   case $::osfamily {
     'RedHat': {
-      $package_name       = 'openstack-ironic'
-      $api_package        = false
-      $conductor_package  = false
-      $api_service        = 'ironic-api'
-      $conductor_service  = 'ironic-conductor'
-      $client_package     = 'python-ironicclient'
+      $common_package_name = 'openstack-ironic-common'
+      $api_package         = 'openstack-ironic-api'
+      $api_service         = 'openstack-ironic-api'
+      $conductor_package   = 'openstack-ironic-conductor'
+      $conductor_service   = 'openstack-ironic-conductor'
+      $client_package      = 'python-ironicclient'
     }
     'Debian': {
-      $package_name       = 'ironic-common'
-      $api_service        = 'ironic-api'
-      $conductor_service  = 'ironic-conductor'
-      $api_package        = 'ironic-api'
-      $conductor_package  = 'ironic-conductor'
-      $client_package     = 'python-ironicclient'
+      $common_package_name = 'ironic-common'
+      $api_service         = 'ironic-api'
+      $api_package         = 'ironic-api'
+      $conductor_service   = 'ironic-conductor'
+      $conductor_package   = 'ironic-conductor'
+      $client_package      = 'python-ironicclient'
     }
     default: {
       fail("Unsupported osfamily ${::osfamily}")
