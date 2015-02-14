@@ -41,6 +41,11 @@
 #   (optional) Default protocol to use when connecting to glance
 #   Defaults to 'keystone'. 'https' is the only other valid option for SSL
 #
+# [*enabled_drivers*]
+#  (optional) Array of drivers to load during service
+#  initialization.
+#  Defaults to ['pxe_ipmitool'].
+#
 # [*control_exchange*]
 #   (optional) What RPC queue/exchange to use
 #   Defaults to openstack
@@ -121,6 +126,7 @@ class ironic (
   $verbose                     = false,
   $debug                       = false,
   $auth_strategy               = 'keystone',
+  $enabled_drivers             = ['pxe_ipmitool'],
   $control_exchange            = 'openstack',
   $rpc_backend                 = 'ironic.openstack.common.rpc.impl_kombu',
   $rabbit_password             = false,
@@ -180,6 +186,7 @@ class ironic (
   }
 
   validate_re($database_connection, '(sqlite|mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
+  validate_array($enabled_drivers)
 
   case $database_connection {
     /mysql:\/\/\S+:\S+@\S+\/\S+/: {
@@ -221,6 +228,7 @@ class ironic (
     'DEFAULT/auth_strategy':           value => $auth_strategy;
     'DEFAULT/control_exchange':        value => $control_exchange;
     'DEFAULT/rpc_backend':             value => $rpc_backend;
+    'DEFAULT/enabled_drivers':         value => join($enabled_drivers, ',');
     'database/connection':             value => $database_connection, secret => true;
     'database/idle_timeout':           value => $database_idle_timeout;
     'database/retry_interval':         value => $database_retry_interval;

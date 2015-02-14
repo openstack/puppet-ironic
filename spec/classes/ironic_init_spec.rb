@@ -26,6 +26,7 @@ describe 'ironic' do
     { :package_ensure              => 'present',
       :verbose                     => false,
       :debug                       => false,
+      :enabled_drivers             => ['pxe_ipmitool'],
       :rabbit_host                 => '127.0.0.1',
       :rabbit_port                 => 5672,
       :rabbit_hosts                => false,
@@ -120,6 +121,10 @@ describe 'ironic' do
         :ensure => 'present',
         :name   => platform_params[:common_package_name],
       )
+    end
+
+    it 'configures enabled_drivers' do
+      should contain_ironic_config('DEFAULT/enabled_drivers').with_value( params[:enabled_drivers] )
     end
 
     it 'configures credentials for rabbit' do
