@@ -36,6 +36,10 @@
 # [*configure_endpoint*]
 #   Should Ironic endpoint be configured? Defaults to 'true'.
 #
+# [*service_name*]
+#   (Optional) Name of the service.
+#   Defaults to the value of auth_name, but must differ from the value.
+#
 # [*service_type*]
 #   Type of service. Defaults to 'baremetal'.
 #
@@ -66,6 +70,7 @@ class ironic::keystone::auth (
   $email              = 'ironic@localhost',
   $tenant             = 'services',
   $configure_endpoint = true,
+  $service_name       = undef,
   $service_type       = 'baremetal',
   $public_protocol    = 'http',
   $public_address     = '127.0.0.1',
@@ -76,8 +81,14 @@ class ironic::keystone::auth (
   $region             = 'RegionOne'
 ) {
 
+  if $service_name == undef {
+    $real_service_name = $auth_name
+  } else {
+    $real_service_name = $service_name
+  }
+
   Keystone_user_role["${auth_name}@${tenant}"] ~> Service <| name == 'ironic-server' |>
-  Keystone_endpoint["${region}/${auth_name}"]  ~> Service <| name == 'ironic-server' |>
+  Keystone_endpoint["${region}/${real_service_name}"]  ~> Service <| name == 'ironic-server' |>
 
   if ! $public_port {
     $real_public_port = $port
@@ -89,6 +100,7 @@ class ironic::keystone::auth (
     configure_user      => true,
     configure_user_role => true,
     configure_endpoint  => $configure_endpoint,
+    service_name        => $real_service_name,
     service_type        => $service_type,
     service_description => 'Ironic Networking Service',
     region              => $region,

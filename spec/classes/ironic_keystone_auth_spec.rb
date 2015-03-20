@@ -100,4 +100,18 @@ describe 'ironic::keystone::auth' do
     it { should contain_keystone_service('ironicy') }
     it { should contain_keystone_endpoint('RegionOne/ironicy') }
   end
+
+  describe 'when overriding service name' do
+    let :params do
+      {
+        :service_name => 'ironic_service',
+        :password     => 'ironic_password',
+      }
+    end
+
+    it { should contain_keystone_user('ironic') }
+    it { should contain_keystone_user_role('ironic@services') }
+    it { should contain_keystone_service('ironic_service') }
+    it { should contain_keystone_endpoint('RegionOne/ironic_service') }
+  end
 end
