@@ -160,7 +160,7 @@ class ironic (
   $glance_api_insecure         = false
 ) {
 
-  include ironic::params
+  include ::ironic::params
 
   Package['ironic-common'] -> Ironic_config<||>
 
@@ -180,9 +180,9 @@ class ironic (
   }
 
   package { 'ironic-common':
-    ensure  => $package_ensure,
-    name    => $::ironic::params::common_package_name,
-    notify  => Exec['ironic-dbsync'],
+    ensure => $package_ensure,
+    name   => $::ironic::params::common_package_name,
+    notify => Exec['ironic-dbsync'],
   }
 
   validate_re($database_connection, '(sqlite|mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')

@@ -30,7 +30,7 @@ class ironic::client (
   $package_ensure = present
 ) {
 
-  include ironic::params
+  include ::ironic::params
 
   package { 'python-ironicclient':
     ensure => $package_ensure,

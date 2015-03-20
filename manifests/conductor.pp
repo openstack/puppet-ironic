@@ -31,7 +31,7 @@ class ironic::conductor (
   $max_time_interval = '120'
 ) {
 
-  include ironic::params
+  include ::ironic::params
 
   Ironic_config<||> ~> Service['ironic-conductor']
 

@@ -33,15 +33,15 @@ $deploy_ramdisk = 'glance://deploy_ramdisk_uuid'
 
 node 'db' {
 
-  class { 'mysql::server':
+  class { '::mysql::server':
     config_hash => {
-      'bind_address' => '0.0.0.0'
-    }
+      'bind_address' => '0.0.0.0',
+    },
   }
 
-  class { 'mysql::ruby': }
+  class { '::mysql::ruby': }
 
-  class { 'ironic::db::mysql':
+  class { '::ironic::db::mysql':
     password      => $db_password,
     dbname        => $db_name,
     user          => $db_username,
@@ -53,7 +53,7 @@ node 'db' {
 
 node controller {
 
-  class { 'ironic':
+  class { '::ironic':
     db_password         => $db_password,
     db_name             => $db_name,
     db_user             => $db_username,
@@ -67,13 +67,13 @@ node controller {
     glance_api_servers  => $glance_api_servers,
   }
 
-  class { 'ironic::api': }
+  class { '::ironic::api': }
 
-  class { 'ironic::conductor': }
+  class { '::ironic::conductor': }
 
-  class { 'ironic::drivers::ipmi': }
+  class { '::ironic::drivers::ipmi': }
 
-  class { 'ironic::drivers::pxe':
+  class { '::ironic::drivers::pxe':
     deploy_kernel  => $deploy_kernel,
     deploy_ramdisk => $deploy_ramdisk,
   }

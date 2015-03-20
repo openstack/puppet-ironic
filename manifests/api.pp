@@ -94,8 +94,8 @@ class ironic::api (
   $admin_password,
 ) {
 
-  include ironic::params
-  include ironic::policy
+  include ::ironic::params
+  include ::ironic::policy
 
   Ironic_config<||> ~> Service['ironic-api']
   Class['ironic::policy'] ~> Service['ironic-api']
