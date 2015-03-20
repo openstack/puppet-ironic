@@ -61,7 +61,7 @@ describe Puppet::Provider::Ironic do
     it 'should use specified host/port/protocol in the auth endpoint' do
       conf = {'keystone_authtoken' => credential_hash}
       klass.expects(:ironic_conf).returns(conf)
-      klass.get_auth_endpoint.should == auth_endpoint
+      expect(klass.get_auth_endpoint).to eq(auth_endpoint)
     end
 
   end
@@ -103,7 +103,7 @@ describe Puppet::Provider::Ironic do
       EOT
       klass.expects(:auth_ironic).returns(output)
       result = klass.list_ironic_resources('foo')
-      result.should eql(['net1', 'net2'])
+      expect(result).to eql(['net1', 'net2'])
     end
 
   end

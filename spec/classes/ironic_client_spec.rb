@@ -27,7 +27,7 @@ describe 'ironic::client' do
       { :osfamily => 'Debian' }
     end
 
-    it { should contain_class('ironic::client') }
+    it { is_expected.to contain_class('ironic::client') }
   end
 
   context 'on RedHat platforms' do
@@ -35,6 +35,6 @@ describe 'ironic::client' do
       { :osfamily => 'RedHat' }
     end
 
-    it { should contain_class('ironic::client') }
+    it { is_expected.to contain_class('ironic::client') }
   end
 end

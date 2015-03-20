@@ -41,32 +41,32 @@ describe 'ironic::api' do
       default_params.merge(params)
     end
 
-    it { should contain_class('ironic::params') }
-    it { should contain_class('ironic::policy') }
+    it { is_expected.to contain_class('ironic::params') }
+    it { is_expected.to contain_class('ironic::policy') }
 
     it 'installs ironic api package' do
       if platform_params.has_key?(:api_package)
-        should contain_package('ironic-api').with(
+        is_expected.to contain_package('ironic-api').with(
           :name   => platform_params[:api_package],
           :ensure => p[:package_ensure]
         )
-        should contain_package('ironic-api').with_before(/Ironic_config\[.+\]/)
-        should contain_package('ironic-api').with_before(/Service\[ironic-api\]/)
+        is_expected.to contain_package('ironic-api').with_before(/Ironic_config\[.+\]/)
+        is_expected.to contain_package('ironic-api').with_before(/Service\[ironic-api\]/)
       end
     end
 
     it 'ensure ironic api service is running' do
-      should contain_service('ironic-api').with('hasstatus' => true)
+      is_expected.to contain_service('ironic-api').with('hasstatus' => true)
     end
 
     it 'configures ironic.conf' do
-      should contain_ironic_config('api/port').with_value(p[:port])
-      should contain_ironic_config('api/host_ip').with_value(p[:host_ip])
-      should contain_ironic_config('api/max_limit').with_value(p[:max_limit])
-      should contain_ironic_config('keystone_authtoken/admin_password').with_value(p[:admin_password])
-      should contain_ironic_config('keystone_authtoken/admin_user').with_value(p[:admin_user])
-      should contain_ironic_config('keystone_authtoken/auth_uri').with_value('http://127.0.0.1:5000/')
-      should contain_ironic_config('neutron/url').with_value('http://127.0.0.1:9696/')
+      is_expected.to contain_ironic_config('api/port').with_value(p[:port])
+      is_expected.to contain_ironic_config('api/host_ip').with_value(p[:host_ip])
+      is_expected.to contain_ironic_config('api/max_limit').with_value(p[:max_limit])
+      is_expected.to contain_ironic_config('keystone_authtoken/admin_password').with_value(p[:admin_password])
+      is_expected.to contain_ironic_config('keystone_authtoken/admin_user').with_value(p[:admin_user])
+      is_expected.to contain_ironic_config('keystone_authtoken/auth_uri').with_value('http://127.0.0.1:5000/')
+      is_expected.to contain_ironic_config('neutron/url').with_value('http://127.0.0.1:9696/')
     end
 
     context 'when overriding parameters' do
@@ -80,10 +80,10 @@ describe 'ironic::api' do
         )
       end
       it 'should replace default parameter with new value' do
-        should contain_ironic_config('api/port').with_value(p[:port])
-        should contain_ironic_config('api/host_ip').with_value(p[:host_ip])
-        should contain_ironic_config('api/max_limit').with_value(p[:max_limit])
-        should contain_ironic_config('keystone_authtoken/auth_uri').with_value('https://1.2.3.4:5000/')
+        is_expected.to contain_ironic_config('api/port').with_value(p[:port])
+        is_expected.to contain_ironic_config('api/host_ip').with_value(p[:host_ip])
+        is_expected.to contain_ironic_config('api/max_limit').with_value(p[:max_limit])
+        is_expected.to contain_ironic_config('keystone_authtoken/auth_uri').with_value('https://1.2.3.4:5000/')
       end
     end
 

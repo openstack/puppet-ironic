@@ -37,25 +37,25 @@ describe 'ironic::conductor' do
       default_params.merge(params)
     end
 
-    it { should contain_class('ironic::params') }
+    it { is_expected.to contain_class('ironic::params') }
 
     it 'installs ironic conductor package' do
       if platform_params.has_key?(:conductor_package)
-        should contain_package('ironic-conductor').with(
+        is_expected.to contain_package('ironic-conductor').with(
           :name   => platform_params[:conductor_package],
           :ensure => p[:package_ensure]
         )
-        should contain_package('ironic-conductor').with_before(/Ironic_config\[.+\]/)
-        should contain_package('ironic-conductor').with_before(/Service\[ironic-conductor\]/)
+        is_expected.to contain_package('ironic-conductor').with_before(/Ironic_config\[.+\]/)
+        is_expected.to contain_package('ironic-conductor').with_before(/Service\[ironic-conductor\]/)
       end
     end
 
     it 'ensure ironic conductor service is running' do
-      should contain_service('ironic-conductor').with('hasstatus' => true)
+      is_expected.to contain_service('ironic-conductor').with('hasstatus' => true)
     end
 
     it 'configures ironic.conf' do
-      should contain_ironic_config('conductor/max_time_interval').with_value(p[:max_time_interval])
+      is_expected.to contain_ironic_config('conductor/max_time_interval').with_value(p[:max_time_interval])
     end
 
     context 'when overriding parameters' do
@@ -63,7 +63,7 @@ describe 'ironic::conductor' do
         params.merge!(:max_time_interval => '50')
       end
       it 'should replace default parameter with new value' do
-        should contain_ironic_config('conductor/max_time_interval').with_value(p[:max_time_interval])
+        is_expected.to contain_ironic_config('conductor/max_time_interval').with_value(p[:max_time_interval])
       end
     end
 

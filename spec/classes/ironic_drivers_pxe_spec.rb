@@ -43,14 +43,14 @@ describe 'ironic::drivers::pxe' do
     end
 
     it 'configures ironic.conf' do
-      should contain_ironic_config('pxe/pxe_append_params').with_value(p[:pxe_append_params])
-      should contain_ironic_config('pxe/pxe_config_template').with_value(p[:pxe_config_template])
-      should contain_ironic_config('pxe/pxe_deploy_timeout').with_value(p[:pxe_deploy_timeout])
-      should contain_ironic_config('pxe/tftp_server').with_value(p[:tftp_server])
-      should contain_ironic_config('pxe/tftp_root').with_value(p[:tftp_root])
-      should contain_ironic_config('pxe/images_path').with_value(p[:images_path])
-      should contain_ironic_config('pxe/tftp_master_path').with_value(p[:tftp_master_path])
-      should contain_ironic_config('pxe/instance_master_path').with_value(p[:instance_master_path])
+      is_expected.to contain_ironic_config('pxe/pxe_append_params').with_value(p[:pxe_append_params])
+      is_expected.to contain_ironic_config('pxe/pxe_config_template').with_value(p[:pxe_config_template])
+      is_expected.to contain_ironic_config('pxe/pxe_deploy_timeout').with_value(p[:pxe_deploy_timeout])
+      is_expected.to contain_ironic_config('pxe/tftp_server').with_value(p[:tftp_server])
+      is_expected.to contain_ironic_config('pxe/tftp_root').with_value(p[:tftp_root])
+      is_expected.to contain_ironic_config('pxe/images_path').with_value(p[:images_path])
+      is_expected.to contain_ironic_config('pxe/tftp_master_path').with_value(p[:tftp_master_path])
+      is_expected.to contain_ironic_config('pxe/instance_master_path').with_value(p[:instance_master_path])
     end
 
     context 'when overriding parameters' do
@@ -70,16 +70,16 @@ describe 'ironic::drivers::pxe' do
       end
 
       it 'should replace default parameter with new value' do
-        should contain_ironic_config('pxe/deploy_kernel').with_value(p[:deploy_kernel])
-        should contain_ironic_config('pxe/deploy_ramdisk').with_value(p[:deploy_ramdisk])
-        should contain_ironic_config('pxe/pxe_append_params').with_value(p[:pxe_append_params])
-        should contain_ironic_config('pxe/pxe_config_template').with_value(p[:pxe_config_template])
-        should contain_ironic_config('pxe/pxe_deploy_timeout').with_value(p[:pxe_deploy_timeout])
-        should contain_ironic_config('pxe/tftp_server').with_value(p[:tftp_server])
-        should contain_ironic_config('pxe/tftp_root').with_value(p[:tftp_root])
-        should contain_ironic_config('pxe/images_path').with_value(p[:images_path])
-        should contain_ironic_config('pxe/tftp_master_path').with_value(p[:tftp_master_path])
-        should contain_ironic_config('pxe/instance_master_path').with_value(p[:instance_master_path])
+        is_expected.to contain_ironic_config('pxe/deploy_kernel').with_value(p[:deploy_kernel])
+        is_expected.to contain_ironic_config('pxe/deploy_ramdisk').with_value(p[:deploy_ramdisk])
+        is_expected.to contain_ironic_config('pxe/pxe_append_params').with_value(p[:pxe_append_params])
+        is_expected.to contain_ironic_config('pxe/pxe_config_template').with_value(p[:pxe_config_template])
+        is_expected.to contain_ironic_config('pxe/pxe_deploy_timeout').with_value(p[:pxe_deploy_timeout])
+        is_expected.to contain_ironic_config('pxe/tftp_server').with_value(p[:tftp_server])
+        is_expected.to contain_ironic_config('pxe/tftp_root').with_value(p[:tftp_root])
+        is_expected.to contain_ironic_config('pxe/images_path').with_value(p[:images_path])
+        is_expected.to contain_ironic_config('pxe/tftp_master_path').with_value(p[:tftp_master_path])
+        is_expected.to contain_ironic_config('pxe/instance_master_path').with_value(p[:instance_master_path])
       end
     end
 

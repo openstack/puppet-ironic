@@ -36,7 +36,7 @@ describe 'ironic::drivers::ipmi' do
     end
 
     it 'configures ironic.conf' do
-      should contain_ironic_config('ipmi/retry_timeout').with_value(p[:retry_timeout])
+      is_expected.to contain_ironic_config('ipmi/retry_timeout').with_value(p[:retry_timeout])
     end
 
     context 'when overriding parameters' do
@@ -44,7 +44,7 @@ describe 'ironic::drivers::ipmi' do
         params.merge!(:retry_timeout => '50')
       end
       it 'should replace default parameter with new value' do
-        should contain_ironic_config('ipmi/retry_timeout').with_value(p[:retry_timeout])
+        is_expected.to contain_ironic_config('ipmi/retry_timeout').with_value(p[:retry_timeout])
       end
     end
 

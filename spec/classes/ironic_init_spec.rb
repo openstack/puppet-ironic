@@ -78,14 +78,14 @@ describe 'ironic' do
       before do
         params.merge!(:database_connection => 'sqlite:////var/lib/ironic/ironic.sqlite')
       end
-      it { should contain_package('ironic-database-backend').with_name('python-pysqlite2')}
+      it { is_expected.to contain_package('ironic-database-backend').with_name('python-pysqlite2')}
     end
 
     context 'with postgresql database backend' do
       before do
         params.merge!(:database_connection => 'postgresql://ironic:ironic@localhost/ironic')
       end
-      it { should contain_package('ironic-database-backend').with_name('python-psycopg2')}
+      it { is_expected.to contain_package('ironic-database-backend').with_name('python-psycopg2')}
     end
 
     it_configures 'with syslog disabled'
@@ -95,10 +95,10 @@ describe 'ironic' do
 
   shared_examples_for 'a ironic base installation' do
 
-    it { should contain_class('ironic::params') }
+    it { is_expected.to contain_class('ironic::params') }
 
     it 'configures ironic configuration folder' do
-      should contain_file('/etc/ironic/').with(
+      is_expected.to contain_file('/etc/ironic/').with(
         :ensure  => 'directory',
         :owner   => 'root',
         :group   => 'ironic',
@@ -108,7 +108,7 @@ describe 'ironic' do
     end
 
     it 'configures ironic configuration file' do
-      should contain_file('/etc/ironic/ironic.conf').with(
+      is_expected.to contain_file('/etc/ironic/ironic.conf').with(
         :owner   => 'root',
         :group   => 'ironic',
         :mode    => '0640',
@@ -117,62 +117,62 @@ describe 'ironic' do
     end
 
     it 'installs ironic package' do
-      should contain_package('ironic-common').with(
+      is_expected.to contain_package('ironic-common').with(
         :ensure => 'present',
         :name   => platform_params[:common_package_name],
       )
     end
 
     it 'configures enabled_drivers' do
-      should contain_ironic_config('DEFAULT/enabled_drivers').with_value( params[:enabled_drivers] )
+      is_expected.to contain_ironic_config('DEFAULT/enabled_drivers').with_value( params[:enabled_drivers] )
     end
 
     it 'configures credentials for rabbit' do
-      should contain_ironic_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_user] )
-      should contain_ironic_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
-      should contain_ironic_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
-      should contain_ironic_config('DEFAULT/rabbit_password').with_secret( true )
+      is_expected.to contain_ironic_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_user] )
+      is_expected.to contain_ironic_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
+      is_expected.to contain_ironic_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
+      is_expected.to contain_ironic_config('DEFAULT/rabbit_password').with_secret( true )
     end
 
     it 'should perform default database configuration' do
-      should contain_ironic_config('database/connection').with_value(params[:database_connection])
-      should contain_ironic_config('database/max_retries').with_value(params[:database_max_retries])
-      should contain_ironic_config('database/idle_timeout').with_value(params[:database_idle_timeout])
-      should contain_ironic_config('database/retry_interval').with_value(params[:database_retry_interval])
+      is_expected.to contain_ironic_config('database/connection').with_value(params[:database_connection])
+      is_expected.to contain_ironic_config('database/max_retries').with_value(params[:database_max_retries])
+      is_expected.to contain_ironic_config('database/idle_timeout').with_value(params[:database_idle_timeout])
+      is_expected.to contain_ironic_config('database/retry_interval').with_value(params[:database_retry_interval])
     end
 
     it 'configures glance connection' do
-      should contain_ironic_config('glance/glance_num_retries').with_value(params[:glance_num_retries])
-      should contain_ironic_config('glance/glance_api_insecure').with_value(params[:glance_api_insecure])
+      is_expected.to contain_ironic_config('glance/glance_num_retries').with_value(params[:glance_num_retries])
+      is_expected.to contain_ironic_config('glance/glance_api_insecure').with_value(params[:glance_api_insecure])
     end
 
     it 'configures ironic.conf' do
-      should contain_ironic_config('DEFAULT/verbose').with_value( params[:verbose] )
-      should contain_ironic_config('DEFAULT/auth_strategy').with_value('keystone')
-      should contain_ironic_config('DEFAULT/control_exchange').with_value('openstack')
+      is_expected.to contain_ironic_config('DEFAULT/verbose').with_value( params[:verbose] )
+      is_expected.to contain_ironic_config('DEFAULT/auth_strategy').with_value('keystone')
+      is_expected.to contain_ironic_config('DEFAULT/control_exchange').with_value('openstack')
     end
   end
 
   shared_examples_for 'rabbit HA with a single virtual host' do
     it 'in ironic.conf' do
-      should_not contain_ironic_config('DEFAULT/rabbit_host')
-      should_not contain_ironic_config('DEFAULT/rabbit_port')
-      should contain_ironic_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts] )
-      should contain_ironic_config('DEFAULT/rabbit_ha_queues').with_value(true)
+      is_expected.not_to contain_ironic_config('DEFAULT/rabbit_host')
+      is_expected.not_to contain_ironic_config('DEFAULT/rabbit_port')
+      is_expected.to contain_ironic_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts] )
+      is_expected.to contain_ironic_config('DEFAULT/rabbit_ha_queues').with_value(true)
     end
   end
 
   shared_examples_for 'rabbit HA with multiple hosts' do
     it 'in ironic.conf' do
-      should_not contain_ironic_config('DEFAULT/rabbit_host')
-      should_not contain_ironic_config('DEFAULT/rabbit_port')
-      should contain_ironic_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') )
-      should contain_ironic_config('DEFAULT/rabbit_ha_queues').with_value(true)
+      is_expected.not_to contain_ironic_config('DEFAULT/rabbit_host')
+      is_expected.not_to contain_ironic_config('DEFAULT/rabbit_port')
+      is_expected.to contain_ironic_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') )
+      is_expected.to contain_ironic_config('DEFAULT/rabbit_ha_queues').with_value(true)
     end
   end
 
   shared_examples_for 'with syslog disabled' do
-    it { should contain_ironic_config('DEFAULT/use_syslog').with_value(false) }
+    it { is_expected.to contain_ironic_config('DEFAULT/use_syslog').with_value(false) }
   end
 
   shared_examples_for 'with syslog enabled' do
@@ -181,8 +181,8 @@ describe 'ironic' do
     end
 
     it do
-      should contain_ironic_config('DEFAULT/use_syslog').with_value(true)
-      should contain_ironic_config('DEFAULT/syslog_log_facility').with_value('LOG_USER')
+      is_expected.to contain_ironic_config('DEFAULT/use_syslog').with_value(true)
+      is_expected.to contain_ironic_config('DEFAULT/syslog_log_facility').with_value('LOG_USER')
     end
   end
 
@@ -195,8 +195,8 @@ describe 'ironic' do
     end
 
     it do
-      should contain_ironic_config('DEFAULT/use_syslog').with_value(true)
-      should contain_ironic_config('DEFAULT/syslog_log_facility').with_value('LOG_LOCAL0')
+      is_expected.to contain_ironic_config('DEFAULT/use_syslog').with_value(true)
+      is_expected.to contain_ironic_config('DEFAULT/syslog_log_facility').with_value('LOG_LOCAL0')
     end
   end
 
@@ -206,7 +206,7 @@ describe 'ironic' do
     end
 
     it 'should configure one glance server' do
-      should contain_ironic_config('glance/glance_api_servers').with_value(p[:glance_api_servers])
+      is_expected.to contain_ironic_config('glance/glance_api_servers').with_value(p[:glance_api_servers])
     end
   end
 
@@ -216,7 +216,7 @@ describe 'ironic' do
     end
 
     it 'should configure one glance server' do
-       should contain_ironic_config('glance/glance_api_servers').with_value(p[:glance_api_servers].join(','))
+       is_expected.to contain_ironic_config('glance/glance_api_servers').with_value(p[:glance_api_servers].join(','))
     end
   end
 
