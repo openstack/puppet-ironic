@@ -36,6 +36,14 @@
 # [*configure_endpoint*]
 #   Should Ironic endpoint be configured? Defaults to 'true'.
 #
+# [*configure_user*]
+#   (Optional) Should the service user be configured?
+#   Defaults to 'true'.
+#
+# [*configure_user_role*]
+#   (Optional) Should the admin role be configured for the service user?
+#   Defaults to 'true'.
+#
 # [*service_name*]
 #   (Optional) Name of the service.
 #   Defaults to the value of auth_name, but must differ from the value.
@@ -66,19 +74,21 @@
 #
 class ironic::keystone::auth (
   $password,
-  $auth_name          = 'ironic',
-  $email              = 'ironic@localhost',
-  $tenant             = 'services',
-  $configure_endpoint = true,
-  $service_name       = undef,
-  $service_type       = 'baremetal',
-  $public_protocol    = 'http',
-  $public_address     = '127.0.0.1',
-  $admin_address      = '127.0.0.1',
-  $internal_address   = '127.0.0.1',
-  $port               = '6385',
-  $public_port        = undef,
-  $region             = 'RegionOne'
+  $auth_name           = 'ironic',
+  $email               = 'ironic@localhost',
+  $tenant              = 'services',
+  $configure_endpoint  = true,
+  $configure_user      = true,
+  $configure_user_role = true,
+  $service_name        = undef,
+  $service_type        = 'baremetal',
+  $public_protocol     = 'http',
+  $public_address      = '127.0.0.1',
+  $admin_address       = '127.0.0.1',
+  $internal_address    = '127.0.0.1',
+  $port                = '6385',
+  $public_port         = undef,
+  $region              = 'RegionOne'
 ) {
 
   if $service_name == undef {
@@ -87,18 +97,22 @@ class ironic::keystone::auth (
     $real_service_name = $service_name
   }
 
-  Keystone_user_role["${auth_name}@${tenant}"] ~> Service <| name == 'ironic-server' |>
-  Keystone_endpoint["${region}/${real_service_name}"]  ~> Service <| name == 'ironic-server' |>
-
   if ! $public_port {
     $real_public_port = $port
   } else {
     $real_public_port = $public_port
   }
 
+
+  if $configure_user_role {
+    Keystone_user_role["${auth_name}@${tenant}"] ~> Service <| name == 'ironic-server' |>
+  }
+
+  Keystone_endpoint["${region}/${real_service_name}"]  ~> Service <| name == 'ironic-server' |>
+
   keystone::resource::service_identity { $auth_name:
-    configure_user      => true,
-    configure_user_role => true,
+    configure_user      => $configure_user,
+    configure_user_role => $configure_user_role,
     configure_endpoint  => $configure_endpoint,
     service_name        => $real_service_name,
     service_type        => $service_type,
