@@ -48,7 +48,8 @@ describe 'ironic::api' do
       if platform_params.has_key?(:api_package)
         is_expected.to contain_package('ironic-api').with(
           :name   => platform_params[:api_package],
-          :ensure => p[:package_ensure]
+          :ensure => p[:package_ensure],
+          :tag    => 'openstack'
         )
         is_expected.to contain_package('ironic-api').with_before(/Ironic_config\[.+\]/)
         is_expected.to contain_package('ironic-api').with_before(/Service\[ironic-api\]/)

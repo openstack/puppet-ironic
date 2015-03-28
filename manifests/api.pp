@@ -115,6 +115,7 @@ class ironic::api (
     package { 'ironic-api':
       ensure => $package_ensure,
       name   => $::ironic::params::api_package,
+      tag    => 'openstack',
     }
   }
 

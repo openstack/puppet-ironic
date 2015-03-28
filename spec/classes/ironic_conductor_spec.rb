@@ -43,7 +43,8 @@ describe 'ironic::conductor' do
       if platform_params.has_key?(:conductor_package)
         is_expected.to contain_package('ironic-conductor').with(
           :name   => platform_params[:conductor_package],
-          :ensure => p[:package_ensure]
+          :ensure => p[:package_ensure],
+          :tag    => 'openstack'
         )
         is_expected.to contain_package('ironic-conductor').with_before(/Ironic_config\[.+\]/)
         is_expected.to contain_package('ironic-conductor').with_before(/Service\[ironic-conductor\]/)

@@ -35,6 +35,7 @@ class ironic::client (
   package { 'python-ironicclient':
     ensure => $package_ensure,
     name   => $::ironic::params::client_package,
+    tag    => 'openstack',
   }
 
 }

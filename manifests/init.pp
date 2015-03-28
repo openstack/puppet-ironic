@@ -182,6 +182,7 @@ class ironic (
   package { 'ironic-common':
     ensure => $package_ensure,
     name   => $::ironic::params::common_package_name,
+    tag    => 'openstack',
     notify => Exec['ironic-dbsync'],
   }
 
@@ -209,6 +210,7 @@ class ironic (
     package { 'ironic-database-backend':
       ensure => present,
       name   => $database_backend_package,
+      tag    => 'openstack',
     }
   }
 

@@ -47,6 +47,7 @@ class ironic::conductor (
     package { 'ironic-conductor':
       ensure => $package_ensure,
       name   => $::ironic::params::conductor_package,
+      tag    => 'openstack',
     }
   }
 
