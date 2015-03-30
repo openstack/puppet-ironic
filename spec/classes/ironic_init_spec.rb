@@ -30,7 +30,7 @@ describe 'ironic' do
       :rabbit_host                 => '127.0.0.1',
       :rabbit_port                 => 5672,
       :rabbit_hosts                => false,
-      :rabbit_user                 => 'guest',
+      :rabbit_userid               => 'guest',
       :rabbit_password             => 'guest',
       :rabbit_virtual_host         => '/',
       :database_connection         => 'sqlite:////var/lib/ironic/ironic.sqlite',
@@ -47,6 +47,9 @@ describe 'ironic' do
 
     context 'and if rabbit_host parameter is provided' do
       it_configures 'a ironic base installation'
+      it_configures 'with SSL disabled'
+      it_configures 'with SSL enabled without kombu'
+      it_configures 'with SSL enabled with kombu'
     end
 
     context 'and if rabbit_hosts parameter is provided' do
@@ -129,7 +132,7 @@ describe 'ironic' do
     end
 
     it 'configures credentials for rabbit' do
-      is_expected.to contain_ironic_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_user] )
+      is_expected.to contain_ironic_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_userid] )
       is_expected.to contain_ironic_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
       is_expected.to contain_ironic_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
       is_expected.to contain_ironic_config('DEFAULT/rabbit_password').with_secret( true )
@@ -156,8 +159,8 @@ describe 'ironic' do
 
   shared_examples_for 'rabbit HA with a single virtual host' do
     it 'in ironic.conf' do
-      is_expected.not_to contain_ironic_config('DEFAULT/rabbit_host')
-      is_expected.not_to contain_ironic_config('DEFAULT/rabbit_port')
+      is_expected.to contain_ironic_config('DEFAULT/rabbit_host').with_ensure('absent')
+      is_expected.to contain_ironic_config('DEFAULT/rabbit_port').with_ensure('absent')
       is_expected.to contain_ironic_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts] )
       is_expected.to contain_ironic_config('DEFAULT/rabbit_ha_queues').with_value(true)
     end
@@ -165,11 +168,80 @@ describe 'ironic' do
 
   shared_examples_for 'rabbit HA with multiple hosts' do
     it 'in ironic.conf' do
-      is_expected.not_to contain_ironic_config('DEFAULT/rabbit_host')
-      is_expected.not_to contain_ironic_config('DEFAULT/rabbit_port')
+      is_expected.to contain_ironic_config('DEFAULT/rabbit_host').with_ensure('absent')
+      is_expected.to contain_ironic_config('DEFAULT/rabbit_port').with_ensure('absent')
       is_expected.to contain_ironic_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') )
       is_expected.to contain_ironic_config('DEFAULT/rabbit_ha_queues').with_value(true)
     end
+  end
+
+  shared_examples_for 'with SSL enabled with kombu' do
+    before do
+      params.merge!(
+        :rabbit_use_ssl     => true,
+        :kombu_ssl_ca_certs => '/path/to/ssl/ca/certs',
+        :kombu_ssl_certfile => '/path/to/ssl/cert/file',
+        :kombu_ssl_keyfile  => '/path/to/ssl/keyfile',
+        :kombu_ssl_version  => 'TLSv1'
+      )
+    end
+
+    it do
+      is_expected.to contain_ironic_config('DEFAULT/rabbit_use_ssl').with_value('true')
+      is_expected.to contain_ironic_config('DEFAULT/kombu_ssl_ca_certs').with_value('/path/to/ssl/ca/certs')
+      is_expected.to contain_ironic_config('DEFAULT/kombu_ssl_certfile').with_value('/path/to/ssl/cert/file')
+      is_expected.to contain_ironic_config('DEFAULT/kombu_ssl_keyfile').with_value('/path/to/ssl/keyfile')
+      is_expected.to contain_ironic_config('DEFAULT/kombu_ssl_version').with_value('TLSv1')
+    end
+  end
+
+  shared_examples_for 'with SSL enabled without kombu' do
+    before do
+      params.merge!(
+        :rabbit_use_ssl     => true,
+      )
+    end
+
+    it do
+      is_expected.to contain_ironic_config('DEFAULT/rabbit_use_ssl').with_value('true')
+      is_expected.to contain_ironic_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent')
+      is_expected.to contain_ironic_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent')
+      is_expected.to contain_ironic_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent')
+      is_expected.to contain_ironic_config('DEFAULT/kombu_ssl_version').with_value('TLSv1')
+    end
+  end
+
+  shared_examples_for 'with SSL disabled' do
+    before do
+      params.merge!(
+        :rabbit_use_ssl     => false,
+        :kombu_ssl_ca_certs => 'undef',
+        :kombu_ssl_certfile => 'undef',
+        :kombu_ssl_keyfile  => 'undef',
+        :kombu_ssl_version  => 'TLSv1'
+      )
+    end
+
+    it do
+      is_expected.to contain_ironic_config('DEFAULT/rabbit_use_ssl').with_value('false')
+      is_expected.to contain_ironic_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent')
+      is_expected.to contain_ironic_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent')
+      is_expected.to contain_ironic_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent')
+      is_expected.to contain_ironic_config('DEFAULT/kombu_ssl_version').with_ensure('absent')
+    end
+  end
+
+
+  shared_examples_for 'with amqp_durable_queues disabled' do
+    it { is_expected.to contain_ironic_config('DEFAULT/amqp_durable_queues').with_value(false) }
+  end
+
+  shared_examples_for 'with amqp_durable_queues enabled' do
+    before do
+      params.merge( :amqp_durable_queues => true )
+    end
+
+    it { is_expected.to contain_ironic_config('DEFAULT/amqp_durable_queues').with_value(true) }
   end
 
   shared_examples_for 'with syslog disabled' do

@@ -49,15 +49,67 @@
 # [*control_exchange*]
 #   (optional) What RPC queue/exchange to use
 #   Defaults to openstack
-
+#
 # [*rpc_backend*]
 #   (optional) what rpc/queuing service to use
 #   Defaults to impl_kombu (rabbitmq)
 #
-# [*rabbit_password*]
 # [*rabbit_host*]
+#   (Optional) IP or hostname of the rabbit server.
+#   Defaults to 'localhost'
+#
 # [*rabbit_port*]
+#   (Optional) Port of the rabbit server.
+#   Defaults to 5672.
+#
+# [*rabbit_hosts*]
+#   (Optional) Array of host:port (used with HA queues).
+#   If defined, will remove rabbit_host & rabbit_port parameters from config
+#   Defaults to undef.
+#
 # [*rabbit_user*]
+#   (Optional) User to connect to the rabbit server.
+#   Defaults to undef.
+#   Deprecated, use rabbit_userid instead.
+#
+# [*rabbit_userid*]
+#   (Optional) User to connect to the rabbit server.
+#   Defaults to 'guest'
+#
+# [*rabbit_password*]
+#   (Optional) Password to connect to the rabbit_server.
+#   Defaults to empty.
+#
+# [*rabbit_virtual_host*]
+#   (Optional) Virtual_host to use.
+#   Defaults to '/'
+#
+# [*rabbit_use_ssl*]
+#   (optional) Connect over SSL for RabbitMQ
+#   Defaults to false
+#
+# [*kombu_ssl_ca_certs*]
+#   (optional) SSL certification authority file (valid only if SSL enabled).
+#   Defaults to undef
+#
+# [*kombu_ssl_certfile*]
+#   (optional) SSL cert file (valid only if SSL enabled).
+#   Defaults to undef
+#
+# [*kombu_ssl_keyfile*]
+#   (optional) SSL key file (valid only if SSL enabled).
+#   Defaults to undef
+#
+# [*kombu_ssl_version*]
+#   (optional) SSL version to use (valid only if SSL enabled).
+#   Valid values are TLSv1, SSLv23 and SSLv3. SSLv2 may be
+#   available on some distributions.
+#   Defaults to 'TLSv1'
+#
+# [*amqp_durable_queues*]
+#   Use durable queues in amqp.
+#   (Optional) Defaults to false.
+#
 # [*rabbit_virtual_host*]
 #   (optional) Various rabbitmq settings
 #
@@ -129,12 +181,20 @@ class ironic (
   $enabled_drivers             = ['pxe_ipmitool'],
   $control_exchange            = 'openstack',
   $rpc_backend                 = 'ironic.openstack.common.rpc.impl_kombu',
-  $rabbit_password             = false,
-  $rabbit_host                 = 'localhost',
   $rabbit_hosts                = false,
-  $rabbit_port                 = '5672',
-  $rabbit_user                 = 'guest',
   $rabbit_virtual_host         = '/',
+  $rabbit_host                 = 'localhost',
+  $rabbit_port                 = 5672,
+  $rabbit_hosts                = false,
+  $rabbit_virtual_host         = '/',
+  $rabbit_userid               = 'guest',
+  $rabbit_password             = false,
+  $rabbit_use_ssl              = false,
+  $kombu_ssl_ca_certs          = undef,
+  $kombu_ssl_certfile          = undef,
+  $kombu_ssl_keyfile           = undef,
+  $kombu_ssl_version           = 'TLSv1',
+  $amqp_durable_queues         = false,
   $qpid_hostname               = 'localhost',
   $qpid_port                   = '5672',
   $qpid_username               = 'guest',
@@ -157,10 +217,19 @@ class ironic (
   $database_retry_interval     = '10',
   $glance_api_servers          = undef,
   $glance_num_retries          = '0',
-  $glance_api_insecure         = false
+  $glance_api_insecure         = false,
+  # DEPRECATED PARAMETERS
+  $rabbit_user                 = undef,
 ) {
 
   include ::ironic::params
+
+  if $rabbit_user {
+    warning('The rabbit_user parameter is deprecated. Please use rabbit_userid instead.')
+    $rabbit_user_real = $rabbit_user
+  } else {
+    $rabbit_user_real = $rabbit_userid
+  }
 
   Package['ironic-common'] -> Ironic_config<||>
 
@@ -228,7 +297,6 @@ class ironic (
     'DEFAULT/verbose':                 value => $verbose;
     'DEFAULT/debug':                   value => $debug;
     'DEFAULT/auth_strategy':           value => $auth_strategy;
-    'DEFAULT/control_exchange':        value => $control_exchange;
     'DEFAULT/rpc_backend':             value => $rpc_backend;
     'DEFAULT/enabled_drivers':         value => join($enabled_drivers, ',');
     'database/connection':             value => $database_connection, secret => true;
@@ -250,12 +318,25 @@ class ironic (
   }
 
   if $rpc_backend == 'ironic.openstack.common.rpc.impl_kombu' {
+
     if ! $rabbit_password {
       fail('When rpc_backend is rabbitmq, you must set rabbit password')
     }
+
+    ironic_config {
+      'DEFAULT/rabbit_userid':       value => $rabbit_user_real;
+      'DEFAULT/rabbit_password':     value => $rabbit_password, secret => true;
+      'DEFAULT/rabbit_virtual_host': value => $rabbit_virtual_host;
+      'DEFAULT/rabbit_use_ssl':      value => $rabbit_use_ssl;
+      'DEFAULT/control_exchange':    value => $control_exchange;
+      'DEFAULT/amqp_durable_queues': value => $amqp_durable_queues;
+    }
+
     if $rabbit_hosts {
       ironic_config { 'DEFAULT/rabbit_hosts':     value  => join($rabbit_hosts, ',') }
       ironic_config { 'DEFAULT/rabbit_ha_queues': value  => true }
+      ironic_config { 'DEFAULT/rabbit_host':      ensure => absent }
+      ironic_config { 'DEFAULT/rabbit_port':      ensure => absent }
     } else  {
       ironic_config { 'DEFAULT/rabbit_host':      value => $rabbit_host }
       ironic_config { 'DEFAULT/rabbit_port':      value => $rabbit_port }
@@ -263,10 +344,33 @@ class ironic (
       ironic_config { 'DEFAULT/rabbit_ha_queues': value => false }
     }
 
-    ironic_config {
-      'DEFAULT/rabbit_userid':       value => $rabbit_user;
-      'DEFAULT/rabbit_password':     value => $rabbit_password, secret => true;
-      'DEFAULT/rabbit_virtual_host': value => $rabbit_virtual_host;
+    if $rabbit_use_ssl {
+      ironic_config { 'DEFAULT/kombu_ssl_version': value => $kombu_ssl_version }
+
+      if $kombu_ssl_ca_certs {
+        ironic_config { 'DEFAULT/kombu_ssl_ca_certs': value => $kombu_ssl_ca_certs }
+      } else {
+        ironic_config { 'DEFAULT/kombu_ssl_ca_certs': ensure => absent}
+      }
+
+      if $kombu_ssl_certfile {
+        ironic_config { 'DEFAULT/kombu_ssl_certfile': value => $kombu_ssl_certfile }
+      } else {
+        ironic_config { 'DEFAULT/kombu_ssl_certfile': ensure => absent}
+      }
+
+      if $kombu_ssl_keyfile {
+        ironic_config { 'DEFAULT/kombu_ssl_keyfile': value => $kombu_ssl_keyfile }
+      } else {
+        ironic_config { 'DEFAULT/kombu_ssl_keyfile': ensure => absent}
+      }
+    } else {
+      ironic_config {
+        'DEFAULT/kombu_ssl_ca_certs': ensure => absent;
+        'DEFAULT/kombu_ssl_certfile': ensure => absent;
+        'DEFAULT/kombu_ssl_keyfile':  ensure => absent;
+        'DEFAULT/kombu_ssl_version':  ensure => absent;
+      }
     }
   }
 
