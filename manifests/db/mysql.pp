@@ -38,7 +38,7 @@
 #
 # [*collate*]
 #   (optional) The collate to use for the nova database
-#   Defaults to 'utf8_unicode_ci'
+#   Defaults to 'utf8_general_ci'
 #
 # [*allowed_hosts*]
 #   (optional) Additional hosts that are allowed to access this DB
@@ -54,7 +54,7 @@ class ironic::db::mysql (
   $host          = '127.0.0.1',
   $allowed_hosts = undef,
   $charset       = 'utf8',
-  $collate       = 'utf8_unicode_ci',
+  $collate       = 'utf8_general_ci',
   $cluster_id    = undef,
 ) {
 
