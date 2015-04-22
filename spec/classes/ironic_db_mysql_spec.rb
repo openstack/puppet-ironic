@@ -42,7 +42,8 @@ describe 'ironic::db::mysql' do
     it { is_expected.to contain_openstacklib__db__mysql('ironic').with(
       :user          => 'ironic',
       :password_hash => '*74B1C21ACE0C2D6B0678A5E503D2A60E8F9651A3',
-      :charset       => 'utf8'
+      :charset       => 'utf8',
+      :collate       => 'utf8_general_ci',
     )}
   end
 
@@ -54,7 +55,8 @@ describe 'ironic::db::mysql' do
     it { is_expected.to contain_openstacklib__db__mysql('ironic').with(
       :user          => 'ironic',
       :password_hash => '*74B1C21ACE0C2D6B0678A5E503D2A60E8F9651A3',
-      :charset       => 'utf8'
+      :charset       => 'utf8',
+      :collate       => 'utf8_general_ci',
     )}
   end
 
