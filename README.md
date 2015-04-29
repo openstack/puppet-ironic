@@ -37,6 +37,18 @@ puppet-ironic is a combination of Puppet manifest and ruby code to delivery conf
 Limitations
 -----------
 
+Beaker-Rspec
+------------
+
+This module has beaker-rspec tests
+
+To run:
+
+``shell
+bundle install
+bundle exec rspec spec/acceptance
+``
+
 Development
 -----------
 
