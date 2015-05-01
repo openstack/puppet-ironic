@@ -236,16 +236,12 @@ class ironic (
   file { '/etc/ironic':
     ensure  => directory,
     require => Package['ironic-common'],
-    owner   => 'root',
     group   => 'ironic',
-    mode    => '0750',
   }
 
   file { '/etc/ironic/ironic.conf':
     require => Package['ironic-common'],
-    owner   => 'root',
     group   => 'ironic',
-    mode    => '0640',
   }
 
   package { 'ironic-common':
@@ -312,7 +308,12 @@ class ironic (
   exec { 'ironic-dbsync':
     command     => $::ironic::params::dbsync_command,
     path        => '/usr/bin',
-    user        => 'ironic',
+    # Ubuntu packaging is running dbsync command as root during ironic-common
+    # postinstall script so when Puppet tries to run dbsync again, it fails
+    # because it is run with ironic user.
+    # This is a temporary patch until it's changed in Packaging
+    # https://bugs.launchpad.net/cloud-archive/+bug/1450942
+    user        => 'root',
     refreshonly => true,
     logoutput   => on_failure,
   }

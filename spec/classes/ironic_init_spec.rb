@@ -103,18 +103,14 @@ describe 'ironic' do
     it 'configures ironic configuration folder' do
       is_expected.to contain_file('/etc/ironic/').with(
         :ensure  => 'directory',
-        :owner   => 'root',
         :group   => 'ironic',
-        :mode    => '0750',
         :require => 'Package[ironic-common]'
       )
     end
 
     it 'configures ironic configuration file' do
       is_expected.to contain_file('/etc/ironic/ironic.conf').with(
-        :owner   => 'root',
         :group   => 'ironic',
-        :mode    => '0640',
         :require => 'Package[ironic-common]'
       )
     end
