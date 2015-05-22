@@ -51,6 +51,10 @@
 # [*service_type*]
 #   Type of service. Defaults to 'baremetal'.
 #
+# [*service_description*]
+#   (Optional) Description for keystone service.
+#   Defaults to 'Ironic Bare Metal Provisioning Service'.
+#
 # [*region*]
 #   Region for endpoint. Defaults to 'RegionOne'.
 #
@@ -119,6 +123,7 @@ class ironic::keystone::auth (
   $configure_user_role = true,
   $service_name        = undef,
   $service_type        = 'baremetal',
+  $service_description = 'Ironic Bare Metal Provisioning Service',
   $public_protocol     = 'http',
   $region              = 'RegionOne',
   $public_url          = 'http://127.0.0.1:6385',
@@ -196,7 +201,7 @@ class ironic::keystone::auth (
     configure_endpoint  => $configure_endpoint,
     service_name        => $real_service_name,
     service_type        => $service_type,
-    service_description => 'Ironic Networking Service',
+    service_description => $service_description,
     region              => $region,
     password            => $password,
     email               => $email,

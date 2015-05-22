@@ -46,7 +46,7 @@ describe 'ironic::keystone::auth' do
     it { is_expected.to contain_keystone_service('ironic').with(
       :ensure      => 'present',
       :type        => 'baremetal',
-      :description => 'Ironic Networking Service'
+      :description => 'Ironic Bare Metal Provisioning Service'
     ) }
 
     it { is_expected.to contain_keystone_endpoint('RegionOne/ironic').with(
@@ -147,7 +147,7 @@ describe 'ironic::keystone::auth' do
     it { is_expected.to contain_keystone_service('ironic').with(
       :ensure      => 'present',
       :type        => 'baremetal',
-      :description => 'Ironic Networking Service'
+      :description => 'Ironic Bare Metal Provisioning Service'
     ) }
 
   end
@@ -169,7 +169,7 @@ describe 'ironic::keystone::auth' do
     it { is_expected.to contain_keystone_service('ironic').with(
       :ensure      => 'present',
       :type        => 'baremetal',
-      :description => 'Ironic Networking Service'
+      :description => 'Ironic Bare Metal Provisioning Service'
     ) }
 
   end
