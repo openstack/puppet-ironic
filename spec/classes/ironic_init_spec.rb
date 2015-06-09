@@ -128,10 +128,10 @@ describe 'ironic' do
     end
 
     it 'configures credentials for rabbit' do
-      is_expected.to contain_ironic_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_userid] )
-      is_expected.to contain_ironic_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
-      is_expected.to contain_ironic_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
-      is_expected.to contain_ironic_config('DEFAULT/rabbit_password').with_secret( true )
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_userid').with_value( params[:rabbit_userid] )
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_password').with_value( params[:rabbit_password] )
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_password').with_secret( true )
     end
 
     it 'should perform default database configuration' do
@@ -155,19 +155,19 @@ describe 'ironic' do
 
   shared_examples_for 'rabbit HA with a single virtual host' do
     it 'in ironic.conf' do
-      is_expected.to contain_ironic_config('DEFAULT/rabbit_host').with_ensure('absent')
-      is_expected.to contain_ironic_config('DEFAULT/rabbit_port').with_ensure('absent')
-      is_expected.to contain_ironic_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts] )
-      is_expected.to contain_ironic_config('DEFAULT/rabbit_ha_queues').with_value(true)
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_host').with_ensure('absent')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_port').with_ensure('absent')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_hosts').with_value( params[:rabbit_hosts] )
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value(true)
     end
   end
 
   shared_examples_for 'rabbit HA with multiple hosts' do
     it 'in ironic.conf' do
-      is_expected.to contain_ironic_config('DEFAULT/rabbit_host').with_ensure('absent')
-      is_expected.to contain_ironic_config('DEFAULT/rabbit_port').with_ensure('absent')
-      is_expected.to contain_ironic_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') )
-      is_expected.to contain_ironic_config('DEFAULT/rabbit_ha_queues').with_value(true)
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_host').with_ensure('absent')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_port').with_ensure('absent')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') )
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value(true)
     end
   end
 
@@ -183,11 +183,11 @@ describe 'ironic' do
     end
 
     it do
-      is_expected.to contain_ironic_config('DEFAULT/rabbit_use_ssl').with_value('true')
-      is_expected.to contain_ironic_config('DEFAULT/kombu_ssl_ca_certs').with_value('/path/to/ssl/ca/certs')
-      is_expected.to contain_ironic_config('DEFAULT/kombu_ssl_certfile').with_value('/path/to/ssl/cert/file')
-      is_expected.to contain_ironic_config('DEFAULT/kombu_ssl_keyfile').with_value('/path/to/ssl/keyfile')
-      is_expected.to contain_ironic_config('DEFAULT/kombu_ssl_version').with_value('TLSv1')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('true')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('/path/to/ssl/ca/certs')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('/path/to/ssl/cert/file')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('/path/to/ssl/keyfile')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('TLSv1')
     end
   end
 
@@ -199,11 +199,11 @@ describe 'ironic' do
     end
 
     it do
-      is_expected.to contain_ironic_config('DEFAULT/rabbit_use_ssl').with_value('true')
-      is_expected.to contain_ironic_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent')
-      is_expected.to contain_ironic_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent')
-      is_expected.to contain_ironic_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent')
-      is_expected.to contain_ironic_config('DEFAULT/kombu_ssl_version').with_value('TLSv1')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('true')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_ensure('absent')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_ensure('absent')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_ensure('absent')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('TLSv1')
     end
   end
 
@@ -219,11 +219,11 @@ describe 'ironic' do
     end
 
     it do
-      is_expected.to contain_ironic_config('DEFAULT/rabbit_use_ssl').with_value('false')
-      is_expected.to contain_ironic_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent')
-      is_expected.to contain_ironic_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent')
-      is_expected.to contain_ironic_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent')
-      is_expected.to contain_ironic_config('DEFAULT/kombu_ssl_version').with_ensure('absent')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('false')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_ensure('absent')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_ensure('absent')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_ensure('absent')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/kombu_ssl_version').with_ensure('absent')
     end
   end
 
