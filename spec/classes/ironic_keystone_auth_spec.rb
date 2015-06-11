@@ -51,9 +51,9 @@ describe 'ironic::keystone::auth' do
 
     it { is_expected.to contain_keystone_endpoint('RegionOne/ironic').with(
       :ensure       => 'present',
-      :public_url   => "http://127.0.0.1:6385/",
-      :admin_url    => "http://127.0.0.1:6385/",
-      :internal_url => "http://127.0.0.1:6385/"
+      :public_url   => "http://127.0.0.1:6385",
+      :admin_url    => "http://127.0.0.1:6385",
+      :internal_url => "http://127.0.0.1:6385"
     ) }
   end
 
@@ -68,9 +68,25 @@ describe 'ironic::keystone::auth' do
     end
 
     #FIXME it { should contain_keystone_endpoint('RegionOne/ironic').with_notify('Service[ironic-server]') }
- end
+  end
 
-  describe 'when overriding public_protocol, public_port and public address' do
+  describe 'with endpoint parameters' do
+    let :params do
+      { :password     => 'ironic_password',
+        :public_url   => 'https://10.0.0.10:6385',
+        :admin_url    => 'https://10.0.0.11:6385',
+        :internal_url => 'https://10.0.0.11:6385' }
+    end
+
+    it { is_expected.to contain_keystone_endpoint('RegionOne/ironic').with(
+      :ensure       => 'present',
+      :public_url   => 'https://10.0.0.10:6385',
+      :admin_url    => 'https://10.0.0.11:6385',
+      :internal_url => 'https://10.0.0.11:6385'
+    ) }
+  end
+
+  describe 'with deprecated endpoint parameters' do
     let :params do
       { :password         => 'ironic_password',
         :public_protocol  => 'https',
@@ -83,9 +99,9 @@ describe 'ironic::keystone::auth' do
 
     it { is_expected.to contain_keystone_endpoint('RegionOne/ironic').with(
       :ensure       => 'present',
-      :public_url   => "https://10.10.10.10:80/",
-      :internal_url => "http://10.10.10.11:81/",
-      :admin_url    => "http://10.10.10.12:81/"
+      :public_url   => "https://10.10.10.10:80",
+      :internal_url => "http://10.10.10.11:81",
+      :admin_url    => "http://10.10.10.12:81"
     ) }
   end
 
