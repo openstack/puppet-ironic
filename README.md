@@ -14,7 +14,7 @@ puppet-ironic
 Overview
 --------
 
-The ironic module is a part of [Stackforge](https://github.com/stackforge), an effort by the Openstack infrastructure team to provide continuous integration testing and code review for Openstack and Openstack community projects not part of the core software. The module itself is used to flexibly configure and manage the baremetal service for Openstack.
+The ironic module is a part of [OpenStack](https://github.com/openstack), an effort by the Openstack infrastructure team to provide continuous integration testing and code review for Openstack and Openstack community projects as part of the core software. The module itself is used to flexibly configure and manage the baremetal service for Openstack.
 
 Module Description
 ------------------
@@ -58,4 +58,4 @@ Developer documentation for the entire puppet-openstack project.
 Contributors
 ------------
 
-* https://github.com/stackforge/puppet-ironic/graphs/contributors
+* https://github.com/openstack/puppet-ironic/graphs/contributors
