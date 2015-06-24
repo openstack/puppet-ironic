@@ -42,7 +42,6 @@ describe 'basic ironic' do
 
       class { '::rabbitmq':
         delete_guest_user => true,
-        erlang_cookie     => 'secrete',
         package_provider  => $package_provider,
       }
 
