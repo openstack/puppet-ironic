@@ -19,6 +19,14 @@
 #
 # === Parameters
 #
+# [*package_ensure*]
+#   (optional) Control the ensure parameter for the package ressource.
+#   Defaults to 'present'.
+#
+# [*enabled*]
+#   (optional) Define if the service must be enabled or not.
+#   Defaults to true.
+#
 # [*host_ip*]
 #   (optional) The listen IP for the Ironic API server.
 #   Should be an valid IP address

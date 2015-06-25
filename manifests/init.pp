@@ -154,6 +154,10 @@
 #   (optional) Timeout before idle db connections are reaped.
 #   Defaults to: 3600
 #
+# [*database_reconnect_interval*]
+#   (optional) Database reconnection interval in seconds.
+#   Defaults to: 10
+#
 # [*database_retry_interval*]
 #   (optional) Database reconnection interval in seconds.
 #   Defaults to: 10

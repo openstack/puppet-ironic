@@ -19,12 +19,19 @@
 #
 # === Parameters
 #
+# [*package_ensure*]
+#   (optional) Control the ensure parameter for the package ressource.
+#   Defaults to 'present'.
+#
+# [*enabled*]
+#   (optional) Define if the service must be enabled or not.
+#   Defaults to true.
+#
 # [*max_time_interval*]
 #   (optional) Maximum time, in seconds, since the last check-in of a conductor.
 #   Should be an interger value
 #   Defaults to '120'.
 #
-
 class ironic::conductor (
   $package_ensure    = 'present',
   $enabled           = true,
