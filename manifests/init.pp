@@ -175,7 +175,10 @@
 #   (optional) Allow to perform insecure SSL (https) requests to glance.
 #   Defaults to false
 #
-
+# [*sync_db*]
+#   Enable dbsync
+#   Defaults to true
+#
 class ironic (
   $enabled                     = true,
   $package_ensure              = 'present',
@@ -222,6 +225,7 @@ class ironic (
   $glance_api_servers          = undef,
   $glance_num_retries          = '0',
   $glance_api_insecure         = false,
+  $sync_db                     = true,
   # DEPRECATED PARAMETERS
   $rabbit_user                 = undef,
 ) {
@@ -307,19 +311,8 @@ class ironic (
     'glance/glance_api_insecure':      value => $glance_api_insecure;
   }
 
-  Ironic_config['database/connection'] ~> Exec['ironic-dbsync']
-
-  exec { 'ironic-dbsync':
-    command     => $::ironic::params::dbsync_command,
-    path        => '/usr/bin',
-    # Ubuntu packaging is running dbsync command as root during ironic-common
-    # postinstall script so when Puppet tries to run dbsync again, it fails
-    # because it is run with ironic user.
-    # This is a temporary patch until it's changed in Packaging
-    # https://bugs.launchpad.net/cloud-archive/+bug/1450942
-    user        => 'root',
-    refreshonly => true,
-    logoutput   => on_failure,
+  if $sync_db {
+    include ::ironic::db::sync
   }
 
   if $rpc_backend == 'ironic.openstack.common.rpc.impl_kombu' {
