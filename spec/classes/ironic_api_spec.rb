@@ -49,7 +49,7 @@ describe 'ironic::api' do
         is_expected.to contain_package('ironic-api').with(
           :name   => platform_params[:api_package],
           :ensure => p[:package_ensure],
-          :tag    => 'openstack'
+          :tag    => ['openstack', 'ironic-package'],
         )
         is_expected.to contain_package('ironic-api').with_before(/Ironic_config\[.+\]/)
         is_expected.to contain_package('ironic-api').with_before(/Service\[ironic-api\]/)
@@ -57,7 +57,10 @@ describe 'ironic::api' do
     end
 
     it 'ensure ironic api service is running' do
-      is_expected.to contain_service('ironic-api').with('hasstatus' => true)
+      is_expected.to contain_service('ironic-api').with(
+        'hasstatus' => true,
+        'tag'       => 'ironic-service',
+      )
     end
 
     it 'configures ironic.conf' do

@@ -119,7 +119,7 @@ describe 'ironic' do
       is_expected.to contain_package('ironic-common').with(
         :ensure => 'present',
         :name   => platform_params[:common_package_name],
-        :tag    => 'openstack',
+        :tag    => ['openstack', 'ironic-package'],
       )
     end
 

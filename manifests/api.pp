@@ -123,7 +123,7 @@ class ironic::api (
     package { 'ironic-api':
       ensure => $package_ensure,
       name   => $::ironic::params::api_package,
-      tag    => 'openstack',
+      tag    => ['openstack', 'ironic-package'],
     }
   }
 
@@ -139,6 +139,7 @@ class ironic::api (
     name      => $::ironic::params::api_service,
     enable    => $enabled,
     hasstatus => true,
+    tag       => 'ironic-service',
   }
 
   if $neutron_url {

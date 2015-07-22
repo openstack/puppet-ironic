@@ -45,7 +45,7 @@ describe 'ironic::conductor' do
         is_expected.to contain_package('ironic-conductor').with(
           :name   => platform_params[:conductor_package],
           :ensure => p[:package_ensure],
-          :tag    => 'openstack'
+          :tag    => ['openstack', 'ironic-package'],
         )
         is_expected.to contain_package('ironic-conductor').with_before(/Ironic_config\[.+\]/)
         is_expected.to contain_package('ironic-conductor').with_before(/Service\[ironic-conductor\]/)
@@ -53,7 +53,10 @@ describe 'ironic::conductor' do
     end
 
     it 'ensure ironic conductor service is running' do
-      is_expected.to contain_service('ironic-conductor').with('hasstatus' => true)
+      is_expected.to contain_service('ironic-conductor').with(
+        'hasstatus' => true,
+        'tag'       => 'ironic-service',
+      )
     end
 
     it 'configures ironic.conf' do
