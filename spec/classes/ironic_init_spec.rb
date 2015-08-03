@@ -71,26 +71,6 @@ describe 'ironic' do
       end
     end
 
-    context 'with mysql database backend' do
-      before do
-        params.merge!(:database_connection => 'mysql://ironic:ironic@localhost/ironic')
-      end
-    end
-
-    context 'with sqlite database backend' do
-      before do
-        params.merge!(:database_connection => 'sqlite:////var/lib/ironic/ironic.sqlite')
-      end
-      it { is_expected.to contain_package('ironic-database-backend').with_name('python-pysqlite2')}
-    end
-
-    context 'with postgresql database backend' do
-      before do
-        params.merge!(:database_connection => 'postgresql://ironic:ironic@localhost/ironic')
-      end
-      it { is_expected.to contain_package('ironic-database-backend').with_name('python-psycopg2')}
-    end
-
   end
 
   shared_examples_for 'a ironic base installation' do

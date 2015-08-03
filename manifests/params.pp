@@ -37,6 +37,8 @@ class ironic::params {
       $inspector_package         = 'openstack-ironic-inspector'
       $inspector_service         = 'openstack-ironic-inspector'
       $inspector_dnsmasq_service = 'openstack-ironic-inspector-dnsmasq'
+      $psycopg_package_name      = 'python-psycopg2'
+      $sqlite_package_name       = undef
     }
     'Debian': {
       $common_package_name       = 'ironic-common'
@@ -51,6 +53,8 @@ class ironic::params {
       # https://packages.debian.org/source/experimental/ironic-inspector
       # this should be changed to whatever debian will use for dnsmasq
       $inspector_dnsmasq_service = 'ironic-inspector-dnsmasq'
+      $psycopg_package_name      = 'python-psycopg2'
+      $sqlite_package_name       = 'python-pysqlite2'
     }
     default: {
       fail("Unsupported osfamily ${::osfamily}")
