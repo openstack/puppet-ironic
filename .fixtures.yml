@@ -9,5 +9,6 @@ fixtures:
     'openstacklib': 'git://github.com/stackforge/puppet-openstacklib.git'
     'postgresql': 'git://github.com/puppetlabs/puppet-postgresql.git'
     'stdlib': 'git://github.com/puppetlabs/puppetlabs-stdlib.git'
+    'vcsrepo': 'git://github.com/puppetlabs/puppetlabs-vcsrepo.git'
   symlinks:
     'ironic': "#{source_dir}"

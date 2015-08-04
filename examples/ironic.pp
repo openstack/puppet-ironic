@@ -30,6 +30,33 @@ $rabbit_port     = '5672'
 $glance_api_servers = 'glance:9292'
 $deploy_kernel  = 'glance://deploy_kernel_uuid'
 $deploy_ramdisk = 'glance://deploy_ramdisk_uuid'
+$baremetal_json_hosts = '
+  "ironic-bm-test.bifrost.example": {
+    "ansible_ssh_host": "1.1.1.1",
+    "uuid": "11111111-1111-1111-1111-111111111111",
+    "driver_info": {
+      "power": {
+        "ipmi_address": "10.0.0.1",
+        "ipmi_username": "admin",
+        "ipmi_password": "pass"
+      },
+    },
+    "nics": [
+      {
+        "mac": "ff:ff:ff:ff:ff:ff"
+      }
+    ],
+    "driver": "agent_ipmitool",
+    "ipv4_address": "1.1.1.1",
+    "properties": {
+      "cpu_arch": "x86_64",
+      "ram": null,
+       "disk_size": null,
+       "cpus": null
+    },
+    "name": "ironic-bm-test.bifrost.example"
+  }
+'
 
 node 'db' {
 
@@ -76,6 +103,17 @@ node controller {
   class { '::ironic::drivers::pxe':
     deploy_kernel  => $deploy_kernel,
     deploy_ramdisk => $deploy_ramdisk,
+  }
+
+}
+
+node bifrost-controller {
+
+  class { '::ironic::bifrost':
+    network_interface    => 'eth1',
+    ironic_db_password   => 'changeme',
+    mysql_password       => 'changemetoo',
+    baremetal_json_hosts => $baremetal_json_hosts,
   }
 
 }

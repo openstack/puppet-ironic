@@ -1,0 +1,44 @@
+---
+ironic_url: <%= @ironic_url %>
+network_interface: <%= @network_interface %>
+# ironic_db_password ironic user password for rabbit
+ironic_db_password: <%= @ironic_db_password %>
+# mysql_password: mysql root user password
+mysql_password: <%= @mysql_password %>
+# If testing is true, then the environment is setup for using libvirt
+# virtual machines for the hardware instead of real hardware.
+# testing: true
+#
+# Normally this user should be ubuntu, however if cirros is used,
+# a user may wish to define a specific user for testing VM
+# connectivity during  atest sequence
+testing: <%= @testing %>
+testing_user: <%= @testing_user %>
+http_boot_folder: <%= @http_boot_folder %>
+nginx_port: <%= @nginx_port %>
+ssh_public_key_path: <%= @ssh_public_key_path %>
+deploy_kernel: <%= @deploy_kernel %>
+deploy_ramdisk: <%= @deploy_ramdisk %>
+deploy_kernel_url: <%= @deploy_kernel_url %>
+deploy_ramdisk_url: <%= @deploy_ramdisk_url %>
+# When using disk image builder based image generation, which is the
+# default at this time, the deploy_image_filename must end with .qcow2
+# due to the image creation process.
+deploy_image_filename: <%= @deploy_image_filename %>
+deploy_image: <%= @deploy_image %>
+# Setting to utilize diskimage-builder to create a bootable image.
+create_image_via_dib: <%= @create_image_via_dib %>
+# Transform boot image is intended for use with the Ubuntu trusty image.  It makes the image bootable by installing Grub.
+# Setting to prepend a partition image with a boot sector and partition table.
+transform_boot_image: <%= @transform_boot_image %>
+node_default_network_interface: <%= @node_default_network_interface %>
+# ipv4_subnet_mask is intended for the static ipv4 address assignments.
+ipv4_subnet_mask: <%= @ipv4_subnet_mask %>
+ipv4_gateway: <%= @ipv4_gateway %>
+ipv4_nameserver: <%= @ipv4_nameserver %>
+network_mtu: <%= @network_mtu %>
+dhcp_pool_start: <%= @dhcp_pool_start %>
+dhcp_pool_end: <%= @dhcp_pool_end %>
+# ipmi_bridging: Default undefined.  Valid values: "no", "single", and "dual"
+# See http://docs.openstack.org/developer/ironic/_modules/ironic/drivers/modules/ipmitool.html
+ipmi_bridging: <%= @ipmi_bridging %>
