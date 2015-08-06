@@ -3,7 +3,7 @@ Puppet::Type.newtype(:ironic_config) do
   ensurable
 
   newparam(:name, :namevar => true) do
-    desc 'Section/setting name to manage from /etc/ironic/ironic.conf'
+    desc 'Section/setting name to manage from ironic.conf'
     newvalues(/\S+\/\S+/)
   end
 
@@ -14,6 +14,7 @@ Puppet::Type.newtype(:ironic_config) do
       value.capitalize! if value =~ /^(true|false)$/i
       value
     end
+    newvalues(/^[\S ]*$/)
 
     def is_to_s( currentvalue )
       if resource.secret?
@@ -38,6 +39,11 @@ Puppet::Type.newtype(:ironic_config) do
     newvalues(:true, :false)
 
     defaultto false
+  end
+
+  newparam(:ensure_absent_val) do
+    desc 'A value that is specified as the value property will behave as if ensure => absent was specified'
+    defaultto('<SERVICE DEFAULT>')
   end
 
   autorequire(:package) do
