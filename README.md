@@ -26,7 +26,49 @@ Setup
 
 **What the ironic module affects:**
 
-* ironic, the baremetal service for Openstack.
+* [Ironic](https://wiki.openstack.org/wiki/Ironic), the baremetal service for Openstack.
+
+### Installing Ironic
+
+    puppet module install openstack/ironic
+
+### Beginning with ironic
+
+To utilize the ironic module's functionality you will need to declare multiple resources.
+The following is a modified excerpt from the [openstack module](httpd://github.com/stackforge/puppet-openstack).
+This is not an exhaustive list of all the components needed. We recommend that you consult and understand the
+[openstack module](https://github.com/stackforge/puppet-openstack) and the [core openstack](http://docs.openstack.org)
+documentation to assist you in understanding the available deployment options.
+
+```puppet
+# enable Ironic resources
+class { '::ironic':
+  rabbit_userid       => 'ironic',
+  rabbit_password     => 'an_even_bigger_secret',
+  rabbit_host         => '127.0.0.1',
+  database_connection => 'mysql://ironic:a_big_secret@127.0.0.1/ironic?charset=utf8',
+}
+
+class { '::ironic::db::mysql':
+  password => 'a_big_secret',
+}
+
+class { '::ironic::keystone::auth':
+  password => 'a_big_secret',
+}
+
+class { '::ironic::client': }
+
+class { '::ironic::conductor': }
+
+class { '::ironic::api':
+  admin_password => 'a_big_secret',
+}
+
+class { '::ironic::drivers::ipmi': }
+```
+
+Examples of usage also can be found in the *examples* directory.
 
 Implementation
 --------------
