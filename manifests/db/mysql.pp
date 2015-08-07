@@ -72,4 +72,6 @@ class ironic::db::mysql (
     allowed_hosts => $allowed_hosts,
   }
 
+  ::Openstacklib::Db::Mysql['ironic'] ~> Exec<| title == 'ironic-dbsync' |>
+
 }
