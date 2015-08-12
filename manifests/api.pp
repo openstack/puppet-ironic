@@ -35,7 +35,7 @@
 # [*port*]
 #   (optional) The port for the Ironic API server.
 #   Should be an valid port
-#   Defaults to '0.0.0.0'.
+#   Defaults to '6385'.
 #
 # [*max_limit*]
 #   (optional) The maximum number of items returned in a single response
