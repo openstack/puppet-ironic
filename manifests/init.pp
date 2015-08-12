@@ -239,8 +239,6 @@ class ironic (
     $rabbit_user_real = $rabbit_userid
   }
 
-  Package['ironic-common'] -> Ironic_config<||>
-
   file { '/etc/ironic':
     ensure  => directory,
     require => Package['ironic-common'],

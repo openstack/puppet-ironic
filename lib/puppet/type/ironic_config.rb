@@ -39,4 +39,9 @@ Puppet::Type.newtype(:ironic_config) do
 
     defaultto false
   end
+
+  autorequire(:package) do
+    'ironic-common'
+  end
+
 end

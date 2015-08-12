@@ -51,7 +51,6 @@ describe 'ironic::api' do
           :ensure => p[:package_ensure],
           :tag    => ['openstack', 'ironic-package'],
         )
-        is_expected.to contain_package('ironic-api').with_before(/Ironic_config\[.+\]/)
         is_expected.to contain_package('ironic-api').with_before(/Service\[ironic-api\]/)
       end
     end

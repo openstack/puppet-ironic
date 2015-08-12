@@ -58,7 +58,6 @@ class ironic::conductor (
   # Install package
   if $::ironic::params::conductor_package {
     Package['ironic-conductor'] -> Service['ironic-conductor']
-    Package['ironic-conductor'] -> Ironic_config<||>
     package { 'ironic-conductor':
       ensure => $package_ensure,
       name   => $::ironic::params::conductor_package,

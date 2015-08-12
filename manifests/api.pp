@@ -119,7 +119,6 @@ class ironic::api (
   if $::ironic::params::api_package {
     Package['ironic-api'] -> Class['ironic::policy']
     Package['ironic-api'] -> Service['ironic-api']
-    Package['ironic-api'] -> Ironic_config<||>
     package { 'ironic-api':
       ensure => $package_ensure,
       name   => $::ironic::params::api_package,
