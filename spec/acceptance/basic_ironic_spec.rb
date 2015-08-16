@@ -94,6 +94,8 @@ describe 'basic ironic' do
             rabbit_password     => 'an_even_bigger_secret',
             rabbit_host         => '127.0.0.1',
             database_connection => 'mysql://ironic:a_big_secret@127.0.0.1/ironic?charset=utf8',
+            debug               => true,
+            verbose             => true,
           }
           class { '::ironic::db::mysql':
             password => 'a_big_secret',
