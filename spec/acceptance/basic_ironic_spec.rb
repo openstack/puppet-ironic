@@ -32,6 +32,7 @@ describe 'basic ironic' do
             },
           }
           $package_provider = 'yum'
+          package { 'openstack-selinux': ensure => 'latest' }
         }
         default: {
           fail("Unsupported osfamily (${::osfamily})")
