@@ -55,6 +55,15 @@
 #   (optional) Folder to clone the Bifrost git repository
 #   Defaults to '/opt/stack/bifrost'
 #
+# [*bifrost_config_folder*]
+#   (optional) Folder to keep the configuration files, namely the global vars file
+#   and baremetal.json
+#   Defaults to '/etc/bifrost'
+#   Note that due to how Ansible handles the directory layout of playbooks and roles,
+#   you will need to pass '-e "@/etc/bifrost/bifrost_global_vars' switch to 'ansible-playbook'
+#   to load the variables at execution time.
+#   For more information, check http://docs.ansible.com/ansible/playbooks_variables.html
+#
 # [*ironic_url*]
 #   (optional) The URL of the Ironic server
 #   Defaults to '"http://localhost:6385"'
@@ -155,6 +164,7 @@ class ironic::bifrost (
   $ensure                         = present,
   $revision                       = 'master',
   $git_dest_repo_folder           = '/opt/stack/bifrost',
+  $bifrost_config_folder          = '/etc/bifrost',
   $ironic_url                     = '"http://localhost:6385/"',
   $network_interface              = '"virbr0"',
   $testing                        = false,
@@ -187,16 +197,20 @@ class ironic::bifrost (
     source   => $git_source_repo,
   }
 
-  file { "${git_dest_repo_folder}/playbooks/inventory/group_vars/all":
-    ensure  => present,
-    content => template('ironic/group_vars_all.erb'),
-    require => Vcsrepo[$git_dest_repo_folder],
+  file { $bifrost_config_folder:
+    ensure => directory
   }
 
-  file { "${git_dest_repo_folder}/baremetal.json":
+  file { "${bifrost_config_folder}/bifrost_global_vars":
+    ensure  => present,
+    content => template('ironic/bifrost_global_vars.erb'),
+    require => File[$bifrost_config_folder],
+  }
+
+  file { "${bifrost_config_folder}/baremetal.json":
     ensure  => present,
     content => template('ironic/baremetal.json.erb'),
-    require => Vcsrepo[$git_dest_repo_folder],
+    require => File[$bifrost_config_folder],
   }
 }
 
