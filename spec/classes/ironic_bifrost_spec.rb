@@ -23,6 +23,7 @@ describe 'ironic::bifrost' do
     { :git_source_repo => 'https://git.openstack.org/openstack/bifrost',
       :revision => master,
       :git_dest_repo_folder => '/opt/stack/bifrost',
+      :bifrost_config_folder => '/etc/bifrost',
       :ironic_url => '"http://localhost:6385/"',
       :network_interface => '"virbr0"',
       :testing => false,
@@ -65,18 +66,24 @@ describe 'ironic::bifrost' do
     )
   end
 
-  it 'should contain file group_vars/all' do
-    should contain_file('/opt/stack/bifrost/playbooks/inventory/group_vars/all').with(
+  it 'should contain folder /etc/bifrost' do
+    should contain_file('/etc/bifrost').with(
+      'ensure'  => 'directory',
+    )
+  end
+
+  it 'should contain file /etc/bifrost/bifrost_global_vars' do
+    should contain_file('/etc/bifrost/bifrost_global_vars').with(
       'ensure'  => 'present',
-      'require' => 'Vcsrepo[/opt/stack/bifrost]',
+      'require' => 'File[/etc/bifrost]',
       'content' => /ironic_url/,
     )
   end
 
-  it 'should contain file baremetal.json' do
-    should contain_file('/opt/stack/bifrost/baremetal.json').with(
+  it 'should contain file /etc/bifrost/baremetal.json' do
+    should contain_file('/etc/bifrost/baremetal.json').with(
       'ensure'  => 'present',
-      'require' => 'Vcsrepo[/opt/stack/bifrost]',
+      'require' => 'File[/etc/bifrost]',
       'content' => /test/,
     )
   end
