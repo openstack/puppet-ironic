@@ -6,7 +6,7 @@ describe 'ironic::db::sync' do
 
     it 'runs ironic-manage db_sync' do
       is_expected.to contain_exec('ironic-dbsync').with(
-        :command     => 'ironic-dbsync --config-file /etc/ironic/ironic.conf',
+        :command     => 'ironic-dbsync --config-file /etc/ironic/ironic.conf ',
         :path        => '/usr/bin',
         :user        => 'root',
         :refreshonly => 'true',
@@ -14,7 +14,23 @@ describe 'ironic::db::sync' do
       )
     end
 
+    describe "overriding extra_params" do
+        let :params do
+            {
+                :extra_params => '--config-file /etc/ironic/ironic_01.conf',
+            }
+        end
+        it { is_expected.to contain_exec('ironic-dbsync').with(
+            :command     => 'ironic-dbsync --config-file /etc/ironic/ironic.conf --config-file /etc/ironic/ironic_01.conf',
+            :path        => '/usr/bin',
+            :user        => 'root',
+            :refreshonly => true,
+            :logoutput   => 'on_failure'
+        )
+        }
+    end
   end
+
 
   context 'on a RedHat osfamily' do
     let :facts do

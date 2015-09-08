@@ -1,7 +1,16 @@
 #
 # Class to execute ironic dbsync
 #
-class ironic::db::sync {
+# == Parameters
+#
+# [*extra_params*]
+#   (optional) String of extra command line parameters to append
+#   to the ironic-dbsync command.
+#   Defaults to undef
+#
+class ironic::db::sync(
+  $extra_params  = undef,
+) {
 
   include ::ironic::params
 
@@ -12,7 +21,7 @@ class ironic::db::sync {
   Ironic_config<| title == 'database/connection' |> ~> Exec['ironic-dbsync']
 
   exec { 'ironic-dbsync':
-    command     => $::ironic::params::dbsync_command,
+    command     => "${::ironic::params::dbsync_command} ${extra_params}",
     path        => '/usr/bin',
     # Ubuntu packaging is running dbsync command as root during ironic-common
     # postinstall script so when Puppet tries to run dbsync again, it fails
