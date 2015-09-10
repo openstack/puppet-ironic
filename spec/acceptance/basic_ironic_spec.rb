@@ -13,21 +13,30 @@ describe 'basic ironic' do
         'Debian': {
           include ::apt
           class { '::openstack_extras::repo::debian::ubuntu':
-            release         => 'kilo',
+            release         => 'liberty',
+            repo            => 'proposed',
             package_require => true,
           }
           $package_provider = 'apt'
         }
         'RedHat': {
           class { '::openstack_extras::repo::redhat::redhat':
-            # Kilo is not GA yet, so let's use the testing repo
             manage_rdo => false,
-            repo_hash  => {
-              'rdo-kilo-testing' => {
-                'baseurl'  => 'https://repos.fedorapeople.org/repos/openstack/openstack-kilo/testing/el7/',
-                # packages are not GA so not signed
-                'gpgcheck' => '0',
-                'priority' => 97,
+            repo_hash => {
+              'openstack-common-testing' => {
+                'baseurl'  => 'http://cbs.centos.org/repos/cloud7-openstack-common-testing/x86_64/os/',
+                'descr'    => 'openstack-common-testing',
+                'gpgcheck' => 'no',
+              },
+              'openstack-liberty-testing' => {
+                'baseurl'  => 'http://cbs.centos.org/repos/cloud7-openstack-liberty-testing/x86_64/os/',
+                'descr'    => 'openstack-liberty-testing',
+                'gpgcheck' => 'no',
+              },
+              'openstack-liberty-trunk' => {
+                'baseurl'  => 'http://trunk.rdoproject.org/centos7-liberty/current/',
+                'descr'    => 'openstack-liberty-trunk',
+                'gpgcheck' => 'no',
               },
             },
           }
