@@ -58,7 +58,7 @@ describe 'ironic::bifrost' do
   end
 
   it 'should clone with vcsrepo bifrost repo with master branch' do
-    should contain_vcsrepo('/opt/stack/bifrost').with(
+    is_expected.to contain_vcsrepo('/opt/stack/bifrost').with(
       'ensure'   => 'present',
       'provider' => 'git',
       'revision' => 'master',
@@ -67,13 +67,13 @@ describe 'ironic::bifrost' do
   end
 
   it 'should contain folder /etc/bifrost' do
-    should contain_file('/etc/bifrost').with(
+    is_expected.to contain_file('/etc/bifrost').with(
       'ensure'  => 'directory',
     )
   end
 
   it 'should contain file /etc/bifrost/bifrost_global_vars' do
-    should contain_file('/etc/bifrost/bifrost_global_vars').with(
+    is_expected.to contain_file('/etc/bifrost/bifrost_global_vars').with(
       'ensure'  => 'present',
       'require' => 'File[/etc/bifrost]',
       'content' => /ironic_url/,
@@ -81,7 +81,7 @@ describe 'ironic::bifrost' do
   end
 
   it 'should contain file /etc/bifrost/baremetal.json' do
-    should contain_file('/etc/bifrost/baremetal.json').with(
+    is_expected.to contain_file('/etc/bifrost/baremetal.json').with(
       'ensure'  => 'present',
       'require' => 'File[/etc/bifrost]',
       'content' => /test/,
