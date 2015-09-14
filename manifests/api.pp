@@ -44,23 +44,27 @@
 #   Defaults to '1000'.
 #
 # [*auth_host*]
-#   (optional) The IP of the server running keystone
+#   (optional) DEPRECATED. The IP of the server running keystone
 #   Defaults to '127.0.0.1'
 #
 # [*auth_port*]
-#   (optional) The port to use when authenticating against Keystone
+#   (optional) DEPRECATED. The port to use when authenticating against Keystone
 #   Defaults to 35357
 #
 # [*auth_protocol*]
-#   (optional) The protocol to use when authenticating against Keystone
+#   (optional) DEPRECATED. The protocol to use when authenticating against Keystone
 #   Defaults to 'http'
 #
 # [*auth_uri*]
-#   (optional) The uri of a Keystone service to authenticate against
+#   (optional) Complete public Identity API endpoint.
 #   Defaults to false
 #
+# [*identity_uri*]
+#   (optional) Complete admin Identity API endpoint.
+#   Defaults to: false
+#
 # [*auth_admin_prefix*]
-#   (optional) Prefix to prepend at the beginning of the keystone path
+#   (optional) DEPRECATED. Prefix to prepend at the beginning of the keystone path
 #   Defaults to false
 #
 # [*auth_version*]
@@ -90,16 +94,18 @@ class ironic::api (
   $host_ip           = '0.0.0.0',
   $port              = '6385',
   $max_limit         = '1000',
-  $auth_host         = '127.0.0.1',
-  $auth_port         = '35357',
-  $auth_protocol     = 'http',
   $auth_uri          = false,
-  $auth_admin_prefix = false,
+  $identity_uri      = false,
   $auth_version      = false,
   $admin_tenant_name = 'services',
   $admin_user        = 'ironic',
   $neutron_url       = false,
   $admin_password,
+  # DEPRECATED PARAMETER
+  $auth_host         = '127.0.0.1',
+  $auth_port         = '35357',
+  $auth_protocol     = 'http',
+  $auth_admin_prefix = false,
 ) {
 
   include ::ironic::params
@@ -153,30 +159,65 @@ class ironic::api (
     ironic_config { 'keystone_authtoken/auth_uri': value => "${auth_protocol}://${auth_host}:5000/"; }
   }
 
+  if $identity_uri {
+    ironic_config { 'keystone_authtoken/identity_uri': value => $identity_uri; }
+  } else {
+    ironic_config { 'keystone_authtoken/identity_uri': ensure => absent; }
+  }
+
   if $auth_version {
     ironic_config { 'keystone_authtoken/auth_version': value => $auth_version; }
   } else {
     ironic_config { 'keystone_authtoken/auth_version': ensure => absent; }
   }
 
+  # if both auth_uri and identity_uri are set we skip these deprecated settings entirely
+  if !$auth_uri or !$identity_uri {
+
+    if $auth_host {
+      warning('The auth_host parameter is deprecated. Please use auth_uri and identity_uri instead.')
+      ironic_config { 'keystone_authtoken/auth_host': value => $auth_host; }
+    } else {
+      ironic_config { 'keystone_authtoken/auth_host': ensure => absent; }
+    }
+
+    if $auth_port {
+      warning('The auth_port parameter is deprecated. Please use auth_uri and identity_uri instead.')
+      ironic_config { 'keystone_authtoken/auth_port': value => $auth_port; }
+    } else {
+      ironic_config { 'keystone_authtoken/auth_port': ensure => absent; }
+    }
+
+    if $auth_protocol {
+      warning('The auth_protocol parameter is deprecated. Please use auth_uri and identity_uri instead.')
+      ironic_config { 'keystone_authtoken/auth_protocol': value => $auth_protocol; }
+    } else {
+      ironic_config { 'keystone_authtoken/auth_protocol': ensure => absent; }
+    }
+
+    if $auth_admin_prefix {
+      warning('The auth_admin_prefix  parameter is deprecated. Please use auth_uri and identity_uri instead.')
+      validate_re($auth_admin_prefix, '^(/.+[^/])?$')
+      ironic_config {
+        'keystone_authtoken/auth_admin_prefix': value => $auth_admin_prefix;
+      }
+    } else {
+      ironic_config { 'keystone_authtoken/auth_admin_prefix': ensure => absent; }
+    }
+
+  } else {
+    ironic_config {
+      'keystone_authtoken/auth_host': ensure => absent;
+      'keystone_authtoken/auth_port': ensure => absent;
+      'keystone_authtoken/auth_protocol': ensure => absent;
+      'keystone_authtoken/auth_admin_prefix': ensure => absent;
+    }
+  }
+
   ironic_config {
-    'keystone_authtoken/auth_host':         value => $auth_host;
-    'keystone_authtoken/auth_port':         value => $auth_port;
-    'keystone_authtoken/auth_protocol':     value => $auth_protocol;
     'keystone_authtoken/admin_tenant_name': value => $admin_tenant_name;
     'keystone_authtoken/admin_user':        value => $admin_user;
     'keystone_authtoken/admin_password':    value => $admin_password, secret => true;
-  }
-
-  if $auth_admin_prefix {
-    validate_re($auth_admin_prefix, '^(/.+[^/])?$')
-    ironic_config {
-      'keystone_authtoken/auth_admin_prefix': value => $auth_admin_prefix;
-    }
-  } else {
-    ironic_config {
-      'keystone_authtoken/auth_admin_prefix': ensure => absent;
-    }
   }
 
 }
