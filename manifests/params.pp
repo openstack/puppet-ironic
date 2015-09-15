@@ -23,22 +23,34 @@ class ironic::params {
   $dbsync_command =
     'ironic-dbsync --config-file /etc/ironic/ironic.conf'
 
+  $inspector_dbsync_command =
+    'ironic-inspector-dbsync --config-file /etc/ironic-inspector/inspector.conf upgrade'
+
   case $::osfamily {
     'RedHat': {
-      $common_package_name = 'openstack-ironic-common'
-      $api_package         = 'openstack-ironic-api'
-      $api_service         = 'openstack-ironic-api'
-      $conductor_package   = 'openstack-ironic-conductor'
-      $conductor_service   = 'openstack-ironic-conductor'
-      $client_package      = 'python-ironicclient'
+      $common_package_name       = 'openstack-ironic-common'
+      $api_package               = 'openstack-ironic-api'
+      $api_service               = 'openstack-ironic-api'
+      $conductor_package         = 'openstack-ironic-conductor'
+      $conductor_service         = 'openstack-ironic-conductor'
+      $client_package            = 'python-ironicclient'
+      $inspector_package         = 'openstack-ironic-inspector'
+      $inspector_service         = 'openstack-ironic-inspector'
+      $inspector_dnsmasq_service = 'openstack-ironic-inspector-dnsmasq'
     }
     'Debian': {
-      $common_package_name = 'ironic-common'
-      $api_service         = 'ironic-api'
-      $api_package         = 'ironic-api'
-      $conductor_service   = 'ironic-conductor'
-      $conductor_package   = 'ironic-conductor'
-      $client_package      = 'python-ironicclient'
+      $common_package_name       = 'ironic-common'
+      $api_service               = 'ironic-api'
+      $api_package               = 'ironic-api'
+      $conductor_service         = 'ironic-conductor'
+      $conductor_package         = 'ironic-conductor'
+      $client_package            = 'python-ironicclient'
+      $inspector_package         = 'ironic-inspector'
+      $inspector_service         = 'ironic-inspector'
+      # it seems like there is not currently a builtin dnsmasq in the debian packaging
+      # https://packages.debian.org/source/experimental/ironic-inspector
+      # this should be changed to whatever debian will use for dnsmasq
+      $inspector_dnsmasq_service = 'ironic-inspector-dnsmasq'
     }
     default: {
       fail("Unsupported osfamily ${::osfamily}")
