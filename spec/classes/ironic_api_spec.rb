@@ -97,12 +97,12 @@ describe 'ironic::api' do
         })
       end
       it 'configures identity_uri' do
-        should contain_ironic_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:1234/");
+        is_expected.to contain_ironic_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:1234/");
         # since only auth_uri is set the deprecated auth parameters should
         # still get set in case they are still in use
-        should contain_ironic_config('keystone_authtoken/auth_host').with_value('127.0.0.1');
-        should contain_ironic_config('keystone_authtoken/auth_port').with_value('35357');
-        should contain_ironic_config('keystone_authtoken/auth_protocol').with_value('http');
+        is_expected.to contain_ironic_config('keystone_authtoken/auth_host').with_value('127.0.0.1');
+        is_expected.to contain_ironic_config('keystone_authtoken/auth_port').with_value('35357');
+        is_expected.to contain_ironic_config('keystone_authtoken/auth_protocol').with_value('http');
       end
     end
 
@@ -114,12 +114,12 @@ describe 'ironic::api' do
         })
       end
       it 'configures identity_uri' do
-        should contain_ironic_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:35357/");
-        should contain_ironic_config('keystone_authtoken/auth_uri').with_value("https://foo.bar:5000/v2.0/");
-        should contain_ironic_config('keystone_authtoken/auth_host').with_ensure('absent')
-        should contain_ironic_config('keystone_authtoken/auth_port').with_ensure('absent')
-        should contain_ironic_config('keystone_authtoken/auth_protocol').with_ensure('absent')
-        should contain_ironic_config('keystone_authtoken/auth_admin_prefix').with_ensure('absent')
+        is_expected.to contain_ironic_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:35357/");
+        is_expected.to contain_ironic_config('keystone_authtoken/auth_uri').with_value("https://foo.bar:5000/v2.0/");
+        is_expected.to contain_ironic_config('keystone_authtoken/auth_host').with_ensure('absent')
+        is_expected.to contain_ironic_config('keystone_authtoken/auth_port').with_ensure('absent')
+        is_expected.to contain_ironic_config('keystone_authtoken/auth_protocol').with_ensure('absent')
+        is_expected.to contain_ironic_config('keystone_authtoken/auth_admin_prefix').with_ensure('absent')
       end
     end
 
