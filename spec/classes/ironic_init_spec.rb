@@ -91,13 +91,11 @@ describe 'ironic' do
       it { is_expected.to contain_package('ironic-database-backend').with_name('python-psycopg2')}
     end
 
-    it_configures 'with syslog disabled'
-    it_configures 'with syslog enabled'
-    it_configures 'with syslog enabled and custom settings'
   end
 
   shared_examples_for 'a ironic base installation' do
 
+    it { is_expected.to contain_class('ironic::logging') }
     it { is_expected.to contain_class('ironic::params') }
 
     it 'configures ironic configuration folder' do
@@ -147,7 +145,6 @@ describe 'ironic' do
     end
 
     it 'configures ironic.conf' do
-      is_expected.to contain_ironic_config('DEFAULT/verbose').with_value( params[:verbose] )
       is_expected.to contain_ironic_config('DEFAULT/auth_strategy').with_value('keystone')
       is_expected.to contain_ironic_config('DEFAULT/control_exchange').with_value('openstack')
     end
@@ -238,35 +235,6 @@ describe 'ironic' do
     end
 
     it { is_expected.to contain_ironic_config('DEFAULT/amqp_durable_queues').with_value(true) }
-  end
-
-  shared_examples_for 'with syslog disabled' do
-    it { is_expected.to contain_ironic_config('DEFAULT/use_syslog').with_value(false) }
-  end
-
-  shared_examples_for 'with syslog enabled' do
-    before do
-      params.merge!( :use_syslog => true )
-    end
-
-    it do
-      is_expected.to contain_ironic_config('DEFAULT/use_syslog').with_value(true)
-      is_expected.to contain_ironic_config('DEFAULT/syslog_log_facility').with_value('LOG_USER')
-    end
-  end
-
-  shared_examples_for 'with syslog enabled and custom settings' do
-    before do
-      params.merge!(
-        :use_syslog    => true,
-        :log_facility  => 'LOG_LOCAL0'
-      )
-    end
-
-    it do
-      is_expected.to contain_ironic_config('DEFAULT/use_syslog').with_value(true)
-      is_expected.to contain_ironic_config('DEFAULT/syslog_log_facility').with_value('LOG_LOCAL0')
-    end
   end
 
   shared_examples_for 'with one glance server' do

@@ -136,11 +136,20 @@
 #
 # [*use_syslog*]
 #   (optional) Use syslog for logging
-#   Defaults to false
+#   Defaults to undef.
 #
 # [*log_facility*]
 #   (optional) Syslog facility to receive log lines
-#   Defaults to LOG_USER
+#   Defaults to undef.
+#
+# [*use_stderr*]
+#   (optional) Use stderr for logging
+#   Defaults to undef.
+#
+# [*log_dir*]
+#   (optional) Directory where logs should be stored.
+#   If set to boolean false, it will not log to any directory.
+#   Defaults to undef.
 #
 # [*database_connection*]
 #   (optional) Connection url for the ironic database.
@@ -182,8 +191,12 @@
 class ironic (
   $enabled                     = true,
   $package_ensure              = 'present',
-  $verbose                     = false,
-  $debug                       = false,
+  $verbose                     = undef,
+  $debug                       = undef,
+  $use_syslog                  = undef,
+  $use_stderr                  = undef,
+  $log_facility                = undef,
+  $log_dir                     = undef,
   $auth_strategy               = 'keystone',
   $enabled_drivers             = ['pxe_ipmitool'],
   $control_exchange            = 'openstack',
@@ -215,8 +228,6 @@ class ironic (
   $qpid_reconnect_interval_min = 0,
   $qpid_reconnect_interval_max = 0,
   $qpid_reconnect_interval     = 0,
-  $use_syslog                  = false,
-  $log_facility                = 'LOG_USER',
   $database_connection         = 'sqlite:////var/lib/ironic/ovs.sqlite',
   $database_max_retries        = '10',
   $database_idle_timeout       = '3600',
@@ -230,6 +241,7 @@ class ironic (
   $rabbit_user                 = undef,
 ) {
 
+  include ::ironic::logging
   include ::ironic::params
 
   if $rabbit_user {
@@ -296,8 +308,6 @@ class ironic (
   }
 
   ironic_config {
-    'DEFAULT/verbose':                 value => $verbose;
-    'DEFAULT/debug':                   value => $debug;
     'DEFAULT/auth_strategy':           value => $auth_strategy;
     'DEFAULT/rpc_backend':             value => $rpc_backend;
     'DEFAULT/enabled_drivers':         value => join($enabled_drivers, ',');
@@ -385,17 +395,6 @@ class ironic (
       'DEFAULT/qpid_reconnect_interval_min': value => $qpid_reconnect_interval_min;
       'DEFAULT/qpid_reconnect_interval_max': value => $qpid_reconnect_interval_max;
       'DEFAULT/qpid_reconnect_interval':     value => $qpid_reconnect_interval;
-    }
-  }
-
-  if $use_syslog {
-    ironic_config {
-      'DEFAULT/use_syslog':           value => true;
-      'DEFAULT/syslog_log_facility':  value => $log_facility;
-    }
-  } else {
-    ironic_config {
-      'DEFAULT/use_syslog':           value => false;
     }
   }
 
