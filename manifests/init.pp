@@ -52,7 +52,7 @@
 #
 # [*rpc_backend*]
 #   (optional) what rpc/queuing service to use
-#   Defaults to impl_kombu (rabbitmq)
+#   Defaults to rabbit (rabbitmq)
 #
 # [*rabbit_host*]
 #   (Optional) IP or hostname of the rabbit server.
@@ -200,7 +200,7 @@ class ironic (
   $auth_strategy               = 'keystone',
   $enabled_drivers             = ['pxe_ipmitool'],
   $control_exchange            = 'openstack',
-  $rpc_backend                 = 'ironic.openstack.common.rpc.impl_kombu',
+  $rpc_backend                 = 'rabbit',
   $rabbit_hosts                = false,
   $rabbit_virtual_host         = '/',
   $rabbit_host                 = 'localhost',
@@ -323,7 +323,7 @@ class ironic (
     include ::ironic::db::sync
   }
 
-  if $rpc_backend == 'ironic.openstack.common.rpc.impl_kombu' {
+  if $rpc_backend == 'ironic.openstack.common.rpc.impl_kombu' or $rpc_backend == 'rabbit' {
 
     if ! $rabbit_password {
       fail('When rpc_backend is rabbitmq, you must set rabbit password')
@@ -380,7 +380,7 @@ class ironic (
     }
   }
 
-  if $rpc_backend == 'ironic.openstack.common.rpc.impl_qpid' {
+  if $rpc_backend == 'ironic.openstack.common.rpc.impl_qpid' or $rpc_backend == 'qpid' {
     ironic_config {
       'DEFAULT/qpid_hostname':               value => $qpid_hostname;
       'DEFAULT/qpid_port':                   value => $qpid_port;
