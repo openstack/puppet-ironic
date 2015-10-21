@@ -206,7 +206,7 @@ describe 'ironic' do
 
 
   shared_examples_for 'with amqp_durable_queues disabled' do
-    it { is_expected.to contain_ironic_config('DEFAULT/amqp_durable_queues').with_value(false) }
+    it { is_expected.to contain_ironic_config('oslo_messaging_rabbit/amqp_durable_queues').with_value(false) }
   end
 
   shared_examples_for 'with amqp_durable_queues enabled' do
@@ -214,7 +214,7 @@ describe 'ironic' do
       params.merge( :amqp_durable_queues => true )
     end
 
-    it { is_expected.to contain_ironic_config('DEFAULT/amqp_durable_queues').with_value(true) }
+    it { is_expected.to contain_ironic_config('oslo_messaging_rabbit/amqp_durable_queues').with_value(true) }
   end
 
   shared_examples_for 'with one glance server' do
