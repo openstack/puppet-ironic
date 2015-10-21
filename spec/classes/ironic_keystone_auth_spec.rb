@@ -35,7 +35,6 @@ describe 'ironic::keystone::auth' do
     it { is_expected.to contain_keystone_user('ironic').with(
       :ensure   => 'present',
       :password => 'ironic_password',
-      :tenant   => 'foobar'
     ) }
 
     it { is_expected.to contain_keystone_user_role('ironic@foobar').with(
