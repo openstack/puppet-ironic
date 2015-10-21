@@ -64,7 +64,8 @@ class ironic::db (
         require 'mysql::bindings::python'
       }
       /^postgresql:\/\//: {
-        $backend_package = $::ironic::params::psycopg_package_name
+        $backend_package = false
+        require 'postgresql::lib::python'
       }
       /^sqlite:\/\//: {
         $backend_package = $::ironic::params::sqlite_package_name
