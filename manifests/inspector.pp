@@ -169,15 +169,16 @@ class ironic::inspector (
     ensure  => 'present',
     require => Package['ironic-inspector'],
   }
+  file { '/tftpboot':
+    ensure  => 'directory',
+    seltype => 'tftpdir_t',
+  }
 
   if $pxe_transfer_protocol == 'tftp' {
     file { '/etc/ironic-inspector/dnsmasq.conf':
       ensure  => 'present',
       content => template('ironic/inspector_dnsmasq_tftp.erb'),
       require => Package['ironic-inspector'],
-    }
-    file { '/tftpboot':
-      ensure => 'directory',
     }
     file { '/tftpboot/pxelinux.cfg':
       ensure => 'directory',
