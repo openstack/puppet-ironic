@@ -31,12 +31,12 @@ describe 'ironic::db::mysql' do
   end
 
   let :facts do
-      { :osfamily => 'Debian' }
+      @default_facts.merge({ :osfamily => 'Debian' })
   end
 
   context 'on Debian platforms' do
     let :facts do
-      { :osfamily => 'Debian' }
+      @default_facts.merge({ :osfamily => 'Debian' })
     end
 
     it { is_expected.to contain_openstacklib__db__mysql('ironic').with(
@@ -49,7 +49,7 @@ describe 'ironic::db::mysql' do
 
   context 'on RedHat platforms' do
     let :facts do
-      { :osfamily => 'RedHat' }
+      @default_facts.merge({ :osfamily => 'RedHat' })
     end
 
     it { is_expected.to contain_openstacklib__db__mysql('ironic').with(

@@ -23,7 +23,7 @@ require 'spec_helper'
 describe 'ironic::keystone::auth' do
 
   let :facts do
-    { :osfamily => 'Debian' }
+    @default_facts.merge({ :osfamily => 'Debian' })
   end
 
   describe 'with default class parameters' do
