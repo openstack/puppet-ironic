@@ -8,7 +8,7 @@ This is a backwards-incompatible major release for OpenStack Liberty.
 - change section name for AMQP rabbit parameters
 
 ####Features
-- add heat::db::sync
+- add ironic::db::sync
 - add bifrost manifest
 - reflect provider change in puppet-openstacklib
 - put all the logging related parameters to the logging class
