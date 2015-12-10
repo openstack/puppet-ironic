@@ -119,6 +119,12 @@ describe 'ironic::inspector' do
         'content' => /default/,
       )
     end
+    it 'should contain directory /tftpboot with selinux type tftpdir_t' do
+      is_expected.to contain_file('/tftpboot').with(
+        'ensure'  => 'directory',
+        'seltype' => 'tftpdir_t'
+      )
+    end
 
     context 'when overriding parameters' do
       before :each do
