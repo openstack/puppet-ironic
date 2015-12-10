@@ -44,9 +44,6 @@
 #   (optional) Additional hosts that are allowed to access this DB
 #   Defaults to undef
 #
-# [*cluster_id*]
-#   (optional) Deprecated. Does nothing
-
 class ironic::db::mysql (
   $password,
   $dbname        = 'ironic',
@@ -55,12 +52,7 @@ class ironic::db::mysql (
   $allowed_hosts = undef,
   $charset       = 'utf8',
   $collate       = 'utf8_general_ci',
-  $cluster_id    = undef,
 ) {
-
-  if $cluster_id {
-    warning('The cluster_id parameter is deprecated and has no effect.')
-  }
 
   ::openstacklib::db::mysql { 'ironic':
     user          => $user,
