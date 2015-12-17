@@ -23,14 +23,15 @@ require 'spec_helper'
 describe 'ironic::drivers::pxe' do
 
   let :default_params do
-    { :pxe_append_params    => 'nofb nomodeset vga=normal',
-      :pxe_config_template  => '$pybasedir/drivers/modules/pxe_config.template',
-      :pxe_deploy_timeout   => '0',
-      :tftp_server          => '$my_ip',
-      :tftp_root            => '/tftpboot',
-      :images_path          => '/var/lib/ironic/images/',
-      :tftp_master_path     => '/tftpboot/master_images',
-      :instance_master_path => '/var/lib/ironic/master_images' }
+    { :pxe_append_params      => 'nofb nomodeset vga=normal',
+      :pxe_config_template    => '$pybasedir/drivers/modules/pxe_config.template',
+      :pxe_deploy_timeout     => '0',
+      :tftp_server            => '$my_ip',
+      :tftp_root              => '/tftpboot',
+      :images_path            => '/var/lib/ironic/images/',
+      :tftp_master_path       => '/tftpboot/master_images',
+      :instance_master_path   => '/var/lib/ironic/master_images',
+      :uefi_pxe_bootfile_name => 'elilo.efi' }
   end
 
   let :params do
@@ -51,6 +52,7 @@ describe 'ironic::drivers::pxe' do
       is_expected.to contain_ironic_config('pxe/images_path').with_value(p[:images_path])
       is_expected.to contain_ironic_config('pxe/tftp_master_path').with_value(p[:tftp_master_path])
       is_expected.to contain_ironic_config('pxe/instance_master_path').with_value(p[:instance_master_path])
+      is_expected.to contain_ironic_config('pxe/uefi_pxe_bootfile_name').with_value(p[:uefi_pxe_bootfile_name])
     end
 
     context 'when overriding parameters' do
@@ -65,7 +67,8 @@ describe 'ironic::drivers::pxe' do
           :tftp_root            => '/mnt/ftp',
           :images_path          => '/mnt/images',
           :tftp_master_path     => '/mnt/master_images',
-          :instance_master_path => '/mnt/ironic/master_images'
+          :instance_master_path => '/mnt/ironic/master_images',
+          :uefi_pxe_bootfile_name => 'bootx64.efi'
         )
       end
 
@@ -80,6 +83,7 @@ describe 'ironic::drivers::pxe' do
         is_expected.to contain_ironic_config('pxe/images_path').with_value(p[:images_path])
         is_expected.to contain_ironic_config('pxe/tftp_master_path').with_value(p[:tftp_master_path])
         is_expected.to contain_ironic_config('pxe/instance_master_path').with_value(p[:instance_master_path])
+        is_expected.to contain_ironic_config('pxe/uefi_pxe_bootfile_name').with_value(p[:uefi_pxe_bootfile_name])
       end
     end
 
