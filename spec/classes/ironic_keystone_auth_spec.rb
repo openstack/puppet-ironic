@@ -42,13 +42,12 @@ describe 'ironic::keystone::auth' do
       :roles   => ['admin']
     )}
 
-    it { is_expected.to contain_keystone_service('ironic').with(
+    it { is_expected.to contain_keystone_service('ironic::baremetal').with(
       :ensure      => 'present',
-      :type        => 'baremetal',
       :description => 'Ironic Bare Metal Provisioning Service'
     ) }
 
-    it { is_expected.to contain_keystone_endpoint('RegionOne/ironic').with(
+    it { is_expected.to contain_keystone_endpoint('RegionOne/ironic::baremetal').with(
       :ensure       => 'present',
       :public_url   => "http://127.0.0.1:6385",
       :admin_url    => "http://127.0.0.1:6385",
@@ -77,7 +76,7 @@ describe 'ironic::keystone::auth' do
         :internal_url => 'https://10.0.0.11:6385' }
     end
 
-    it { is_expected.to contain_keystone_endpoint('RegionOne/ironic').with(
+    it { is_expected.to contain_keystone_endpoint('RegionOne/ironic::baremetal').with(
       :ensure       => 'present',
       :public_url   => 'https://10.0.0.10:6385',
       :admin_url    => 'https://10.0.0.11:6385',
@@ -96,7 +95,7 @@ describe 'ironic::keystone::auth' do
         :admin_address    => '10.10.10.12' }
     end
 
-    it { is_expected.to contain_keystone_endpoint('RegionOne/ironic').with(
+    it { is_expected.to contain_keystone_endpoint('RegionOne/ironic::baremetal').with(
       :ensure       => 'present',
       :public_url   => "https://10.10.10.10:80",
       :internal_url => "http://10.10.10.11:81",
@@ -112,8 +111,8 @@ describe 'ironic::keystone::auth' do
 
     it { is_expected.to contain_keystone_user('ironicy') }
     it { is_expected.to contain_keystone_user_role('ironicy@services') }
-    it { is_expected.to contain_keystone_service('ironicy') }
-    it { is_expected.to contain_keystone_endpoint('RegionOne/ironicy') }
+    it { is_expected.to contain_keystone_service('ironicy::baremetal') }
+    it { is_expected.to contain_keystone_endpoint('RegionOne/ironicy::baremetal') }
   end
 
   describe 'when overriding service name' do
@@ -126,8 +125,8 @@ describe 'ironic::keystone::auth' do
 
     it { is_expected.to contain_keystone_user('ironic') }
     it { is_expected.to contain_keystone_user_role('ironic@services') }
-    it { is_expected.to contain_keystone_service('ironic_service') }
-    it { is_expected.to contain_keystone_endpoint('RegionOne/ironic_service') }
+    it { is_expected.to contain_keystone_service('ironic_service::baremetal') }
+    it { is_expected.to contain_keystone_endpoint('RegionOne/ironic_service::baremetal') }
   end
 
   describe 'when disabling user configuration' do
@@ -143,9 +142,8 @@ describe 'ironic::keystone::auth' do
 
     it { is_expected.to contain_keystone_user_role('ironic@services') }
 
-    it { is_expected.to contain_keystone_service('ironic').with(
+    it { is_expected.to contain_keystone_service('ironic::baremetal').with(
       :ensure      => 'present',
-      :type        => 'baremetal',
       :description => 'Ironic Bare Metal Provisioning Service'
     ) }
 
@@ -165,9 +163,8 @@ describe 'ironic::keystone::auth' do
 
     it { is_expected.not_to contain_keystone_user_role('ironic@services') }
 
-    it { is_expected.to contain_keystone_service('ironic').with(
+    it { is_expected.to contain_keystone_service('ironic::baremetal').with(
       :ensure      => 'present',
-      :type        => 'baremetal',
       :description => 'Ironic Bare Metal Provisioning Service'
     ) }
 
