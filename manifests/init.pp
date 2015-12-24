@@ -285,7 +285,6 @@ class ironic (
     ensure => $package_ensure,
     name   => $::ironic::params::common_package_name,
     tag    => ['openstack', 'ironic-package'],
-    notify => Exec['ironic-dbsync'],
   }
 
   validate_array($enabled_drivers)
