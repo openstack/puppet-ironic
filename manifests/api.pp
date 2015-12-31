@@ -43,32 +43,16 @@
 #   Should be an valid interger
 #   Defaults to '1000'.
 #
-# [*auth_host*]
-#   (optional) DEPRECATED. The IP of the server running keystone
-#   Defaults to '127.0.0.1'
-#
-# [*auth_port*]
-#   (optional) DEPRECATED. The port to use when authenticating against Keystone
-#   Defaults to 35357
-#
-# [*auth_protocol*]
-#   (optional) DEPRECATED. The protocol to use when authenticating against Keystone
-#   Defaults to 'http'
-#
 # [*auth_uri*]
 #   (optional) Complete public Identity API endpoint.
-#   Defaults to false
+#   Defaults to 'http://127.0.0.1:5000/'.
 #
 # [*identity_uri*]
 #   (optional) Complete admin Identity API endpoint.
-#   Defaults to: false
-#
-# [*auth_admin_prefix*]
-#   (optional) DEPRECATED. Prefix to prepend at the beginning of the keystone path
-#   Defaults to false
+#   Defaults to 'http://127.0.0.1:35357/'.
 #
 # [*auth_version*]
-#   (optional) API version of the admin Identity API endpoint
+#   (optional) DEPRECATED. API version of the admin Identity API endpoint
 #   for example, use 'v3.0' for the keystone version 3.0 api
 #   Defaults to false
 #
@@ -82,7 +66,7 @@
 #
 # [*neutron_url*]
 #   (optional) The Neutron URL to be used for requests from ironic
-#   Defaults to false
+#   Defaults to 'http://127.0.0.1:9696/'
 #
 # [*admin_password*]
 #   (required) The password to set for the ironic admin user in keystone
@@ -109,18 +93,14 @@ class ironic::api (
   $port              = '6385',
   $max_limit         = '1000',
   $workers           = $::os_service_default,
-  $auth_uri          = false,
-  $identity_uri      = false,
-  $auth_version      = false,
+  $auth_uri          = 'http://127.0.0.1:5000/',
+  $identity_uri      = 'http://127.0.0.1:35357/',
   $admin_tenant_name = 'services',
   $admin_user        = 'ironic',
-  $neutron_url       = false,
+  $neutron_url       = 'http://127.0.0.1:9696/',
   $admin_password,
   # DEPRECATED PARAMETER
-  $auth_host         = '127.0.0.1',
-  $auth_port         = '35357',
-  $auth_protocol     = 'http',
-  $auth_admin_prefix = false,
+  $auth_version      = false,
 ) inherits ironic::params {
 
   include ::ironic::params
@@ -178,78 +158,17 @@ class ironic::api (
     fail('Invalid service_name. Either ironic-api/openstack-ironic-api for running as a standalone service, or httpd for being run by a httpd server')
   }
 
-
-  if $neutron_url {
-    ironic_config { 'neutron/url': value => $neutron_url; }
-  } else {
-    ironic_config { 'neutron/url': value => "${auth_protocol}://${auth_host}:9696/"; }
-  }
-
-  if $auth_uri {
-    ironic_config { 'keystone_authtoken/auth_uri': value => $auth_uri; }
-  } else {
-    ironic_config { 'keystone_authtoken/auth_uri': value => "${auth_protocol}://${auth_host}:5000/"; }
-  }
-
-  if $identity_uri {
-    ironic_config { 'keystone_authtoken/identity_uri': value => $identity_uri; }
-  } else {
-    ironic_config { 'keystone_authtoken/identity_uri': ensure => absent; }
-  }
-
   if $auth_version {
-    ironic_config { 'keystone_authtoken/auth_version': value => $auth_version; }
-  } else {
-    ironic_config { 'keystone_authtoken/auth_version': ensure => absent; }
-  }
-
-  # if both auth_uri and identity_uri are set we skip these deprecated settings entirely
-  if !$auth_uri or !$identity_uri {
-
-    if $auth_host {
-      warning('The auth_host parameter is deprecated. Please use auth_uri and identity_uri instead.')
-      ironic_config { 'keystone_authtoken/auth_host': value => $auth_host; }
-    } else {
-      ironic_config { 'keystone_authtoken/auth_host': ensure => absent; }
-    }
-
-    if $auth_port {
-      warning('The auth_port parameter is deprecated. Please use auth_uri and identity_uri instead.')
-      ironic_config { 'keystone_authtoken/auth_port': value => $auth_port; }
-    } else {
-      ironic_config { 'keystone_authtoken/auth_port': ensure => absent; }
-    }
-
-    if $auth_protocol {
-      warning('The auth_protocol parameter is deprecated. Please use auth_uri and identity_uri instead.')
-      ironic_config { 'keystone_authtoken/auth_protocol': value => $auth_protocol; }
-    } else {
-      ironic_config { 'keystone_authtoken/auth_protocol': ensure => absent; }
-    }
-
-    if $auth_admin_prefix {
-      warning('The auth_admin_prefix  parameter is deprecated. Please use auth_uri and identity_uri instead.')
-      validate_re($auth_admin_prefix, '^(/.+[^/])?$')
-      ironic_config {
-        'keystone_authtoken/auth_admin_prefix': value => $auth_admin_prefix;
-      }
-    } else {
-      ironic_config { 'keystone_authtoken/auth_admin_prefix': ensure => absent; }
-    }
-
-  } else {
-    ironic_config {
-      'keystone_authtoken/auth_host': ensure => absent;
-      'keystone_authtoken/auth_port': ensure => absent;
-      'keystone_authtoken/auth_protocol': ensure => absent;
-      'keystone_authtoken/auth_admin_prefix': ensure => absent;
-    }
+    warning('auth_version parameter is deprecated and has no effect during Mitaka and will be dropped during N cycle.')
   }
 
   ironic_config {
     'keystone_authtoken/admin_tenant_name': value => $admin_tenant_name;
     'keystone_authtoken/admin_user':        value => $admin_user;
     'keystone_authtoken/admin_password':    value => $admin_password, secret => true;
+    'keystone_authtoken/auth_uri':          value => $auth_uri;
+    'keystone_authtoken/identity_uri':      value => $identity_uri;
+    'neutron/url':                          value => $neutron_url;
   }
 
 }

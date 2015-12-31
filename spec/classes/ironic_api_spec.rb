@@ -70,18 +70,19 @@ describe 'ironic::api' do
       is_expected.to contain_ironic_config('keystone_authtoken/admin_password').with_value(p[:admin_password])
       is_expected.to contain_ironic_config('keystone_authtoken/admin_user').with_value(p[:admin_user])
       is_expected.to contain_ironic_config('keystone_authtoken/auth_uri').with_value('http://127.0.0.1:5000/')
+      is_expected.to contain_ironic_config('keystone_authtoken/identity_uri').with_value('http://127.0.0.1:35357/')
       is_expected.to contain_ironic_config('neutron/url').with_value('http://127.0.0.1:9696/')
     end
 
     context 'when overriding parameters' do
       before :each do
         params.merge!(
-          :port => '3430',
-          :host_ip => '127.0.0.1',
-          :max_limit => '10',
-          :workers => '8',
-          :auth_protocol => 'https',
-          :auth_host => '1.2.3.4'
+          :port         => '3430',
+          :host_ip      => '127.0.0.1',
+          :max_limit    => '10',
+          :workers      => '8',
+          :auth_uri     => 'https://1.2.3.4:5000/',
+          :identity_uri => 'https://1.2.3.4:35357/',
         )
       end
       it 'should replace default parameter with new value' do
@@ -90,39 +91,7 @@ describe 'ironic::api' do
         is_expected.to contain_ironic_config('api/max_limit').with_value(p[:max_limit])
         is_expected.to contain_ironic_config('api/api_workers').with_value(p[:workers])
         is_expected.to contain_ironic_config('keystone_authtoken/auth_uri').with_value('https://1.2.3.4:5000/')
-      end
-    end
-
-    context 'with custom keystone identity_uri' do
-      before do
-        params.merge!({
-          :identity_uri => 'https://foo.bar:1234/',
-        })
-      end
-      it 'configures identity_uri' do
-        is_expected.to contain_ironic_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:1234/");
-        # since only auth_uri is set the deprecated auth parameters should
-        # still get set in case they are still in use
-        is_expected.to contain_ironic_config('keystone_authtoken/auth_host').with_value('127.0.0.1');
-        is_expected.to contain_ironic_config('keystone_authtoken/auth_port').with_value('35357');
-        is_expected.to contain_ironic_config('keystone_authtoken/auth_protocol').with_value('http');
-      end
-    end
-
-    context 'with custom keystone identity_uri and auth_uri' do
-      before do
-        params.merge!({
-          :identity_uri => 'https://foo.bar:35357/',
-          :auth_uri => 'https://foo.bar:5000/v2.0/',
-        })
-      end
-      it 'configures identity_uri' do
-        is_expected.to contain_ironic_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:35357/");
-        is_expected.to contain_ironic_config('keystone_authtoken/auth_uri').with_value("https://foo.bar:5000/v2.0/");
-        is_expected.to contain_ironic_config('keystone_authtoken/auth_host').with_ensure('absent')
-        is_expected.to contain_ironic_config('keystone_authtoken/auth_port').with_ensure('absent')
-        is_expected.to contain_ironic_config('keystone_authtoken/auth_protocol').with_ensure('absent')
-        is_expected.to contain_ironic_config('keystone_authtoken/auth_admin_prefix').with_ensure('absent')
+        is_expected.to contain_ironic_config('keystone_authtoken/identity_uri').with_value('https://1.2.3.4:35357/')
       end
     end
 
