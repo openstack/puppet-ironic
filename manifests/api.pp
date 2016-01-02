@@ -87,6 +87,10 @@
 # [*admin_password*]
 #   (required) The password to set for the ironic admin user in keystone
 #
+# [*workers*]
+#   (Optional) The number of workers to spawn.
+#   Defaults to $::os_service_default.
+#
 
 class ironic::api (
   $package_ensure    = 'present',
@@ -94,6 +98,7 @@ class ironic::api (
   $host_ip           = '0.0.0.0',
   $port              = '6385',
   $max_limit         = '1000',
+  $workers           = $::os_service_default,
   $auth_uri          = false,
   $identity_uri      = false,
   $auth_version      = false,
@@ -116,9 +121,10 @@ class ironic::api (
 
   # Configure ironic.conf
   ironic_config {
-    'api/host_ip':   value => $host_ip;
-    'api/port':      value => $port;
-    'api/max_limit': value => $max_limit;
+    'api/host_ip':     value => $host_ip;
+    'api/port':        value => $port;
+    'api/max_limit':   value => $max_limit;
+    'api/api_workers': value => $workers;
   }
 
   # Install package
