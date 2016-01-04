@@ -39,6 +39,8 @@ class ironic::params {
       $inspector_dnsmasq_service = 'openstack-ironic-inspector-dnsmasq'
       $sqlite_package_name       = undef
       $pymysql_package_name      = undef
+      $ironic_wsgi_script_path   = '/var/www/cgi-bin/ironic'
+      $ironic_wsgi_script_source = '/usr/lib/python2.7/site-packages/ironic/api/app.wsgi'
     }
     'Debian': {
       $common_package_name       = 'ironic-common'
@@ -55,6 +57,8 @@ class ironic::params {
       $inspector_dnsmasq_service = 'ironic-inspector-dnsmasq'
       $sqlite_package_name       = 'python-pysqlite2'
       $pymysql_package_name      = 'python-pymysql'
+      $ironic_wsgi_script_path   = '/usr/lib/cgi-bin/ironic'
+      $ironic_wsgi_script_source = '/usr/lib/python2.7/dist-packages/ironic/api/app.wsgi'
     }
     default: {
       fail("Unsupported osfamily ${::osfamily}")

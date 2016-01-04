@@ -126,11 +126,48 @@ describe 'ironic::api' do
       end
     end
 
+    context 'when running ironic-api in wsgi' do
+      before do
+        params.merge!({ :service_name => 'httpd' })
+      end
+
+      let :pre_condition do
+        "include ::apache"
+      end
+
+      it 'configures ironic-api service with Apache' do
+        is_expected.to contain_service('ironic-api').with(
+          :ensure     => 'stopped',
+          :name       => platform_params[:api_service],
+          :enable     => false,
+          :tag        => 'ironic-service',
+        )
+      end
+    end
+
+    context 'when service_name is not valid' do
+      before do
+        params.merge!({ :service_name => 'foobar' })
+      end
+
+      let :pre_condition do
+        "include ::apache"
+      end
+
+      it_raises 'a Puppet::Error', /Invalid service_name/
+    end
   end
 
   context 'on Debian platforms' do
     let :facts do
-      @default_facts.merge({ :osfamily => 'Debian' })
+      @default_facts.merge({
+        :osfamily        => 'Debian',
+        :operatingsystem => 'Debian',
+        :operatingsystemrelease => '8.0',
+        :concat_basedir  => '/var/lib/puppet/concat',
+        :fqdn            => 'some.host.tld',
+        :processorcount  => 2,
+      })
     end
 
     let :platform_params do
@@ -143,11 +180,18 @@ describe 'ironic::api' do
 
   context 'on RedHat platforms' do
     let :facts do
-      @default_facts.merge({ :osfamily => 'RedHat' })
+      @default_facts.merge({
+        :osfamily               => 'RedHat',
+        :operatingsystem        => 'RedHat',
+        :operatingsystemrelease => '7.2',
+        :concat_basedir         => '/var/lib/puppet/concat',
+        :fqdn                   => 'some.host.tld',
+        :processorcount         => 2,
+      })
     end
 
     let :platform_params do
-      { :api_service => 'ironic-api' }
+      { :api_service => 'openstack-ironic-api' }
     end
 
     it_configures 'ironic api'
