@@ -110,9 +110,6 @@
 #   Use durable queues in amqp.
 #   (Optional) Defaults to false.
 #
-# [*rabbit_virtual_host*]
-#   (optional) Various rabbitmq settings
-#
 # [*rabbit_hosts*]
 #   (optional) array of rabbitmq servers for HA.
 #   A single IP address, such as a VIP, can be used for load-balancing
@@ -219,7 +216,6 @@ class ironic (
   $rabbit_host                 = 'localhost',
   $rabbit_port                 = 5672,
   $rabbit_hosts                = false,
-  $rabbit_virtual_host         = '/',
   $rabbit_userid               = 'guest',
   $rabbit_password             = false,
   $rabbit_use_ssl              = false,
