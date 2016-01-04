@@ -118,6 +118,9 @@ describe 'ironic::inspector' do
         'require' => 'Package[ironic-inspector]',
         'content' => /default/,
       )
+      is_expected.to contain_file('/tftpboot/pxelinux.cfg/default').with_content(
+          /initrd=agent.ramdisk ipa-inspection-callback-url=http:\/\/192.168.0.1:5050\/v1\/continue ipa-inspection-collectors=default/
+      )
     end
     it 'should contain directory /tftpboot with selinux type tftpdir_t' do
       is_expected.to contain_file('/tftpboot').with(
@@ -163,6 +166,9 @@ describe 'ironic::inspector' do
           'ensure'  => 'present',
           'require' => 'Package[ironic-inspector]',
           'content' => /ipxe/,
+        )
+        is_expected.to contain_file('/httpboot/inspector.ipxe').with_content(
+            /kernel http:\/\/192.168.0.1:8088\/agent.kernel ipa-inspection-callback-url=http:\/\/192.168.0.1:5050\/v1\/continue ipa-inspection-collectors=default/
         )
       end
     end
