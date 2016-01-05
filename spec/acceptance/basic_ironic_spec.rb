@@ -43,6 +43,9 @@ describe 'basic ironic' do
       class { '::ironic::keystone::auth':
         password => 'a_big_secret',
       }
+      class { '::ironic::keystone::auth_inspector':
+        password => 'a_big_secret',
+      }
       class { '::ironic::client': }
       class { '::ironic::conductor': }
       class { '::ironic::api':
