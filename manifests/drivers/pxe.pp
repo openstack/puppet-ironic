@@ -73,32 +73,38 @@
 #   (optional) Bootfile DHCP parameter for UEFI boot mode.
 #   Defaults to 'elilo.efi'.
 #
+# [*uefi_pxe_config_template*]
+#   (optional) Template file for PXE configuration for UEFI boot loader.
+#   Defaults to '$pybasedir/drivers/modules/elilo_efi_pxe_config.template'.
+#
 
 class ironic::drivers::pxe (
-  $deploy_kernel          = undef,
-  $deploy_ramdisk         = undef,
-  $pxe_append_params      = 'nofb nomodeset vga=normal',
-  $pxe_config_template    = '$pybasedir/drivers/modules/pxe_config.template',
-  $pxe_deploy_timeout     = '0',
-  $tftp_server            = '$my_ip',
-  $tftp_root              = '/tftpboot',
-  $images_path            = '/var/lib/ironic/images/',
-  $tftp_master_path       = '/tftpboot/master_images',
-  $instance_master_path   = '/var/lib/ironic/master_images',
-  $uefi_pxe_bootfile_name = 'elilo.efi',
+  $deploy_kernel            = undef,
+  $deploy_ramdisk           = undef,
+  $pxe_append_params        = 'nofb nomodeset vga=normal',
+  $pxe_config_template      = '$pybasedir/drivers/modules/pxe_config.template',
+  $pxe_deploy_timeout       = '0',
+  $tftp_server              = '$my_ip',
+  $tftp_root                = '/tftpboot',
+  $images_path              = '/var/lib/ironic/images/',
+  $tftp_master_path         = '/tftpboot/master_images',
+  $instance_master_path     = '/var/lib/ironic/master_images',
+  $uefi_pxe_bootfile_name   = 'elilo.efi',
+  $uefi_pxe_config_template = '$pybasedir/drivers/modules/elilo_efi_pxe_config.template',
 ) {
 
   # Configure ironic.conf
   ironic_config {
-    'pxe/pxe_append_params': value      => $pxe_append_params;
-    'pxe/pxe_config_template': value    => $pxe_config_template;
-    'pxe/pxe_deploy_timeout': value     => $pxe_deploy_timeout;
-    'pxe/tftp_server': value            => $tftp_server;
-    'pxe/tftp_root': value              => $tftp_root;
-    'pxe/images_path': value            => $images_path;
-    'pxe/tftp_master_path': value       => $tftp_master_path;
-    'pxe/instance_master_path': value   => $instance_master_path;
-    'pxe/uefi_pxe_bootfile_name': value => $uefi_pxe_bootfile_name;
+    'pxe/pxe_append_params': value        => $pxe_append_params;
+    'pxe/pxe_config_template': value      => $pxe_config_template;
+    'pxe/pxe_deploy_timeout': value       => $pxe_deploy_timeout;
+    'pxe/tftp_server': value              => $tftp_server;
+    'pxe/tftp_root': value                => $tftp_root;
+    'pxe/images_path': value              => $images_path;
+    'pxe/tftp_master_path': value         => $tftp_master_path;
+    'pxe/instance_master_path': value     => $instance_master_path;
+    'pxe/uefi_pxe_bootfile_name': value   => $uefi_pxe_bootfile_name;
+    'pxe/uefi_pxe_config_template': value => $uefi_pxe_config_template;
   }
 
   if $deploy_kernel {
