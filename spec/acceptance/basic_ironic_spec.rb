@@ -50,6 +50,7 @@ describe 'basic ironic' do
       class { '::ironic::conductor': }
       class { '::ironic::api':
         admin_password => 'a_big_secret',
+        workers        => '2',
       }
       class { '::ironic::drivers::ipmi': }
 
