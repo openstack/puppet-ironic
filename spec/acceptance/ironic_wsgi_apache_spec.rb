@@ -50,7 +50,11 @@ describe 'basic ironic' do
       class { '::ironic::conductor': }
       class { '::ironic::api':
         admin_password => 'a_big_secret',
-        workers        => '2',
+        service_name   => 'httpd',
+      }
+      include ::apache
+      class { '::ironic::wsgi::apache':
+        ssl => false,
       }
       class { '::ironic::drivers::ipmi': }
 
@@ -81,7 +85,7 @@ describe 'basic ironic' do
     if os[:family].casecmp('RedHat') == 0
       # Ironic API port
       describe port(6385) do
-        it { is_expected.to be_listening.with('tcp') }
+        it { is_expected.to be_listening }
       end
       # Inspector API port
       describe port(5050) do
@@ -90,7 +94,7 @@ describe 'basic ironic' do
     else # Inspector is not packaged, so only test Ironic
       # Ironic API port
       describe port(6385) do
-        it { is_expected.to be_listening.with('tcp') }
+        it { is_expected.to be_listening }
       end
     end
 

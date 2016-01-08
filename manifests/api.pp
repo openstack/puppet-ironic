@@ -91,10 +91,20 @@
 #   (Optional) The number of workers to spawn.
 #   Defaults to $::os_service_default.
 #
+# [*service_name*]
+#   (optional) Name of the service that will be providing the
+#   server functionality of ironic-api.
+#   If the value is 'httpd', this means ironic-api will be a web
+#   service, and you must use another class to configure that
+#   web service. For example, use class { 'ironic::wsgi::apache'...}
+#   to make ironic-api be a web app using apache mod_wsgi.
+#   Defaults to '$::ironic::params::api_service'
+#
 
 class ironic::api (
   $package_ensure    = 'present',
   $enabled           = true,
+  $service_name      = $::ironic::params::api_service,
   $host_ip           = '0.0.0.0',
   $port              = '6385',
   $max_limit         = '1000',
@@ -111,13 +121,13 @@ class ironic::api (
   $auth_port         = '35357',
   $auth_protocol     = 'http',
   $auth_admin_prefix = false,
-) {
+) inherits ironic::params {
 
   include ::ironic::params
   include ::ironic::policy
 
-  Ironic_config<||> ~> Service['ironic-api']
-  Class['ironic::policy'] ~> Service['ironic-api']
+  Ironic_config<||> ~> Service[$service_name]
+  Class['ironic::policy'] ~> Service[$service_name]
 
   # Configure ironic.conf
   ironic_config {
@@ -130,7 +140,7 @@ class ironic::api (
   # Install package
   if $::ironic::params::api_package {
     Package['ironic-api'] -> Class['ironic::policy']
-    Package['ironic-api'] -> Service['ironic-api']
+    Package['ironic-api'] -> Service[$service_name]
     package { 'ironic-api':
       ensure => $package_ensure,
       name   => $::ironic::params::api_package,
@@ -144,14 +154,30 @@ class ironic::api (
     $ensure = 'stopped'
   }
 
-  # Manage service
-  service { 'ironic-api':
-    ensure    => $ensure,
-    name      => $::ironic::params::api_service,
-    enable    => $enabled,
-    hasstatus => true,
-    tag       => 'ironic-service',
+  if $service_name == $::ironic::params::api_service {
+    service { 'ironic-api':
+      ensure     => $ensure,
+      name       => $::ironic::params::api_service,
+      enable     => $enabled,
+      hasstatus  => true,
+      hasrestart => true,
+      tag        => 'ironic-service',
+    }
+  } elsif $service_name == 'httpd' {
+    include ::apache::params
+    service { 'ironic-api':
+      ensure => 'stopped',
+      name   => $::ironic::params::api_service,
+      enable => false,
+      tag    => 'ironic-service',
+    }
+
+    # we need to make sure ironic-api/eventlet is stopped before trying to start apache
+    Service['ironic-api'] -> Service[$service_name]
+  } else {
+    fail('Invalid service_name. Either ironic-api/openstack-ironic-api for running as a standalone service, or httpd for being run by a httpd server')
   }
+
 
   if $neutron_url {
     ironic_config { 'neutron/url': value => $neutron_url; }
