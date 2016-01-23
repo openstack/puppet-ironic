@@ -110,12 +110,6 @@
 #   Use durable queues in amqp.
 #   (Optional) Defaults to false.
 #
-# [*rabbit_hosts*]
-#   (optional) array of rabbitmq servers for HA.
-#   A single IP address, such as a VIP, can be used for load-balancing
-#   multiple RabbitMQ Brokers.
-#   Defaults to false
-#
 # [*use_syslog*]
 #   (optional) Use syslog for logging
 #   Defaults to undef.
@@ -215,7 +209,6 @@ class ironic (
   $rabbit_virtual_host         = '/',
   $rabbit_host                 = 'localhost',
   $rabbit_port                 = 5672,
-  $rabbit_hosts                = false,
   $rabbit_userid               = 'guest',
   $rabbit_password             = false,
   $rabbit_use_ssl              = false,
@@ -224,8 +217,6 @@ class ironic (
   $kombu_ssl_keyfile           = undef,
   $kombu_ssl_version           = 'TLSv1',
   $amqp_durable_queues         = false,
-  $use_syslog                  = false,
-  $log_facility                = 'LOG_USER',
   $database_connection         = undef,
   $database_max_retries        = undef,
   $database_idle_timeout       = undef,

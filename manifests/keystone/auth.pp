@@ -124,7 +124,6 @@ class ironic::keystone::auth (
   $service_name        = undef,
   $service_type        = 'baremetal',
   $service_description = 'Ironic Bare Metal Provisioning Service',
-  $public_protocol     = 'http',
   $region              = 'RegionOne',
   $public_url          = 'http://127.0.0.1:6385',
   $admin_url           = 'http://127.0.0.1:6385',
