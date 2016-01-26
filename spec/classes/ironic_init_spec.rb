@@ -50,6 +50,10 @@ describe 'ironic' do
       it_configures 'with SSL disabled'
       it_configures 'with SSL enabled without kombu'
       it_configures 'with SSL enabled with kombu'
+      it_configures 'with amqp_durable_queues disabled'
+      it_configures 'with amqp_durable_queues enabled'
+      it_configures 'with one glance server'
+      it_configures 'with two glance servers'
     end
 
     context 'and if rabbit_hosts parameter is provided' do
@@ -211,7 +215,7 @@ describe 'ironic' do
 
   shared_examples_for 'with amqp_durable_queues enabled' do
     before do
-      params.merge( :amqp_durable_queues => true )
+      params.merge!( :amqp_durable_queues => true )
     end
 
     it { is_expected.to contain_ironic_config('oslo_messaging_rabbit/amqp_durable_queues').with_value(true) }
@@ -223,7 +227,7 @@ describe 'ironic' do
     end
 
     it 'should configure one glance server' do
-      is_expected.to contain_ironic_config('glance/glance_api_servers').with_value(p[:glance_api_servers])
+      is_expected.to contain_ironic_config('glance/glance_api_servers').with_value(params[:glance_api_servers])
     end
   end
 
@@ -233,7 +237,7 @@ describe 'ironic' do
     end
 
     it 'should configure one glance server' do
-       is_expected.to contain_ironic_config('glance/glance_api_servers').with_value(p[:glance_api_servers].join(','))
+       is_expected.to contain_ironic_config('glance/glance_api_servers').with_value(params[:glance_api_servers].join(','))
     end
   end
 
