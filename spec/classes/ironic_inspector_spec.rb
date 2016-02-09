@@ -103,6 +103,7 @@ describe 'ironic::inspector' do
       is_expected.to contain_ironic_inspector_config('swift/username').with_value(p[:swift_username])
       is_expected.to contain_ironic_inspector_config('swift/tenant_name').with_value(p[:swift_tenant_name])
       is_expected.to contain_ironic_inspector_config('swift/os_auth_url').with_value(p[:swift_auth_url])
+      is_expected.to contain_ironic_inspector_config('processing/processing_hooks').with_value('$default_processing_hooks')
     end
 
     it 'should contain file /etc/ironic-inspector/dnsmasq.conf' do
@@ -132,15 +133,16 @@ describe 'ironic::inspector' do
     context 'when overriding parameters' do
       before :each do
         params.merge!(
-          :debug                 => true,
-          :auth_uri              => 'http://192.168.0.1:5000/v2.0',
-          :identity_uri          => 'http://192.168.0.1:35357',
-          :admin_password        => 'password',
-          :ironic_password       => 'password',
-          :ironic_auth_url       => 'http://192.168.0.1:5000/v2.0',
-          :swift_password        => 'password',
-          :swift_auth_url        => 'http://192.168.0.1:5000/v2.0',
-          :pxe_transfer_protocol => 'http',
+          :debug                        => true,
+          :auth_uri                     => 'http://192.168.0.1:5000/v2.0',
+          :identity_uri                 => 'http://192.168.0.1:35357',
+          :admin_password               => 'password',
+          :ironic_password              => 'password',
+          :ironic_auth_url              => 'http://192.168.0.1:5000/v2.0',
+          :swift_password               => 'password',
+          :swift_auth_url               => 'http://192.168.0.1:5000/v2.0',
+          :pxe_transfer_protocol        => 'http',
+          :additional_processing_hooks  => 'hook1,hook2',
         )
       end
       it 'should replace default parameter with new value' do
@@ -152,6 +154,7 @@ describe 'ironic::inspector' do
         is_expected.to contain_ironic_inspector_config('ironic/os_auth_url').with_value(p[:ironic_auth_url])
         is_expected.to contain_ironic_inspector_config('swift/password').with_value(p[:swift_password])
         is_expected.to contain_ironic_inspector_config('swift/os_auth_url').with_value(p[:swift_auth_url])
+        is_expected.to contain_ironic_inspector_config('processing/processing_hooks').with_value('$default_processing_hooks,hook1,hook2')
       end
 
       it 'should contain file /etc/ironic-inspector/dnsmasq.conf' do

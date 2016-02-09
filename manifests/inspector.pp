@@ -134,6 +134,10 @@
 #   Comma-separated list of IPA inspection collectors
 #   Defaults to 'default'
 #
+# [*additional_processing_hooks*]
+#   Comma-separated list of processing hooks to append to the default list.
+#   Defaults to undef
+#
 class ironic::inspector (
   $package_ensure                  = 'present',
   $enabled                         = true,
@@ -164,6 +168,7 @@ class ironic::inspector (
   $dnsmasq_local_ip                = '192.168.0.1',
   $sync_db                         = true,
   $ramdisk_collectors              = 'default',
+  $additional_processing_hooks     = undef,
 ) {
 
   include ::ironic::params
@@ -235,6 +240,9 @@ class ironic::inspector (
     'swift/password':                             value => $swift_password, secret => true;
     'swift/tenant_name':                          value => $swift_tenant_name;
     'swift/os_auth_url':                          value => $swift_auth_url;
+    # Here we use oslo.config interpolation with another option default_processing_hooks,
+    # which we don't change as it might break introspection completely.
+    'processing/processing_hooks':                value => join(delete_undef_values(['$default_processing_hooks', $additional_processing_hooks]), ',');
   }
 
   # Install package
