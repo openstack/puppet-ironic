@@ -1,22 +1,9 @@
 #
-# Class to execute ironic-inspector dbsync
+# Class to execute ironic-inspector dbsync (deprecated, use
+# ironic::inspector::db::sync instead).
 #
 class ironic::db::inspector_sync {
+  warning('ironic::db::inspector_sync is deprecated, please use ironic::inspector::db::sync')
 
-  include ::ironic::deps
-  include ::ironic::params
-
-  exec { 'ironic-inspector-dbsync':
-    command     => $::ironic::params::inspector_dbsync_command,
-    path        => '/usr/bin',
-    user        => 'ironic-inspector',
-    refreshonly => true,
-    logoutput   => on_failure,
-    subscribe   => [
-      Anchor['ironic-inspector::install::end'],
-      Anchor['ironic-inspector::config::end'],
-      Anchor['ironic-inspector::dbsync::begin']
-    ],
-    notify      => Anchor['ironic-inspector::dbsync::end'],
-  }
+  include ::ironic::inspector::db::sync
 }

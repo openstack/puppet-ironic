@@ -32,7 +32,6 @@ describe 'ironic::inspector' do
       :admin_tenant_name               => 'services',
       :identity_uri                    => 'http://127.0.0.1:35357/v2.0',
       :dnsmasq_interface               => 'br-ctlplane',
-      :db_connection                   => 'sqlite:////var/lib/ironic-inspector/inspector.sqlite',
       :ramdisk_logs_dir                => '/var/log/ironic-inspector/ramdisk/',
       :enable_setting_ipmi_credentials => false,
       :keep_ports                      => 'all',
@@ -101,7 +100,6 @@ describe 'ironic::inspector' do
       is_expected.to contain_ironic_inspector_config('keystone_authtoken/password').with_value(p[:admin_password])
       is_expected.to contain_ironic_inspector_config('keystone_authtoken/project_name').with_value(p[:admin_tenant_name])
       is_expected.to contain_ironic_inspector_config('firewall/dnsmasq_interface').with_value(p[:dnsmasq_interface])
-      is_expected.to contain_ironic_inspector_config('database/connection').with_value(p[:db_connection])
       is_expected.to contain_ironic_inspector_config('processing/ramdisk_logs_dir').with_value(p[:ramdisk_logs_dir])
       is_expected.to contain_ironic_inspector_config('processing/enable_setting_ipmi_credentials').with_value(p[:enable_setting_ipmi_credentials])
       is_expected.to contain_ironic_inspector_config('processing/keep_ports').with_value(p[:keep_ports])

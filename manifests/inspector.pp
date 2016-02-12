@@ -53,7 +53,7 @@
 #
 # [*db_connection*]
 #   (optional) Location of the ironic-inspector node cache database
-#   Defaults to 'sqlite::////var/lib/ironic-inspector/inspector.sqlite'
+#   Defaults to undef
 #
 # [*ramdisk_logs_dir*]
 #   (optional) Location to store logs retrieved from the ramdisk
@@ -190,7 +190,7 @@ class ironic::inspector (
   $debug                           = undef,
   $auth_strategy                   = 'keystone',
   $dnsmasq_interface               = 'br-ctlplane',
-  $db_connection                   = 'sqlite:////var/lib/ironic-inspector/inspector.sqlite',
+  $db_connection                   = undef,
   $ramdisk_logs_dir                = '/var/log/ironic-inspector/ramdisk/',
   $enable_setting_ipmi_credentials = false,
   $keep_ports                      = 'all',
@@ -229,6 +229,7 @@ class ironic::inspector (
   include ::ironic::params
   include ::ironic::pxe::common
   include ::ironic::inspector::logging
+  include ::ironic::inspector::db
 
   if $admin_tenant_name {
     warning("Parameter 'ironic::inspector::admin_tenant_name' is deprecated and will be removed in O release. \
@@ -317,7 +318,6 @@ tftpboot and httpboot setup, please include ::ironic::pxe")
     'DEFAULT/listen_address':                     value => $listen_address;
     'DEFAULT/auth_strategy':                      value => $auth_strategy;
     'firewall/dnsmasq_interface':                 value => $dnsmasq_interface;
-    'database/connection':                        value => $db_connection;
     'processing/ramdisk_logs_dir':                value => $ramdisk_logs_dir;
     'processing/enable_setting_ipmi_credentials': value => $enable_setting_ipmi_credentials;
     'processing/keep_ports':                      value => $keep_ports;
@@ -349,7 +349,7 @@ tftpboot and httpboot setup, please include ::ironic::pxe")
   }
 
   if $sync_db {
-    include ::ironic::db::inspector_sync
+    include ::ironic::inspector::db::sync
   }
 
   if $enabled {

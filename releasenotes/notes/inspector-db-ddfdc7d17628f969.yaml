@@ -1,0 +1,7 @@
+---
+features:
+  - New manifest "ironic::inspector::db" for configuring ironic-inspector
+    oslo.db parameters.
+deprecations:
+  - Manifest "ironic::db::inspector_sync" is deprecated, use
+    "ironic::inspector::db::sync" instead.
