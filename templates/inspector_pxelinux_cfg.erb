@@ -2,5 +2,5 @@ default inspector
 
 label inspector
 kernel agent.kernel
-append initrd=agent.ramdisk ipa-inspection-callback-url=http://<%= @dnsmasq_local_ip %>:5050/v1/continue ipa-inspection-collectors=<%= @ramdisk_collectors %> systemd.journald.forward_to_console=yes
+append initrd=agent.ramdisk ipa-inspection-callback-url=http://<%= @dnsmasq_local_ip %>:5050/v1/continue ipa-inspection-collectors=<%= @ramdisk_collectors %> systemd.journald.forward_to_console=yes <%= @ramdisk_kernel_args %>
 ipappend 3

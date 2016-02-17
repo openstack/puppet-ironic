@@ -138,6 +138,10 @@
 #   Comma-separated list of processing hooks to append to the default list.
 #   Defaults to undef
 #
+# [*ramdisk_kernel_args*]
+#   String with kernel arguments to send to the ramdisk on boot.
+#   Defaults to undef
+#
 class ironic::inspector (
   $package_ensure                  = 'present',
   $enabled                         = true,
@@ -169,6 +173,7 @@ class ironic::inspector (
   $sync_db                         = true,
   $ramdisk_collectors              = 'default',
   $additional_processing_hooks     = undef,
+  $ramdisk_kernel_args             = undef,
 ) {
 
   include ::ironic::params

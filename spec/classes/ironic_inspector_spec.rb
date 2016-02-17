@@ -143,6 +143,7 @@ describe 'ironic::inspector' do
           :swift_auth_url               => 'http://192.168.0.1:5000/v2.0',
           :pxe_transfer_protocol        => 'http',
           :additional_processing_hooks  => 'hook1,hook2',
+          :ramdisk_kernel_args          => 'foo=bar',
         )
       end
       it 'should replace default parameter with new value' do
@@ -171,7 +172,7 @@ describe 'ironic::inspector' do
           'content' => /ipxe/,
         )
         is_expected.to contain_file('/httpboot/inspector.ipxe').with_content(
-            /kernel http:\/\/192.168.0.1:8088\/agent.kernel ipa-inspection-callback-url=http:\/\/192.168.0.1:5050\/v1\/continue ipa-inspection-collectors=default/
+            /kernel http:\/\/192.168.0.1:8088\/agent.kernel ipa-inspection-callback-url=http:\/\/192.168.0.1:5050\/v1\/continue ipa-inspection-collectors=default.* foo=bar/
         )
       end
     end
