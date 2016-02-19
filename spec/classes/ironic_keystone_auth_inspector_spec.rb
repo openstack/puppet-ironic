@@ -45,7 +45,7 @@ describe 'ironic::keystone::auth_inspector' do
     it { is_expected.to contain_keystone_service('ironic-inspector::baremetal-introspection').with(
       :ensure      => 'present',
       :type        => 'baremetal-introspection',
-      :description => 'Baremetal Introspection Service'
+      :description => 'Bare Metal Introspection Service'
     ) }
 
     it { is_expected.to contain_keystone_endpoint('RegionOne/ironic-inspector::baremetal-introspection').with(
@@ -126,7 +126,7 @@ describe 'ironic::keystone::auth_inspector' do
     it { is_expected.to contain_keystone_service('ironic-inspector::baremetal-introspection').with(
       :ensure      => 'present',
       :type        => 'baremetal-introspection',
-      :description => 'Baremetal Introspection Service'
+      :description => 'Bare Metal Introspection Service'
     ) }
 
   end
@@ -148,7 +148,7 @@ describe 'ironic::keystone::auth_inspector' do
     it { is_expected.to contain_keystone_service('ironic-inspector::baremetal-introspection').with(
       :ensure      => 'present',
       :type        => 'baremetal-introspection',
-      :description => 'Baremetal Introspection Service'
+      :description => 'Bare Metal Introspection Service'
     ) }
 
   end

@@ -25,7 +25,7 @@
 #   (required) Password for Baremetal Introspection user.
 #
 # [*auth_name*]
-#   Username for Baremetal Introspection service. Defaults to 'ironic-inspector'.
+#   Username for Bare Metal Introspection Service. Defaults to 'ironic-inspector'.
 #
 # [*email*]
 #   Email for Baremetal Introspection user. Defaults to 'baremetal-introspection@localhost'.
@@ -53,7 +53,7 @@
 #
 # [*service_description*]
 #   (Optional) Description for keystone service.
-#   Defaults to 'Baremetal Introspection Service'.
+#   Defaults to 'Bare Metal Introspection Service'.
 #
 # [*region*]
 #   Region for endpoint. Defaults to 'RegionOne'.
@@ -88,7 +88,7 @@ class ironic::keystone::auth_inspector (
   $configure_user_role = true,
   $service_name        = undef,
   $service_type        = 'baremetal-introspection',
-  $service_description = 'Baremetal Introspection Service',
+  $service_description = 'Bare Metal Introspection Service',
   $region              = 'RegionOne',
   $public_url          = 'http://127.0.0.1:5050',
   $admin_url           = 'http://127.0.0.1:5050',
