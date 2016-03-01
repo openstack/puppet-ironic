@@ -5,3 +5,4 @@ dhcp-range=<%= @dnsmasq_ip_range %>,29
 enable-tftp
 tftp-root=/tftpboot
 dhcp-boot=pxelinux.0,localhost.localdomain,<%= @dnsmasq_local_ip %>
+dhcp-sequential-ip
