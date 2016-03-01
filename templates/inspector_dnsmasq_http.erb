@@ -7,3 +7,4 @@ tftp-root=/tftpboot
 dhcp-match=ipxe,175
 dhcp-boot=tag:!ipxe,undionly.kpxe,localhost.localdomain,<%= @dnsmasq_local_ip %>
 dhcp-boot=tag:ipxe,http://<%= @dnsmasq_local_ip %>:8088/inspector.ipxe
+dhcp-sequential-ip
