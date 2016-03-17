@@ -1,0 +1,36 @@
+---
+features:
+  - Use dnsmasq dhcp-sequential-ip flag in dnsmasq.conf
+    Introspection naturally happens in large bulks, after which it's inactive.
+    Small pool for DHCP addresses means that we'll have conflicts due to how
+    dnsmasq distributes them by default - using hashing. This change tells dnsmasq
+    to allocate IP addresses sequentially instead to avoid these conflicts.
+    The drawback of this option is that long-running clients may switch IP
+    addresses if their lease expires. This is not a concern for short introspection
+    process.
+  - Allow sending random kernel arguments to the IPA.
+    IPA accepts plenty of kernel arguments, adding all them explicitly
+    may be not practical. New option ramdisk_kernel_args allows to set
+    a string to append to the kernel command line when booting IPA.
+    One of the use-cases is ipa-inspection-benchmarks option, enabling benchmarking
+    during inspection.
+  - Allow changing list of processing hooks.
+    Processing hooks are ironic-inspector plugins for the data processing
+    pipeline. This change enables appending new hooks to the default list.
+  - Specify SELinux type context for tftp dir.
+    We create a /tftpboot/ dir in the root directory without
+    specifying a SELinux type context, so it gets default_t. The
+    tftp process is not allowed read permission on default_t, and
+    as a result the ironic-inspector-dnsmasq service fails to start.
+    The fix is to specify a type context of tftpdir_t when
+    creating the /tftpboot/ directory.
+    This feature pulls the /tftpboot/ directory out of the if
+    block relating only to tftp configuration. The /tftpboot/
+    directory is also used by iPXE/http for the undionly.kpxe
+    chainloading image.
+  - Enable changing list of inspection collectors.
+    Inspection collectors are IPA plugins that collect additional information
+    for inspection. This feature allow changing their list, with default remaining
+    the same (for now).
+  - Allow to create Keystone resources to deploy Ironic Inspector, like service, endpoints, etc.
+  - Create a separate class for configuring logging.

@@ -1,0 +1,3 @@
+---
+features:
+  - Allow to deploy Ironic API in WSGI with Apache.
