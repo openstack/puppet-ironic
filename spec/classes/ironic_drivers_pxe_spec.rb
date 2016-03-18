@@ -32,7 +32,9 @@ describe 'ironic::drivers::pxe' do
       :tftp_master_path         => '/tftpboot/master_images',
       :instance_master_path     => '/var/lib/ironic/master_images',
       :uefi_pxe_bootfile_name   => 'elilo.efi',
-      :uefi_pxe_config_template => '$pybasedir/drivers/modules/elilo_efi_pxe_config.template' }
+      :uefi_pxe_config_template => '$pybasedir/drivers/modules/elilo_efi_pxe_config.template',
+      :ipxe_timeout             => 0
+    }
   end
 
   let :params do
@@ -71,7 +73,8 @@ describe 'ironic::drivers::pxe' do
           :tftp_master_path         => '/mnt/master_images',
           :instance_master_path     => '/mnt/ironic/master_images',
           :uefi_pxe_bootfile_name   => 'bootx64.efi',
-          :uefi_pxe_config_template => 'foo-uefi'
+          :uefi_pxe_config_template => 'foo-uefi',
+          :ipxe_timeout             => '60'
         )
       end
 
@@ -88,6 +91,7 @@ describe 'ironic::drivers::pxe' do
         is_expected.to contain_ironic_config('pxe/instance_master_path').with_value(p[:instance_master_path])
         is_expected.to contain_ironic_config('pxe/uefi_pxe_bootfile_name').with_value(p[:uefi_pxe_bootfile_name])
         is_expected.to contain_ironic_config('pxe/uefi_pxe_config_template').with_value(p[:uefi_pxe_config_template])
+        is_expected.to contain_ironic_config('pxe/ipxe_timeout').with_value(p[:ipxe_timeout])
       end
     end
 
