@@ -77,6 +77,10 @@
 #   (optional) Template file for PXE configuration for UEFI boot loader.
 #   Defaults to '$pybasedir/drivers/modules/elilo_efi_pxe_config.template'.
 #
+# [*ipxe_timeout*]
+#   (optional) ipxe timeout in second.
+#   Should be an valid integer
+#   Defaults to '0' for unlimited.
 
 class ironic::drivers::pxe (
   $deploy_kernel            = undef,
@@ -91,6 +95,7 @@ class ironic::drivers::pxe (
   $instance_master_path     = '/var/lib/ironic/master_images',
   $uefi_pxe_bootfile_name   = 'elilo.efi',
   $uefi_pxe_config_template = '$pybasedir/drivers/modules/elilo_efi_pxe_config.template',
+  $ipxe_timeout             = '0',
 ) {
 
   # Configure ironic.conf
@@ -105,6 +110,7 @@ class ironic::drivers::pxe (
     'pxe/instance_master_path': value     => $instance_master_path;
     'pxe/uefi_pxe_bootfile_name': value   => $uefi_pxe_bootfile_name;
     'pxe/uefi_pxe_config_template': value => $uefi_pxe_config_template;
+    'pxe/ipxe_timeout': value             => $ipxe_timeout;
   }
 
   if $deploy_kernel {
