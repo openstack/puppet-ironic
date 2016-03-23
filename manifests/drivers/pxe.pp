@@ -81,6 +81,10 @@
 #   (optional) ipxe timeout in second.
 #   Should be an valid integer
 #   Defaults to '0' for unlimited.
+#
+# [*ipxe_enabled*]
+#   (optional) Enable ipxe support
+#   Defaults to $::os_service_default.
 
 class ironic::drivers::pxe (
   $deploy_kernel            = undef,
@@ -96,6 +100,7 @@ class ironic::drivers::pxe (
   $uefi_pxe_bootfile_name   = 'elilo.efi',
   $uefi_pxe_config_template = '$pybasedir/drivers/modules/elilo_efi_pxe_config.template',
   $ipxe_timeout             = '0',
+  $ipxe_enabled             = $::os_service_default,
 ) {
 
   # Configure ironic.conf
@@ -111,6 +116,7 @@ class ironic::drivers::pxe (
     'pxe/uefi_pxe_bootfile_name': value   => $uefi_pxe_bootfile_name;
     'pxe/uefi_pxe_config_template': value => $uefi_pxe_config_template;
     'pxe/ipxe_timeout': value             => $ipxe_timeout;
+    'pxe/ipxe_enabled': value             => $ipxe_enabled;
   }
 
   if $deploy_kernel {
