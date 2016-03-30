@@ -27,6 +27,9 @@ describe 'basic ironic' do
         require              => Class['rabbitmq'],
       }
 
+      # https://bugs.launchpad.net/ironic/+bug/1564075
+      Rabbitmq_user_permissions['ironic@/'] -> Service<| tag == 'ironic-service' |>
+
       # Ironic resources
       class { '::ironic':
         rabbit_userid       => 'ironic',
