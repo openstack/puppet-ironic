@@ -232,11 +232,13 @@ class ironic::inspector (
       ensure  => 'present',
       source  => 'puppet:///modules/ironic/undionly.kpxe',
       require => Package['ironic-inspector'],
+      backup  => false,
     }
     file { '/tftpboot/ipxe.efi':
       ensure  => 'present',
       source  => 'puppet:///modules/ironic/ipxe.efi',
       require => Package['ironic-inspector'],
+      backup  => false,
     }
   }
 
