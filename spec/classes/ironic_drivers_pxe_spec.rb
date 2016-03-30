@@ -58,6 +58,7 @@ describe 'ironic::drivers::pxe' do
       is_expected.to contain_ironic_config('pxe/uefi_pxe_bootfile_name').with_value(p[:uefi_pxe_bootfile_name])
       is_expected.to contain_ironic_config('pxe/uefi_pxe_config_template').with_value(p[:uefi_pxe_config_template])
       is_expected.to contain_ironic_config('pxe/ipxe_enabled').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('pxe/pxe_bootfile_name').with_value('<SERVICE DEFAULT>')
     end
 
     context 'when overriding parameters' do
@@ -76,7 +77,8 @@ describe 'ironic::drivers::pxe' do
           :uefi_pxe_bootfile_name   => 'bootx64.efi',
           :uefi_pxe_config_template => 'foo-uefi',
           :ipxe_timeout             => '60',
-          :ipxe_enabled             => true
+          :ipxe_enabled             => true,
+          :pxe_bootfile_name        => 'bootx64',
         )
       end
 
@@ -95,6 +97,7 @@ describe 'ironic::drivers::pxe' do
         is_expected.to contain_ironic_config('pxe/uefi_pxe_config_template').with_value(p[:uefi_pxe_config_template])
         is_expected.to contain_ironic_config('pxe/ipxe_timeout').with_value(p[:ipxe_timeout])
         is_expected.to contain_ironic_config('pxe/ipxe_enabled').with_value(p[:ipxe_enabled])
+        is_expected.to contain_ironic_config('pxe/pxe_bootfile_name').with_value(p[:pxe_bootfile_name])
       end
     end
 
