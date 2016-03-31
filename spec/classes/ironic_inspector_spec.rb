@@ -178,10 +178,12 @@ describe 'ironic::inspector' do
         is_expected.to contain_file('/tftpboot/undionly.kpxe').with(
           'ensure' => 'present',
           'require' => 'Package[ironic-inspector]',
+          'backup'  => false,
         )
         is_expected.to contain_file('/tftpboot/ipxe.efi').with(
           'ensure' => 'present',
           'require' => 'Package[ironic-inspector]',
+          'backup'  => false,
         )
       end
     end
