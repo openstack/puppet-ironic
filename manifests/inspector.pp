@@ -225,19 +225,23 @@ class ironic::inspector (
       content => template('ironic/inspector_ipxe.erb'),
       require => Package['ironic-inspector'],
     }
-    $bios_ipxe_file = '/tftpboot/undionly.kpxe'
-    exec { 'test BIOS iPXE image present':
-      path    => '/bin:/usr/bin',
-      command => 'exit 1',
-      unless  => "test -f ${bios_ipxe_file}",
-    }
-    if $enable_uefi {
-      $uefi_ipxe_file = '/tftpboot/ipxe.efi'
-      exec { 'test UEFI iPXE image present':
-        path    => '/bin:/usr/bin',
-        command => 'exit 1',
-        unless  => "test -f ${uefi_ipxe_file}",
+    if $::ironic::params::ipxe_rom_dir {
+      file { '/tftpboot/undionly.kpxe':
+        ensure  => 'present',
+        source  => "${::ironic::params::ipxe_rom_dir}/undionly.kpxe",
+        backup  => false,
+        seltype => 'tftpdir_t',
       }
+      if $enable_uefi {
+        file { '/tftpboot/ipxe.efi':
+          ensure  => 'present',
+          source  => "${::ironic::params::ipxe_rom_dir}/ipxe.efi",
+          backup  => false,
+          seltype => 'tftpdir_t',
+        }
+      }
+    } else {
+      warning('iPXE ROM source location not set, ensure ROMs are copied into /tftpboot')
     }
   }
 
