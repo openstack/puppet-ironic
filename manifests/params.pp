@@ -39,6 +39,7 @@ class ironic::params {
       $inspector_dnsmasq_service = 'openstack-ironic-inspector-dnsmasq'
       $sqlite_package_name       = undef
       $pymysql_package_name      = undef
+      $ipxe_rom_dir              = '/usr/share/ipxe'
     }
     'Debian': {
       $common_package_name       = 'ironic-common'
@@ -55,6 +56,7 @@ class ironic::params {
       $inspector_dnsmasq_service = 'ironic-inspector-dnsmasq'
       $sqlite_package_name       = 'python-pysqlite2'
       $pymysql_package_name      = 'python-pymysql'
+      $ipxe_rom_dir              = '/usr/lib/ipxe'
     }
     default: {
       fail("Unsupported osfamily ${::osfamily}")
