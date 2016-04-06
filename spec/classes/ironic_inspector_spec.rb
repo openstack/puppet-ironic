@@ -130,12 +130,12 @@ describe 'ironic::inspector' do
       )
     end
 
-    it 'should not test for BIOS iPXE image by default' do
-      is_expected.to_not contain_exec('test BIOS iPXE image present')
+    it 'should not contain BIOS iPXE image by default' do
+      is_expected.to_not contain_file('/tftpboot/undionly.kpxe')
     end
 
-    it 'should not test for UEFI iPXE image by default' do
-      is_expected.to_not contain_exec('test UEFI iPXE image present')
+    it 'should not contain UEFI iPXE image by default' do
+      is_expected.to_not contain_file('/tftpboot/ipxe.efi')
     end
 
     context 'when overriding parameters' do
@@ -184,20 +184,16 @@ describe 'ironic::inspector' do
             /kernel http:\/\/192.168.0.1:8088\/agent.kernel ipa-inspection-callback-url=http:\/\/192.168.0.1:5050\/v1\/continue ipa-inspection-collectors=default.* foo=bar/
         )
       end
-
-      it 'should test for BIOS iPXE image' do
-        is_expected.to contain_exec('test BIOS iPXE image present').with(
-          :path    => '/bin:/usr/bin',
-          :command => 'exit 1',
-          :unless  => 'test -f /tftpboot/undionly.kpxe'
+      it 'should contain iPXE chainload images' do
+        is_expected.to contain_file('/tftpboot/undionly.kpxe').with(
+          'ensure' => 'present',
+          'backup'  => false,
         )
       end
-
-      it 'should test for UEFI iPXE image' do
-        is_expected.to contain_exec('test UEFI iPXE image present').with(
-          :path    => '/bin:/usr/bin',
-          :command => 'exit 1',
-          :unless  => 'test -f /tftpboot/ipxe.efi'
+      it 'should contain iPXE UEFI chainload image' do
+        is_expected.to contain_file('/tftpboot/ipxe.efi').with(
+          'ensure' => 'present',
+          'backup'  => false,
         )
       end
     end
