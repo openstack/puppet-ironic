@@ -4,7 +4,16 @@ bind-interfaces
 dhcp-range=<%= @dnsmasq_ip_range %>,29
 enable-tftp
 tftp-root=/tftpboot
-dhcp-match=ipxe,175
-dhcp-boot=tag:!ipxe,undionly.kpxe,localhost.localdomain,<%= @dnsmasq_local_ip %>
-dhcp-boot=tag:ipxe,http://<%= @dnsmasq_local_ip %>:8088/inspector.ipxe
 dhcp-sequential-ip
+dhcp-match=ipxe,175
+<% if @enable_uefi -%>
+dhcp-match=set:efi,option:client-arch,7
+<% end -%>
+# Client is running iPXE; move to next stage of chainloading
+dhcp-boot=tag:ipxe,http://<%= @dnsmasq_local_ip %>:8088/inspector.ipxe
+<% if @enable_uefi -%>
+# Client is running PXE over EFI; send EFI version of iPXE chainloader
+dhcp-boot=tag:efi,ipxe.efi
+# Client is running PXE over BIOS; send BIOS version of iPXE chainloader
+<% end -%>
+dhcp-boot=undionly.kpxe,localhost.localdomain,<%= @dnsmasq_local_ip %>

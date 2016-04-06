@@ -2,6 +2,6 @@
 
 dhcp
 
-kernel http://<%= @dnsmasq_local_ip %>:8088/agent.kernel ipa-inspection-callback-url=http://<%= @dnsmasq_local_ip %>:5050/v1/continue ipa-inspection-collectors=<%= @ramdisk_collectors %> systemd.journald.forward_to_console=yes BOOTIF=${mac} <%= @ramdisk_kernel_args %>
+kernel http://<%= @dnsmasq_local_ip %>:8088/agent.kernel ipa-inspection-callback-url=http://<%= @dnsmasq_local_ip %>:5050/v1/continue ipa-inspection-collectors=<%= @ramdisk_collectors %> systemd.journald.forward_to_console=yes BOOTIF=${mac} <%= @ramdisk_kernel_args %> initrd=agent.ramdisk
 initrd http://<%= @dnsmasq_local_ip %>:8088/agent.ramdisk
 boot

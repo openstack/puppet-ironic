@@ -29,6 +29,10 @@
 #  (optional) Protocol to be used for transferring the ramdisk
 #  Defaults to 'tftp'. Valid values are 'tftp' or 'http'.
 #
+# [*enable_uefi*]
+# (optional) Allow introspection of machines with UEFI firmware.
+# Defaults to false. Ignored unless $pxe_transfer_protocol='http'.
+#
 # [*debug*]
 #   (optional) Enable debug logging
 #   Defaults to false
@@ -147,6 +151,7 @@ class ironic::inspector (
   $enabled                         = true,
   $pxe_transfer_protocol           = 'tftp',
   $debug                           = false,
+  $enable_uefi                     = false,
   $auth_uri                        = 'http://127.0.0.1:5000/v2.0',
   $identity_uri                    = 'http://127.0.0.1:35357',
   $admin_user                      = 'ironic',
@@ -218,6 +223,20 @@ class ironic::inspector (
       ensure  => 'present',
       content => template('ironic/inspector_ipxe.erb'),
       require => Package['ironic-inspector'],
+    }
+    $bios_ipxe_file = '/tftpboot/undionly.kpxe'
+    exec { 'test BIOS iPXE image present':
+      path    => '/bin:/usr/bin',
+      command => 'exit 1',
+      unless  => "test -f ${bios_ipxe_file}",
+    }
+    if $enable_uefi {
+      $uefi_ipxe_file = '/tftpboot/ipxe.efi'
+      exec { 'test UEFI iPXE image present':
+        path    => '/bin:/usr/bin',
+        command => 'exit 1',
+        unless  => "test -f ${uefi_ipxe_file}",
+      }
     }
   }
 
