@@ -174,18 +174,6 @@ describe 'ironic::inspector' do
             /kernel http:\/\/192.168.0.1:8088\/agent.kernel ipa-inspection-callback-url=http:\/\/192.168.0.1:5050\/v1\/continue ipa-inspection-collectors=default.* foo=bar/
         )
       end
-      it 'should contain iPXE chainload images' do
-        is_expected.to contain_file('/tftpboot/undionly.kpxe').with(
-          'ensure' => 'present',
-          'require' => 'Package[ironic-inspector]',
-          'backup'  => false,
-        )
-        is_expected.to contain_file('/tftpboot/ipxe.efi').with(
-          'ensure' => 'present',
-          'require' => 'Package[ironic-inspector]',
-          'backup'  => false,
-        )
-      end
     end
   end
 

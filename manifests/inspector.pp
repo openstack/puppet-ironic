@@ -220,26 +220,6 @@ class ironic::inspector (
       content => template('ironic/inspector_ipxe.erb'),
       require => Package['ironic-inspector'],
     }
-    # Copy across iPXE boot images for chainloading.
-    # These can be found in the "ipxe" package on Debian-family operating
-    # systems, but there is currently (2016-02-24) no RPM that includes the EFI
-    # image (https://bugzilla.redhat.com/show_bug.cgi?id=1295673 -
-    # internal-only link).
-    # TODO(mgould): when ipxe.efi is included in the "bootimgs" RPM, remove our
-    # copies and replace this code with "install the right OS package and copy
-    # the files to /tftpboot".
-    file { '/tftpboot/undionly.kpxe':
-      ensure  => 'present',
-      source  => 'puppet:///modules/ironic/undionly.kpxe',
-      require => Package['ironic-inspector'],
-      backup  => false,
-    }
-    file { '/tftpboot/ipxe.efi':
-      ensure  => 'present',
-      source  => 'puppet:///modules/ironic/ipxe.efi',
-      require => Package['ironic-inspector'],
-      backup  => false,
-    }
   }
 
   # Configure inspector.conf
