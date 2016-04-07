@@ -61,18 +61,21 @@ describe 'ironic::conductor' do
     it 'configures ironic.conf' do
       is_expected.to contain_ironic_config('conductor/max_time_interval').with_value(p[:max_time_interval])
       is_expected.to contain_ironic_config('conductor/force_power_state_during_sync').with_value(p[:force_power_state_during_sync])
+      is_expected.to contain_ironic_config('conductor/automated_clean').with(:value => '<SERVICE DEFAULT>')
     end
 
     context 'when overriding parameters' do
       before :each do
         params.merge!(
           :max_time_interval             => '50',
-          :force_power_state_during_sync => false
+          :force_power_state_during_sync => false,
+          :automated_clean               => false
         )
       end
       it 'should replace default parameter with new value' do
         is_expected.to contain_ironic_config('conductor/max_time_interval').with_value(p[:max_time_interval])
         is_expected.to contain_ironic_config('conductor/force_power_state_during_sync').with_value(p[:force_power_state_during_sync])
+        is_expected.to contain_ironic_config('conductor/automated_clean').with_value(p[:automated_clean])
       end
     end
 

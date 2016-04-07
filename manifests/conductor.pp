@@ -38,11 +38,16 @@
 #   state (False).
 #   Defaults to true.
 #
+# [*automated_clean*]
+#   (optional) Whether to enable automated cleaning on nodes.
+#   Defaults to $::os_service_default
+#
 class ironic::conductor (
   $package_ensure                = 'present',
   $enabled                       = true,
   $max_time_interval             = '120',
   $force_power_state_during_sync = true,
+  $automated_clean               = $::os_service_default,
 ) {
 
   include ::ironic::params
@@ -53,6 +58,7 @@ class ironic::conductor (
   ironic_config {
     'conductor/max_time_interval': value => $max_time_interval;
     'conductor/force_power_state_during_sync': value => $force_power_state_during_sync;
+    'conductor/automated_clean': value => $automated_clean;
   }
 
   # Install package
