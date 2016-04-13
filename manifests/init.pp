@@ -46,69 +46,103 @@
 #  initialization.
 #  Defaults to ['pxe_ipmitool'].
 #
+# [*rpc_response_timeout*]
+#   (optional) Seconds to wait for a response from a call. (integer value)
+#   Defaults to $::os_service_default.
+#
 # [*control_exchange*]
-#   (optional) What RPC queue/exchange to use
-#   Defaults to openstack
+#   (optional) What RPC queue/exchange to use (string value)
+#   Defaults to $::os_service_default
 #
 # [*rpc_backend*]
-#   (optional) what rpc/queuing service to use
-#   Defaults to rabbit (rabbitmq)
+#   (optional) what rpc/queuing service to use (string value)
+#   Defaults to $::os_service_default
 #
 # [*rabbit_host*]
-#   (Optional) IP or hostname of the rabbit server.
-#   Defaults to 'localhost'
-#
-# [*rabbit_port*]
-#   (Optional) Port of the rabbit server.
-#   Defaults to 5672.
+#   (optional) IP or hostname of the rabbit server. (string value)
+#   Defaults to $::os_service_default
 #
 # [*rabbit_hosts*]
-#   (Optional) Array of host:port (used with HA queues).
-#   If defined, will remove rabbit_host & rabbit_port parameters from config
-#   Defaults to undef.
+#   (optional) List of clustered rabbit servers. (string value)
+#   Defaults to $::os_service_default
 #
 # [*rabbit_user*]
-#   (Optional) User to connect to the rabbit server.
+#   (optional) User to connect to the rabbit server.
 #   Defaults to undef.
 #   Deprecated, use rabbit_userid instead.
 #
 # [*rabbit_userid*]
-#   (Optional) User to connect to the rabbit server.
-#   Defaults to 'guest'
+#   (optional) User used to connect to rabbitmq. (string value)
+#   Defaults to $::os_service_default
+#
+# [*rabbit_port*]
+#   (optional) Port for rabbitmq instance. (port value)
+#   Defaults to $::os_service_default
 #
 # [*rabbit_password*]
-#   (Optional) Password to connect to the rabbit_server.
-#   Defaults to empty.
+#   (optional) Password used to connect to rabbitmq. (string value)
+#   Defaults to $::os_service_default
 #
 # [*rabbit_virtual_host*]
-#   (Optional) Virtual_host to use.
-#   Defaults to '/'
+#   (optional) The RabbitMQ virtual host. (string value)
+#   Defaults to $::os_service_default
 #
 # [*rabbit_use_ssl*]
-#   (optional) Connect over SSL for RabbitMQ
-#   Defaults to false
+#   (optional) Connect over SSL for RabbitMQ. (boolean value)
+#   Defaults to $::os_service_default
+#
+# [*rabbit_ha_queues*]
+#   (optional) Use HA queues in RabbitMQ. (boolean value)
+#   Defaults to $::os_service_default
+#
+# [*rabbit_heartbeat_timeout_threshold*]
+#   (optional) Number of seconds after which the RabbitMQ broker is considered
+#   down if the heartbeat keepalive fails.  Any value >0 enables heartbeats.
+#   Heartbeating helps to ensure the TCP connection to RabbitMQ isn't silently
+#   closed, resulting in missed or lost messages from the queue.
+#   Requires kombu >= 3.0.7 and amqp >= 1.4.0. (integer value)
+#   Defaults to $::os_service_default
+#
+# [*rabbit_heartbeat_rate*]
+#   (optional) How often during the rabbit_heartbeat_timeout_threshold period
+#   to check the heartbeat on RabbitMQ connection.
+#   i.e. rabbit_heartbeat_rate=2 when rabbit_heartbeat_timeout_threshold=60,
+#   the heartbeat will be checked every 30 seconds. (integer value)
+#   Defaults to $::os_service_default
 #
 # [*kombu_ssl_ca_certs*]
 #   (optional) SSL certification authority file (valid only if SSL enabled).
-#   Defaults to undef
+#   (string value)
+#   Defaults to $::os_service_default
 #
 # [*kombu_ssl_certfile*]
-#   (optional) SSL cert file (valid only if SSL enabled).
-#   Defaults to undef
+#   (optional) SSL cert file (valid only if SSL enabled). (string value)
+#   Defaults to $::os_service_default
 #
 # [*kombu_ssl_keyfile*]
-#   (optional) SSL key file (valid only if SSL enabled).
-#   Defaults to undef
+#   (optional) SSL key file (valid only if SSL enabled). (string value)
+#   Defaults to $::os_service_default
 #
 # [*kombu_ssl_version*]
 #   (optional) SSL version to use (valid only if SSL enabled).
 #   Valid values are TLSv1, SSLv23 and SSLv3. SSLv2 may be
-#   available on some distributions.
-#   Defaults to 'TLSv1'
+#   available on some distributions. (string value)
+#   Defaults to $::os_service_default
+#
+# [*kombu_reconnect_delay*]
+#   (optional) How long to wait before reconnecting in response to an AMQP
+#   consumer cancel notification. (floating point value)
+#   Defaults to $::os_service_default
+#
+# [*kombu_compression*]
+#   (optional) Possible values are: gzip, bz2. If not set compression will not
+#   be used. This option may notbe available in future versions. EXPERIMENTAL.
+#   (string value)
+#   Defaults to $::os_service_default
 #
 # [*amqp_durable_queues*]
-#   Use durable queues in amqp.
-#   (Optional) Defaults to false.
+#   (optional) Define queues as "durable" to rabbitmq. (boolean value)
+#   Defaults to $::os_service_default
 #
 # [*use_syslog*]
 #   (optional) Use syslog for logging
@@ -177,42 +211,48 @@
 #   Defaults to true
 #
 class ironic (
-  $enabled                     = true,
-  $package_ensure              = 'present',
-  $verbose                     = undef,
-  $debug                       = undef,
-  $use_syslog                  = undef,
-  $use_stderr                  = undef,
-  $log_facility                = undef,
-  $log_dir                     = undef,
-  $auth_strategy               = 'keystone',
-  $enabled_drivers             = ['pxe_ipmitool'],
-  $control_exchange            = 'openstack',
-  $rpc_backend                 = 'rabbit',
-  $rabbit_hosts                = false,
-  $rabbit_virtual_host         = '/',
-  $rabbit_host                 = 'localhost',
-  $rabbit_port                 = 5672,
-  $rabbit_userid               = 'guest',
-  $rabbit_password             = false,
-  $rabbit_use_ssl              = false,
-  $kombu_ssl_ca_certs          = undef,
-  $kombu_ssl_certfile          = undef,
-  $kombu_ssl_keyfile           = undef,
-  $kombu_ssl_version           = 'TLSv1',
-  $amqp_durable_queues         = false,
-  $database_connection         = undef,
-  $database_max_retries        = undef,
-  $database_idle_timeout       = undef,
-  $database_reconnect_interval = undef,
-  $database_retry_interval     = undef,
-  $database_min_pool_size      = undef,
-  $database_max_pool_size      = undef,
-  $database_max_overflow       = undef,
-  $glance_api_servers          = undef,
-  $glance_num_retries          = '0',
-  $glance_api_insecure         = false,
-  $sync_db                     = true,
+  $enabled                            = true,
+  $package_ensure                     = 'present',
+  $verbose                            = undef,
+  $debug                              = undef,
+  $use_syslog                         = undef,
+  $use_stderr                         = undef,
+  $log_facility                       = undef,
+  $log_dir                            = undef,
+  $auth_strategy                      = 'keystone',
+  $enabled_drivers                    = ['pxe_ipmitool'],
+  $control_exchange                   = $::os_service_default,
+  $rpc_response_timeout               = $::os_service_default,
+  $rpc_backend                        = $::os_service_default,
+  $rabbit_host                        = $::os_service_default,
+  $rabbit_hosts                       = $::os_service_default,
+  $rabbit_password                    = $::os_service_default,
+  $rabbit_port                        = $::os_service_default,
+  $rabbit_userid                      = $::os_service_default,
+  $rabbit_virtual_host                = $::os_service_default,
+  $rabbit_use_ssl                     = $::os_service_default,
+  $rabbit_heartbeat_timeout_threshold = $::os_service_default,
+  $rabbit_heartbeat_rate              = $::os_service_default,
+  $rabbit_ha_queues                   = $::os_service_default,
+  $kombu_ssl_ca_certs                 = $::os_service_default,
+  $kombu_ssl_certfile                 = $::os_service_default,
+  $kombu_ssl_keyfile                  = $::os_service_default,
+  $kombu_ssl_version                  = $::os_service_default,
+  $kombu_reconnect_delay              = $::os_service_default,
+  $kombu_compression                  = $::os_service_default,
+  $amqp_durable_queues                = $::os_service_default,
+  $database_connection                = undef,
+  $database_max_retries               = undef,
+  $database_idle_timeout              = undef,
+  $database_reconnect_interval        = undef,
+  $database_retry_interval            = undef,
+  $database_min_pool_size             = undef,
+  $database_max_pool_size             = undef,
+  $database_max_overflow              = undef,
+  $glance_api_servers                 = undef,
+  $glance_num_retries                 = '0',
+  $glance_api_insecure                = false,
+  $sync_db                            = true,
   # DEPRECATED PARAMETERS
   $rabbit_user                 = undef,
 ) {
@@ -270,7 +310,6 @@ class ironic (
 
   ironic_config {
     'DEFAULT/auth_strategy':           value => $auth_strategy;
-    'DEFAULT/rpc_backend':             value => $rpc_backend;
     'DEFAULT/enabled_drivers':         value => join($enabled_drivers, ',');
     'glance/glance_num_retries':       value => $glance_num_retries;
     'glance/glance_api_insecure':      value => $glance_api_insecure;
@@ -280,61 +319,33 @@ class ironic (
     include ::ironic::db::sync
   }
 
-  if $rpc_backend == 'ironic.openstack.common.rpc.impl_kombu' or $rpc_backend == 'rabbit' {
+  oslo::messaging::default {'ironic_config':
+      rpc_response_timeout => $rpc_response_timeout,
+      control_exchange     => $control_exchange,
+  }
 
-    if ! $rabbit_password {
-      fail('When rpc_backend is rabbitmq, you must set rabbit password')
+  if $rpc_backend in [$::os_service_default, 'ironic.openstack.common.rpc.impl_kombu', 'rabbit'] {
+    oslo::messaging::rabbit {'ironic_config':
+      rabbit_password             => $rabbit_password,
+      rabbit_userid               => $rabbit_user_real,
+      rabbit_virtual_host         => $rabbit_virtual_host,
+      rabbit_use_ssl              => $rabbit_use_ssl,
+      heartbeat_timeout_threshold => $rabbit_heartbeat_timeout_threshold,
+      heartbeat_rate              => $rabbit_heartbeat_rate,
+      kombu_reconnect_delay       => $kombu_reconnect_delay,
+      amqp_durable_queues         => $amqp_durable_queues,
+      kombu_compression           => $kombu_compression,
+      kombu_ssl_ca_certs          => $kombu_ssl_ca_certs,
+      kombu_ssl_certfile          => $kombu_ssl_certfile,
+      kombu_ssl_keyfile           => $kombu_ssl_keyfile,
+      kombu_ssl_version           => $kombu_ssl_version,
+      rabbit_hosts                => $rabbit_hosts,
+      rabbit_host                 => $rabbit_host,
+      rabbit_port                 => $rabbit_port,
+      rabbit_ha_queues            => $rabbit_ha_queues,
     }
-
-    ironic_config {
-      'oslo_messaging_rabbit/rabbit_userid':       value => $rabbit_user_real;
-      'oslo_messaging_rabbit/rabbit_password':     value => $rabbit_password, secret => true;
-      'oslo_messaging_rabbit/rabbit_virtual_host': value => $rabbit_virtual_host;
-      'oslo_messaging_rabbit/rabbit_use_ssl':      value => $rabbit_use_ssl;
-      'DEFAULT/control_exchange':    value => $control_exchange;
-      'oslo_messaging_rabbit/amqp_durable_queues': value => $amqp_durable_queues;
-    }
-
-    if $rabbit_hosts {
-      ironic_config { 'oslo_messaging_rabbit/rabbit_hosts':     value  => join($rabbit_hosts, ',') }
-      ironic_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value  => true }
-      ironic_config { 'oslo_messaging_rabbit/rabbit_host':      ensure => absent }
-      ironic_config { 'oslo_messaging_rabbit/rabbit_port':      ensure => absent }
-    } else  {
-      ironic_config { 'oslo_messaging_rabbit/rabbit_host':      value => $rabbit_host }
-      ironic_config { 'oslo_messaging_rabbit/rabbit_port':      value => $rabbit_port }
-      ironic_config { 'oslo_messaging_rabbit/rabbit_hosts':     value => "${rabbit_host}:${rabbit_port}" }
-      ironic_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value => false }
-    }
-
-    if $rabbit_use_ssl {
-      ironic_config { 'oslo_messaging_rabbit/kombu_ssl_version': value => $kombu_ssl_version }
-
-      if $kombu_ssl_ca_certs {
-        ironic_config { 'oslo_messaging_rabbit/kombu_ssl_ca_certs': value => $kombu_ssl_ca_certs }
-      } else {
-        ironic_config { 'oslo_messaging_rabbit/kombu_ssl_ca_certs': ensure => absent}
-      }
-
-      if $kombu_ssl_certfile {
-        ironic_config { 'oslo_messaging_rabbit/kombu_ssl_certfile': value => $kombu_ssl_certfile }
-      } else {
-        ironic_config { 'oslo_messaging_rabbit/kombu_ssl_certfile': ensure => absent}
-      }
-
-      if $kombu_ssl_keyfile {
-        ironic_config { 'oslo_messaging_rabbit/kombu_ssl_keyfile': value => $kombu_ssl_keyfile }
-      } else {
-        ironic_config { 'oslo_messaging_rabbit/kombu_ssl_keyfile': ensure => absent}
-      }
-    } else {
-      ironic_config {
-        'oslo_messaging_rabbit/kombu_ssl_ca_certs': ensure => absent;
-        'oslo_messaging_rabbit/kombu_ssl_certfile': ensure => absent;
-        'oslo_messaging_rabbit/kombu_ssl_keyfile':  ensure => absent;
-        'oslo_messaging_rabbit/kombu_ssl_version':  ensure => absent;
-      }
-    }
+  } else {
+    ironic_config { 'DEFAULT/rpc_backend': value => $rpc_backend }
   }
 
 }

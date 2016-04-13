@@ -89,8 +89,29 @@ describe 'ironic::db' do
         { :database_connection     => 'mysql+pymysql://ironic:ironic@localhost/ironic' }
       end
 
-      it { is_expected.to contain_package('ironic-backend-package').with({ :ensure => 'present', :name => 'python-pymysql' }) }
+      it 'install the proper backend package' do
+        is_expected.to contain_package('db_backend_package').with(
+          :ensure => 'present',
+          :name   => 'python-pymysql',
+          :tag    => ['openstack'],
+        )
+      end
     end
+
+    context 'with sqlite backend' do
+      let :params do
+        { :database_connection     => 'sqlite:///var/lib/nova/nova.sqlite', }
+      end
+
+      it 'install the proper backend package' do
+        is_expected.to contain_package('db_backend_package').with(
+          :ensure => 'present',
+          :name   => 'python-pysqlite2',
+          :tag    => ['openstack'],
+        )
+      end
+    end
+
   end
 
   context 'on Redhat platforms' do
@@ -107,7 +128,7 @@ describe 'ironic::db' do
         { :database_connection     => 'mysql+pymysql://ironic:ironic@localhost/ironic' }
       end
 
-      it { is_expected.not_to contain_package('ironic-backend-package') }
+      it { is_expected.not_to contain_package('db_backend_package') }
     end
   end
 

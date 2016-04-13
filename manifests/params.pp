@@ -37,8 +37,6 @@ class ironic::params {
       $inspector_package         = 'openstack-ironic-inspector'
       $inspector_service         = 'openstack-ironic-inspector'
       $inspector_dnsmasq_service = 'openstack-ironic-inspector-dnsmasq'
-      $sqlite_package_name       = undef
-      $pymysql_package_name      = undef
       $ipxe_rom_dir              = '/usr/share/ipxe'
       $ironic_wsgi_script_path   = '/var/www/cgi-bin/ironic'
       $ironic_wsgi_script_source = '/usr/lib/python2.7/site-packages/ironic/api/app.wsgi'
@@ -56,8 +54,6 @@ class ironic::params {
       # https://packages.debian.org/source/experimental/ironic-inspector
       # this should be changed to whatever debian will use for dnsmasq
       $inspector_dnsmasq_service = 'ironic-inspector-dnsmasq'
-      $sqlite_package_name       = 'python-pysqlite2'
-      $pymysql_package_name      = 'python-pymysql'
       $ipxe_rom_dir              = '/usr/lib/ipxe'
       $ironic_wsgi_script_path   = '/usr/lib/cgi-bin/ironic'
       $ironic_wsgi_script_source = '/usr/lib/python2.7/dist-packages/ironic/api/app.wsgi'

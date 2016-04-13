@@ -27,12 +27,6 @@ describe 'ironic' do
       :verbose                     => false,
       :debug                       => false,
       :enabled_drivers             => ['pxe_ipmitool'],
-      :rabbit_host                 => '127.0.0.1',
-      :rabbit_port                 => 5672,
-      :rabbit_hosts                => false,
-      :rabbit_userid               => 'guest',
-      :rabbit_password             => 'guest',
-      :rabbit_virtual_host         => '/',
       :database_connection         => 'sqlite:////var/lib/ironic/ironic.sqlite',
       :database_max_retries        => 10,
       :database_idle_timeout       => 3600,
@@ -57,10 +51,6 @@ describe 'ironic' do
     end
 
     context 'and if rabbit_hosts parameter is provided' do
-      before do
-        params.delete(:rabbit_host)
-        params.delete(:rabbit_port)
-      end
 
       context 'with one server' do
         before { params.merge!( :rabbit_hosts => ['127.0.0.1:5672'] ) }
@@ -110,9 +100,9 @@ describe 'ironic' do
     end
 
     it 'configures credentials for rabbit' do
-      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_userid').with_value( params[:rabbit_userid] )
-      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_password').with_value( params[:rabbit_password] )
-      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_userid').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_password').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_virtual_host').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_password').with_secret( true )
     end
 
@@ -130,23 +120,24 @@ describe 'ironic' do
 
     it 'configures ironic.conf' do
       is_expected.to contain_ironic_config('DEFAULT/auth_strategy').with_value('keystone')
-      is_expected.to contain_ironic_config('DEFAULT/control_exchange').with_value('openstack')
+      is_expected.to contain_ironic_config('DEFAULT/rpc_response_timeout').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('DEFAULT/control_exchange').with_value('<SERVICE DEFAULT>')
     end
   end
 
   shared_examples_for 'rabbit HA with a single virtual host' do
     it 'in ironic.conf' do
-      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_host').with_ensure('absent')
-      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_port').with_ensure('absent')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_host').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_port').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_hosts').with_value( params[:rabbit_hosts] )
-      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value(true)
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('<SERVICE DEFAULT>')
     end
   end
 
   shared_examples_for 'rabbit HA with multiple hosts' do
     it 'in ironic.conf' do
-      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_host').with_ensure('absent')
-      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_port').with_ensure('absent')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_host').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_port').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') )
       is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value(true)
     end
@@ -181,10 +172,10 @@ describe 'ironic' do
 
     it do
       is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('true')
-      is_expected.to contain_ironic_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_ensure('absent')
-      is_expected.to contain_ironic_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_ensure('absent')
-      is_expected.to contain_ironic_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_ensure('absent')
-      is_expected.to contain_ironic_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('TLSv1')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('<SERVICE DEFAULT>')
     end
   end
 
@@ -192,25 +183,21 @@ describe 'ironic' do
     before do
       params.merge!(
         :rabbit_use_ssl     => false,
-        :kombu_ssl_ca_certs => 'undef',
-        :kombu_ssl_certfile => 'undef',
-        :kombu_ssl_keyfile  => 'undef',
-        :kombu_ssl_version  => 'TLSv1'
       )
     end
 
     it do
       is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('false')
-      is_expected.to contain_ironic_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_ensure('absent')
-      is_expected.to contain_ironic_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_ensure('absent')
-      is_expected.to contain_ironic_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_ensure('absent')
-      is_expected.to contain_ironic_config('oslo_messaging_rabbit/kombu_ssl_version').with_ensure('absent')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('<SERVICE DEFAULT>')
     end
   end
 
 
   shared_examples_for 'with amqp_durable_queues disabled' do
-    it { is_expected.to contain_ironic_config('oslo_messaging_rabbit/amqp_durable_queues').with_value(false) }
+    it { is_expected.to contain_ironic_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('<SERVICE DEFAULT>') }
   end
 
   shared_examples_for 'with amqp_durable_queues enabled' do
