@@ -176,22 +176,6 @@
 #   Enable dbsync
 #   Defaults to true
 #
-# DEPRECATED PARAMETERS
-#
-# [*qpid_hostname*]
-# [*qpid_port*]
-# [*qpid_username*]
-# [*qpid_password*]
-# [*qpid_heartbeat*]
-# [*qpid_protocol*]
-# [*qpid_tcp_nodelay*]
-# [*qpid_reconnect*]
-# [*qpid_reconnect_timeout*]
-# [*qpid_reconnect_limit*]
-# [*qpid_reconnect_interval*]
-# [*qpid_reconnect_interval_min*]
-# [*qpid_reconnect_interval_max*]
-#
 class ironic (
   $enabled                     = true,
   $package_ensure              = 'present',
@@ -231,19 +215,6 @@ class ironic (
   $sync_db                     = true,
   # DEPRECATED PARAMETERS
   $rabbit_user                 = undef,
-  $qpid_hostname               = undef,
-  $qpid_port                   = undef,
-  $qpid_username               = undef,
-  $qpid_password               = undef,
-  $qpid_heartbeat              = undef,
-  $qpid_protocol               = undef,
-  $qpid_tcp_nodelay            = undef,
-  $qpid_reconnect              = undef,
-  $qpid_reconnect_timeout      = undef,
-  $qpid_reconnect_limit        = undef,
-  $qpid_reconnect_interval_min = undef,
-  $qpid_reconnect_interval_max = undef,
-  $qpid_reconnect_interval     = undef,
 ) {
 
   include ::ironic::logging
@@ -353,10 +324,6 @@ class ironic (
         'oslo_messaging_rabbit/kombu_ssl_version':  ensure => absent;
       }
     }
-  }
-
-  if $rpc_backend == 'ironic.openstack.common.rpc.impl_qpid' or $rpc_backend == 'qpid' {
-    warning('Qpid driver is removed from Oslo.messaging in the Mitaka release')
   }
 
 }
