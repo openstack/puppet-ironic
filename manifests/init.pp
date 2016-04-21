@@ -247,6 +247,17 @@ class ironic (
 
   validate_array($enabled_drivers)
 
+  # On Ubuntu, ipmitool dependency is missing and ironic-conductor fails to start.
+  # https://bugs.launchpad.net/cloud-archive/+bug/1572800
+  if member($enabled_drivers, 'pxe_ipmitool') and $::osfamily == 'Debian' {
+    ensure_packages('ipmitool',
+      {
+        ensure => $package_ensure,
+        tag    => ['openstack', 'ironic-package'],
+      }
+    )
+  }
+
   if is_array($glance_api_servers) {
     ironic_config {
       'glance/glance_api_servers': value => join($glance_api_servers, ',');
