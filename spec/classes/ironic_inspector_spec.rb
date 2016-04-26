@@ -44,7 +44,8 @@ describe 'ironic::inspector' do
       :swift_tenant_name               => 'services',
       :swift_auth_url                  => 'http://127.0.0.1:5000/v2.0',
       :dnsmasq_ip_range                => '192.168.0.100,192.168.0.120',
-      :dnsmasq_local_ip                => '192.168.0.1', }
+      :dnsmasq_local_ip                => '192.168.0.1',
+      :ipxe_timeout                    => 0, }
   end
 
   let :params do
@@ -181,7 +182,7 @@ describe 'ironic::inspector' do
           'content' => /ipxe/,
         )
         is_expected.to contain_file('/httpboot/inspector.ipxe').with_content(
-            /kernel http:\/\/192.168.0.1:8088\/agent.kernel ipa-inspection-callback-url=http:\/\/192.168.0.1:5050\/v1\/continue ipa-inspection-collectors=default.* foo=bar/
+            /kernel http:\/\/192.168.0.1:8088\/agent.kernel ipa-inspection-callback-url=http:\/\/192.168.0.1:5050\/v1\/continue ipa-inspection-collectors=default.* foo=bar || goto retry_boot/
         )
       end
       it 'should contain iPXE chainload images' do
@@ -195,6 +196,19 @@ describe 'ironic::inspector' do
           'ensure' => 'present',
           'backup'  => false,
         )
+      end
+
+      context 'when ipxe_timeout is set' do
+        before :each do
+          params.merge!(
+            :ipxe_timeout => 30,
+          )
+        end
+
+        it 'should contain file /httpboot/inspector.ipxe' do
+          is_expected.to contain_file('/httpboot/inspector.ipxe').with_content(
+              /kernel --timeout 30000/)
+        end
       end
     end
   end
