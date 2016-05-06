@@ -26,4 +26,6 @@ class ironic::policy (
 
   create_resources('openstacklib::policy::base', $policies)
 
+  oslo::policy { 'ironic_config': policy_file => $policy_path }
+
 }
