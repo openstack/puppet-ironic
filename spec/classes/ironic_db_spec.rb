@@ -13,6 +13,7 @@ describe 'ironic::db' do
       it { is_expected.to contain_ironic_config('database/max_overflow').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_ironic_config('database/max_retries').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_ironic_config('database/retry_interval').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_ironic_config('database/db_max_retries').with_value('<SERVICE DEFAULT>') }
 
     end
 
@@ -24,7 +25,9 @@ describe 'ironic::db' do
           :database_max_pool_size  => '21',
           :database_max_retries    => '11',
           :database_max_overflow   => '21',
-          :database_retry_interval => '11', }
+          :database_retry_interval => '11',
+          :database_db_max_retries => '-1',
+        }
       end
 
       it { is_expected.to contain_ironic_config('database/connection').with_value('mysql+pymysql://ironic:ironic@localhost/ironic').with_secret(true) }
@@ -34,6 +37,7 @@ describe 'ironic::db' do
       it { is_expected.to contain_ironic_config('database/max_pool_size').with_value('21') }
       it { is_expected.to contain_ironic_config('database/max_overflow').with_value('21') }
       it { is_expected.to contain_ironic_config('database/retry_interval').with_value('11') }
+      it { is_expected.to contain_ironic_config('database/db_max_retries').with_value('-1') }
 
     end
 

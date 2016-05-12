@@ -33,6 +33,11 @@
 #   If set, use this value for max_overflow with sqlalchemy.
 #   (Optional) Defaults to $::os_service_default
 #
+# [*database_db_max_retries*]
+#   (Optional) Maximum retries in case of connection error or deadlock error
+#   before error is raised. Set to -1 to specify an infinite retry count.
+#   Defaults to $::os_service_default
+#
 class ironic::db (
   $database_connection     = 'sqlite:////var/lib/ironic/ovs.sqlite',
   $database_idle_timeout   = $::os_service_default,
@@ -41,6 +46,7 @@ class ironic::db (
   $database_min_pool_size  = $::os_service_default,
   $database_max_pool_size  = $::os_service_default,
   $database_max_overflow   = $::os_service_default,
+  $database_db_max_retries = $::os_service_default,
 ) {
 
   # NOTE(spredzy): In order to keep backward compatibility we rely on the pick function
@@ -64,6 +70,7 @@ class ironic::db (
     max_retries    => $database_max_retries_real,
     retry_interval => $database_retry_interval_real,
     max_overflow   => $database_max_overflow_real,
+    db_max_retries => $database_db_max_retries,
   }
 
 }
