@@ -146,6 +146,10 @@
 #   String with kernel arguments to send to the ramdisk on boot.
 #   Defaults to undef
 #
+# [*ipxe_timeout*]
+#   (optional) ipxe timeout in second. Should be an integer.
+#   Defaults to '0' for unlimited.
+#
 class ironic::inspector (
   $package_ensure                  = 'present',
   $enabled                         = true,
@@ -179,6 +183,7 @@ class ironic::inspector (
   $ramdisk_collectors              = 'default',
   $additional_processing_hooks     = undef,
   $ramdisk_kernel_args             = undef,
+  $ipxe_timeout                    = 0,
 ) {
 
   include ::ironic::params
