@@ -1,0 +1,3 @@
+---
+features:
+  - Allow to configure Ironic deploy_utils with ironic::drivers::deploy class.
