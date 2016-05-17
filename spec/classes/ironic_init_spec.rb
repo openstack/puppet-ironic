@@ -124,6 +124,7 @@ describe 'ironic' do
 
     it 'configures ironic.conf' do
       is_expected.to contain_ironic_config('DEFAULT/auth_strategy').with_value('keystone')
+      is_expected.to contain_ironic_config('DEFAULT/my_ip').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('DEFAULT/rpc_response_timeout').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('DEFAULT/control_exchange').with_value('<SERVICE DEFAULT>')
     end
