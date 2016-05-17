@@ -84,6 +84,10 @@
 #   to make ironic-api be a web app using apache mod_wsgi.
 #   Defaults to '$::ironic::params::api_service'
 #
+# [*public_endpoint*]
+#   (Optional) Public URL to use when building the links to the API resources
+#   Defaults to $::os_service_default
+#
 
 class ironic::api (
   $package_ensure    = 'present',
@@ -98,6 +102,7 @@ class ironic::api (
   $admin_tenant_name = 'services',
   $admin_user        = 'ironic',
   $neutron_url       = 'http://127.0.0.1:9696/',
+  $public_endpoint   = $::os_service_default,
   $admin_password,
   # DEPRECATED PARAMETER
   $auth_version      = false,
@@ -111,10 +116,11 @@ class ironic::api (
 
   # Configure ironic.conf
   ironic_config {
-    'api/host_ip':     value => $host_ip;
-    'api/port':        value => $port;
-    'api/max_limit':   value => $max_limit;
-    'api/api_workers': value => $workers;
+    'api/host_ip':         value => $host_ip;
+    'api/port':            value => $port;
+    'api/max_limit':       value => $max_limit;
+    'api/api_workers':     value => $workers;
+    'api/public_endpoint': value => $public_endpoint;
   }
 
   # Install package
