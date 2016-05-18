@@ -4,10 +4,6 @@
 #
 # == parameters
 #
-#  [*verbose*]
-#    (Optional) Should the daemons log verbose messages
-#    Defaults to $::os_service_default
-#
 #  [*debug*]
 #    (Optional) Should the daemons log debug messages
 #    Defaults to $::os_service_default
@@ -88,13 +84,18 @@
 #    (optional) Format string for %%(asctime)s in log records.
 #    Defaults to $::os_service_default
 #    Example: 'Y-%m-%d %H:%M:%S'
-
+#
+#  DEPRECATED PARAMETERS
+#
+#  [*verbose*]
+#    (Optional) Deprecated, Should the daemons log verbose messages
+#    Defaults to undef
+#
 class ironic::inspector::logging(
   $use_syslog                    = $::os_service_default,
   $use_stderr                    = $::os_service_default,
   $log_facility                  = $::os_service_default,
   $log_dir                       = '/var/log/ironic-inspector',
-  $verbose                       = $::os_service_default,
   $debug                         = $::os_service_default,
   $logging_context_format_string = $::os_service_default,
   $logging_default_format_string = $::os_service_default,
@@ -107,6 +108,8 @@ class ironic::inspector::logging(
   $instance_format               = $::os_service_default,
   $instance_uuid_format          = $::os_service_default,
   $log_date_format               = $::os_service_default,
+  #Deprecated
+  $verbose                       = undef,
 ) {
 
   $debug_real = pick($::ironic::inspector::debug,$debug)
@@ -116,9 +119,12 @@ class ironic::inspector::logging(
     $default_log_levels_real = join(sort(join_keys_to_values($default_log_levels, '=')), ',')
   }
 
+  if $verbose {
+    warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
+  }
+
   ironic_inspector_config {
     'DEFAULT/debug':                         value => $debug_real;
-    'DEFAULT/verbose':                       value => $verbose;
     'DEFAULT/use_stderr':                    value => $use_stderr;
     'DEFAULT/use_syslog':                    value => $use_syslog;
     'DEFAULT/log_dir':                       value => $log_dir;

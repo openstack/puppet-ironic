@@ -88,12 +88,12 @@ puppet-ironic is a combination of Puppet manifest and ruby code to delivery conf
 The `ironic_config` provider is a children of the ini_setting provider. It allows one to write an entry in the `/etc/ironic/ironic.conf` file.
 
 ```puppet
-ironic_config { 'DEFAULT/verbose' :
-  value => true,
+ironic_config { 'DEFAULT/my_ip' :
+  value => 127.0.0.1,
 }
 ```
 
-This will write `verbose=true` in the `[DEFAULT]` section.
+This will write `my_ip=127.0.0.1` in the `[DEFAULT]` section.
 
 ##### name
 

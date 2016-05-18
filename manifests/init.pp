@@ -29,10 +29,6 @@
 #   (optional) The state of the package
 #   Defaults to 'present'
 #
-# [*verbose*]
-#   (optional) Verbose logging
-#   Defaults to False
-#
 # [*debug*]
 #   (optional) Print debug messages in the logs
 #   Defaults to False
@@ -71,11 +67,6 @@
 # [*rabbit_hosts*]
 #   (optional) List of clustered rabbit servers. (string value)
 #   Defaults to $::os_service_default
-#
-# [*rabbit_user*]
-#   (optional) User to connect to the rabbit server.
-#   Defaults to undef.
-#   Deprecated, use rabbit_userid instead.
 #
 # [*rabbit_userid*]
 #   (optional) User used to connect to rabbitmq. (string value)
@@ -280,10 +271,21 @@
 #   Enable dbsync
 #   Defaults to true
 #
+# DEPRECATED PARAMETERS
+#
+# [*rabbit_user*]
+#   (optional) User to connect to the rabbit server.
+#   Defaults to undef.
+#   Deprecated, use rabbit_userid instead.
+#
+# [*verbose*]
+#   (optional) Deprecated, Verbose logging
+#   Defaults to undef
+
+
 class ironic (
   $enabled                            = true,
   $package_ensure                     = 'present',
-  $verbose                            = undef,
   $debug                              = undef,
   $my_ip                              = $::os_service_default,
   $use_syslog                         = undef,
@@ -341,12 +343,17 @@ class ironic (
   $glance_api_insecure                = false,
   $sync_db                            = true,
   # DEPRECATED PARAMETERS
-  $rabbit_user                 = undef,
+  $rabbit_user                        = undef,
+  $verbose                            = undef,
 ) {
 
   include ::ironic::logging
   include ::ironic::db
   include ::ironic::params
+
+  if $verbose {
+    warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
+  }
 
   if $rabbit_user {
     warning('The rabbit_user parameter is deprecated. Please use rabbit_userid instead.')

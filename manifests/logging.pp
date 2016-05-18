@@ -88,13 +88,18 @@
 #    (optional) Format string for %%(asctime)s in log records.
 #    Defaults to $::os_service_default
 #    Example: 'Y-%m-%d %H:%M:%S'
-
+#
+#  DEPRECATED PARAMETERS
+#
+#  [*verbose*]
+#    (Optional) Deprecated. Should the daemons log verbose messages
+#    Defaults to undef
+#
 class ironic::logging(
   $use_syslog                    = $::os_service_default,
   $use_stderr                    = $::os_service_default,
   $log_facility                  = $::os_service_default,
   $log_dir                       = '/var/log/ironic',
-  $verbose                       = $::os_service_default,
   $debug                         = $::os_service_default,
   $logging_context_format_string = $::os_service_default,
   $logging_default_format_string = $::os_service_default,
@@ -107,6 +112,8 @@ class ironic::logging(
   $instance_format               = $::os_service_default,
   $instance_uuid_format          = $::os_service_default,
   $log_date_format               = $::os_service_default,
+  # Deprecated
+  $verbose                       = undef,
 ) {
 
   # NOTE(spredzy): In order to keep backward compatibility we rely on the pick function
@@ -115,12 +122,14 @@ class ironic::logging(
   $use_stderr_real = pick($::ironic::use_stderr,$use_stderr)
   $log_facility_real = pick($::ironic::log_facility,$log_facility)
   $log_dir_real = pick($::ironic::log_dir,$log_dir)
-  $verbose_real  = pick($::ironic::verbose,$verbose)
   $debug_real = pick($::ironic::debug,$debug)
+
+  if $verbose {
+    warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
+  }
 
   oslo::log { 'ironic_config':
     debug                         => $debug_real,
-    verbose                       => $verbose_real,
     use_stderr                    => $use_stderr_real,
     use_syslog                    => $use_syslog_real,
     log_dir                       => $log_dir_real,

@@ -37,7 +37,6 @@ describe 'basic ironic' do
         rabbit_host         => '127.0.0.1',
         database_connection => 'mysql+pymysql://ironic:a_big_secret@127.0.0.1/ironic?charset=utf8',
         debug               => true,
-        verbose             => true,
         enabled_drivers     => ['pxe_ssh'],
       }
       class { '::ironic::db::mysql':

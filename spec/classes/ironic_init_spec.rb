@@ -24,7 +24,6 @@ describe 'ironic' do
 
   let :params do
     { :package_ensure              => 'present',
-      :verbose                     => false,
       :debug                       => false,
       :enabled_drivers             => ['pxe_ipmitool'],
       :database_connection         => 'sqlite:////var/lib/ironic/ironic.sqlite',
