@@ -1,3 +1,27 @@
+##2016-05-20 - 7.1.0
+
+###Summary
+
+This is a feature and bugfix release in the Liberty series.
+
+####Features
+
+- iPXE: retry on failure during introspection
+- Copy iPXE ROMs into /tftpboot
+- Allow chainloading of Inspector ramdisk over UEFI
+- inspector: use dnsmasq dhcp-sequential-ip flag in dnsmasq.conf
+- inspector: allow sending random kernel arguments to the IPA
+- inspector: allow changing list of processing hooks
+- inspector: specify SELinux type context for tftp dir
+- Support of PyMySQL driver for MySQL backend
+- Enable changing list of inspection collectors
+- Add uefi_pxe_bootfile_name parameter
+
+####Maintenance
+
+- Add deprecation warning for Qpid rpc driver
+
+
 ##2015-11-25 - 7.0.0
 ###Summary
 
