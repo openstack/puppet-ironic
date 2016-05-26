@@ -83,7 +83,7 @@ describe 'ironic' do
     it { is_expected.to contain_class('ironic::params') }
 
     it 'configures ironic configuration folder' do
-      is_expected.to contain_file('/etc/ironic/').with(
+      is_expected.to contain_file('/etc/ironic').with(
         :ensure  => 'directory',
         :group   => 'ironic',
         :require => 'Package[ironic-common]'
