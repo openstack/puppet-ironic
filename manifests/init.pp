@@ -56,6 +56,12 @@
 #   (optional) What RPC queue/exchange to use (string value)
 #   Defaults to $::os_service_default
 #
+# [*default_transport_url*]
+#    (optional) A URL representing the messaging driver to use and its full
+#    configuration. Transport URLs take the form:
+#      transport://user:pass@host1:port[,hostN:portN]/virtual_host
+#    Defaults to $::os_service_default
+#
 # [*rpc_backend*]
 #   (optional) what rpc/queuing service to use (string value)
 #   Defaults to $::os_service_default
@@ -296,6 +302,7 @@ class ironic (
   $enabled_drivers                    = ['pxe_ipmitool'],
   $control_exchange                   = $::os_service_default,
   $rpc_response_timeout               = $::os_service_default,
+  $default_transport_url              = $::os_service_default,
   $rpc_backend                        = $::os_service_default,
   $rabbit_host                        = $::os_service_default,
   $rabbit_hosts                       = $::os_service_default,
@@ -415,6 +422,7 @@ class ironic (
   }
 
   oslo::messaging::default {'ironic_config':
+      transport_url        => $default_transport_url,
       rpc_response_timeout => $rpc_response_timeout,
       control_exchange     => $control_exchange,
   }
