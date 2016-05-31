@@ -37,6 +37,10 @@
 #   (optional) Enable debug logging
 #   Defaults to undef
 #
+# [*auth_strategy*]
+#   (optional) API authentication strategy: keystone or noauth
+#   Defaults to 'keystone'
+#
 # [*auth_uri*]
 #   (optional) Complete public Identity API endpoint
 #   Defaults to 'http://127.0.0.1:5000/v2.0'
@@ -82,6 +86,10 @@
 #   (optional) Method for storing introspection data
 #   Defaults to 'none'
 #
+# [*ironic_auth_type*]
+#   (optional) Authentication plugin for accessing Ironic
+#   Defaults to 'password'
+#
 # [*ironic_username*]
 #   (optional) User name for accessing Ironic API
 #   Defaults to 'ironic'
@@ -105,6 +113,10 @@
 # [*ironic_retry_interval*]
 #   (optional) Interval between retries in case of conflict error
 #   Defaults to 2
+#
+# [*swift_auth_type*]
+#   (optional) Authentication plugin for accessing Swift
+#   Defaults to 'password'
 #
 # [*swift_username*]
 #   (optional) User name for accessing Swift API
@@ -156,6 +168,7 @@ class ironic::inspector (
   $pxe_transfer_protocol           = 'tftp',
   $enable_uefi                     = false,
   $debug                           = undef,
+  $auth_strategy                   = 'keystone',
   $auth_uri                        = 'http://127.0.0.1:5000/v2.0',
   $identity_uri                    = 'http://127.0.0.1:35357',
   $admin_user                      = 'ironic',
@@ -167,12 +180,14 @@ class ironic::inspector (
   $enable_setting_ipmi_credentials = false,
   $keep_ports                      = 'all',
   $store_data                      = 'none',
+  $ironic_auth_type                = 'password',
   $ironic_username                 = 'ironic',
   $ironic_password                 = undef,
   $ironic_tenant_name              = 'services',
   $ironic_auth_url                 = 'http://127.0.0.1:5000/v2.0',
   $ironic_max_retries              = 30,
   $ironic_retry_interval           = 2,
+  $swift_auth_type                 = 'password',
   $swift_username                  = 'ironic',
   $swift_password                  = undef,
   $swift_tenant_name               = 'services',
@@ -251,28 +266,38 @@ class ironic::inspector (
   }
 
   # Configure inspector.conf
+
+  if $auth_strategy == 'keystone' {
+    ironic_inspector_config {
+      'keystone_authtoken/auth_type':               value => 'password';
+      'keystone_authtoken/auth_uri':                value => $auth_uri;
+      'keystone_authtoken/auth_url':                value => $identity_uri;
+      'keystone_authtoken/username':                value => $admin_user;
+      'keystone_authtoken/password':                value => $admin_password, secret => true;
+      'keystone_authtoken/project_name':            value => $admin_tenant_name;
+    }
+  }
+
   ironic_inspector_config {
-    'keystone_authtoken/auth_uri':                value => $auth_uri;
-    'keystone_authtoken/identity_uri':            value => $identity_uri;
-    'keystone_authtoken/admin_user':              value => $admin_user;
-    'keystone_authtoken/admin_password':          value => $admin_password, secret => true;
-    'keystone_authtoken/admin_tenant_name':       value => $admin_tenant_name;
+    'DEFAULT/auth_strategy':                      value => $auth_strategy;
     'firewall/dnsmasq_interface':                 value => $dnsmasq_interface;
     'database/connection':                        value => $db_connection;
     'processing/ramdisk_logs_dir':                value => $ramdisk_logs_dir;
     'processing/enable_setting_ipmi_credentials': value => $enable_setting_ipmi_credentials;
     'processing/keep_ports':                      value => $keep_ports;
     'processing/store_data':                      value => $store_data;
-    'ironic/os_username':                         value => $ironic_username;
-    'ironic/os_password':                         value => $ironic_password, secret => true;
-    'ironic/os_tenant_name':                      value => $ironic_tenant_name;
-    'ironic/os_auth_url':                         value => $ironic_auth_url;
+    'ironic/auth_type':                           value => $ironic_auth_type;
+    'ironic/username':                            value => $ironic_username;
+    'ironic/password':                            value => $ironic_password, secret => true;
+    'ironic/project_name':                        value => $ironic_tenant_name;
+    'ironic/auth_url':                            value => $ironic_auth_url;
     'ironic/max_retries':                         value => $ironic_max_retries;
     'ironic/retry_interval':                      value => $ironic_retry_interval;
+    'swift/auth_type':                            value => $swift_auth_type;
     'swift/username':                             value => $swift_username;
     'swift/password':                             value => $swift_password, secret => true;
-    'swift/tenant_name':                          value => $swift_tenant_name;
-    'swift/os_auth_url':                          value => $swift_auth_url;
+    'swift/project_name':                         value => $swift_tenant_name;
+    'swift/auth_url':                             value => $swift_auth_url;
     # Here we use oslo.config interpolation with another option default_processing_hooks,
     # which we don't change as it might break introspection completely.
     'processing/processing_hooks':                value => join(delete_undef_values(['$default_processing_hooks', $additional_processing_hooks]), ',');

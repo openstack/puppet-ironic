@@ -25,6 +25,7 @@ describe 'ironic::inspector' do
       :enabled                         => true,
       :pxe_transfer_protocol           => 'tftp',
       :enable_uefi                     => false,
+      :auth_strategy                   => 'keystone',
       :auth_uri                        => 'http://127.0.0.1:5000/v2.0',
       :identity_uri                    => 'http://127.0.0.1:35357',
       :admin_user                      => 'ironic',
@@ -35,11 +36,13 @@ describe 'ironic::inspector' do
       :enable_setting_ipmi_credentials => false,
       :keep_ports                      => 'all',
       :store_data                      => 'none',
+      :ironic_auth_type                => 'password',
       :ironic_username                 => 'ironic',
       :ironic_tenant_name              => 'services',
       :ironic_auth_url                 => 'http://127.0.0.1:5000/v2.0',
       :ironic_max_retries              => 30,
       :ironic_retry_interval           => 2,
+      :swift_auth_type                 => 'password',
       :swift_username                  => 'ironic',
       :swift_tenant_name               => 'services',
       :swift_auth_url                  => 'http://127.0.0.1:5000/v2.0',
@@ -86,24 +89,28 @@ describe 'ironic::inspector' do
     end
 
     it 'configures inspector.conf' do
+      is_expected.to contain_ironic_inspector_config('DEFAULT/auth_strategy').with_value(p[:auth_strategy])
+      is_expected.to contain_ironic_inspector_config('keystone_authtoken/auth_type').with_value('password')
       is_expected.to contain_ironic_inspector_config('keystone_authtoken/auth_uri').with_value(p[:auth_uri])
-      is_expected.to contain_ironic_inspector_config('keystone_authtoken/identity_uri').with_value(p[:identity_uri])
-      is_expected.to contain_ironic_inspector_config('keystone_authtoken/admin_user').with_value(p[:admin_user])
-      is_expected.to contain_ironic_inspector_config('keystone_authtoken/admin_tenant_name').with_value(p[:admin_tenant_name])
+      is_expected.to contain_ironic_inspector_config('keystone_authtoken/auth_url').with_value(p[:identity_uri])
+      is_expected.to contain_ironic_inspector_config('keystone_authtoken/username').with_value(p[:admin_user])
+      is_expected.to contain_ironic_inspector_config('keystone_authtoken/project_name').with_value(p[:admin_tenant_name])
       is_expected.to contain_ironic_inspector_config('firewall/dnsmasq_interface').with_value(p[:dnsmasq_interface])
       is_expected.to contain_ironic_inspector_config('database/connection').with_value(p[:db_connection])
       is_expected.to contain_ironic_inspector_config('processing/ramdisk_logs_dir').with_value(p[:ramdisk_logs_dir])
       is_expected.to contain_ironic_inspector_config('processing/enable_setting_ipmi_credentials').with_value(p[:enable_setting_ipmi_credentials])
       is_expected.to contain_ironic_inspector_config('processing/keep_ports').with_value(p[:keep_ports])
       is_expected.to contain_ironic_inspector_config('processing/store_data').with_value(p[:store_data])
-      is_expected.to contain_ironic_inspector_config('ironic/os_username').with_value(p[:ironic_username])
-      is_expected.to contain_ironic_inspector_config('ironic/os_tenant_name').with_value(p[:ironic_tenant_name])
-      is_expected.to contain_ironic_inspector_config('ironic/os_auth_url').with_value(p[:ironic_auth_url])
+      is_expected.to contain_ironic_inspector_config('ironic/auth_type').with_value(p[:ironic_auth_type])
+      is_expected.to contain_ironic_inspector_config('ironic/username').with_value(p[:ironic_username])
+      is_expected.to contain_ironic_inspector_config('ironic/project_name').with_value(p[:ironic_tenant_name])
+      is_expected.to contain_ironic_inspector_config('ironic/auth_url').with_value(p[:ironic_auth_url])
       is_expected.to contain_ironic_inspector_config('ironic/max_retries').with_value(p[:ironic_max_retries])
       is_expected.to contain_ironic_inspector_config('ironic/retry_interval').with_value(p[:ironic_retry_interval])
+      is_expected.to contain_ironic_inspector_config('swift/auth_type').with_value(p[:swift_auth_type])
       is_expected.to contain_ironic_inspector_config('swift/username').with_value(p[:swift_username])
-      is_expected.to contain_ironic_inspector_config('swift/tenant_name').with_value(p[:swift_tenant_name])
-      is_expected.to contain_ironic_inspector_config('swift/os_auth_url').with_value(p[:swift_auth_url])
+      is_expected.to contain_ironic_inspector_config('swift/project_name').with_value(p[:swift_tenant_name])
+      is_expected.to contain_ironic_inspector_config('swift/auth_url').with_value(p[:swift_auth_url])
       is_expected.to contain_ironic_inspector_config('processing/processing_hooks').with_value('$default_processing_hooks')
     end
 
@@ -159,12 +166,12 @@ describe 'ironic::inspector' do
       it 'should replace default parameter with new value' do
         is_expected.to contain_ironic_inspector_config('DEFAULT/debug').with_value(p[:debug])
         is_expected.to contain_ironic_inspector_config('keystone_authtoken/auth_uri').with_value(p[:auth_uri])
-        is_expected.to contain_ironic_inspector_config('keystone_authtoken/identity_uri').with_value(p[:identity_uri])
-        is_expected.to contain_ironic_inspector_config('keystone_authtoken/admin_password').with_value(p[:admin_password])
-        is_expected.to contain_ironic_inspector_config('ironic/os_password').with_value(p[:ironic_password])
-        is_expected.to contain_ironic_inspector_config('ironic/os_auth_url').with_value(p[:ironic_auth_url])
+        is_expected.to contain_ironic_inspector_config('keystone_authtoken/auth_url').with_value(p[:identity_uri])
+        is_expected.to contain_ironic_inspector_config('keystone_authtoken/password').with_value(p[:admin_password])
+        is_expected.to contain_ironic_inspector_config('ironic/password').with_value(p[:ironic_password])
+        is_expected.to contain_ironic_inspector_config('ironic/auth_url').with_value(p[:ironic_auth_url])
         is_expected.to contain_ironic_inspector_config('swift/password').with_value(p[:swift_password])
-        is_expected.to contain_ironic_inspector_config('swift/os_auth_url').with_value(p[:swift_auth_url])
+        is_expected.to contain_ironic_inspector_config('swift/auth_url').with_value(p[:swift_auth_url])
         is_expected.to contain_ironic_inspector_config('processing/processing_hooks').with_value('$default_processing_hooks,hook1,hook2')
       end
 
