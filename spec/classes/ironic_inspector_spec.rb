@@ -24,7 +24,6 @@ describe 'ironic::inspector' do
     { :package_ensure                  => 'present',
       :enabled                         => true,
       :pxe_transfer_protocol           => 'tftp',
-      :debug                           => false,
       :enable_uefi                     => false,
       :auth_uri                        => 'http://127.0.0.1:5000/v2.0',
       :identity_uri                    => 'http://127.0.0.1:35357',
@@ -59,6 +58,7 @@ describe 'ironic::inspector' do
     end
 
     it { is_expected.to contain_class('ironic::params') }
+    it { is_expected.to contain_class('ironic::inspector::logging') }
 
     it 'installs ironic inspector package' do
       if platform_params.has_key?(:inspector_package)
@@ -86,7 +86,6 @@ describe 'ironic::inspector' do
     end
 
     it 'configures inspector.conf' do
-      is_expected.to contain_ironic_inspector_config('DEFAULT/debug').with_value(p[:debug])
       is_expected.to contain_ironic_inspector_config('keystone_authtoken/auth_uri').with_value(p[:auth_uri])
       is_expected.to contain_ironic_inspector_config('keystone_authtoken/identity_uri').with_value(p[:identity_uri])
       is_expected.to contain_ironic_inspector_config('keystone_authtoken/admin_user').with_value(p[:admin_user])

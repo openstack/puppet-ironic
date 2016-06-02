@@ -35,7 +35,7 @@
 #
 # [*debug*]
 #   (optional) Enable debug logging
-#   Defaults to false
+#   Defaults to undef
 #
 # [*auth_uri*]
 #   (optional) Complete public Identity API endpoint
@@ -154,7 +154,7 @@ class ironic::inspector (
   $package_ensure                  = 'present',
   $enabled                         = true,
   $pxe_transfer_protocol           = 'tftp',
-  $debug                           = false,
+  $debug                           = undef,
   $enable_uefi                     = false,
   $auth_uri                        = 'http://127.0.0.1:5000/v2.0',
   $identity_uri                    = 'http://127.0.0.1:35357',
@@ -187,6 +187,7 @@ class ironic::inspector (
 ) {
 
   include ::ironic::params
+  include ::ironic::inspector::logging
 
   Ironic_inspector_config<||> ~> Service['ironic-inspector']
 
@@ -251,7 +252,6 @@ class ironic::inspector (
 
   # Configure inspector.conf
   ironic_inspector_config {
-    'DEFAULT/debug':                              value => $debug;
     'keystone_authtoken/auth_uri':                value => $auth_uri;
     'keystone_authtoken/identity_uri':            value => $identity_uri;
     'keystone_authtoken/admin_user':              value => $admin_user;
