@@ -46,7 +46,7 @@
 #
 # [*service_name*]
 #   (Optional) Name of the service.
-#   Defaults to the value of auth_name, but must differ from the value.
+#   Defaults to the value of 'ironic'.
 #
 # [*service_type*]
 #   Type of service. Defaults to 'baremetal'.
@@ -86,7 +86,7 @@ class ironic::keystone::auth (
   $configure_endpoint  = true,
   $configure_user      = true,
   $configure_user_role = true,
-  $service_name        = undef,
+  $service_name        = 'ironic',
   $service_type        = 'baremetal',
   $service_description = 'Ironic Bare Metal Provisioning Service',
   $region              = 'RegionOne',
@@ -95,20 +95,19 @@ class ironic::keystone::auth (
   $internal_url        = 'http://127.0.0.1:6385',
 ) {
 
-  $real_service_name = pick($service_name, $auth_name)
-
   if $configure_user_role {
     Keystone_user_role["${auth_name}@${tenant}"] ~> Service <| name == 'ironic-server' |>
   }
 
-  Keystone_endpoint["${region}/${real_service_name}::${service_type}"]  ~> Service <| name == 'ironic-server' |>
+  Keystone_endpoint["${region}/${service_name}::${service_type}"]  ~> Service <| name == 'ironic-server' |>
 
-  keystone::resource::service_identity { $auth_name:
+  keystone::resource::service_identity { 'ironic':
     configure_user      => $configure_user,
     configure_user_role => $configure_user_role,
     configure_endpoint  => $configure_endpoint,
-    service_name        => $real_service_name,
+    service_name        => $service_name,
     service_type        => $service_type,
+    auth_name           => $auth_name,
     service_description => $service_description,
     region              => $region,
     password            => $password,

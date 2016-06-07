@@ -92,8 +92,8 @@ describe 'ironic::keystone::auth' do
 
     it { is_expected.to contain_keystone_user('ironicy') }
     it { is_expected.to contain_keystone_user_role('ironicy@services') }
-    it { is_expected.to contain_keystone_service('ironicy::baremetal') }
-    it { is_expected.to contain_keystone_endpoint('RegionOne/ironicy::baremetal') }
+    it { is_expected.to contain_keystone_service('ironic::baremetal') }
+    it { is_expected.to contain_keystone_endpoint('RegionOne/ironic::baremetal') }
   end
 
   describe 'when overriding service name' do
