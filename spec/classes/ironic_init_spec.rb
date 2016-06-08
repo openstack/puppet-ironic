@@ -32,7 +32,8 @@ describe 'ironic' do
       :database_reconnect_interval => 10,
       :database_retry_interval     => 10,
       :glance_num_retries          => 0,
-      :glance_api_insecure         => false
+      :glance_api_insecure         => false,
+      :purge_config                => false,
     }
   end
 
@@ -96,6 +97,12 @@ describe 'ironic' do
         :name   => platform_params[:common_package_name],
         :tag    => ['openstack', 'ironic-package'],
       )
+    end
+
+    it 'passes purge to resource' do
+      is_expected.to contain_resources('ironic_config').with({
+        :purge => false
+      })
     end
 
     it 'configures enabled_drivers' do

@@ -277,6 +277,11 @@
 #   Enable dbsync
 #   Defaults to true
 #
+# [*purge_config*]
+#   (optional) Whether to set only the specified config options
+#   in the ironic config.
+#   Defaults to false.
+#
 # DEPRECATED PARAMETERS
 #
 # [*rabbit_user*]
@@ -349,6 +354,7 @@ class ironic (
   $glance_num_retries                 = '0',
   $glance_api_insecure                = false,
   $sync_db                            = true,
+  $purge_config                       = false,
   # DEPRECATED PARAMETERS
   $rabbit_user                        = undef,
   $verbose                            = undef,
@@ -397,6 +403,10 @@ class ironic (
         tag    => ['openstack', 'ironic-package'],
       }
     )
+  }
+
+  resources { 'ironic_config':
+    purge => $purge_config,
   }
 
   if is_array($glance_api_servers) {
