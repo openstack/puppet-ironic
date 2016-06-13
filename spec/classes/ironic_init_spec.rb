@@ -76,21 +76,6 @@ describe 'ironic' do
     it { is_expected.to contain_class('ironic::logging') }
     it { is_expected.to contain_class('ironic::params') }
 
-    it 'configures ironic configuration folder' do
-      is_expected.to contain_file('/etc/ironic').with(
-        :ensure  => 'directory',
-        :group   => 'ironic',
-        :require => 'Package[ironic-common]'
-      )
-    end
-
-    it 'configures ironic configuration file' do
-      is_expected.to contain_file('/etc/ironic/ironic.conf').with(
-        :group   => 'ironic',
-        :require => 'Package[ironic-common]'
-      )
-    end
-
     it 'installs ironic package' do
       is_expected.to contain_package('ironic-common').with(
         :ensure => 'present',

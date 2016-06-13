@@ -375,17 +375,6 @@ class ironic (
     $rabbit_user_real = $rabbit_userid
   }
 
-  file { '/etc/ironic':
-    ensure  => directory,
-    require => Package['ironic-common'],
-    group   => 'ironic',
-  }
-
-  file { '/etc/ironic/ironic.conf':
-    require => Package['ironic-common'],
-    group   => 'ironic',
-  }
-
   package { 'ironic-common':
     ensure => $package_ensure,
     name   => $::ironic::params::common_package_name,
