@@ -56,6 +56,11 @@
 #   (optional) Ironic API URL.
 #   Defaults to $::os_service_default
 #
+# [*provisioning_network_uuid*]
+#   (optional) Neutron network UUID for the ramdisk to be booted into for
+#    provisioning nodes. Required for neutron network interface.
+#    Defaults to $::os_service_default
+#
 class ironic::conductor (
   $package_ensure                = 'present',
   $enabled                       = true,
@@ -65,6 +70,7 @@ class ironic::conductor (
   $swift_account                 = $::os_service_default,
   $cleaning_network_uuid         = $::os_service_default,
   $api_url                       = $::os_service_default,
+  $provisioning_network_uuid     = $::os_service_default,
 ) {
 
   include ::ironic::params
@@ -79,6 +85,7 @@ class ironic::conductor (
     'conductor/api_url': value => $api_url;
     'glance/swift_account': value => $swift_account;
     'neutron/cleaning_network_uuid': value => $cleaning_network_uuid;
+    'neutron/provisioning_network_uuid': value => $provisioning_network_uuid;
   }
 
   # Install package

@@ -65,6 +65,7 @@ describe 'ironic::conductor' do
       is_expected.to contain_ironic_config('conductor/api_url').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('glance/swift_account').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('neutron/cleaning_network_uuid').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('neutron/provisioning_network_uuid').with(:value => '<SERVICE DEFAULT>')
     end
 
     context 'when overriding parameters' do
@@ -75,7 +76,8 @@ describe 'ironic::conductor' do
           :automated_clean               => false,
           :swift_account                 => '00000000-0000-0000-0000-000000000000',
           :cleaning_network_uuid         => '00000000-0000-0000-0000-000000000000',
-          :api_url                       => 'https://127.0.0.1:6385'
+          :api_url                       => 'https://127.0.0.1:6385',
+          :provisioning_network_uuid     => '00000000-0000-0000-0000-000000000000'
         )
       end
       it 'should replace default parameter with new value' do
@@ -85,6 +87,7 @@ describe 'ironic::conductor' do
         is_expected.to contain_ironic_config('conductor/api_url').with_value(p[:api_url])
         is_expected.to contain_ironic_config('glance/swift_account').with_value(p[:swift_account])
         is_expected.to contain_ironic_config('neutron/cleaning_network_uuid').with_value('00000000-0000-0000-0000-000000000000')
+        is_expected.to contain_ironic_config('neutron/provisioning_network_uuid').with_value('00000000-0000-0000-0000-000000000000')
       end
     end
 
