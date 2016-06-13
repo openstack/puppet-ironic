@@ -47,6 +47,11 @@
 #   The format is "AUTH_uuid"
 #   Defaults to $::os_service_default
 #
+# [*cleaning_network_uuid*]
+#   (optional) UUID of the network to create Neutron ports on, when booting
+#   to a ramdisk for cleaning using Neutron DHCP.
+#   Defaults to $::os_service_default
+#
 class ironic::conductor (
   $package_ensure                = 'present',
   $enabled                       = true,
@@ -54,6 +59,7 @@ class ironic::conductor (
   $force_power_state_during_sync = true,
   $automated_clean               = $::os_service_default,
   $swift_account                 = $::os_service_default,
+  $cleaning_network_uuid         = $::os_service_default,
 ) {
 
   include ::ironic::params
@@ -66,6 +72,7 @@ class ironic::conductor (
     'conductor/force_power_state_during_sync': value => $force_power_state_during_sync;
     'conductor/automated_clean': value => $automated_clean;
     'glance/swift_account': value => $swift_account;
+    'neutron/cleaning_network_uuid': value => $cleaning_network_uuid;
   }
 
   # Install package
