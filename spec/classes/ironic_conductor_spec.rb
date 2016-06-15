@@ -62,6 +62,7 @@ describe 'ironic::conductor' do
       is_expected.to contain_ironic_config('conductor/max_time_interval').with_value(p[:max_time_interval])
       is_expected.to contain_ironic_config('conductor/force_power_state_during_sync').with_value(p[:force_power_state_during_sync])
       is_expected.to contain_ironic_config('conductor/automated_clean').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('glance/swift_account').with(:value => '<SERVICE DEFAULT>')
     end
 
     context 'when overriding parameters' do
@@ -69,13 +70,15 @@ describe 'ironic::conductor' do
         params.merge!(
           :max_time_interval             => '50',
           :force_power_state_during_sync => false,
-          :automated_clean               => false
+          :automated_clean               => false,
+          :swift_account                 => '00000000-0000-0000-0000-000000000000',
         )
       end
       it 'should replace default parameter with new value' do
         is_expected.to contain_ironic_config('conductor/max_time_interval').with_value(p[:max_time_interval])
         is_expected.to contain_ironic_config('conductor/force_power_state_during_sync').with_value(p[:force_power_state_during_sync])
         is_expected.to contain_ironic_config('conductor/automated_clean').with_value(p[:automated_clean])
+        is_expected.to contain_ironic_config('glance/swift_account').with_value(p[:swift_account])
       end
     end
 
