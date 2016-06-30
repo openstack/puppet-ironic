@@ -72,19 +72,21 @@ describe 'ironic::api' do
       is_expected.to contain_ironic_config('keystone_authtoken/admin_user').with_value(p[:admin_user])
       is_expected.to contain_ironic_config('keystone_authtoken/auth_uri').with_value('http://127.0.0.1:5000/')
       is_expected.to contain_ironic_config('keystone_authtoken/identity_uri').with_value('http://127.0.0.1:35357/')
+      is_expected.to contain_ironic_config('keystone_authtoken/memcached_servers').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('neutron/url').with_value('http://127.0.0.1:9696/')
     end
 
     context 'when overriding parameters' do
       before :each do
         params.merge!(
-          :port            => '3430',
-          :host_ip         => '127.0.0.1',
-          :max_limit       => '10',
-          :workers         => '8',
-          :auth_uri        => 'https://1.2.3.4:5000/',
-          :identity_uri    => 'https://1.2.3.4:35357/',
-          :public_endpoint => 'https://1.2.3.4:6385/',
+          :port              => '3430',
+          :host_ip           => '127.0.0.1',
+          :max_limit         => '10',
+          :workers           => '8',
+          :auth_uri          => 'https://1.2.3.4:5000/',
+          :identity_uri      => 'https://1.2.3.4:35357/',
+          :public_endpoint   => 'https://1.2.3.4:6385/',
+          :memcached_servers => '1.1.1.1:11211',
         )
       end
       it 'should replace default parameter with new value' do
@@ -95,6 +97,7 @@ describe 'ironic::api' do
         is_expected.to contain_ironic_config('api/public_endpoint').with_value(p[:public_endpoint])
         is_expected.to contain_ironic_config('keystone_authtoken/auth_uri').with_value('https://1.2.3.4:5000/')
         is_expected.to contain_ironic_config('keystone_authtoken/identity_uri').with_value('https://1.2.3.4:35357/')
+        is_expected.to contain_ironic_config('keystone_authtoken/memcached_servers').with_value('1.1.1.1:11211')
       end
     end
 
