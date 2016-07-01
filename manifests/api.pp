@@ -64,6 +64,11 @@
 #   (optional) The name of the user to create in keystone for use by the ironic services
 #   Defaults to 'ironic'
 #
+# [*memcached_servers*]
+#   (optinal) a list of memcached server(s) to use for caching. If left
+#   undefined, tokens will instead be cached in-process.
+#   Defaults to $::os_service_default.
+#
 # [*neutron_url*]
 #   (optional) The Neutron URL to be used for requests from ironic
 #   Defaults to 'http://127.0.0.1:9696/'
@@ -101,6 +106,7 @@ class ironic::api (
   $identity_uri      = 'http://127.0.0.1:35357/',
   $admin_tenant_name = 'services',
   $admin_user        = 'ironic',
+  $memcached_servers = $::os_service_default,
   $neutron_url       = 'http://127.0.0.1:9696/',
   $public_endpoint   = $::os_service_default,
   $admin_password,
@@ -174,6 +180,7 @@ class ironic::api (
     'keystone_authtoken/admin_password':    value => $admin_password, secret => true;
     'keystone_authtoken/auth_uri':          value => $auth_uri;
     'keystone_authtoken/identity_uri':      value => $identity_uri;
+    'keystone_authtoken/memcached_servers': value => join(any2array($memcached_servers), ',');
     'neutron/url':                          value => $neutron_url;
   }
 
