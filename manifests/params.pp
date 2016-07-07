@@ -19,6 +19,7 @@
 #
 
 class ironic::params {
+  include ::openstacklib::defaults
 
   $dbsync_command =
     'ironic-dbsync --config-file /etc/ironic/ironic.conf'

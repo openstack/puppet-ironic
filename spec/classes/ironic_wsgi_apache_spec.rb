@@ -3,11 +3,11 @@ require 'spec_helper'
 describe 'ironic::wsgi::apache' do
 
   let :global_facts do
-    {
+    OSDefaults.get_facts({
       :processorcount => 42,
       :concat_basedir => '/var/lib/puppet/concat',
       :fqdn           => 'some.host.tld'
-    }
+    })
   end
 
   shared_examples_for 'apache serving ironic with mod_wsgi' do
