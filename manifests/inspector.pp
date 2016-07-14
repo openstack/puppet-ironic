@@ -162,6 +162,10 @@
 #   (optional) ipxe timeout in second. Should be an integer.
 #   Defaults to '0' for unlimited.
 #
+# [*http_port*]
+#   (optional) port used by the HTTP service serving introspection images.
+#   Defaults to 8088.
+#
 class ironic::inspector (
   $package_ensure                  = 'present',
   $enabled                         = true,
@@ -199,6 +203,7 @@ class ironic::inspector (
   $additional_processing_hooks     = undef,
   $ramdisk_kernel_args             = undef,
   $ipxe_timeout                    = 0,
+  $http_port                       = 8088,
 ) {
 
   include ::ironic::params

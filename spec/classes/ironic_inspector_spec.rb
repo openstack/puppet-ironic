@@ -48,7 +48,8 @@ describe 'ironic::inspector' do
       :swift_auth_url                  => 'http://127.0.0.1:5000/v2.0',
       :dnsmasq_ip_range                => '192.168.0.100,192.168.0.120',
       :dnsmasq_local_ip                => '192.168.0.1',
-      :ipxe_timeout                    => 0, }
+      :ipxe_timeout                    => 0,
+      :http_port                       => 8088, }
   end
 
   let :params do
@@ -161,6 +162,7 @@ describe 'ironic::inspector' do
           :additional_processing_hooks  => 'hook1,hook2',
           :ramdisk_kernel_args          => 'foo=bar',
           :enable_uefi                  => true,
+          :http_port                    => 3816,
         )
       end
       it 'should replace default parameter with new value' do
@@ -181,6 +183,9 @@ describe 'ironic::inspector' do
           'require' => 'Package[ironic-inspector]',
           'content' => /ipxe/,
         )
+        is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
+            /dhcp-boot=tag:ipxe,http:\/\/192.168.0.1:3816\/inspector.ipxe/
+        )
       end
       it 'should contain file /httpboot/inspector.ipxe' do
         is_expected.to contain_file('/httpboot/inspector.ipxe').with(
@@ -189,7 +194,7 @@ describe 'ironic::inspector' do
           'content' => /ipxe/,
         )
         is_expected.to contain_file('/httpboot/inspector.ipxe').with_content(
-            /kernel http:\/\/192.168.0.1:8088\/agent.kernel ipa-inspection-callback-url=http:\/\/192.168.0.1:5050\/v1\/continue ipa-inspection-collectors=default.* foo=bar || goto retry_boot/
+            /kernel http:\/\/192.168.0.1:3816\/agent.kernel ipa-inspection-callback-url=http:\/\/192.168.0.1:5050\/v1\/continue ipa-inspection-collectors=default.* foo=bar || goto retry_boot/
         )
       end
       it 'should contain iPXE chainload images' do
