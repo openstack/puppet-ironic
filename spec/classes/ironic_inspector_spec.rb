@@ -86,6 +86,7 @@ describe 'ironic::inspector' do
     end
 
     it 'configures inspector.conf' do
+      is_expected.to contain_ironic_inspector_config('DEFAULT/listen_address').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('keystone_authtoken/auth_uri').with_value(p[:auth_uri])
       is_expected.to contain_ironic_inspector_config('keystone_authtoken/identity_uri').with_value(p[:identity_uri])
       is_expected.to contain_ironic_inspector_config('keystone_authtoken/admin_user').with_value(p[:admin_user])
@@ -143,6 +144,7 @@ describe 'ironic::inspector' do
       before :each do
         params.merge!(
           :debug                        => true,
+          :listen_address               => '127.0.0.1',
           :auth_uri                     => 'http://192.168.0.1:5000/v2.0',
           :identity_uri                 => 'http://192.168.0.1:35357',
           :admin_password               => 'password',
@@ -157,6 +159,7 @@ describe 'ironic::inspector' do
         )
       end
       it 'should replace default parameter with new value' do
+        is_expected.to contain_ironic_inspector_config('DEFAULT/listen_address').with_value(p[:listen_address])
         is_expected.to contain_ironic_inspector_config('DEFAULT/debug').with_value(p[:debug])
         is_expected.to contain_ironic_inspector_config('keystone_authtoken/auth_uri').with_value(p[:auth_uri])
         is_expected.to contain_ironic_inspector_config('keystone_authtoken/identity_uri').with_value(p[:identity_uri])
