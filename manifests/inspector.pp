@@ -25,6 +25,11 @@
 #   (optional) Define if the service must be enabled or not
 #   Defaults to true
 #
+# [*listen_address*]
+#   (optional) The listen IP for the Ironic-inspector API server.
+#   Should be an valid IP address
+#   Defaults to $::os_service_default.
+#
 # [*pxe_transfer_protocol*]
 #  (optional) Protocol to be used for transferring the ramdisk
 #  Defaults to 'tftp'. Valid values are 'tftp' or 'http'.
@@ -169,6 +174,7 @@
 class ironic::inspector (
   $package_ensure                  = 'present',
   $enabled                         = true,
+  $listen_address                  = $::os_service_default,
   $pxe_transfer_protocol           = 'tftp',
   $enable_uefi                     = false,
   $debug                           = undef,
@@ -284,6 +290,7 @@ class ironic::inspector (
   }
 
   ironic_inspector_config {
+    'DEFAULT/listen_address':                     value => $listen_address;
     'DEFAULT/auth_strategy':                      value => $auth_strategy;
     'firewall/dnsmasq_interface':                 value => $dnsmasq_interface;
     'database/connection':                        value => $db_connection;
