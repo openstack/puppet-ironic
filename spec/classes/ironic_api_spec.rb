@@ -22,23 +22,23 @@ require 'spec_helper'
 
 describe 'ironic::api' do
 
-  let :default_params do
-    { :package_ensure => 'present',
-      :enabled        => true,
-      :port           => '6385',
-      :max_limit      => '1000',
-      :host_ip        => '0.0.0.0',
-      :admin_user     => 'ironic',
-    }
-  end
-
   let :params do
-    { :admin_password => 'thepassword' }
+    { :package_ensure    => 'present',
+      :enabled           => true,
+      :port              => '6385',
+      :max_limit         => '1000',
+      :host_ip           => '0.0.0.0',
+      :admin_user        => 'ironic',
+      :admin_password    => 'password',
+      :admin_tenant_name => 'admin_tenant',
+      :auth_uri          => 'http://127.0.0.1:5000/v2.0',
+      :identity_uri      => 'http://127.0.0.1:35357/v2.0',
+    }
   end
 
   shared_examples_for 'ironic api' do
     let :p do
-      default_params.merge(params)
+      params
     end
 
     it { is_expected.to contain_class('ironic::params') }
@@ -68,12 +68,13 @@ describe 'ironic::api' do
       is_expected.to contain_ironic_config('api/max_limit').with_value(p[:max_limit])
       is_expected.to contain_ironic_config('api/api_workers').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('api/public_endpoint').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('keystone_authtoken/admin_password').with_value(p[:admin_password])
-      is_expected.to contain_ironic_config('keystone_authtoken/admin_user').with_value(p[:admin_user])
-      is_expected.to contain_ironic_config('keystone_authtoken/auth_uri').with_value('http://127.0.0.1:5000/')
-      is_expected.to contain_ironic_config('keystone_authtoken/identity_uri').with_value('http://127.0.0.1:35357/')
+      is_expected.to contain_ironic_config('keystone_authtoken/password').with_value(p[:admin_password])
+      is_expected.to contain_ironic_config('keystone_authtoken/username').with_value(p[:admin_user])
+      is_expected.to contain_ironic_config('keystone_authtoken/auth_uri').with_value(p[:auth_uri])
+      is_expected.to contain_ironic_config('keystone_authtoken/auth_url').with_value(p[:identity_uri])
       is_expected.to contain_ironic_config('keystone_authtoken/memcached_servers').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('neutron/url').with_value('http://127.0.0.1:9696/')
+      is_expected.to contain_ironic_config('keystone_authtoken/project_name').with_value(p[:admin_tenant_name])
     end
 
     context 'when overriding parameters' do
@@ -87,6 +88,7 @@ describe 'ironic::api' do
           :identity_uri      => 'https://1.2.3.4:35357/',
           :public_endpoint   => 'https://1.2.3.4:6385/',
           :memcached_servers => '1.1.1.1:11211',
+          :admin_tenant_name => 'ironic_tenant',
         )
       end
       it 'should replace default parameter with new value' do
@@ -96,7 +98,8 @@ describe 'ironic::api' do
         is_expected.to contain_ironic_config('api/api_workers').with_value(p[:workers])
         is_expected.to contain_ironic_config('api/public_endpoint').with_value(p[:public_endpoint])
         is_expected.to contain_ironic_config('keystone_authtoken/auth_uri').with_value('https://1.2.3.4:5000/')
-        is_expected.to contain_ironic_config('keystone_authtoken/identity_uri').with_value('https://1.2.3.4:35357/')
+        is_expected.to contain_ironic_config('keystone_authtoken/auth_url').with_value('https://1.2.3.4:35357/')
+        is_expected.to contain_ironic_config('keystone_authtoken/project_name').with_value('ironic_tenant')
         is_expected.to contain_ironic_config('keystone_authtoken/memcached_servers').with_value('1.1.1.1:11211')
       end
     end

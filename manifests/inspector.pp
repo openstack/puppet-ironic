@@ -46,26 +46,6 @@
 #   (optional) API authentication strategy: keystone or noauth
 #   Defaults to 'keystone'
 #
-# [*auth_uri*]
-#   (optional) Complete public Identity API endpoint
-#   Defaults to 'http://127.0.0.1:5000/v2.0'
-#
-# [*identity_uri*]
-#   (optional) Complete admin Identity API endpoint
-#   Defaults to 'http://127.0.0.1:35357'
-#
-# [*admin_user*]
-#   (optional) The name of the auth user
-#   Defaults to 'ironic'
-#
-# [*admin_password*]
-#   (optional) The password to use for authentication (keystone)
-#   Defaults to undef. Set a value unless you are using noauth
-#
-# [*admin_tenant_name*]
-#   (optional) The tenant of the auth user
-#   Defaults to 'services'
-#
 # [*dnsmasq_interface*]
 #   (optional) The interface for the ironic-inspector dnsmasq process
 #   to listen on
@@ -171,6 +151,28 @@
 #   (optional) port used by the HTTP service serving introspection images.
 #   Defaults to 8088.
 #
+# DEPRECATED PARAMETERS
+#
+# [*identity_uri*]
+#   (optional) Complete admin Identity API endpoint.
+#   Defaults to undef.
+#
+# [*admin_tenant_name*]
+#   (optional) The name of the tenant to create in keystone for use by the ironic services
+#   Defaults to undef.
+#
+# [*admin_user*]
+#   (optional) The name of the user to create in keystone for use by the ironic services
+#   Defaults to undef.
+#
+# [*admin_password*]
+#   (optional) The password to set for the ironic admin user in keystone.
+#   Defaults to undef.
+#
+# [*auth_uri*]
+#   (optional) Complete public Identity API endpoint.
+#   Defaults to undef.
+#
 class ironic::inspector (
   $package_ensure                  = 'present',
   $enabled                         = true,
@@ -179,11 +181,6 @@ class ironic::inspector (
   $enable_uefi                     = false,
   $debug                           = undef,
   $auth_strategy                   = 'keystone',
-  $auth_uri                        = 'http://127.0.0.1:5000/v2.0',
-  $identity_uri                    = 'http://127.0.0.1:35357',
-  $admin_user                      = 'ironic',
-  $admin_password                  = undef,
-  $admin_tenant_name               = 'services',
   $dnsmasq_interface               = 'br-ctlplane',
   $db_connection                   = 'sqlite:////var/lib/ironic-inspector/inspector.sqlite',
   $ramdisk_logs_dir                = '/var/log/ironic-inspector/ramdisk/',
@@ -210,10 +207,40 @@ class ironic::inspector (
   $ramdisk_kernel_args             = undef,
   $ipxe_timeout                    = 0,
   $http_port                       = 8088,
+  # DEPRECATED PARAMETERS
+  $identity_uri                   = undef,
+  $admin_tenant_name              = undef,
+  $admin_user                     = undef,
+  $admin_password                 = undef,
+  $auth_uri                       = undef,
 ) {
 
   include ::ironic::params
   include ::ironic::inspector::logging
+
+  if $admin_tenant_name {
+    warning('Parameter "ironic::inspector::admin_tenant_name" is deprecated and will be removed in O release. Use "ironic::inspector::authtoken::project_name" parameter instead.')
+  }
+
+  if $admin_user {
+    warning('Parameter "ironic::inspector::admin_user" is deprecated will be removed in O release. Use "ironic::inspector::authtoken::username" parameter instead.')
+  }
+
+  if $admin_password {
+    warning('Parameter "ironic::inspector::admin_password" is deprecated and will be removed in O release. Use "ironic::inspector::authtoken::password" parameter instead.')
+  }
+
+  if $identity_uri {
+    warning('Parameter "ironic::inspector::identity_uri" is deprecated and will be removed in O release. Use "ironic::inspector::authtoken::auth_url" parameter instead.')
+  }
+
+  if $auth_uri {
+    warning('Parameter "ironic::inspector::auth_uri" is deprecated and will be removed in O release. Use "ironic::inspector::authtoken::auth_uri" parameter instead.')
+  }
+
+  if $auth_strategy == 'keystone' {
+    include ::ironic::inspector::authtoken
+  }
 
   Ironic_inspector_config<||> ~> Service['ironic-inspector']
 
@@ -277,17 +304,6 @@ class ironic::inspector (
   }
 
   # Configure inspector.conf
-
-  if $auth_strategy == 'keystone' {
-    ironic_inspector_config {
-      'keystone_authtoken/auth_type':               value => 'password';
-      'keystone_authtoken/auth_uri':                value => $auth_uri;
-      'keystone_authtoken/auth_url':                value => $identity_uri;
-      'keystone_authtoken/username':                value => $admin_user;
-      'keystone_authtoken/password':                value => $admin_password, secret => true;
-      'keystone_authtoken/project_name':            value => $admin_tenant_name;
-    }
-  }
 
   ironic_inspector_config {
     'DEFAULT/listen_address':                     value => $listen_address;

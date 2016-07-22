@@ -43,32 +43,6 @@
 #   Should be an valid interger
 #   Defaults to '1000'.
 #
-# [*auth_uri*]
-#   (optional) Complete public Identity API endpoint.
-#   Defaults to 'http://127.0.0.1:5000/'.
-#
-# [*identity_uri*]
-#   (optional) Complete admin Identity API endpoint.
-#   Defaults to 'http://127.0.0.1:35357/'.
-#
-# [*auth_version*]
-#   (optional) DEPRECATED. API version of the admin Identity API endpoint
-#   for example, use 'v3.0' for the keystone version 3.0 api
-#   Defaults to false
-#
-# [*admin_tenant_name*]
-#   (optional) The name of the tenant to create in keystone for use by the ironic services
-#   Defaults to 'services'
-#
-# [*admin_user*]
-#   (optional) The name of the user to create in keystone for use by the ironic services
-#   Defaults to 'ironic'
-#
-# [*memcached_servers*]
-#   (optinal) a list of memcached server(s) to use for caching. If left
-#   undefined, tokens will instead be cached in-process.
-#   Defaults to $::os_service_default.
-#
 # [*neutron_url*]
 #   (optional) The Neutron URL to be used for requests from ironic
 #   Defaults to 'http://127.0.0.1:9696/'
@@ -93,7 +67,33 @@
 #   (Optional) Public URL to use when building the links to the API resources
 #   Defaults to $::os_service_default
 #
-
+# DEPRECATED PARAMETERS
+#
+# [*identity_uri*]
+#   (optional) Complete admin Identity API endpoint.
+#   Defaults to undef.
+#
+# [*admin_tenant_name*]
+#   (optional) The name of the tenant to create in keystone for use by the ironic services
+#   Defaults to undef.
+#
+# [*admin_user*]
+#   (optional) The name of the user to create in keystone for use by the ironic services
+#   Defaults to undef.
+#
+# [*admin_password*]
+#   (optional) The password to set for the ironic admin user in keystone.
+#   Defaults to undef.
+#
+# [*auth_uri*]
+#   (optional) Complete public Identity API endpoint.
+#   Defaults to undef.
+#
+# [*memcached_servers*]
+#   (optinal) a list of memcached server(s) to use for caching. If left
+#   undefined, tokens will instead be cached in-process.
+#   Defaults to undef.
+#
 class ironic::api (
   $package_ensure    = 'present',
   $enabled           = true,
@@ -102,20 +102,45 @@ class ironic::api (
   $port              = '6385',
   $max_limit         = '1000',
   $workers           = $::os_service_default,
-  $auth_uri          = 'http://127.0.0.1:5000/',
-  $identity_uri      = 'http://127.0.0.1:35357/',
-  $admin_tenant_name = 'services',
-  $admin_user        = 'ironic',
-  $memcached_servers = $::os_service_default,
   $neutron_url       = 'http://127.0.0.1:9696/',
   $public_endpoint   = $::os_service_default,
-  $admin_password,
-  # DEPRECATED PARAMETER
-  $auth_version      = false,
+  # DEPRECATED PARAMETERS
+  $identity_uri      = undef,
+  $admin_tenant_name = undef,
+  $admin_user        = undef,
+  $admin_password    = undef,
+  $auth_uri          = undef,
+  $memcached_servers = undef,
 ) inherits ironic::params {
 
   include ::ironic::params
   include ::ironic::policy
+
+  if $admin_tenant_name {
+    warning('Parameter "ironic::api::admin_tenant_name" is deprecated and will be removed in O release. Use "ironic::api::authtoken::project_name" parameter instead.')
+  }
+
+  if $admin_user {
+    warning('Parameter "ironic::api::admin_user" is deprecated will be removed in O release. Use "ironic::api::authtoken::username" parameter instead.')
+  }
+
+  if $admin_password {
+    warning('Parameter "ironic::api::admin_password" is deprecated and will be removed in O release. Use "ironic::api::authtoken::password" parameter instead.')
+  }
+
+  if $identity_uri {
+    warning('Parameter "ironic::api::identity_uri" is deprecated and will be removed in O release. Use "ironic::api::authtoken::auth_url" parameter instead.')
+  }
+
+  if $auth_uri {
+    warning('Parameter "ironic::api::auth_uri" is deprecated and will be removed in O release. Use "ironic::api::authtoken::auth_uri" parameter instead.')
+  }
+
+  if $memcached_servers {
+    warning('Parameter "ironic::api::memcached_servers" is deprecated and will be removed in O release. Use "ironic::api::authtoken::memcached_servers" parameter instead.')
+  }
+
+  include ::ironic::api::authtoken
 
   Ironic_config<||> ~> Service[$service_name]
   Class['ironic::policy'] ~> Service[$service_name]
@@ -127,6 +152,7 @@ class ironic::api (
     'api/max_limit':       value => $max_limit;
     'api/api_workers':     value => $workers;
     'api/public_endpoint': value => $public_endpoint;
+    'neutron/url':         value => $neutron_url;
   }
 
   # Install package
@@ -168,20 +194,6 @@ class ironic::api (
     Service['ironic-api'] -> Service[$service_name]
   } else {
     fail('Invalid service_name. Either ironic-api/openstack-ironic-api for running as a standalone service, or httpd for being run by a httpd server')
-  }
-
-  if $auth_version {
-    warning('auth_version parameter is deprecated and has no effect during Mitaka and will be dropped during N cycle.')
-  }
-
-  ironic_config {
-    'keystone_authtoken/admin_tenant_name': value => $admin_tenant_name;
-    'keystone_authtoken/admin_user':        value => $admin_user;
-    'keystone_authtoken/admin_password':    value => $admin_password, secret => true;
-    'keystone_authtoken/auth_uri':          value => $auth_uri;
-    'keystone_authtoken/identity_uri':      value => $identity_uri;
-    'keystone_authtoken/memcached_servers': value => join(any2array($memcached_servers), ',');
-    'neutron/url':                          value => $neutron_url;
   }
 
 }
