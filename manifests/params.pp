@@ -42,6 +42,11 @@ class ironic::params {
       $ipxe_rom_dir              = '/usr/share/ipxe'
       $ironic_wsgi_script_path   = '/var/www/cgi-bin/ironic'
       $ironic_wsgi_script_source = '/usr/lib/python2.7/site-packages/ironic/api/app.wsgi'
+      $tftpd_package             = 'tftp-server'
+      $ipxe_package              = 'ipxe-bootimgs'
+      $syslinux_package          = 'syslinux-extlinux'
+      $syslinux_path             = '/usr/share/syslinux'
+      $syslinux_files            = ['pxelinux.0', 'chain.c32']
     }
     'Debian': {
       $common_package_name       = 'ironic-common'
@@ -60,6 +65,11 @@ class ironic::params {
       $ipxe_rom_dir              = '/usr/lib/ipxe'
       $ironic_wsgi_script_path   = '/usr/lib/cgi-bin/ironic'
       $ironic_wsgi_script_source = '/usr/lib/python2.7/dist-packages/ironic/api/app.wsgi'
+      $tftpd_package             = 'tftpd'
+      $ipxe_package              = 'ipxe'
+      $syslinux_package          = 'syslinux-common'
+      $syslinux_path             = '/usr/lib/syslinux'
+      $syslinux_files            = ['pxelinux.0', 'chain.c32', 'libcom32.c32', 'libutil.c32']
     }
     default: {
       fail("Unsupported osfamily ${::osfamily}")
