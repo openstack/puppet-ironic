@@ -62,6 +62,7 @@ describe 'ironic::conductor' do
       is_expected.to contain_ironic_config('conductor/max_time_interval').with_value(p[:max_time_interval])
       is_expected.to contain_ironic_config('conductor/force_power_state_during_sync').with_value(p[:force_power_state_during_sync])
       is_expected.to contain_ironic_config('conductor/automated_clean').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('conductor/api_url').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('glance/swift_account').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('neutron/cleaning_network_uuid').with(:value => '<SERVICE DEFAULT>')
     end
@@ -73,13 +74,15 @@ describe 'ironic::conductor' do
           :force_power_state_during_sync => false,
           :automated_clean               => false,
           :swift_account                 => '00000000-0000-0000-0000-000000000000',
-          :cleaning_network_uuid         => '00000000-0000-0000-0000-000000000000'
+          :cleaning_network_uuid         => '00000000-0000-0000-0000-000000000000',
+          :api_url                       => 'https://127.0.0.1:6385'
         )
       end
       it 'should replace default parameter with new value' do
         is_expected.to contain_ironic_config('conductor/max_time_interval').with_value(p[:max_time_interval])
         is_expected.to contain_ironic_config('conductor/force_power_state_during_sync').with_value(p[:force_power_state_during_sync])
         is_expected.to contain_ironic_config('conductor/automated_clean').with_value(p[:automated_clean])
+        is_expected.to contain_ironic_config('conductor/api_url').with_value(p[:api_url])
         is_expected.to contain_ironic_config('glance/swift_account').with_value(p[:swift_account])
         is_expected.to contain_ironic_config('neutron/cleaning_network_uuid').with_value('00000000-0000-0000-0000-000000000000')
       end

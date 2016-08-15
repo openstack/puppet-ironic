@@ -52,6 +52,10 @@
 #   to a ramdisk for cleaning using Neutron DHCP.
 #   Defaults to $::os_service_default
 #
+# [*api_url*]
+#   (optional) Ironic API URL.
+#   Defaults to $::os_service_default
+#
 class ironic::conductor (
   $package_ensure                = 'present',
   $enabled                       = true,
@@ -60,6 +64,7 @@ class ironic::conductor (
   $automated_clean               = $::os_service_default,
   $swift_account                 = $::os_service_default,
   $cleaning_network_uuid         = $::os_service_default,
+  $api_url                       = $::os_service_default,
 ) {
 
   include ::ironic::params
@@ -71,6 +76,7 @@ class ironic::conductor (
     'conductor/max_time_interval': value => $max_time_interval;
     'conductor/force_power_state_during_sync': value => $force_power_state_during_sync;
     'conductor/automated_clean': value => $automated_clean;
+    'conductor/api_url': value => $api_url;
     'glance/swift_account': value => $swift_account;
     'neutron/cleaning_network_uuid': value => $cleaning_network_uuid;
   }
