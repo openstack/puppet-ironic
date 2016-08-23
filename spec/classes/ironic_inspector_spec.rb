@@ -20,16 +20,17 @@ require 'spec_helper'
 
 describe 'ironic::inspector' do
 
-  let :default_params do
+  let :params do
     { :package_ensure                  => 'present',
       :enabled                         => true,
       :pxe_transfer_protocol           => 'tftp',
       :enable_uefi                     => false,
       :auth_strategy                   => 'keystone',
       :auth_uri                        => 'http://127.0.0.1:5000/v2.0',
-      :identity_uri                    => 'http://127.0.0.1:35357',
       :admin_user                      => 'ironic',
+      :admin_password                  => 'password',
       :admin_tenant_name               => 'services',
+      :identity_uri                    => 'http://127.0.0.1:35357/v2.0',
       :dnsmasq_interface               => 'br-ctlplane',
       :db_connection                   => 'sqlite:////var/lib/ironic-inspector/inspector.sqlite',
       :ramdisk_logs_dir                => '/var/log/ironic-inspector/ramdisk/',
@@ -52,13 +53,10 @@ describe 'ironic::inspector' do
       :http_port                       => 8088, }
   end
 
-  let :params do
-    {}
-  end
 
   shared_examples_for 'ironic inspector' do
     let :p do
-      default_params.merge(params)
+      params
     end
 
     it { is_expected.to contain_class('ironic::params') }
@@ -96,6 +94,7 @@ describe 'ironic::inspector' do
       is_expected.to contain_ironic_inspector_config('keystone_authtoken/auth_uri').with_value(p[:auth_uri])
       is_expected.to contain_ironic_inspector_config('keystone_authtoken/auth_url').with_value(p[:identity_uri])
       is_expected.to contain_ironic_inspector_config('keystone_authtoken/username').with_value(p[:admin_user])
+      is_expected.to contain_ironic_inspector_config('keystone_authtoken/password').with_value(p[:admin_password])
       is_expected.to contain_ironic_inspector_config('keystone_authtoken/project_name').with_value(p[:admin_tenant_name])
       is_expected.to contain_ironic_inspector_config('firewall/dnsmasq_interface').with_value(p[:dnsmasq_interface])
       is_expected.to contain_ironic_inspector_config('database/connection').with_value(p[:db_connection])
@@ -151,20 +150,20 @@ describe 'ironic::inspector' do
     context 'when overriding parameters' do
       before :each do
         params.merge!(
-          :debug                        => true,
-          :listen_address               => '127.0.0.1',
-          :auth_uri                     => 'http://192.168.0.1:5000/v2.0',
-          :identity_uri                 => 'http://192.168.0.1:35357',
-          :admin_password               => 'password',
-          :ironic_password              => 'password',
-          :ironic_auth_url              => 'http://192.168.0.1:5000/v2.0',
-          :swift_password               => 'password',
-          :swift_auth_url               => 'http://192.168.0.1:5000/v2.0',
-          :pxe_transfer_protocol        => 'http',
-          :additional_processing_hooks  => 'hook1,hook2',
-          :ramdisk_kernel_args          => 'foo=bar',
-          :enable_uefi                  => true,
-          :http_port                    => 3816,
+          :debug                       => true,
+          :listen_address              => '127.0.0.1',
+          :auth_uri                    => 'http://192.168.0.1:5000/v2.0',
+          :identity_uri                => 'http://192.168.0.1:35357',
+          :admin_password              => 'password',
+          :ironic_password             => 'password',
+          :ironic_auth_url             => 'http://192.168.0.1:5000/v2.0',
+          :swift_password              => 'password',
+          :swift_auth_url              => 'http://192.168.0.1:5000/v2.0',
+          :pxe_transfer_protocol       => 'http',
+          :additional_processing_hooks => 'hook1,hook2',
+          :ramdisk_kernel_args         => 'foo=bar',
+          :enable_uefi                 => true,
+          :http_port                   => 3816,
         )
       end
       it 'should replace default parameter with new value' do

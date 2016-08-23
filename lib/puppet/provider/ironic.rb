@@ -26,13 +26,23 @@ class Puppet::Provider::Ironic < Puppet::Provider
   end
 
   def self.get_ironic_credentials
-    auth_keys = ['auth_host', 'auth_port', 'auth_protocol',
-                 'admin_tenant_name', 'admin_user', 'admin_password']
+    auth_keys = ['auth_uri', 'project_name', 'username', 'password']
     conf = ironic_conf
     if conf and conf['keystone_authtoken'] and
         auth_keys.all?{|k| !conf['keystone_authtoken'][k].nil?}
-      return Hash[ auth_keys.map \
+      creds = Hash[ auth_keys.map \
                    { |k| [k, conf['keystone_authtoken'][k].strip] } ]
+      if !conf['keystone_authtoken']['project_domain_name'].nil?
+        creds['project_domain_name'] = conf['keystone_authtoken']['project_domain_name'].strip
+      else
+        creds['project_domain_name'] = 'Default'
+      end
+      if !conf['keystone_authtoken']['user_domain_name'].nil?
+        creds['user_domain_name'] = conf['keystone_authtoken']['user_domain_name'].strip
+      else
+        creds['user_domain_name'] = 'Default'
+      end
+      return creds
     else
       raise(Puppet::Error, "File: #{conf_filename} does not contain all \
 required sections.  Ironic types will not work if ironic is not \
@@ -42,15 +52,6 @@ correctly configured.")
 
   def ironic_credentials
     self.class.ironic_credentials
-  end
-
-  def self.auth_endpoint
-    @auth_endpoint ||= get_auth_endpoint
-  end
-
-  def self.get_auth_endpoint
-    q = ironic_credentials
-    "#{q['auth_protocol']}://#{q['auth_host']}:#{q['auth_port']}/v2.0/"
   end
 
   def self.ironic_conf
@@ -63,10 +64,12 @@ correctly configured.")
   def self.auth_ironic(*args)
     q = ironic_credentials
     authenv = {
-      :OS_AUTH_URL    => self.auth_endpoint,
-      :OS_USERNAME    => q['admin_user'],
-      :OS_TENANT_NAME => q['admin_tenant_name'],
-      :OS_PASSWORD    => q['admin_password']
+      :OS_AUTH_URL            => q['auth_uri'],
+      :OS_USERNAME            => q['username'],
+      :OS_PROJECT_NAME        => q['project_name'],
+      :OS_PASSWORD            => q['password'],
+      :OS_PROJECT_DOMAIN_NAME => q['project_domain_name'],
+      :OS_USER_DOMAIN_NAME    => q['user_domain_name'],
     }
     begin
       withenv authenv do

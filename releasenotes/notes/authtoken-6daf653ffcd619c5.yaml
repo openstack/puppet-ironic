@@ -1,0 +1,17 @@
+---
+features:
+  - Configure keystonemiddleware in a consistent
+    way with all options required for Keystone v3.
+deprecations:
+  - ironic::api|inspector::admin_tenant_name is deprecated
+    in favor of ironic::api|inspector::authtoken::project_name.
+  - ironic::api|inspector::admin_user is deprecated
+    in favor of ironic::api|inspector::authtoken::username.
+  - ironic::api|inspector::admin_password is deprecated
+    in favor of ironic::api|inspector::authtoken::password.
+  - ironic::api|inspector::identity_uri is deprecated
+    in favor of ironic::api|inspector::authtoken::auth_uri.
+  - ironic::api|inspector::auth_uri is deprecated
+    in favor of ironic::api|inspector::authtoken::auth_uri.
+  - ironic::api::memcached_servers is deprecated
+    in favor of ironic::api::authtoken::memcached_servers.

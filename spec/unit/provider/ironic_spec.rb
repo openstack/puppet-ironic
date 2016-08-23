@@ -11,17 +11,13 @@ describe Puppet::Provider::Ironic do
 
   let :credential_hash do
     {
-      'auth_host'         => '192.168.56.210',
-      'auth_port'         => '35357',
-      'auth_protocol'     => 'https',
-      'admin_tenant_name' => 'admin_tenant',
-      'admin_user'        => 'admin',
-      'admin_password'    => 'password',
+      'project_name'        => 'admin_tenant',
+      'username'            => 'admin',
+      'password'            => 'password',
+      'auth_uri'            => 'https://192.168.56.210:35357/',
+      'project_domain_name' => 'admin_tenant_domain',
+      'user_domain_name'    => 'admin_domain',
     }
-  end
-
-  let :auth_endpoint do
-    'https://192.168.56.210:35357/v2.0/'
   end
 
   let :credential_error do
@@ -58,22 +54,18 @@ describe Puppet::Provider::Ironic do
       end.to raise_error(Puppet::Error, credential_error)
     end
 
-    it 'should use specified host/port/protocol in the auth endpoint' do
-      conf = {'keystone_authtoken' => credential_hash}
-      klass.expects(:ironic_conf).returns(conf)
-      expect(klass.get_auth_endpoint).to eq(auth_endpoint)
-    end
-
   end
 
   describe 'when invoking the ironic cli' do
 
     it 'should set auth credentials in the environment' do
       authenv = {
-        :OS_AUTH_URL    => auth_endpoint,
-        :OS_USERNAME    => credential_hash['admin_user'],
-        :OS_TENANT_NAME => credential_hash['admin_tenant_name'],
-        :OS_PASSWORD    => credential_hash['admin_password'],
+        :OS_AUTH_URL            => credential_hash['auth_uri'],
+        :OS_USERNAME            => credential_hash['username'],
+        :OS_PROJECT_NAME        => credential_hash['project_name'],
+        :OS_PASSWORD            => credential_hash['password'],
+        :OS_PROJECT_DOMAIN_NAME => credential_hash['project_domain_name'],
+        :OS_USER_DOMAIN_NAME    => credential_hash['user_domain_name'],
       }
       klass.expects(:get_ironic_credentials).with().returns(credential_hash)
       klass.expects(:withenv).with(authenv)
