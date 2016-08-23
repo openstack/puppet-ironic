@@ -1,0 +1,6 @@
+---
+features:
+  - Add new manifest "ironic::drivers::ilo" for configuring parameters
+    related to Ironic iLO drivers.
+  - Add new manifest "ironic::drivers::drac" for configuring parameters
+    related to Ironic DRAC drivers.
