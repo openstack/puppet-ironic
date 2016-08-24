@@ -52,6 +52,19 @@
 #   to a ramdisk for cleaning using Neutron DHCP.
 #   Defaults to $::os_service_default
 #
+# [*cleaning_disk_erase*]
+#   (optional) Whether and how to erase hard drives during automated cleaning.
+#   Accepts the following values:
+#   * full - erase all data from all disks,
+#   * metadata - erase only metadata (partitioning table, etc),
+#   * none - do not erase anything (dangerous, use with caution).
+#   Defaults to undef, which leaves the configuration intact
+#
+# [*continue_if_disk_secure_erase_fails*]
+#   (optional) Whether to continue with shredding the hard drive if secure ATA
+#   erasure fails. Only makes sense if full hard disk erasing is enabled.
+#   Defaults to $::os_service_default
+#
 # [*api_url*]
 #   (optional) Ironic API URL.
 #   Defaults to $::os_service_default
@@ -62,20 +75,45 @@
 #    Defaults to $::os_service_default
 #
 class ironic::conductor (
-  $package_ensure                = 'present',
-  $enabled                       = true,
-  $max_time_interval             = '120',
-  $force_power_state_during_sync = true,
-  $automated_clean               = $::os_service_default,
-  $swift_account                 = $::os_service_default,
-  $cleaning_network_uuid         = $::os_service_default,
-  $api_url                       = $::os_service_default,
-  $provisioning_network_uuid     = $::os_service_default,
+  $package_ensure                       = 'present',
+  $enabled                              = true,
+  $max_time_interval                    = '120',
+  $force_power_state_during_sync        = true,
+  $automated_clean                      = $::os_service_default,
+  $swift_account                        = $::os_service_default,
+  $cleaning_network_uuid                = $::os_service_default,
+  $cleaning_disk_erase                  = undef,
+  $continue_if_disk_secure_erase_fails  = $::os_service_default,
+  $api_url                              = $::os_service_default,
+  $provisioning_network_uuid            = $::os_service_default,
 ) {
 
   include ::ironic::params
 
   Ironic_config<||> ~> Service['ironic-conductor']
+
+  if $cleaning_disk_erase {
+    validate_re($cleaning_disk_erase, ['^full$', '^metadata$', '^none$'])
+  }
+
+  case $cleaning_disk_erase {
+    'full': {
+      $erase_devices_priority = 10
+      $erase_devices_metadata_priority = 0
+    }
+    'metadata': {
+      $erase_devices_priority = 0
+      $erase_devices_metadata_priority = 10
+    }
+    'none': {
+      $erase_devices_priority = 0
+      $erase_devices_metadata_priority = 0
+    }
+    default: {
+      $erase_devices_priority = $::os_service_default
+      $erase_devices_metadata_priority = $::os_service_default
+    }
+  }
 
   # Configure ironic.conf
   ironic_config {
@@ -86,6 +124,9 @@ class ironic::conductor (
     'glance/swift_account': value => $swift_account;
     'neutron/cleaning_network_uuid': value => $cleaning_network_uuid;
     'neutron/provisioning_network_uuid': value => $provisioning_network_uuid;
+    'deploy/erase_devices_priority': value => $erase_devices_priority;
+    'deploy/erase_devices_metadata_priority': value => $erase_devices_metadata_priority;
+    'deploy/continue_if_disk_secure_erase_fails': value => $continue_if_disk_secure_erase_fails;
   }
 
   # Install package

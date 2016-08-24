@@ -1,0 +1,18 @@
+---
+features:
+    - |
+      Add new option ``ironic::conductor::cleaning_disk_erase`` for tweaking
+      how Ironic erases hard drive during cleaning. Possible values:
+
+      * *full* - erase all data on all hard drives using either ATA secure
+        erase or ``shred`` utility.
+
+      * *metadata* - erase only disk metadata on all hard drives, leaving
+        data intact.
+
+      * *none* - do not erase anything (only use it if you have other means
+        of erasing hard drives in place).
+
+    - Add new option ``ironic::conductor::continue_if_disk_secure_erase_fails``
+      which defines whether ironic should fall back to ``shred`` utility
+      if ATA secure erase is available, but fails in the process.
