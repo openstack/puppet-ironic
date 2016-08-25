@@ -380,6 +380,14 @@ class ironic (
     name   => $::ironic::params::common_package_name,
     tag    => ['openstack', 'ironic-package'],
   }
+  Package['ironic-common'] ~> Service<| tag == 'ironic-service' |>
+
+  package { 'ironic-lib':
+    ensure => $package_ensure,
+    name   => $::ironic::params::lib_package_name,
+    tag    => ['openstack', 'ironic-package'],
+  }
+  Package['ironic-lib'] ~> Service<| tag == 'ironic-service' |>
 
   validate_array($enabled_drivers)
 

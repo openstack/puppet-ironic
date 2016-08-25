@@ -76,10 +76,18 @@ describe 'ironic' do
     it { is_expected.to contain_class('ironic::logging') }
     it { is_expected.to contain_class('ironic::params') }
 
-    it 'installs ironic package' do
+    it 'installs ironic-common package' do
       is_expected.to contain_package('ironic-common').with(
         :ensure => 'present',
         :name   => platform_params[:common_package_name],
+        :tag    => ['openstack', 'ironic-package'],
+      )
+    end
+
+    it 'installs ironic-lib package' do
+      is_expected.to contain_package('ironic-lib').with(
+        :ensure => 'present',
+        :name   => platform_params[:lib_package_name],
         :tag    => ['openstack', 'ironic-package'],
       )
     end
@@ -285,7 +293,8 @@ describe 'ironic' do
     end
 
     let :platform_params do
-      { :common_package_name => 'ironic-common' }
+      { :common_package_name => 'ironic-common',
+        :lib_package_name    => 'python-ironic-lib' }
     end
 
     it_configures 'ironic'
@@ -306,7 +315,8 @@ describe 'ironic' do
     end
 
     let :platform_params do
-      { :common_package_name => 'openstack-ironic-common' }
+      { :common_package_name => 'openstack-ironic-common',
+        :lib_package_name    => 'python-ironic-lib' }
     end
 
     it_configures 'ironic'

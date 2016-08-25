@@ -1,0 +1,4 @@
+---
+features:
+  - Manage ironic-lib package, called python-ironic-lib.
+    Also make sure the packages notify Ironic services to facilitate upgrade orchestration.

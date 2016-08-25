@@ -30,6 +30,7 @@ class ironic::params {
   case $::osfamily {
     'RedHat': {
       $common_package_name       = 'openstack-ironic-common'
+      $lib_package_name          = 'python-ironic-lib'
       $api_package               = 'openstack-ironic-api'
       $api_service               = 'openstack-ironic-api'
       $conductor_package         = 'openstack-ironic-conductor'
@@ -44,6 +45,7 @@ class ironic::params {
     }
     'Debian': {
       $common_package_name       = 'ironic-common'
+      $lib_package_name          = 'python-ironic-lib'
       $api_service               = 'ironic-api'
       $api_package               = 'ironic-api'
       $conductor_service         = 'ironic-conductor'
