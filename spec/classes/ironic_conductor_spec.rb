@@ -67,6 +67,8 @@ describe 'ironic::conductor' do
       is_expected.to contain_ironic_config('neutron/cleaning_network_uuid').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('neutron/provisioning_network_uuid').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('deploy/continue_if_disk_secure_erase_fails').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('deploy/http_url').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('deploy/http_root').with(:value => '<SERVICE DEFAULT>')
     end
 
     context 'when overriding parameters' do
@@ -80,6 +82,8 @@ describe 'ironic::conductor' do
           :api_url                       => 'https://127.0.0.1:6385',
           :provisioning_network_uuid     => '00000000-0000-0000-0000-000000000000',
           :cleaning_disk_erase           => 'metadata',
+          :http_url                      => 'http://host:port',
+          :http_root                     => '/src/www',
         )
       end
       it 'should replace default parameter with new value' do
@@ -92,6 +96,8 @@ describe 'ironic::conductor' do
         is_expected.to contain_ironic_config('neutron/provisioning_network_uuid').with_value('00000000-0000-0000-0000-000000000000')
         is_expected.to contain_ironic_config('deploy/erase_devices_priority').with_value(0)
         is_expected.to contain_ironic_config('deploy/erase_devices_metadata_priority').with_value(10)
+        is_expected.to contain_ironic_config('deploy/http_url').with_value(p[:http_url])
+        is_expected.to contain_ironic_config('deploy/http_root').with_value(p[:http_root])
       end
     end
 

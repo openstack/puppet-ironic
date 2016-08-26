@@ -59,7 +59,6 @@ describe 'basic ironic' do
         ssl => false,
       }
       class { '::ironic::drivers::ipmi': }
-      class { '::ironic::drivers::deploy': }
 
       # Ironic inspector resources
       case $::osfamily {
