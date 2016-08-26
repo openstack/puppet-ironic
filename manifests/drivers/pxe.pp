@@ -19,6 +19,66 @@
 #
 # === Parameters
 #
+# [*ipxe_enabled*]
+#   (optional) Enable ipxe support
+#   Defaults to false.
+#
+# [*pxe_append_params*]
+#   (optional) Additional append parameters for baremetal PXE boot.
+#   Should be valid pxe parameters
+#   Defaults to $::os_service_default
+#
+# [*pxe_bootfile_name*]
+#   (optional) Bootfile DHCP parameter.
+#   If not set, its value is detected based on ipxe_enabled.
+#   Defaults to undef.
+#
+# [*pxe_config_template*]
+#   (optional) Template file for PXE configuration.
+#   If set, should be an valid template file. Otherwise, its value is detected
+#   based on ipxe_enabled.
+#   Defaults to undef.
+#
+# [*tftp_server*]
+#   (optional) IP address of Ironic compute node's tftp server.
+#   Should be an valid IP address
+#   Defaults to $::os_service_default.
+#
+# [*tftp_root*]
+#   (optional) Ironic compute node's tftp root path.
+#   Should be an valid path
+#   Defaults to '/tftpboot'.
+#
+# [*images_path*]
+#   (optional) Directory where images are stored on disk.
+#   Should be an valid directory
+#   Defaults to $::os_service_default.
+#
+# [*tftp_master_path*]
+#   (optional) Directory where master tftp images are stored on disk.
+#   Should be an valid directory
+#   Defaults to '/tftpboot/master_images'.
+#
+# [*instance_master_path*]
+#   (optional) Directory where master tftp images are stored on disk.
+#   Should be an valid directory
+#   Defaults to $::os_service_default.
+#
+# [*uefi_pxe_bootfile_name*]
+#   (optional) Bootfile DHCP parameter for UEFI boot mode.
+#   Defaults to $::os_service_default.
+#
+# [*uefi_pxe_config_template*]
+#   (optional) Template file for PXE configuration for UEFI boot loader.
+#   Defaults to $::os_service_default.
+#
+# [*ipxe_timeout*]
+#   (optional) ipxe timeout in second.
+#   Should be an valid integer
+#   Defaults to $::os_service_default.
+#
+# DEPRECATED
+#
 # [*deploy_kernel*]
 #   (optional) Default kernel image ID used in deployment phase.
 #   Should be an valid id
@@ -29,90 +89,44 @@
 #   Should be an valid id
 #   Defaults to undef.
 #
-# [*pxe_append_params*]
-#   (optional) Additional append parameters for baremetal PXE boot.
-#   Should be valid pxe parameters
-#   Defaults to 'nofb nomodeset vga=normal'.
-#
-# [*pxe_config_template*]
-#   (optional) Template file for PXE configuration.
-#   Should be an valid template file
-#   Defaults to '$pybasedir/drivers/modules/pxe_config.template'.
-#
 # [*pxe_deploy_timeout*]
 #   (optional) Timeout for PXE deployments.
 #   Should be an valid integer
-#   Defaults to '0' for unlimited.
-#
-# [*tftp_server*]
-#   (optional) IP address of Ironic compute node's tftp server.
-#   Should be an valid IP address
-#   Defaults to '$my_ip'.
-#
-# [*tftp_root*]
-#   (optional) Ironic compute node's tftp root path.
-#   Should be an valid path
-#   Defaults to '/tftpboot'.
-#
-# [*images_path*]
-#   (optional) Directory where images are stored on disk.
-#   Should be an valid directory
-#   Defaults to '/tftpboot'.
-#
-# [*tftp_master_path*]
-#   (optional) Directory where master tftp images are stored on disk.
-#   Should be an valid directory
-#   Defaults to '/tftpboot/master_images'.
-#
-# [*instance_master_path*]
-#   (optional) Directory where master tftp images are stored on disk.
-#   Should be an valid directory
-#   Defaults to '/var/lib/ironic/master_images'.
-#
-# [*uefi_pxe_bootfile_name*]
-#   (optional) Bootfile DHCP parameter for UEFI boot mode.
-#   Defaults to 'elilo.efi'.
-#
-# [*uefi_pxe_config_template*]
-#   (optional) Template file for PXE configuration for UEFI boot loader.
-#   Defaults to '$pybasedir/drivers/modules/elilo_efi_pxe_config.template'.
-#
-# [*ipxe_timeout*]
-#   (optional) ipxe timeout in second.
-#   Should be an valid integer
-#   Defaults to '0' for unlimited.
-#
-# [*ipxe_enabled*]
-#   (optional) Enable ipxe support
-#   Defaults to $::os_service_default.
-#
-# [*pxe_bootfile_name*]
-#   (optional) Bootfile DHCP parameter
-#   Defaults to $::os_service_default.
+#   Defaults to undef
 
 class ironic::drivers::pxe (
+  $ipxe_enabled             = false,
+  $pxe_append_params        = $::os_service_default,
+  $pxe_bootfile_name        = undef,
+  $pxe_config_template      = undef,
+  $tftp_server              = $::os_service_default,
+  $tftp_root                = '/tftpboot',
+  $images_path              = $::os_service_default,
+  $tftp_master_path         = '/tftpboot/master_images',
+  $instance_master_path     = $::os_service_default,
+  $uefi_pxe_bootfile_name   = $::os_service_default,
+  $uefi_pxe_config_template = $::os_service_default,
+  $ipxe_timeout             = $::os_service_default,
+  # Deprecated
   $deploy_kernel            = undef,
   $deploy_ramdisk           = undef,
-  $pxe_append_params        = 'nofb nomodeset vga=normal',
-  $pxe_config_template      = '$pybasedir/drivers/modules/pxe_config.template',
-  $pxe_deploy_timeout       = '0',
-  $tftp_server              = '$my_ip',
-  $tftp_root                = '/tftpboot',
-  $images_path              = '/var/lib/ironic/images/',
-  $tftp_master_path         = '/tftpboot/master_images',
-  $instance_master_path     = '/var/lib/ironic/master_images',
-  $uefi_pxe_bootfile_name   = 'elilo.efi',
-  $uefi_pxe_config_template = '$pybasedir/drivers/modules/elilo_efi_pxe_config.template',
-  $ipxe_timeout             = '0',
-  $ipxe_enabled             = $::os_service_default,
-  $pxe_bootfile_name        = $::os_service_default,
+  $pxe_deploy_timeout       = undef,
 ) {
+
+  if $ipxe_enabled {
+    $pxe_bootfile_name_real = pick($pxe_bootfile_name, 'undionly.kpxe')
+    $pxe_config_template_real = pick($pxe_config_template, '$pybasedir/drivers/modules/ipxe_config.template')
+  } else {
+    $pxe_bootfile_name_real = pick($pxe_bootfile_name, 'pxelinux.0')
+    $pxe_config_template_real = pick($pxe_config_template, '$pybasedir/drivers/modules/pxe_config.template')
+  }
 
   # Configure ironic.conf
   ironic_config {
+    'pxe/ipxe_enabled': value             => $ipxe_enabled;
     'pxe/pxe_append_params': value        => $pxe_append_params;
-    'pxe/pxe_config_template': value      => $pxe_config_template;
-    'pxe/pxe_deploy_timeout': value       => $pxe_deploy_timeout;
+    'pxe/pxe_bootfile_name': value        => $pxe_bootfile_name_real;
+    'pxe/pxe_config_template': value      => $pxe_config_template_real;
     'pxe/tftp_server': value              => $tftp_server;
     'pxe/tftp_root': value                => $tftp_root;
     'pxe/images_path': value              => $images_path;
@@ -121,20 +135,18 @@ class ironic::drivers::pxe (
     'pxe/uefi_pxe_bootfile_name': value   => $uefi_pxe_bootfile_name;
     'pxe/uefi_pxe_config_template': value => $uefi_pxe_config_template;
     'pxe/ipxe_timeout': value             => $ipxe_timeout;
-    'pxe/ipxe_enabled': value             => $ipxe_enabled;
-    'pxe/pxe_bootfile_name': value        => $pxe_bootfile_name;
   }
 
   if $deploy_kernel {
-    ironic_config {
-      'pxe/deploy_kernel': value => $deploy_kernel;
-    }
+    warning('deploy_kernel option does nothing and will be removed soon')
   }
 
   if $deploy_ramdisk {
-    ironic_config {
-      'pxe/deploy_ramdisk': value => $deploy_ramdisk;
-    }
+    warning('deploy_ramdisk option does nothing and will be removed soon')
+  }
+
+  if $pxe_deploy_timeout {
+    warning('deploy_ramdisk option does nothing and will be removed soon')
   }
 
 }

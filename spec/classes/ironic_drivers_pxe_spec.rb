@@ -23,17 +23,10 @@ require 'spec_helper'
 describe 'ironic::drivers::pxe' do
 
   let :default_params do
-    { :pxe_append_params        => 'nofb nomodeset vga=normal',
+    { :pxe_bootfile_name        => 'pxelinux.0',
       :pxe_config_template      => '$pybasedir/drivers/modules/pxe_config.template',
-      :pxe_deploy_timeout       => '0',
-      :tftp_server              => '$my_ip',
       :tftp_root                => '/tftpboot',
-      :images_path              => '/var/lib/ironic/images/',
       :tftp_master_path         => '/tftpboot/master_images',
-      :instance_master_path     => '/var/lib/ironic/master_images',
-      :uefi_pxe_bootfile_name   => 'elilo.efi',
-      :uefi_pxe_config_template => '$pybasedir/drivers/modules/elilo_efi_pxe_config.template',
-      :ipxe_timeout             => 0,
     }
   end
 
@@ -47,28 +40,46 @@ describe 'ironic::drivers::pxe' do
     end
 
     it 'configures ironic.conf' do
-      is_expected.to contain_ironic_config('pxe/pxe_append_params').with_value(p[:pxe_append_params])
+      is_expected.to contain_ironic_config('pxe/pxe_append_params').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('pxe/pxe_bootfile_name').with_value(p[:pxe_bootfile_name])
       is_expected.to contain_ironic_config('pxe/pxe_config_template').with_value(p[:pxe_config_template])
-      is_expected.to contain_ironic_config('pxe/pxe_deploy_timeout').with_value(p[:pxe_deploy_timeout])
-      is_expected.to contain_ironic_config('pxe/tftp_server').with_value(p[:tftp_server])
+      is_expected.to contain_ironic_config('pxe/tftp_server').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/tftp_root').with_value(p[:tftp_root])
-      is_expected.to contain_ironic_config('pxe/images_path').with_value(p[:images_path])
+      is_expected.to contain_ironic_config('pxe/images_path').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/tftp_master_path').with_value(p[:tftp_master_path])
-      is_expected.to contain_ironic_config('pxe/instance_master_path').with_value(p[:instance_master_path])
-      is_expected.to contain_ironic_config('pxe/uefi_pxe_bootfile_name').with_value(p[:uefi_pxe_bootfile_name])
-      is_expected.to contain_ironic_config('pxe/uefi_pxe_config_template').with_value(p[:uefi_pxe_config_template])
-      is_expected.to contain_ironic_config('pxe/ipxe_enabled').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('pxe/pxe_bootfile_name').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('pxe/instance_master_path').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('pxe/uefi_pxe_bootfile_name').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('pxe/uefi_pxe_config_template').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('pxe/ipxe_enabled').with_value(false)
+    end
+
+    context 'when overriding only ipxe_enabled' do
+      before do
+        params.merge!(
+          :ipxe_enabled             => true,
+        )
+      end
+
+      it 'detects correct boot parameters' do
+        is_expected.to contain_ironic_config('pxe/pxe_append_params').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('pxe/pxe_bootfile_name').with_value('undionly.kpxe')
+        is_expected.to contain_ironic_config('pxe/pxe_config_template').with_value('$pybasedir/drivers/modules/ipxe_config.template')
+        is_expected.to contain_ironic_config('pxe/tftp_server').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('pxe/tftp_root').with_value(p[:tftp_root])
+        is_expected.to contain_ironic_config('pxe/images_path').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('pxe/tftp_master_path').with_value(p[:tftp_master_path])
+        is_expected.to contain_ironic_config('pxe/instance_master_path').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('pxe/uefi_pxe_bootfile_name').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('pxe/uefi_pxe_config_template').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('pxe/ipxe_enabled').with_value(true)
+      end
     end
 
     context 'when overriding parameters' do
       before do
         params.merge!(
-          :deploy_kernel            => 'foo',
-          :deploy_ramdisk           => 'bar',
           :pxe_append_params        => 'foo',
           :pxe_config_template      => 'bar',
-          :pxe_deploy_timeout       => '40',
           :tftp_server              => '192.168.0.1',
           :tftp_root                => '/mnt/ftp',
           :images_path              => '/mnt/images',
@@ -83,11 +94,8 @@ describe 'ironic::drivers::pxe' do
       end
 
       it 'should replace default parameter with new value' do
-        is_expected.to contain_ironic_config('pxe/deploy_kernel').with_value(p[:deploy_kernel])
-        is_expected.to contain_ironic_config('pxe/deploy_ramdisk').with_value(p[:deploy_ramdisk])
         is_expected.to contain_ironic_config('pxe/pxe_append_params').with_value(p[:pxe_append_params])
         is_expected.to contain_ironic_config('pxe/pxe_config_template').with_value(p[:pxe_config_template])
-        is_expected.to contain_ironic_config('pxe/pxe_deploy_timeout').with_value(p[:pxe_deploy_timeout])
         is_expected.to contain_ironic_config('pxe/tftp_server').with_value(p[:tftp_server])
         is_expected.to contain_ironic_config('pxe/tftp_root').with_value(p[:tftp_root])
         is_expected.to contain_ironic_config('pxe/images_path').with_value(p[:images_path])

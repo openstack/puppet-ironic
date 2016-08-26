@@ -1,0 +1,8 @@
+---
+features:
+  - The default pxe_bootfile_name and pxe_config_template are now detected
+    based on ipxe_enabled instead of hardcoding TFTP values.
+deprecations:
+  - |
+    The following options from ``ironic::drivers::pxe`` do not do anything and
+    are deprecated: "deploy_kernel", "deploy_ramdisk", "pxe_deploy_timeout".
