@@ -1,0 +1,6 @@
+---
+features:
+  - Add new manifest "ironic::drivers::agent" for configuring IPA-related
+    configuration options. Currently contains options for storing ramdisk
+    logs, for streaming raw images and configuring timeout for soft power off
+    after deployment.

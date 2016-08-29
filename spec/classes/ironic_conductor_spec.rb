@@ -40,6 +40,7 @@ describe 'ironic::conductor' do
     end
 
     it { is_expected.to contain_class('ironic::params') }
+    it { is_expected.to contain_class('ironic::drivers::agent') }
 
     it 'installs ironic conductor package' do
       if platform_params.has_key?(:conductor_package)

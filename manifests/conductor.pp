@@ -101,6 +101,10 @@ class ironic::conductor (
 
   validate_array($enabled_drivers_real)
 
+  # NOTE(dtantsur): all in-tree drivers are IPA-based, so it won't hurt
+  # including its manifest (which only contains configuration options)
+  include ::ironic::drivers::agent
+
   # On Ubuntu, ipmitool dependency is missing and ironic-conductor fails to start.
   # https://bugs.launchpad.net/cloud-archive/+bug/1572800
   if member($enabled_drivers_real, 'pxe_ipmitool') and $::osfamily == 'Debian' {
