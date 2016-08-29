@@ -1,0 +1,3 @@
+---
+deprecations:
+  - The "enabled_drivers" option was moved to "ironic::conductor" manifest.

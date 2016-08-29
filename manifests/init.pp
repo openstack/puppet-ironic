@@ -43,11 +43,6 @@
 #   (optional) Default protocol to use when connecting to glance
 #   Defaults to 'keystone'. 'https' is the only other valid option for SSL
 #
-# [*enabled_drivers*]
-#  (optional) Array of drivers to load during service
-#  initialization.
-#  Defaults to ['pxe_ipmitool'].
-#
 # [*rpc_response_timeout*]
 #   (optional) Seconds to wait for a response from a call. (integer value)
 #   Defaults to $::os_service_default.
@@ -292,6 +287,11 @@
 # [*verbose*]
 #   (optional) Deprecated, Verbose logging
 #   Defaults to undef
+#
+# [*enabled_drivers*]
+#  (optional) Array of drivers to load during service
+#  initialization. Deprecated and moved to conductor.
+#  Defaults to undef
 
 
 class ironic (
@@ -304,7 +304,6 @@ class ironic (
   $log_facility                       = undef,
   $log_dir                            = undef,
   $auth_strategy                      = 'keystone',
-  $enabled_drivers                    = ['pxe_ipmitool'],
   $control_exchange                   = $::os_service_default,
   $rpc_response_timeout               = $::os_service_default,
   $default_transport_url              = $::os_service_default,
@@ -358,6 +357,7 @@ class ironic (
   # DEPRECATED PARAMETERS
   $rabbit_user                        = undef,
   $verbose                            = undef,
+  $enabled_drivers                    = undef,
 ) {
 
   include ::ironic::logging
@@ -389,19 +389,6 @@ class ironic (
   }
   Package['ironic-lib'] ~> Service<| tag == 'ironic-service' |>
 
-  validate_array($enabled_drivers)
-
-  # On Ubuntu, ipmitool dependency is missing and ironic-conductor fails to start.
-  # https://bugs.launchpad.net/cloud-archive/+bug/1572800
-  if member($enabled_drivers, 'pxe_ipmitool') and $::osfamily == 'Debian' {
-    ensure_packages('ipmitool',
-      {
-        ensure => $package_ensure,
-        tag    => ['openstack', 'ironic-package'],
-      }
-    )
-  }
-
   resources { 'ironic_config':
     purge => $purge_config,
   }
@@ -418,7 +405,6 @@ class ironic (
 
   ironic_config {
     'DEFAULT/auth_strategy':           value => $auth_strategy;
-    'DEFAULT/enabled_drivers':         value => join($enabled_drivers, ',');
     'DEFAULT/my_ip':                   value => $my_ip;
     'glance/glance_num_retries':       value => $glance_num_retries;
     'glance/glance_api_insecure':      value => $glance_api_insecure;

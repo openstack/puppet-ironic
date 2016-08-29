@@ -25,6 +25,7 @@ describe 'ironic::conductor' do
   let :default_params do
     { :package_ensure                => 'present',
       :enabled                       => true,
+      :enabled_drivers               => ['pxe_ipmitool'],
       :max_time_interval             => '120',
       :force_power_state_during_sync => true }
   end
@@ -59,6 +60,7 @@ describe 'ironic::conductor' do
     end
 
     it 'configures ironic.conf' do
+      is_expected.to contain_ironic_config('DEFAULT/enabled_drivers').with_value('pxe_ipmitool')
       is_expected.to contain_ironic_config('conductor/max_time_interval').with_value(p[:max_time_interval])
       is_expected.to contain_ironic_config('conductor/force_power_state_during_sync').with_value(p[:force_power_state_during_sync])
       is_expected.to contain_ironic_config('conductor/automated_clean').with(:value => '<SERVICE DEFAULT>')
@@ -72,6 +74,7 @@ describe 'ironic::conductor' do
     context 'when overriding parameters' do
       before :each do
         params.merge!(
+          :enabled_drivers               => ['pxe_ssh', 'agent_ssh'],
           :max_time_interval             => '50',
           :force_power_state_during_sync => false,
           :automated_clean               => false,
@@ -83,6 +86,7 @@ describe 'ironic::conductor' do
         )
       end
       it 'should replace default parameter with new value' do
+        is_expected.to contain_ironic_config('DEFAULT/enabled_drivers').with_value('pxe_ssh,agent_ssh')
         is_expected.to contain_ironic_config('conductor/max_time_interval').with_value(p[:max_time_interval])
         is_expected.to contain_ironic_config('conductor/force_power_state_during_sync').with_value(p[:force_power_state_during_sync])
         is_expected.to contain_ironic_config('conductor/automated_clean').with_value(p[:automated_clean])
@@ -108,6 +112,15 @@ describe 'ironic::conductor' do
     end
 
     it_configures 'ironic conductor'
+
+    # https://bugs.launchpad.net/cloud-archive/+bug/1572800
+    it 'installs ipmitool package' do
+      is_expected.to contain_package('ipmitool').with(
+        :ensure => 'present',
+        :name   => 'ipmitool',
+        :tag    => ['openstack', 'ironic-package'],
+      )
+    end
   end
 
   context 'on RedHat platforms' do

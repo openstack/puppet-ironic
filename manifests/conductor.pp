@@ -27,6 +27,10 @@
 #   (optional) Define if the service must be enabled or not.
 #   Defaults to true.
 #
+# [*enabled_drivers*]
+#  (optional) Array of drivers to load during service initialization.
+#  Defaults to ['pxe_ipmitool'].
+#
 # [*max_time_interval*]
 #   (optional) Maximum time, in seconds, since the last check-in of a conductor.
 #   Should be an interger value
@@ -77,6 +81,7 @@
 class ironic::conductor (
   $package_ensure                       = 'present',
   $enabled                              = true,
+  $enabled_drivers                      = ['pxe_ipmitool'],
   $max_time_interval                    = '120',
   $force_power_state_during_sync        = true,
   $automated_clean                      = $::os_service_default,
@@ -91,6 +96,21 @@ class ironic::conductor (
   include ::ironic::params
 
   Ironic_config<||> ~> Service['ironic-conductor']
+
+  $enabled_drivers_real = pick($::ironic::enabled_drivers, $enabled_drivers)
+
+  validate_array($enabled_drivers_real)
+
+  # On Ubuntu, ipmitool dependency is missing and ironic-conductor fails to start.
+  # https://bugs.launchpad.net/cloud-archive/+bug/1572800
+  if member($enabled_drivers_real, 'pxe_ipmitool') and $::osfamily == 'Debian' {
+    ensure_packages('ipmitool',
+      {
+        ensure => $package_ensure,
+        tag    => ['openstack', 'ironic-package'],
+      }
+    )
+  }
 
   if $cleaning_disk_erase {
     validate_re($cleaning_disk_erase, ['^full$', '^metadata$', '^none$'])
@@ -117,6 +137,7 @@ class ironic::conductor (
 
   # Configure ironic.conf
   ironic_config {
+    'DEFAULT/enabled_drivers': value => join($enabled_drivers_real, ',');
     'conductor/max_time_interval': value => $max_time_interval;
     'conductor/force_power_state_during_sync': value => $force_power_state_during_sync;
     'conductor/automated_clean': value => $automated_clean;

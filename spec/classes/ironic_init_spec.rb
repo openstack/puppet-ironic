@@ -25,7 +25,6 @@ describe 'ironic' do
   let :params do
     { :package_ensure              => 'present',
       :debug                       => false,
-      :enabled_drivers             => ['pxe_ipmitool'],
       :database_connection         => 'sqlite:////var/lib/ironic/ironic.sqlite',
       :database_max_retries        => 10,
       :database_idle_timeout       => 3600,
@@ -96,10 +95,6 @@ describe 'ironic' do
       is_expected.to contain_resources('ironic_config').with({
         :purge => false
       })
-    end
-
-    it 'configures enabled_drivers' do
-      is_expected.to contain_ironic_config('DEFAULT/enabled_drivers').with_value( params[:enabled_drivers] )
     end
 
     it 'configures credentials for rabbit' do
@@ -298,15 +293,6 @@ describe 'ironic' do
     end
 
     it_configures 'ironic'
-
-    # https://bugs.launchpad.net/cloud-archive/+bug/1572800
-    it 'installs ipmitool package' do
-      is_expected.to contain_package('ipmitool').with(
-        :ensure => 'present',
-        :name   => 'ipmitool',
-        :tag    => ['openstack', 'ironic-package'],
-      )
-    end
   end
 
   context 'on RedHat platforms' do
