@@ -42,6 +42,14 @@
 #   state (False).
 #   Defaults to true.
 #
+# [*http_url*]
+#   (optional) ironic-conductor node's HTTP server URL.
+#   Defaults to $::os_service_default
+#
+# [*http_root*]
+#   (optional) ironic-conductor node's HTTP root path.
+#   Defaults to $::os_service_default
+#
 # [*automated_clean*]
 #   (optional) Whether to enable automated cleaning on nodes.
 #   Defaults to $::os_service_default
@@ -84,6 +92,8 @@ class ironic::conductor (
   $enabled_drivers                      = ['pxe_ipmitool'],
   $max_time_interval                    = '120',
   $force_power_state_during_sync        = true,
+  $http_url                             = $::os_service_default,
+  $http_root                            = $::os_service_default,
   $automated_clean                      = $::os_service_default,
   $swift_account                        = $::os_service_default,
   $cleaning_network_uuid                = $::os_service_default,
@@ -94,6 +104,7 @@ class ironic::conductor (
 ) {
 
   include ::ironic::params
+  include ::ironic::drivers::deploy
 
   Ironic_config<||> ~> Service['ironic-conductor']
 
@@ -135,6 +146,9 @@ class ironic::conductor (
     }
   }
 
+  $http_url_real = pick($::ironic::drivers::deploy::http_url, $http_url)
+  $http_root_real = pick($::ironic::drivers::deploy::http_root, $http_root)
+
   # Configure ironic.conf
   ironic_config {
     'DEFAULT/enabled_drivers': value => join($enabled_drivers_real, ',');
@@ -145,6 +159,8 @@ class ironic::conductor (
     'glance/swift_account': value => $swift_account;
     'neutron/cleaning_network_uuid': value => $cleaning_network_uuid;
     'neutron/provisioning_network_uuid': value => $provisioning_network_uuid;
+    'deploy/http_url':  value => $http_url_real;
+    'deploy/http_root': value => $http_root_real;
     'deploy/erase_devices_priority': value => $erase_devices_priority;
     'deploy/erase_devices_metadata_priority': value => $erase_devices_metadata_priority;
     'deploy/continue_if_disk_secure_erase_fails': value => $continue_if_disk_secure_erase_fails;

@@ -11,26 +11,30 @@
 # under the License.
 
 # Configure the deploy_utils in Ironic
+# This manifest is deprecated, use ironic::conductor directly instead.
 #
 # === Parameters
 #
 # [*http_url*]
-#   (optional) ironic-conductor node's HTTP server URL.
-#   Defaults to $::os_service_default
+#   (optional) ironic-conductor node's HTTP server URL. DEPRECATED.
+#   Defaults to undef
 #
 # [*http_root*]
-#   (optional) ironic-conductor node's HTTP root path.
-#   Defaults to $::os_service_default
+#   (optional) ironic-conductor node's HTTP root path. DEPRECATED.
+#   Defaults to undef
 #
 
 class ironic::drivers::deploy (
-  $http_url  = $::os_service_default,
-  $http_root = $::os_service_default,
+  $http_url  = undef,
+  $http_root = undef,
 ) {
 
-  ironic_config {
-    'deploy/http_url':  value => $http_url;
-    'deploy/http_root': value => $http_root;
+  if $http_url {
+    warning('http_url is deprecated and will be removed after Newton cycle.')
+  }
+
+  if $http_root {
+    warning('http_root is deprecated and will be removed after Newton cycle.')
   }
 
 }
