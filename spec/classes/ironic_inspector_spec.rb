@@ -50,11 +50,14 @@ describe 'ironic::inspector' do
       :dnsmasq_ip_range                => '192.168.0.100,192.168.0.120',
       :dnsmasq_local_ip                => '192.168.0.1',
       :ipxe_timeout                    => 0,
-      :http_port                       => 8088, }
+      :http_port                       => 8088,
+      :tftp_root                       => '/tftpboot',
+      :http_root                       => '/httpboot', }
   end
 
 
   shared_examples_for 'ironic inspector' do
+
     let :p do
       params
     end
@@ -132,20 +135,6 @@ describe 'ironic::inspector' do
           /initrd=agent.ramdisk ipa-inspection-callback-url=http:\/\/192.168.0.1:5050\/v1\/continue ipa-inspection-collectors=default/
       )
     end
-    it 'should contain directory /tftpboot with selinux type tftpdir_t' do
-      is_expected.to contain_file('/tftpboot').with(
-        'ensure'  => 'directory',
-        'seltype' => 'tftpdir_t'
-      )
-    end
-
-    it 'should not contain BIOS iPXE image by default' do
-      is_expected.to_not contain_file('/tftpboot/undionly.kpxe')
-    end
-
-    it 'should not contain UEFI iPXE image by default' do
-      is_expected.to_not contain_file('/tftpboot/ipxe.efi')
-    end
 
     context 'when overriding parameters' do
       before :each do
@@ -164,6 +153,8 @@ describe 'ironic::inspector' do
           :ramdisk_kernel_args         => 'foo=bar',
           :enable_uefi                 => true,
           :http_port                   => 3816,
+          :tftp_root                   => '/var/lib/tftpboot',
+          :http_root                   => '/var/www/httpboot',
         )
       end
       it 'should replace default parameter with new value' do
@@ -189,26 +180,14 @@ describe 'ironic::inspector' do
             /dhcp-boot=tag:ipxe,http:\/\/192.168.0.1:3816\/inspector.ipxe/
         )
       end
-      it 'should contain file /httpboot/inspector.ipxe' do
-        is_expected.to contain_file('/httpboot/inspector.ipxe').with(
+      it 'should contain file /var/www/httpboot/inspector.ipxe' do
+        is_expected.to contain_file('/var/www/httpboot/inspector.ipxe').with(
           'ensure'  => 'present',
           'require' => 'Package[ironic-inspector]',
           'content' => /ipxe/,
         )
-        is_expected.to contain_file('/httpboot/inspector.ipxe').with_content(
+        is_expected.to contain_file('/var/www/httpboot/inspector.ipxe').with_content(
             /kernel http:\/\/192.168.0.1:3816\/agent.kernel ipa-inspection-callback-url=http:\/\/192.168.0.1:5050\/v1\/continue ipa-inspection-collectors=default.* foo=bar || goto retry_boot/
-        )
-      end
-      it 'should contain iPXE chainload images' do
-        is_expected.to contain_file('/tftpboot/undionly.kpxe').with(
-          'ensure' => 'present',
-          'backup'  => false,
-        )
-      end
-      it 'should contain iPXE UEFI chainload image' do
-        is_expected.to contain_file('/tftpboot/ipxe.efi').with(
-          'ensure' => 'present',
-          'backup'  => false,
         )
       end
 
@@ -219,8 +198,8 @@ describe 'ironic::inspector' do
           )
         end
 
-        it 'should contain file /httpboot/inspector.ipxe' do
-          is_expected.to contain_file('/httpboot/inspector.ipxe').with_content(
+        it 'should contain file /var/www/httpboot/inspector.ipxe' do
+          is_expected.to contain_file('/var/www/httpboot/inspector.ipxe').with_content(
               /kernel --timeout 30000/)
         end
       end
@@ -229,7 +208,11 @@ describe 'ironic::inspector' do
 
   context 'on Debian platforms' do
     let :facts do
-      @default_facts.merge({ :osfamily => 'Debian' })
+      @default_facts.merge({
+        :osfamily               => 'Debian',
+        :operatingsystem        => 'Debian',
+        :operatingsystemrelease => '7.0'
+      })
     end
 
     let :platform_params do
@@ -242,7 +225,11 @@ describe 'ironic::inspector' do
 
   context 'on RedHat platforms' do
     let :facts do
-      @default_facts.merge({ :osfamily => 'RedHat' })
+      @default_facts.merge({
+        :osfamily               => 'RedHat',
+        :operatingsystem        => 'CentOS',
+        :operatingsystemrelease => '7.2.1511'
+      })
     end
 
     let :platform_params do

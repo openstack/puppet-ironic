@@ -113,6 +113,10 @@ class ironic::drivers::pxe (
   $pxe_deploy_timeout       = undef,
 ) {
 
+  include ::ironic::pxe::common
+  $tftp_root_real    = pick($::ironic::pxe::common::tftp_root, $tftp_root)
+  $ipxe_timeout_real = pick($::ironic::pxe::common::ipxe_timeout, $ipxe_timeout)
+
   if $ipxe_enabled {
     $pxe_bootfile_name_real = pick($pxe_bootfile_name, 'undionly.kpxe')
     $pxe_config_template_real = pick($pxe_config_template, '$pybasedir/drivers/modules/ipxe_config.template')
@@ -128,13 +132,13 @@ class ironic::drivers::pxe (
     'pxe/pxe_bootfile_name': value        => $pxe_bootfile_name_real;
     'pxe/pxe_config_template': value      => $pxe_config_template_real;
     'pxe/tftp_server': value              => $tftp_server;
-    'pxe/tftp_root': value                => $tftp_root;
+    'pxe/tftp_root': value                => $tftp_root_real;
     'pxe/images_path': value              => $images_path;
     'pxe/tftp_master_path': value         => $tftp_master_path;
     'pxe/instance_master_path': value     => $instance_master_path;
     'pxe/uefi_pxe_bootfile_name': value   => $uefi_pxe_bootfile_name;
     'pxe/uefi_pxe_config_template': value => $uefi_pxe_config_template;
-    'pxe/ipxe_timeout': value             => $ipxe_timeout;
+    'pxe/ipxe_timeout': value             => $ipxe_timeout_real;
   }
 
   if $deploy_kernel {

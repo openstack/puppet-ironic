@@ -145,11 +145,19 @@
 #
 # [*ipxe_timeout*]
 #   (optional) ipxe timeout in second. Should be an integer.
-#   Defaults to '0' for unlimited.
+#   Defaults to $::os_service_default
 #
 # [*http_port*]
 #   (optional) port used by the HTTP service serving introspection images.
 #   Defaults to 8088.
+#
+# [*tftp_root*]
+#   (optional) Folder location to deploy PXE boot files
+#   Defaults to '/tftpboot'
+#
+# [*http_root*]
+#   (optional) Folder location to deploy HTTP PXE boot
+#   Defaults to '/httpboot'
 #
 # DEPRECATED PARAMETERS
 #
@@ -205,8 +213,10 @@ class ironic::inspector (
   $ramdisk_collectors              = 'default',
   $additional_processing_hooks     = undef,
   $ramdisk_kernel_args             = undef,
-  $ipxe_timeout                    = 0,
-  $http_port                       = 8088,
+  $ipxe_timeout                    = $::os_service_default,
+  $http_port                       = '8088',
+  $tftp_root                       = '/tftpboot',
+  $http_root                       = '/httpboot',
   # DEPRECATED PARAMETERS
   $identity_uri                   = undef,
   $admin_tenant_name              = undef,
@@ -216,6 +226,7 @@ class ironic::inspector (
 ) {
 
   include ::ironic::params
+  include ::ironic::pxe::common
   include ::ironic::inspector::logging
 
   if $admin_tenant_name {
@@ -242,15 +253,19 @@ class ironic::inspector (
     include ::ironic::inspector::authtoken
   }
 
+  warning("After Newton cycle ::ironic::inspector won't provide tftpboot and httpboot setup, please include ::ironic::pxe")
+  include ::ironic::pxe
+
+  $tftp_root_real = pick($::ironic::pxe::common::tftp_root, $tftp_root)
+  $http_root_real = pick($::ironic::pxe::common::http_root, $http_root)
+  $http_port_real = pick($::ironic::pxe::common::http_port, $http_port)
+  $ipxe_timeout_real     = pick($::ironic::pxe::common::ipxe_timeout, $ipxe_timeout)
+
   Ironic_inspector_config<||> ~> Service['ironic-inspector']
 
   file { '/etc/ironic-inspector/inspector.conf':
     ensure  => 'present',
     require => Package['ironic-inspector'],
-  }
-  file { '/tftpboot':
-    ensure  => 'directory',
-    seltype => 'tftpdir_t',
   }
 
   if $pxe_transfer_protocol == 'tftp' {
@@ -259,10 +274,10 @@ class ironic::inspector (
       content => template('ironic/inspector_dnsmasq_tftp.erb'),
       require => Package['ironic-inspector'],
     }
-    file { '/tftpboot/pxelinux.cfg':
+    file { "${tftp_root_real}/pxelinux.cfg":
       ensure => 'directory',
     }
-    file { '/tftpboot/pxelinux.cfg/default':
+    file { "${tftp_root_real}/pxelinux.cfg/default":
       ensure  => 'present',
       content => template('ironic/inspector_pxelinux_cfg.erb'),
       require => Package['ironic-inspector'],
@@ -275,31 +290,10 @@ class ironic::inspector (
       content => template('ironic/inspector_dnsmasq_http.erb'),
       require => Package['ironic-inspector'],
     }
-    file { '/httpboot':
-      ensure => 'directory',
-    }
-    file { '/httpboot/inspector.ipxe':
+    file { "${http_root_real}/inspector.ipxe":
       ensure  => 'present',
       content => template('ironic/inspector_ipxe.erb'),
       require => Package['ironic-inspector'],
-    }
-    if $::ironic::params::ipxe_rom_dir {
-      file { '/tftpboot/undionly.kpxe':
-        ensure  => 'present',
-        source  => "${::ironic::params::ipxe_rom_dir}/undionly.kpxe",
-        backup  => false,
-        seltype => 'tftpdir_t',
-      }
-      if $enable_uefi {
-        file { '/tftpboot/ipxe.efi':
-          ensure  => 'present',
-          source  => "${::ironic::params::ipxe_rom_dir}/ipxe.efi",
-          backup  => false,
-          seltype => 'tftpdir_t',
-        }
-      }
-    } else {
-      warning('iPXE ROM source location not set, ensure ROMs are copied into /tftpboot')
     }
   }
 

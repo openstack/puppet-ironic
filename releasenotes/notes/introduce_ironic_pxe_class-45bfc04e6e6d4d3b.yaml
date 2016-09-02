@@ -1,0 +1,14 @@
+---
+features:
+  - Introduced ironic::pxe class to fully setup tftpboot
+    and httpboot for Ironic and ironic::pxe::common to
+    allow global overrides of options shared among
+    standalone classes ironic::inspector, ironic::pxe
+    and ironic::drivers::pxe.
+upgrade:
+  - The ironic::inspector class will no longer provide
+    tftp_root and http_root paths. These are provided
+    by ironic::pxe class and the inclusion of this
+    class will be removed after Newton cycle. Either
+    create tftp_root and http_root or include ironic::pxe
+    for full PXE setup.
