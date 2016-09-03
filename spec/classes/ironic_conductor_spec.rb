@@ -66,6 +66,8 @@ describe 'ironic::conductor' do
       is_expected.to contain_ironic_config('conductor/automated_clean').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/api_url').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('glance/swift_account').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('glance/swift_temp_url_key').with(:value => '<SERVICE DEFAULT>').with_secret(true)
+      is_expected.to contain_ironic_config('glance/swift_temp_url_duration').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('neutron/cleaning_network_uuid').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('neutron/provisioning_network_uuid').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('deploy/continue_if_disk_secure_erase_fails').with(:value => '<SERVICE DEFAULT>')
@@ -81,6 +83,8 @@ describe 'ironic::conductor' do
           :force_power_state_during_sync => false,
           :automated_clean               => false,
           :swift_account                 => '00000000-0000-0000-0000-000000000000',
+          :swift_temp_url_key            => 'the-key',
+          :swift_temp_url_duration       => 3600,
           :cleaning_network_uuid         => '00000000-0000-0000-0000-000000000000',
           :api_url                       => 'https://127.0.0.1:6385',
           :provisioning_network_uuid     => '00000000-0000-0000-0000-000000000000',
@@ -96,6 +100,8 @@ describe 'ironic::conductor' do
         is_expected.to contain_ironic_config('conductor/automated_clean').with_value(p[:automated_clean])
         is_expected.to contain_ironic_config('conductor/api_url').with_value(p[:api_url])
         is_expected.to contain_ironic_config('glance/swift_account').with_value(p[:swift_account])
+        is_expected.to contain_ironic_config('glance/swift_temp_url_key').with_value(p[:swift_temp_url_key]).with_secret(true)
+        is_expected.to contain_ironic_config('glance/swift_temp_url_duration').with_value(p[:swift_temp_url_duration])
         is_expected.to contain_ironic_config('neutron/cleaning_network_uuid').with_value('00000000-0000-0000-0000-000000000000')
         is_expected.to contain_ironic_config('neutron/provisioning_network_uuid').with_value('00000000-0000-0000-0000-000000000000')
         is_expected.to contain_ironic_config('deploy/erase_devices_priority').with_value(0)

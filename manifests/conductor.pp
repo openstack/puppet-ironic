@@ -59,6 +59,16 @@
 #   The format is "AUTH_uuid"
 #   Defaults to $::os_service_default
 #
+# [*swift_temp_url_key*]
+#   (optional) The secret token given to Swift to allow temporary URL
+#   downloads. Required for several drivers (e.g. agent_ipmitool).
+#   Defaults to $::os_service_default
+#
+# [*swift_temp_url_duration*]
+#   (optional) The length of time in seconds that the temporary URL will be
+#   valid for.
+#   Defaults to $::os_service_default
+#
 # [*cleaning_network_uuid*]
 #   (optional) UUID of the network to create Neutron ports on, when booting
 #   to a ramdisk for cleaning using Neutron DHCP.
@@ -96,6 +106,8 @@ class ironic::conductor (
   $http_root                            = $::os_service_default,
   $automated_clean                      = $::os_service_default,
   $swift_account                        = $::os_service_default,
+  $swift_temp_url_key                   = $::os_service_default,
+  $swift_temp_url_duration              = $::os_service_default,
   $cleaning_network_uuid                = $::os_service_default,
   $cleaning_disk_erase                  = undef,
   $continue_if_disk_secure_erase_fails  = $::os_service_default,
@@ -157,6 +169,8 @@ class ironic::conductor (
     'conductor/automated_clean': value => $automated_clean;
     'conductor/api_url': value => $api_url;
     'glance/swift_account': value => $swift_account;
+    'glance/swift_temp_url_key': value => $swift_temp_url_key, secret => true;
+    'glance/swift_temp_url_duration': value => $swift_temp_url_duration;
     'neutron/cleaning_network_uuid': value => $cleaning_network_uuid;
     'neutron/provisioning_network_uuid': value => $provisioning_network_uuid;
     'deploy/http_url':  value => $http_url_real;
