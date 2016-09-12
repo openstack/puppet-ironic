@@ -74,6 +74,8 @@ describe 'ironic::conductor' do
       is_expected.to contain_ironic_config('deploy/continue_if_disk_secure_erase_fails').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('deploy/http_url').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('deploy/http_root').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('conductor/configdrive_use_swift').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('conductor/configdrive_swift_container').with(:value => '<SERVICE DEFAULT>')
     end
 
     context 'when overriding parameters' do
@@ -92,6 +94,8 @@ describe 'ironic::conductor' do
           :cleaning_disk_erase           => 'metadata',
           :http_url                      => 'http://host:port',
           :http_root                     => '/src/www',
+          :configdrive_use_swift         => true,
+          :configdrive_swift_container   => 'cont',
         )
       end
       it 'should replace default parameter with new value' do
@@ -109,6 +113,8 @@ describe 'ironic::conductor' do
         is_expected.to contain_ironic_config('deploy/erase_devices_metadata_priority').with_value(10)
         is_expected.to contain_ironic_config('deploy/http_url').with_value(p[:http_url])
         is_expected.to contain_ironic_config('deploy/http_root').with_value(p[:http_root])
+        is_expected.to contain_ironic_config('conductor/configdrive_use_swift').with_value(p[:configdrive_use_swift])
+        is_expected.to contain_ironic_config('conductor/configdrive_swift_container').with_value(p[:configdrive_swift_container])
       end
     end
 

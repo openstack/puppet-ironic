@@ -1,0 +1,5 @@
+---
+features:
+  - Add new options "configdrive_use_swift" and "configdrive_swift_container"
+    in the "ironic::conductor" manifest to configure storing config drives
+    in Swift instead of the database.

@@ -96,6 +96,16 @@
 #    provisioning nodes. Required for neutron network interface.
 #    Defaults to $::os_service_default
 #
+# [*configdrive_use_swift*]
+#   (optional) Whether to use Swift for storing config drives instead of
+#   the database. Recommended for bigger config drives.
+#   Defaults to $::os_service_default
+#
+# [*configdrive_swift_container*]
+#   (optinal) Swift container to use for storing config drives if
+#   configdrive_use_swift is true.
+#   Defaults to $::os_service_default
+#
 class ironic::conductor (
   $package_ensure                       = 'present',
   $enabled                              = true,
@@ -113,6 +123,8 @@ class ironic::conductor (
   $continue_if_disk_secure_erase_fails  = $::os_service_default,
   $api_url                              = $::os_service_default,
   $provisioning_network_uuid            = $::os_service_default,
+  $configdrive_use_swift                = $::os_service_default,
+  $configdrive_swift_container          = $::os_service_default,
 ) {
 
   include ::ironic::params
@@ -182,6 +194,8 @@ class ironic::conductor (
     'deploy/erase_devices_priority': value => $erase_devices_priority;
     'deploy/erase_devices_metadata_priority': value => $erase_devices_metadata_priority;
     'deploy/continue_if_disk_secure_erase_fails': value => $continue_if_disk_secure_erase_fails;
+    'conductor/configdrive_use_swift': value => $configdrive_use_swift;
+    'conductor/configdrive_swift_container': value => $configdrive_swift_container;
   }
 
   # Install package
