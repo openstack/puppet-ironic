@@ -95,6 +95,8 @@ class ironic::keystone::auth (
   $internal_url        = 'http://127.0.0.1:6385',
 ) {
 
+  include ::ironic::deps
+
   if $configure_user_role {
     Keystone_user_role["${auth_name}@${tenant}"] ~> Service <| name == 'ironic-server' |>
   }

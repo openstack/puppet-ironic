@@ -18,6 +18,8 @@ class ironic::policy (
   $policy_path = '/etc/ironic/policy.json',
 ) {
 
+  include ::ironic::deps
+
   validate_hash($policies)
 
   Openstacklib::Policy::Base {

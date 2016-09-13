@@ -113,6 +113,7 @@ class ironic::api (
   $memcached_servers = undef,
 ) inherits ironic::params {
 
+  include ::ironic::deps
   include ::ironic::params
   include ::ironic::policy
 
@@ -142,9 +143,6 @@ class ironic::api (
 
   include ::ironic::api::authtoken
 
-  Ironic_config<||> ~> Service[$service_name]
-  Class['ironic::policy'] ~> Service[$service_name]
-
   # Configure ironic.conf
   ironic_config {
     'api/host_ip':         value => $host_ip;
@@ -157,8 +155,6 @@ class ironic::api (
 
   # Install package
   if $::ironic::params::api_package {
-    Package['ironic-api'] -> Class['ironic::policy']
-    Package['ironic-api'] -> Service[$service_name]
     package { 'ironic-api':
       ensure => $package_ensure,
       name   => $::ironic::params::api_package,

@@ -23,7 +23,7 @@ describe 'ironic::pxe' do
       is_expected.to contain_file('/tftpboot').with(
         'owner'   => 'ironic',
         'group'   => 'ironic',
-        'require' => 'Package[ironic-common]',
+        'require' => 'Anchor[ironic::config::begin]',
         'ensure'  => 'directory',
         'seltype' => 'tftpdir_t',
       )
@@ -43,7 +43,7 @@ describe 'ironic::pxe' do
       is_expected.to contain_file('/httpboot').with(
         'owner'   => 'ironic',
         'group'   => 'ironic',
-        'require' => 'Package[ironic-common]',
+        'require' => 'Anchor[ironic::config::begin]',
         'ensure'  => 'directory',
         'seltype' => 'httpd_sys_content_t',
       )
@@ -67,7 +67,7 @@ describe 'ironic::pxe' do
        'flags'       => 'IPv4',
        'per_source'  => '11',
        'wait'        => 'yes',
-       'require'     => 'Package[tftp-server]',
+       'subscribe'   => 'Anchor[ironic::install::end]',
       )
     end
 
@@ -84,7 +84,7 @@ describe 'ironic::pxe' do
         is_expected.to contain_file('/var/www/httpboot').with(
           'owner'   => 'ironic',
           'group'   => 'ironic',
-          'require' => 'Package[ironic-common]',
+          'require' => 'Anchor[ironic::config::begin]',
           'ensure'  => 'directory',
           'seltype' => 'httpd_sys_content_t',
         )
@@ -94,7 +94,7 @@ describe 'ironic::pxe' do
         is_expected.to contain_file('/var/lib/tftpboot').with(
           'owner'   => 'ironic',
           'group'   => 'ironic',
-          'require' => 'Package[ironic-common]',
+          'require' => 'Anchor[ironic::config::begin]',
           'ensure'  => 'directory',
           'seltype' => 'tftpdir_t',
         )

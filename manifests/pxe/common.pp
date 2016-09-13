@@ -43,4 +43,5 @@ class ironic::pxe::common (
   $http_port        = undef,
   $ipxe_timeout     = undef,
 ) {
+  include ::ironic::deps
 }

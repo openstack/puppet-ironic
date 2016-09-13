@@ -32,7 +32,7 @@ class ironic::db::postgresql(
   $privileges = 'ALL',
 ) {
 
-  Class['ironic::db::postgresql'] -> Service<| title == 'ironic' |>
+  include ::ironic::deps
 
   ::openstacklib::db::postgresql { 'ironic':
     password_hash => postgresql_password($user, $password),
@@ -42,6 +42,7 @@ class ironic::db::postgresql(
     privileges    => $privileges,
   }
 
-  ::Openstacklib::Db::Postgresql['ironic'] ~> Exec<| title == 'ironic-dbsync' |>
-
+  Anchor['ironic::db::begin']
+  ~> Class['ironic::db::postgresql']
+  ~> Anchor['ironic::db::end']
 }

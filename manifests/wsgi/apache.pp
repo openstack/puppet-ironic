@@ -91,6 +91,7 @@ class ironic::wsgi::apache (
   $priority      = '10',
 ) {
 
+  include ::ironic::deps
   include ::ironic::params
   include ::apache
   include ::apache::mod::wsgi

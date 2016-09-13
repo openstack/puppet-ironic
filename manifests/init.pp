@@ -360,6 +360,7 @@ class ironic (
   $enabled_drivers                    = undef,
 ) {
 
+  include ::ironic::deps
   include ::ironic::logging
   include ::ironic::db
   include ::ironic::params
@@ -380,14 +381,12 @@ class ironic (
     name   => $::ironic::params::common_package_name,
     tag    => ['openstack', 'ironic-package'],
   }
-  Package['ironic-common'] ~> Service<| tag == 'ironic-service' |>
 
   package { 'ironic-lib':
     ensure => $package_ensure,
     name   => $::ironic::params::lib_package_name,
     tag    => ['openstack', 'ironic-package'],
   }
-  Package['ironic-lib'] ~> Service<| tag == 'ironic-service' |>
 
   resources { 'ironic_config':
     purge => $purge_config,

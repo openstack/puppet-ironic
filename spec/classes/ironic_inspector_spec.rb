@@ -72,7 +72,8 @@ describe 'ironic::inspector' do
           :ensure => p[:package_ensure],
           :tag    => ['openstack', 'ironic-inspector-package'],
         )
-        is_expected.to contain_package('ironic-inspector').with_before(/Service\[ironic-inspector\]/)
+        is_expected.to contain_package('ironic-inspector').that_requires('Anchor[ironic-inspector::install::begin]')
+        is_expected.to contain_package('ironic-inspector').that_notifies('Anchor[ironic-inspector::install::end]')
       end
     end
 
@@ -118,10 +119,16 @@ describe 'ironic::inspector' do
       is_expected.to contain_ironic_inspector_config('processing/processing_hooks').with_value('$default_processing_hooks')
     end
 
+    it 'should contain file /etc/ironic-inspector/inspector.conf' do
+      is_expected.to contain_file('/etc/ironic-inspector/inspector.conf').with(
+        'ensure'  => 'present',
+        'require' => 'Anchor[ironic-inspector::config::begin]',
+      )
+    end
     it 'should contain file /etc/ironic-inspector/dnsmasq.conf' do
       is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with(
         'ensure'  => 'present',
-        'require' => 'Package[ironic-inspector]',
+        'require' => 'Anchor[ironic-inspector::config::begin]',
         'content' => /pxelinux/,
       )
     end
@@ -131,7 +138,7 @@ describe 'ironic::inspector' do
         'group'   => 'ironic-inspector',
         'seltype' => 'tftpdir_t',
         'ensure'  => 'present',
-        'require' => 'Package[ironic-inspector]',
+        'require' => 'Anchor[ironic-inspector::config::begin]',
         'content' => /default/,
       )
       is_expected.to contain_file('/tftpboot/pxelinux.cfg/default').with_content(
@@ -176,7 +183,7 @@ describe 'ironic::inspector' do
       it 'should contain file /etc/ironic-inspector/dnsmasq.conf' do
         is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with(
           'ensure'  => 'present',
-          'require' => 'Package[ironic-inspector]',
+          'require' => 'Anchor[ironic-inspector::config::begin]',
           'content' => /ipxe/,
         )
         is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
@@ -187,9 +194,9 @@ describe 'ironic::inspector' do
         is_expected.to contain_file('/var/www/httpboot/inspector.ipxe').with(
           'owner'   => 'ironic-inspector',
           'group'   => 'ironic-inspector',
-          'require' => 'Package[ironic-inspector]',
           'seltype' => 'httpd_sys_content_t',
           'ensure'  => 'present',
+          'require' => 'Anchor[ironic-inspector::config::begin]',
           'content' => /ipxe/,
         )
         is_expected.to contain_file('/var/www/httpboot/inspector.ipxe').with_content(

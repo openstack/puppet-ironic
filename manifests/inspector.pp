@@ -225,6 +225,7 @@ class ironic::inspector (
   $auth_uri                       = undef,
 ) {
 
+  include ::ironic::deps
   include ::ironic::params
   include ::ironic::pxe::common
   include ::ironic::inspector::logging
@@ -261,18 +262,16 @@ class ironic::inspector (
   $http_port_real = pick($::ironic::pxe::common::http_port, $http_port)
   $ipxe_timeout_real     = pick($::ironic::pxe::common::ipxe_timeout, $ipxe_timeout)
 
-  Ironic_inspector_config<||> ~> Service['ironic-inspector']
-
   file { '/etc/ironic-inspector/inspector.conf':
     ensure  => 'present',
-    require => Package['ironic-inspector'],
+    require => Anchor['ironic-inspector::config::begin'],
   }
 
   if $pxe_transfer_protocol == 'tftp' {
     file { '/etc/ironic-inspector/dnsmasq.conf':
       ensure  => 'present',
       content => template('ironic/inspector_dnsmasq_tftp.erb'),
-      require => Package['ironic-inspector'],
+      require => Anchor['ironic-inspector::config::begin'],
     }
     file { "${tftp_root_real}/pxelinux.cfg/default":
       ensure  => 'present',
@@ -280,7 +279,7 @@ class ironic::inspector (
       owner   => 'ironic-inspector',
       group   => 'ironic-inspector',
       content => template('ironic/inspector_pxelinux_cfg.erb'),
-      require => Package['ironic-inspector'],
+      require => Anchor['ironic-inspector::config::begin'],
     }
   }
 
@@ -288,7 +287,7 @@ class ironic::inspector (
     file { '/etc/ironic-inspector/dnsmasq.conf':
       ensure  => 'present',
       content => template('ironic/inspector_dnsmasq_http.erb'),
-      require => Package['ironic-inspector'],
+      require => Anchor['ironic-inspector::config::begin'],
     }
     file { "${http_root_real}/inspector.ipxe":
       ensure  => 'present',
@@ -296,7 +295,7 @@ class ironic::inspector (
       owner   => 'ironic-inspector',
       group   => 'ironic-inspector',
       content => template('ironic/inspector_ipxe.erb'),
-      require => Package['ironic-inspector'],
+      require => Anchor['ironic-inspector::config::begin'],
     }
   }
 
@@ -330,8 +329,6 @@ class ironic::inspector (
 
   # Install package
   if $::ironic::params::inspector_package {
-    Package['ironic-inspector'] -> Service['ironic-inspector']
-    Package['ironic-inspector'] -> Service['ironic-inspector-dnsmasq']
     package { 'ironic-inspector':
       ensure => $package_ensure,
       name   => $::ironic::params::inspector_package,
@@ -358,7 +355,6 @@ class ironic::inspector (
     tag       => 'ironic-inspector-service',
   }
 
-  Service['ironic-inspector'] -> Service['ironic-inspector-dnsmasq']
   service { 'ironic-inspector-dnsmasq':
     ensure    => $ensure,
     name      => $::ironic::params::inspector_dnsmasq_service,

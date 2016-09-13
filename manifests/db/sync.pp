@@ -12,13 +12,8 @@ class ironic::db::sync(
   $extra_params  = undef,
 ) {
 
+  include ::ironic::deps
   include ::ironic::params
-
-  Package<| tag == 'ironic-package' |> ~> Exec['ironic-dbsync']
-  Exec['ironic-dbsync'] ~> Service <| tag == 'ironic-service' |>
-
-  Ironic_config<||> -> Exec['ironic-dbsync']
-  Ironic_config<| title == 'database/connection' |> ~> Exec['ironic-dbsync']
 
   exec { 'ironic-dbsync':
     command     => "${::ironic::params::dbsync_command} ${extra_params}",
@@ -31,5 +26,11 @@ class ironic::db::sync(
     user        => 'root',
     refreshonly => true,
     logoutput   => on_failure,
+    subscribe   => [
+      Anchor['ironic::install::end'],
+      Anchor['ironic::config::end'],
+      Anchor['ironic::dbsync::begin']
+    ],
+    notify      => Anchor['ironic::dbsync::end'],
   }
 }

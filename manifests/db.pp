@@ -48,6 +48,7 @@ class ironic::db (
   $database_max_overflow   = $::os_service_default,
   $database_db_max_retries = $::os_service_default,
 ) {
+  include ::ironic::deps
 
   # NOTE(spredzy): In order to keep backward compatibility we rely on the pick function
   # to use ironic::<myparam> if ironic::db::<myparam> isn't specified.
