@@ -78,7 +78,7 @@ node 'db' {
 
 }
 
-node controller {
+node 'controller' {
 
   class { '::ironic':
     db_password         => $db_password,
@@ -107,7 +107,7 @@ node controller {
 
 }
 
-node bifrost-controller {
+node 'bifrost-controller' {
 
   class { '::ironic::bifrost':
     network_interface    => 'eth1',

@@ -230,30 +230,36 @@ class ironic::inspector (
   include ::ironic::inspector::logging
 
   if $admin_tenant_name {
-    warning('Parameter "ironic::inspector::admin_tenant_name" is deprecated and will be removed in O release. Use "ironic::inspector::authtoken::project_name" parameter instead.')
+    warning('Parameter "ironic::inspector::admin_tenant_name" is deprecated and will be removed in O release. \
+              Use "ironic::inspector::authtoken::project_name" parameter instead.')
   }
 
   if $admin_user {
-    warning('Parameter "ironic::inspector::admin_user" is deprecated will be removed in O release. Use "ironic::inspector::authtoken::username" parameter instead.')
+    warning('Parameter "ironic::inspector::admin_user" is deprecated will be removed in O release. \
+              Use "ironic::inspector::authtoken::username" parameter instead.')
   }
 
   if $admin_password {
-    warning('Parameter "ironic::inspector::admin_password" is deprecated and will be removed in O release. Use "ironic::inspector::authtoken::password" parameter instead.')
+    warning('Parameter "ironic::inspector::admin_password" is deprecated and will be removed in O release. \
+              Use "ironic::inspector::authtoken::password" parameter instead.')
   }
 
   if $identity_uri {
-    warning('Parameter "ironic::inspector::identity_uri" is deprecated and will be removed in O release. Use "ironic::inspector::authtoken::auth_url" parameter instead.')
+    warning('Parameter "ironic::inspector::identity_uri" is deprecated and will be removed in O release. \
+              Use "ironic::inspector::authtoken::auth_url" parameter instead.')
   }
 
   if $auth_uri {
-    warning('Parameter "ironic::inspector::auth_uri" is deprecated and will be removed in O release. Use "ironic::inspector::authtoken::auth_uri" parameter instead.')
+    warning('Parameter "ironic::inspector::auth_uri" is deprecated and will be removed in O release. \
+              Use "ironic::inspector::authtoken::auth_uri" parameter instead.')
   }
 
   if $auth_strategy == 'keystone' {
     include ::ironic::inspector::authtoken
   }
 
-  warning("After Newton cycle ::ironic::inspector won't provide tftpboot and httpboot setup, please include ::ironic::pxe")
+  warning("After Newton cycle ::ironic::inspector won't provide \
+          tftpboot and httpboot setup, please include ::ironic::pxe")
   include ::ironic::pxe
 
   $tftp_root_real = pick($::ironic::pxe::common::tftp_root, $tftp_root)
@@ -299,6 +305,11 @@ class ironic::inspector (
 
   # Configure inspector.conf
 
+  #Processing hooks string
+  #Moved here in favor of removing the
+  #140 chars exeeded error in puppet-lint
+  $p_hooks = join(delete_undef_values(['$default_processing_hooks', $additional_processing_hooks]), ',')
+
   ironic_inspector_config {
     'DEFAULT/listen_address':                     value => $listen_address;
     'DEFAULT/auth_strategy':                      value => $auth_strategy;
@@ -322,7 +333,7 @@ class ironic::inspector (
     'swift/auth_url':                             value => $swift_auth_url;
     # Here we use oslo.config interpolation with another option default_processing_hooks,
     # which we don't change as it might break introspection completely.
-    'processing/processing_hooks':                value => join(delete_undef_values(['$default_processing_hooks', $additional_processing_hooks]), ',');
+    'processing/processing_hooks':                value => $p_hooks;
   }
 
   # Install package
