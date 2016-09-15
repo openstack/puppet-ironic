@@ -59,10 +59,6 @@ describe 'ironic::pxe' do
        'wait'        => 'yes',
        'require'     => 'Package[tftp-server]',
       )
-      is_expected.to contain_service('tftpd-hpa').with(
-        'ensure' => 'stopped',
-        'enable' => false,
-      )
     end
 
     context 'when overriding parameters' do

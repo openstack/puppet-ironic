@@ -95,11 +95,6 @@ class ironic::pxe (
     require     => Package['tftp-server'],
   }
 
-  service { 'tftpd-hpa':
-    ensure => 'stopped',
-    enable => false,
-  }
-
   file { "${tftp_root_real}/map-file":
     ensure  => 'present',
     content => "r ^([^/]) ${tftp_root_real}/\\1",
