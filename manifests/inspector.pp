@@ -274,11 +274,11 @@ class ironic::inspector (
       content => template('ironic/inspector_dnsmasq_tftp.erb'),
       require => Package['ironic-inspector'],
     }
-    file { "${tftp_root_real}/pxelinux.cfg":
-      ensure => 'directory',
-    }
     file { "${tftp_root_real}/pxelinux.cfg/default":
       ensure  => 'present',
+      seltype => 'tftpdir_t',
+      owner   => 'ironic-inspector',
+      group   => 'ironic-inspector',
       content => template('ironic/inspector_pxelinux_cfg.erb'),
       require => Package['ironic-inspector'],
     }
@@ -292,6 +292,9 @@ class ironic::inspector (
     }
     file { "${http_root_real}/inspector.ipxe":
       ensure  => 'present',
+      seltype => 'httpd_sys_content_t',
+      owner   => 'ironic-inspector',
+      group   => 'ironic-inspector',
       content => template('ironic/inspector_ipxe.erb'),
       require => Package['ironic-inspector'],
     }

@@ -29,6 +29,16 @@ describe 'ironic::pxe' do
       )
     end
 
+    it 'should contain directory /tftpboot/pxelinux.cfg with selinux type tftpdir_t' do
+      is_expected.to contain_file('/tftpboot/pxelinux.cfg').with(
+        'owner'   => 'ironic',
+        'group'   => 'ironic',
+        'require' => 'Package[ironic-common]',
+        'ensure'  => 'directory',
+        'seltype' => 'tftpdir_t',
+      )
+    end
+
     it 'should contain directory /httpboot with selinux type httpd_sys_content_t' do
       is_expected.to contain_file('/httpboot').with(
         'owner'   => 'ironic',

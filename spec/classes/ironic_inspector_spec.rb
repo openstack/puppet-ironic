@@ -127,6 +127,9 @@ describe 'ironic::inspector' do
     end
     it 'should contain file /tftpboot/pxelinux.cfg/default' do
       is_expected.to contain_file('/tftpboot/pxelinux.cfg/default').with(
+        'owner'   => 'ironic-inspector',
+        'group'   => 'ironic-inspector',
+        'seltype' => 'tftpdir_t',
         'ensure'  => 'present',
         'require' => 'Package[ironic-inspector]',
         'content' => /default/,
@@ -182,8 +185,11 @@ describe 'ironic::inspector' do
       end
       it 'should contain file /var/www/httpboot/inspector.ipxe' do
         is_expected.to contain_file('/var/www/httpboot/inspector.ipxe').with(
-          'ensure'  => 'present',
+          'owner'   => 'ironic-inspector',
+          'group'   => 'ironic-inspector',
           'require' => 'Package[ironic-inspector]',
+          'seltype' => 'httpd_sys_content_t',
+          'ensure'  => 'present',
           'content' => /ipxe/,
         )
         is_expected.to contain_file('/var/www/httpboot/inspector.ipxe').with_content(

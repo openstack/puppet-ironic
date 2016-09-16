@@ -65,6 +65,14 @@ class ironic::pxe (
     require => Package['ironic-common'],
   }
 
+  file { "${tftp_root_real}/pxelinux.cfg":
+    ensure  => 'directory',
+    seltype => 'tftpdir_t',
+    owner   => 'ironic',
+    group   => 'ironic',
+    require => Package['ironic-common'],
+  }
+
   file { $http_root_real:
     ensure  => 'directory',
     seltype => 'httpd_sys_content_t',
