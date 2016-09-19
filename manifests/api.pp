@@ -117,27 +117,33 @@ class ironic::api (
   include ::ironic::policy
 
   if $admin_tenant_name {
-    warning('Parameter "ironic::api::admin_tenant_name" is deprecated and will be removed in O release. Use "ironic::api::authtoken::project_name" parameter instead.')
+    warning('Parameter "ironic::api::admin_tenant_name" is deprecated and will be removed in O release. \
+              Use "ironic::api::authtoken::project_name" parameter instead.')
   }
 
   if $admin_user {
-    warning('Parameter "ironic::api::admin_user" is deprecated will be removed in O release. Use "ironic::api::authtoken::username" parameter instead.')
+    warning('Parameter "ironic::api::admin_user" is deprecated will be removed in O release. \
+              Use "ironic::api::authtoken::username" parameter instead.')
   }
 
   if $admin_password {
-    warning('Parameter "ironic::api::admin_password" is deprecated and will be removed in O release. Use "ironic::api::authtoken::password" parameter instead.')
+    warning('Parameter "ironic::api::admin_password" is deprecated and will be removed in O release. \
+              Use "ironic::api::authtoken::password" parameter instead.')
   }
 
   if $identity_uri {
-    warning('Parameter "ironic::api::identity_uri" is deprecated and will be removed in O release. Use "ironic::api::authtoken::auth_url" parameter instead.')
+    warning('Parameter "ironic::api::identity_uri" is deprecated and will be removed in O release. \
+              Use "ironic::api::authtoken::auth_url" parameter instead.')
   }
 
   if $auth_uri {
-    warning('Parameter "ironic::api::auth_uri" is deprecated and will be removed in O release. Use "ironic::api::authtoken::auth_uri" parameter instead.')
+    warning('Parameter "ironic::api::auth_uri" is deprecated and will be removed in O release. \
+              Use "ironic::api::authtoken::auth_uri" parameter instead.')
   }
 
   if $memcached_servers {
-    warning('Parameter "ironic::api::memcached_servers" is deprecated and will be removed in O release. Use "ironic::api::authtoken::memcached_servers" parameter instead.')
+    warning('Parameter "ironic::api::memcached_servers" is deprecated and will be removed in O release. \
+              Use "ironic::api::authtoken::memcached_servers" parameter instead.')
   }
 
   include ::ironic::api::authtoken
@@ -193,7 +199,8 @@ class ironic::api (
     # we need to make sure ironic-api/eventlet is stopped before trying to start apache
     Service['ironic-api'] -> Service[$service_name]
   } else {
-    fail('Invalid service_name. Either ironic-api/openstack-ironic-api for running as a standalone service, or httpd for being run by a httpd server')
+    fail('Invalid service_name. Either ironic-api/openstack-ironic-api for running as a \
+          standalone service, or httpd for being run by a httpd server')
   }
 
 }
