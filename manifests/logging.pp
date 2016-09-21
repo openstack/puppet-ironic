@@ -116,6 +116,8 @@ class ironic::logging(
   $verbose                       = undef,
 ) {
 
+  include ::ironic::deps
+
   # NOTE(spredzy): In order to keep backward compatibility we rely on the pick function
   # to use ironic::<myparam> first then ironic::logging::<myparam>.
   $use_syslog_real = pick($::ironic::use_syslog,$use_syslog)

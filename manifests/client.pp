@@ -30,12 +30,13 @@ class ironic::client (
   $package_ensure = present
 ) {
 
+  include ::ironic::deps
   include ::ironic::params
 
   package { 'python-ironicclient':
     ensure => $package_ensure,
     name   => $::ironic::params::client_package,
-    tag    => 'openstack',
+    tag    => ['openstack', 'ironic-support-package'],
   }
 
 }

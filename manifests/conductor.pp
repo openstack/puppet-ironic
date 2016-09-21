@@ -127,10 +127,9 @@ class ironic::conductor (
   $configdrive_swift_container          = $::os_service_default,
 ) {
 
+  include ::ironic::deps
   include ::ironic::params
   include ::ironic::drivers::deploy
-
-  Ironic_config<||> ~> Service['ironic-conductor']
 
   $enabled_drivers_real = pick($::ironic::enabled_drivers, $enabled_drivers)
 
@@ -200,7 +199,6 @@ class ironic::conductor (
 
   # Install package
   if $::ironic::params::conductor_package {
-    Package<| tag == 'ironic-package' |> -> Service['ironic-conductor']
     package { 'ironic-conductor':
       ensure => $package_ensure,
       name   => $::ironic::params::conductor_package,

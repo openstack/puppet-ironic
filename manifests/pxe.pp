@@ -51,6 +51,7 @@ class ironic::pxe (
   $syslinux_files = $::ironic::params::syslinux_files,
 ) inherits ::ironic::params {
 
+  include ::ironic::deps
   include ::ironic::pxe::common
 
   $tftp_root_real = pick($::ironic::pxe::common::tftp_root, $tftp_root)
@@ -62,7 +63,8 @@ class ironic::pxe (
     seltype => 'tftpdir_t',
     owner   => 'ironic',
     group   => 'ironic',
-    require => Package['ironic-common'],
+    require => Anchor['ironic::config::begin'],
+    before  => Anchor['ironic::config::end'],
   }
 
   file { "${tftp_root_real}/pxelinux.cfg":
@@ -78,13 +80,14 @@ class ironic::pxe (
     seltype => 'httpd_sys_content_t',
     owner   => 'ironic',
     group   => 'ironic',
-    require => Package['ironic-common'],
+    require => Anchor['ironic::config::begin'],
+    before  => Anchor['ironic::config::end'],
   }
 
   ensure_resource( 'package', 'tftp-server', {
     'ensure' => $package_ensure,
     'name'   => $::ironic::params::tftpd_package,
-    'tag'    => ['openstack', 'ironic-ipxe'],
+    'tag'    => ['openstack', 'ironic-ipxe', 'ironic-support-package'],
   })
 
   $options = "--map-file ${tftp_root_real}/map-file"
@@ -100,7 +103,7 @@ class ironic::pxe (
     flags       => 'IPv4',
     per_source  => '11',
     wait        => 'yes',
-    require     => Package['tftp-server'],
+    subscribe   => Anchor['ironic::install::end'],
   }
 
   file { "${tftp_root_real}/map-file":
@@ -123,7 +126,7 @@ class ironic::pxe (
   ensure_resource( 'package', 'ipxe', {
     ensure => $package_ensure,
     name   => $::ironic::params::ipxe_package,
-    tag    => ['openstack', 'ironic-ipxe'],
+    tag    => ['openstack', 'ironic-ipxe', 'ironic-support-package'],
   })
 
   file { "${tftp_root_real}/undionly.kpxe":

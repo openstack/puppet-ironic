@@ -3,13 +3,8 @@
 #
 class ironic::db::inspector_sync {
 
+  include ::ironic::deps
   include ::ironic::params
-
-  Package<| tag == 'ironic-inspector-package' |> ~> Exec['ironic-inspector-dbsync']
-  Exec['ironic-inspector-dbsync'] ~> Service <| tag == 'ironic-inspector-service' |>
-
-  Ironic_inspector_config<||> -> Exec['ironic-inspector-dbsync']
-  Ironic_inspector_config<| title == 'database/connection' |> ~> Exec['ironic-inspector-dbsync']
 
   exec { 'ironic-inspector-dbsync':
     command     => $::ironic::params::inspector_dbsync_command,
@@ -17,5 +12,11 @@ class ironic::db::inspector_sync {
     user        => 'ironic-inspector',
     refreshonly => true,
     logoutput   => on_failure,
+    subscribe   => [
+      Anchor['ironic-inspector::install::end'],
+      Anchor['ironic-inspector::config::end'],
+      Anchor['ironic-inspector::dbsync::begin']
+    ],
+    notify      => Anchor['ironic-inspector::dbsync::end'],
   }
 }

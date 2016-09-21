@@ -29,6 +29,8 @@ class ironic::drivers::ipmi (
   $retry_timeout = '10'
 ) {
 
+  include ::ironic::deps
+
   # Configure ironic.conf
   ironic_config {
     'ipmi/retry_timeout': value => $retry_timeout;

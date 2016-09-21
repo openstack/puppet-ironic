@@ -45,6 +45,8 @@ class ironic::cors (
   $allow_headers     = $::os_service_default,
 ) {
 
+  include ::ironic::deps
+
   oslo::cors { 'ironic_config':
     allowed_origin    => $allowed_origin,
     allow_credentials => $allow_credentials,

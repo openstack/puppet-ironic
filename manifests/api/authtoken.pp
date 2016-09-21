@@ -228,6 +228,8 @@ class ironic::api::authtoken(
   $token_cache_time               = $::os_service_default,
 ) {
 
+  include ::ironic::deps
+
   if is_service_default($password) and ! $::ironic::api::admin_password {
     fail('Please set password for Ironic API service user')
   }

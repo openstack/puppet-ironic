@@ -51,7 +51,8 @@ describe 'ironic::api' do
           :ensure => p[:package_ensure],
           :tag    => ['openstack', 'ironic-package'],
         )
-        is_expected.to contain_package('ironic-api').with_before(/Service\[ironic-api\]/)
+        is_expected.to contain_package('ironic-api').that_requires('Anchor[ironic::install::begin]')
+        is_expected.to contain_package('ironic-api').that_notifies('Anchor[ironic::install::end]')
       end
     end
 

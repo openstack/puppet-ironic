@@ -49,7 +49,8 @@ describe 'ironic::conductor' do
           :ensure => p[:package_ensure],
           :tag    => ['openstack', 'ironic-package'],
         )
-        is_expected.to contain_package('ironic-conductor').with_before(/Service\[ironic-conductor\]/)
+        is_expected.to contain_package('ironic-conductor').that_requires('Anchor[ironic::install::begin]')
+        is_expected.to contain_package('ironic-conductor').that_notifies('Anchor[ironic::install::end]')
       end
     end
 

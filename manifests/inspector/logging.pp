@@ -112,6 +112,8 @@ class ironic::inspector::logging(
   $verbose                       = undef,
 ) {
 
+  include ::ironic::deps
+
   $debug_real = pick($::ironic::inspector::debug,$debug)
   if is_service_default($default_log_levels) {
     $default_log_levels_real = $default_log_levels

@@ -190,6 +190,8 @@ class ironic::bifrost (
   $ipmi_bridging                  = 'no',
 ) {
 
+  include ::ironic::deps
+
   vcsrepo { $git_dest_repo_folder:
     ensure   => $ensure,
     provider => git,

@@ -54,6 +54,8 @@ class ironic::db::mysql (
   $collate       = 'utf8_general_ci',
 ) {
 
+  include ::ironic::deps
+
   ::openstacklib::db::mysql { 'ironic':
     user          => $user,
     password_hash => mysql_password($password),
@@ -64,6 +66,7 @@ class ironic::db::mysql (
     allowed_hosts => $allowed_hosts,
   }
 
-  ::Openstacklib::Db::Mysql['ironic'] ~> Exec<| title == 'ironic-dbsync' |>
-
+  Anchor['ironic::db::begin']
+  ~> Class['ironic::db::mysql']
+  ~> Anchor['ironic::db::end']
 }

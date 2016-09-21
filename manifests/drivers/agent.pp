@@ -65,6 +65,8 @@ class ironic::drivers::agent (
   $deploy_logs_swift_days_to_expire             = $::os_service_default,
 ) {
 
+  include ::ironic::deps
+
   # Configure ironic.conf
   ironic_config {
     'agent/stream_raw_images':                          value => $stream_raw_images;

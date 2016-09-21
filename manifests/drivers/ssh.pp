@@ -26,6 +26,8 @@ class ironic::drivers::ssh (
   $libvirt_uri = $::os_service_default,
 ) {
 
+  include ::ironic::deps
+
   # Configure ironic.conf
   ironic_config {
     'ssh/libvirt_uri': value => $libvirt_uri;

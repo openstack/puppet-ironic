@@ -228,6 +228,8 @@ class ironic::inspector::authtoken(
   $token_cache_time               = $::os_service_default,
 ) {
 
+  include ::ironic::deps
+
   if is_service_default($password) and ! $::ironic::inspector::admin_password {
     fail('Please set password for Ironic Inspector service user')
   }

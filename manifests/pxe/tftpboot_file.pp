@@ -32,6 +32,8 @@ define ironic::pxe::tftpboot_file (
   $destination_directory,
   $file = $title,
 ) {
+  include ::ironic::deps
+
   file {"${destination_directory}/${file}":
     ensure  => 'present',
     seltype => 'tftpdir_t',

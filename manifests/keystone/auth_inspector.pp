@@ -95,6 +95,8 @@ class ironic::keystone::auth_inspector (
   $internal_url        = 'http://127.0.0.1:5050',
 ) {
 
+  include ::ironic::deps
+
   $real_service_name = pick($service_name, $auth_name)
 
   if $configure_user_role {
