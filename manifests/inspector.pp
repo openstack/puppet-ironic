@@ -231,28 +231,28 @@ class ironic::inspector (
   include ::ironic::inspector::logging
 
   if $admin_tenant_name {
-    warning('Parameter "ironic::inspector::admin_tenant_name" is deprecated and will be removed in O release. \
-              Use "ironic::inspector::authtoken::project_name" parameter instead.')
+    warning("Parameter 'ironic::inspector::admin_tenant_name' is deprecated and will be removed in O release. \
+Use 'ironic::inspector::authtoken::project_name' parameter instead.")
   }
 
   if $admin_user {
-    warning('Parameter "ironic::inspector::admin_user" is deprecated will be removed in O release. \
-              Use "ironic::inspector::authtoken::username" parameter instead.')
+    warning("Parameter 'ironic::inspector::admin_user' is deprecated will be removed in O release. \
+Use 'ironic::inspector::authtoken::username' parameter instead.")
   }
 
   if $admin_password {
-    warning('Parameter "ironic::inspector::admin_password" is deprecated and will be removed in O release. \
-              Use "ironic::inspector::authtoken::password" parameter instead.')
+    warning("Parameter 'ironic::inspector::admin_password' is deprecated and will be removed in O release. \
+Use 'ironic::inspector::authtoken::password' parameter instead.")
   }
 
   if $identity_uri {
-    warning('Parameter "ironic::inspector::identity_uri" is deprecated and will be removed in O release. \
-              Use "ironic::inspector::authtoken::auth_url" parameter instead.')
+    warning("Parameter 'ironic::inspector::identity_uri' is deprecated and will be removed in O release. \
+Use 'ironic::inspector::authtoken::auth_url' parameter instead.")
   }
 
   if $auth_uri {
-    warning('Parameter "ironic::inspector::auth_uri" is deprecated and will be removed in O release. \
-              Use "ironic::inspector::authtoken::auth_uri" parameter instead.')
+    warning("Parameter 'ironic::inspector::auth_uri' is deprecated and will be removed in O release. \
+Use 'ironic::inspector::authtoken::auth_uri' parameter instead.")
   }
 
   if $auth_strategy == 'keystone' {
@@ -260,7 +260,8 @@ class ironic::inspector (
   }
 
   warning("After Newton cycle ::ironic::inspector won't provide \
-          tftpboot and httpboot setup, please include ::ironic::pxe")
+tftpboot and httpboot setup, please include ::ironic::pxe")
+
   include ::ironic::pxe
 
   $tftp_root_real = pick($::ironic::pxe::common::tftp_root, $tftp_root)
