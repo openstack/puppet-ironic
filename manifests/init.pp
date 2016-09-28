@@ -284,16 +284,11 @@
 #   Defaults to undef.
 #   Deprecated, use rabbit_userid instead.
 #
-# [*verbose*]
-#   (optional) Deprecated, Verbose logging
-#   Defaults to undef
-#
 # [*enabled_drivers*]
 #  (optional) Array of drivers to load during service
 #  initialization. Deprecated and moved to conductor.
 #  Defaults to undef
-
-
+#
 class ironic (
   $enabled                            = true,
   $package_ensure                     = 'present',
@@ -356,7 +351,6 @@ class ironic (
   $purge_config                       = false,
   # DEPRECATED PARAMETERS
   $rabbit_user                        = undef,
-  $verbose                            = undef,
   $enabled_drivers                    = undef,
 ) {
 
@@ -364,10 +358,6 @@ class ironic (
   include ::ironic::logging
   include ::ironic::db
   include ::ironic::params
-
-  if $verbose {
-    warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
-  }
 
   if $rabbit_user {
     warning('The rabbit_user parameter is deprecated. Please use rabbit_userid instead.')

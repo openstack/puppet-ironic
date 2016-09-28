@@ -1,0 +1,5 @@
+---
+other:
+  - This patch removes the verbose parameter. Since we are in Ocata
+    and this option was marked to be removed in this release.
+    In Newton the option was deprecated.

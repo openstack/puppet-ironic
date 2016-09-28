@@ -4,10 +4,6 @@
 #
 # == parameters
 #
-#  [*verbose*]
-#    (Optional) Should the daemons log verbose messages
-#    Defaults to $::os_service_default
-#
 #  [*debug*]
 #    (Optional) Should the daemons log debug messages
 #    Defaults to $::os_service_default
@@ -89,12 +85,6 @@
 #    Defaults to $::os_service_default
 #    Example: 'Y-%m-%d %H:%M:%S'
 #
-#  DEPRECATED PARAMETERS
-#
-#  [*verbose*]
-#    (Optional) Deprecated. Should the daemons log verbose messages
-#    Defaults to undef
-#
 class ironic::logging(
   $use_syslog                    = $::os_service_default,
   $use_stderr                    = $::os_service_default,
@@ -112,8 +102,6 @@ class ironic::logging(
   $instance_format               = $::os_service_default,
   $instance_uuid_format          = $::os_service_default,
   $log_date_format               = $::os_service_default,
-  # Deprecated
-  $verbose                       = undef,
 ) {
 
   include ::ironic::deps
@@ -125,10 +113,6 @@ class ironic::logging(
   $log_facility_real = pick($::ironic::log_facility,$log_facility)
   $log_dir_real = pick($::ironic::log_dir,$log_dir)
   $debug_real = pick($::ironic::debug,$debug)
-
-  if $verbose {
-    warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
-  }
 
   oslo::log { 'ironic_config':
     debug                         => $debug_real,
