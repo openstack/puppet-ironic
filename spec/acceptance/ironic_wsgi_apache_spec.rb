@@ -67,6 +67,9 @@ describe 'basic ironic' do
           warning("Ironic inspector packaging is not ready on ${::osfamily}.")
         }
         'RedHat': {
+          class { '::ironic::inspector::db::mysql':
+            password => 'a_big_secret',
+          }
           class { '::ironic::inspector':
             auth_uri        => "https://${::fqdn}:5000/v2.0",
             identity_uri    => "https://${::fqdn}:35357",
@@ -74,6 +77,7 @@ describe 'basic ironic' do
             ironic_password => 'a_big_secret',
             ironic_auth_url => "https://${::fqdn}:5000/v2.0",
             dnsmasq_interface => 'eth0',
+            db_connection   => 'mysql+pymysql://ironic-inspector:a_big_secret@127.0.0.1/ironic-inspector?charset=utf8',
           }
         }
       }
