@@ -365,6 +365,7 @@ class ironic::inspector (
     hasstatus => true,
     tag       => 'ironic-inspector-service',
   }
+  Keystone_endpoint<||> -> Service['ironic-inspector']
 
   service { 'ironic-inspector-dnsmasq':
     ensure    => $ensure,

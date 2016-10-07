@@ -183,6 +183,7 @@ class ironic::api (
       hasrestart => true,
       tag        => 'ironic-service',
     }
+    Keystone_endpoint<||> -> Service['ironic-api']
   } elsif $service_name == 'httpd' {
     include ::apache::params
     service { 'ironic-api':
