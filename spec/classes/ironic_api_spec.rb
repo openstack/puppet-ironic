@@ -145,7 +145,6 @@ describe 'ironic::api' do
         :operatingsystemrelease => '8.0',
         :concat_basedir  => '/var/lib/puppet/concat',
         :fqdn            => 'some.host.tld',
-        :processorcount  => 2,
       })
     end
 
@@ -165,7 +164,6 @@ describe 'ironic::api' do
         :operatingsystemrelease => '7.2',
         :concat_basedir         => '/var/lib/puppet/concat',
         :fqdn                   => 'some.host.tld',
-        :processorcount         => 2,
       })
     end
 
