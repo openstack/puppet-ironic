@@ -366,6 +366,7 @@ tftpboot and httpboot setup, please include ::ironic::pxe")
     hasstatus => true,
     tag       => 'ironic-inspector-service',
   }
+  Keystone_endpoint<||> -> Service['ironic-inspector']
 
   service { 'ironic-inspector-dnsmasq':
     ensure    => $ensure,
