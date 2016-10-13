@@ -106,6 +106,11 @@
 #   configdrive_use_swift is true.
 #   Defaults to $::os_service_default
 #
+# [*default_boot_option*]
+#   (optional) Default boot option to use when no boot option is explicitly
+#   requested. One of "netboot" or "local".
+#   Defaults to $::os_service_default
+#
 class ironic::conductor (
   $package_ensure                       = 'present',
   $enabled                              = true,
@@ -125,6 +130,7 @@ class ironic::conductor (
   $provisioning_network_uuid            = $::os_service_default,
   $configdrive_use_swift                = $::os_service_default,
   $configdrive_swift_container          = $::os_service_default,
+  $default_boot_option                  = $::os_service_default,
 ) {
 
   include ::ironic::deps
@@ -195,6 +201,7 @@ class ironic::conductor (
     'deploy/continue_if_disk_secure_erase_fails': value => $continue_if_disk_secure_erase_fails;
     'conductor/configdrive_use_swift': value => $configdrive_use_swift;
     'conductor/configdrive_swift_container': value => $configdrive_swift_container;
+    'deploy/default_boot_option': value => $default_boot_option;
   }
 
   # Install package

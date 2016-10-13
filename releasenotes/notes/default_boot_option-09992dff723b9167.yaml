@@ -1,0 +1,10 @@
+---
+features:
+  - Add "ironic::conductor::default_boot_option" parameter to configure the
+    default boot option for nodes.
+upgrade:
+  - |
+    Is is recommended to set ``ironic::conductor::default_boot_option``
+    to an explicit value, as it's default value will change in the future from
+    "netboot" to "local". See `bug 1619339
+    <https://bugs.launchpad.net/ironic/+bug/1619339>`_ for details.
