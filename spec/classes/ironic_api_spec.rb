@@ -76,6 +76,7 @@ describe 'ironic::api' do
       is_expected.to contain_ironic_config('keystone_authtoken/memcached_servers').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('neutron/url').with_value('http://127.0.0.1:9696/')
       is_expected.to contain_ironic_config('keystone_authtoken/project_name').with_value(p[:admin_tenant_name])
+      is_expected.to contain_ironic_config('oslo_middleware/enable_proxy_headers_parsing').with_value('<SERVICE DEFAULT>')
     end
 
     context 'when overriding parameters' do
@@ -103,6 +104,14 @@ describe 'ironic::api' do
         is_expected.to contain_ironic_config('keystone_authtoken/project_name').with_value('ironic_tenant')
         is_expected.to contain_ironic_config('keystone_authtoken/memcached_servers').with_value('1.1.1.1:11211')
       end
+    end
+
+    context 'with enable_proxy_headers_parsing' do
+      before do
+        params.merge!({:enable_proxy_headers_parsing => true })
+      end
+
+      it { is_expected.to contain_ironic_config('oslo_middleware/enable_proxy_headers_parsing').with_value(true) }
     end
 
     context 'when running ironic-api in wsgi' do

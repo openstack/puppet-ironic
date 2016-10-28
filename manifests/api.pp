@@ -94,23 +94,29 @@
 #   undefined, tokens will instead be cached in-process.
 #   Defaults to undef.
 #
+# [*enable_proxy_headers_parsing*]
+#   (Optional) Enable paste middleware to handle SSL requests through
+#   HTTPProxyToWSGI middleware.
+#   Defaults to $::os_service_default.
+#
 class ironic::api (
-  $package_ensure    = 'present',
-  $enabled           = true,
-  $service_name      = $::ironic::params::api_service,
-  $host_ip           = '0.0.0.0',
-  $port              = '6385',
-  $max_limit         = '1000',
-  $workers           = $::os_service_default,
-  $neutron_url       = 'http://127.0.0.1:9696/',
-  $public_endpoint   = $::os_service_default,
+  $package_ensure               = 'present',
+  $enabled                      = true,
+  $service_name                 = $::ironic::params::api_service,
+  $host_ip                      = '0.0.0.0',
+  $port                         = '6385',
+  $max_limit                    = '1000',
+  $workers                      = $::os_service_default,
+  $neutron_url                  = 'http://127.0.0.1:9696/',
+  $public_endpoint              = $::os_service_default,
+  $enable_proxy_headers_parsing = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $identity_uri      = undef,
-  $admin_tenant_name = undef,
-  $admin_user        = undef,
-  $admin_password    = undef,
-  $auth_uri          = undef,
-  $memcached_servers = undef,
+  $identity_uri                 = undef,
+  $admin_tenant_name            = undef,
+  $admin_user                   = undef,
+  $admin_password               = undef,
+  $auth_uri                     = undef,
+  $memcached_servers            = undef,
 ) inherits ironic::params {
 
   include ::ironic::deps
@@ -198,6 +204,10 @@ Use 'ironic::api::authtoken::memcached_servers' parameter instead.")
   } else {
     fail("Invalid service_name. Either ironic-api/openstack-ironic-api for running as a \
 standalone service, or httpd for being run by a httpd server")
+  }
+
+  oslo::middleware { 'ironic_config':
+    enable_proxy_headers_parsing => $enable_proxy_headers_parsing,
   }
 
 }
