@@ -19,6 +19,11 @@
 require 'spec_helper'
 
 describe 'ironic::inspector' do
+  let :pre_condition do
+     "class { 'ironic::inspector::authtoken':
+        password => 'password',
+      }"
+  end
 
   let :params do
     { :package_ensure                  => 'present',
@@ -26,11 +31,6 @@ describe 'ironic::inspector' do
       :pxe_transfer_protocol           => 'tftp',
       :enable_uefi                     => false,
       :auth_strategy                   => 'keystone',
-      :auth_uri                        => 'http://127.0.0.1:5000/v2.0',
-      :admin_user                      => 'ironic',
-      :admin_password                  => 'password',
-      :admin_tenant_name               => 'services',
-      :identity_uri                    => 'http://127.0.0.1:35357/v2.0',
       :dnsmasq_interface               => 'br-ctlplane',
       :ramdisk_logs_dir                => '/var/log/ironic-inspector/ramdisk/',
       :enable_setting_ipmi_credentials => false,
@@ -94,12 +94,6 @@ describe 'ironic::inspector' do
       is_expected.to contain_ironic_inspector_config('DEFAULT/listen_address').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('DEFAULT/auth_strategy').with_value(p[:auth_strategy])
       is_expected.to contain_ironic_inspector_config('capabilities/boot_mode').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_inspector_config('keystone_authtoken/auth_type').with_value('password')
-      is_expected.to contain_ironic_inspector_config('keystone_authtoken/auth_uri').with_value(p[:auth_uri])
-      is_expected.to contain_ironic_inspector_config('keystone_authtoken/auth_url').with_value(p[:identity_uri])
-      is_expected.to contain_ironic_inspector_config('keystone_authtoken/username').with_value(p[:admin_user])
-      is_expected.to contain_ironic_inspector_config('keystone_authtoken/password').with_value(p[:admin_password])
-      is_expected.to contain_ironic_inspector_config('keystone_authtoken/project_name').with_value(p[:admin_tenant_name])
       is_expected.to contain_ironic_inspector_config('firewall/dnsmasq_interface').with_value(p[:dnsmasq_interface])
       is_expected.to contain_ironic_inspector_config('processing/ramdisk_logs_dir').with_value(p[:ramdisk_logs_dir])
       is_expected.to contain_ironic_inspector_config('processing/enable_setting_ipmi_credentials').with_value(p[:enable_setting_ipmi_credentials])
@@ -150,9 +144,6 @@ describe 'ironic::inspector' do
         params.merge!(
           :debug                       => true,
           :listen_address              => '127.0.0.1',
-          :auth_uri                    => 'http://192.168.0.1:5000/v2.0',
-          :identity_uri                => 'http://192.168.0.1:35357',
-          :admin_password              => 'password',
           :ironic_password             => 'password',
           :ironic_auth_url             => 'http://192.168.0.1:5000/v2.0',
           :swift_password              => 'password',
@@ -171,9 +162,6 @@ describe 'ironic::inspector' do
         is_expected.to contain_ironic_inspector_config('DEFAULT/listen_address').with_value(p[:listen_address])
         is_expected.to contain_ironic_inspector_config('DEFAULT/debug').with_value(p[:debug])
         is_expected.to contain_ironic_inspector_config('capabilities/boot_mode').with_value(p[:detect_boot_mode])
-        is_expected.to contain_ironic_inspector_config('keystone_authtoken/auth_uri').with_value(p[:auth_uri])
-        is_expected.to contain_ironic_inspector_config('keystone_authtoken/auth_url').with_value(p[:identity_uri])
-        is_expected.to contain_ironic_inspector_config('keystone_authtoken/password').with_value(p[:admin_password])
         is_expected.to contain_ironic_inspector_config('ironic/password').with_value(p[:ironic_password])
         is_expected.to contain_ironic_inspector_config('ironic/auth_url').with_value(p[:ironic_auth_url])
         is_expected.to contain_ironic_inspector_config('swift/password').with_value(p[:swift_password])

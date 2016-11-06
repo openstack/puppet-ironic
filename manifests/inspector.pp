@@ -163,28 +163,6 @@
 #   (optional) Whether to store the boot mode (BIOS or UEFI).
 #   Defaults to $::os_service_default
 #
-# DEPRECATED PARAMETERS
-#
-# [*identity_uri*]
-#   (optional) Complete admin Identity API endpoint.
-#   Defaults to undef.
-#
-# [*admin_tenant_name*]
-#   (optional) The name of the tenant to create in keystone for use by the ironic services
-#   Defaults to undef.
-#
-# [*admin_user*]
-#   (optional) The name of the user to create in keystone for use by the ironic services
-#   Defaults to undef.
-#
-# [*admin_password*]
-#   (optional) The password to set for the ironic admin user in keystone.
-#   Defaults to undef.
-#
-# [*auth_uri*]
-#   (optional) Complete public Identity API endpoint.
-#   Defaults to undef.
-#
 class ironic::inspector (
   $package_ensure                  = 'present',
   $enabled                         = true,
@@ -222,12 +200,6 @@ class ironic::inspector (
   $detect_boot_mode                = $::os_service_default,
   $tftp_root                       = '/tftpboot',
   $http_root                       = '/httpboot',
-  # DEPRECATED PARAMETERS
-  $identity_uri                   = undef,
-  $admin_tenant_name              = undef,
-  $admin_user                     = undef,
-  $admin_password                 = undef,
-  $auth_uri                       = undef,
 ) {
 
   include ::ironic::deps
@@ -235,31 +207,6 @@ class ironic::inspector (
   include ::ironic::pxe::common
   include ::ironic::inspector::logging
   include ::ironic::inspector::db
-
-  if $admin_tenant_name {
-    warning("Parameter 'ironic::inspector::admin_tenant_name' is deprecated and will be removed in O release. \
-Use 'ironic::inspector::authtoken::project_name' parameter instead.")
-  }
-
-  if $admin_user {
-    warning("Parameter 'ironic::inspector::admin_user' is deprecated will be removed in O release. \
-Use 'ironic::inspector::authtoken::username' parameter instead.")
-  }
-
-  if $admin_password {
-    warning("Parameter 'ironic::inspector::admin_password' is deprecated and will be removed in O release. \
-Use 'ironic::inspector::authtoken::password' parameter instead.")
-  }
-
-  if $identity_uri {
-    warning("Parameter 'ironic::inspector::identity_uri' is deprecated and will be removed in O release. \
-Use 'ironic::inspector::authtoken::auth_url' parameter instead.")
-  }
-
-  if $auth_uri {
-    warning("Parameter 'ironic::inspector::auth_uri' is deprecated and will be removed in O release. \
-Use 'ironic::inspector::authtoken::auth_uri' parameter instead.")
-  }
 
   if $auth_strategy == 'keystone' {
     include ::ironic::inspector::authtoken

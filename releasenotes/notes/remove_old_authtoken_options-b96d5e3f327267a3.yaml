@@ -1,0 +1,13 @@
+---
+other:
+  - removed deprecated ironic::api::admin_user
+  - removed deprecated ironic::api::admin_password
+  - removed deprecated ironic::api::admin_tenant_name
+  - removed deprecated ironic::api::auth_uri
+  - removed deprecated ironic::api::identity_uri
+  - removed deprecated ironic::api::memcached_servers
+  - removed deprecated ironic::inspector::admin_user
+  - removed deprecated ironic::inspector::admin_password
+  - removed deprecated ironic::inspector::admin_tenant_name
+  - removed deprecated ironic::inspector::auth_uri
+  - removed deprecated ironic::inspector::identity_uri

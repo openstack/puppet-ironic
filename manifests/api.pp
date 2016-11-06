@@ -67,33 +67,6 @@
 #   (Optional) Public URL to use when building the links to the API resources
 #   Defaults to $::os_service_default
 #
-# DEPRECATED PARAMETERS
-#
-# [*identity_uri*]
-#   (optional) Complete admin Identity API endpoint.
-#   Defaults to undef.
-#
-# [*admin_tenant_name*]
-#   (optional) The name of the tenant to create in keystone for use by the ironic services
-#   Defaults to undef.
-#
-# [*admin_user*]
-#   (optional) The name of the user to create in keystone for use by the ironic services
-#   Defaults to undef.
-#
-# [*admin_password*]
-#   (optional) The password to set for the ironic admin user in keystone.
-#   Defaults to undef.
-#
-# [*auth_uri*]
-#   (optional) Complete public Identity API endpoint.
-#   Defaults to undef.
-#
-# [*memcached_servers*]
-#   (optinal) a list of memcached server(s) to use for caching. If left
-#   undefined, tokens will instead be cached in-process.
-#   Defaults to undef.
-#
 # [*enable_proxy_headers_parsing*]
 #   (Optional) Enable paste middleware to handle SSL requests through
 #   HTTPProxyToWSGI middleware.
@@ -110,49 +83,11 @@ class ironic::api (
   $neutron_url                  = 'http://127.0.0.1:9696/',
   $public_endpoint              = $::os_service_default,
   $enable_proxy_headers_parsing = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $identity_uri                 = undef,
-  $admin_tenant_name            = undef,
-  $admin_user                   = undef,
-  $admin_password               = undef,
-  $auth_uri                     = undef,
-  $memcached_servers            = undef,
 ) inherits ironic::params {
 
   include ::ironic::deps
   include ::ironic::params
   include ::ironic::policy
-
-  if $admin_tenant_name {
-    warning("Parameter 'ironic::api::admin_tenant_name' is deprecated and will be removed in O release. \
-Use 'ironic::api::authtoken::project_name' parameter instead.")
-  }
-
-  if $admin_user {
-    warning("Parameter 'ironic::api::admin_user' is deprecated will be removed in O release. \
-Use 'ironic::api::authtoken::username' parameter instead.")
-  }
-
-  if $admin_password {
-    warning("Parameter 'ironic::api::admin_password' is deprecated and will be removed in O release. \
-Use 'ironic::api::authtoken::password' parameter instead.")
-  }
-
-  if $identity_uri {
-    warning("Parameter 'ironic::api::identity_uri' is deprecated and will be removed in O release. \
-Use 'ironic::api::authtoken::auth_url' parameter instead.")
-  }
-
-  if $auth_uri {
-    warning("Parameter 'ironic::api::auth_uri' is deprecated and will be removed in O release. \
-Use 'ironic::api::authtoken::auth_url' parameter instead.")
-  }
-
-  if $memcached_servers {
-    warning("Parameter 'ironic::api::memcached_servers' is deprecated and will be removed in O release. \
-Use 'ironic::api::authtoken::memcached_servers' parameter instead.")
-  }
-
   include ::ironic::api::authtoken
 
   # Configure ironic.conf

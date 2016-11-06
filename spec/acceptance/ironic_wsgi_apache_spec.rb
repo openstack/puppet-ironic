@@ -49,8 +49,10 @@ describe 'basic ironic' do
       class { '::ironic::conductor':
         enabled_drivers     => ['pxe_ssh'],
       }
+      class { '::ironic::api::authtoken':
+        password => 'a_big_secret',
+      }
       class { '::ironic::api':
-        admin_password => 'a_big_secret',
         service_name   => 'httpd',
       }
       include ::apache
@@ -68,10 +70,10 @@ describe 'basic ironic' do
           class { '::ironic::inspector::db::mysql':
             password => 'a_big_secret',
           }
+          class { '::ironic::inspector::authtoken':
+            password => 'a_big_secret',
+          }
           class { '::ironic::inspector':
-            auth_uri        => "https://${::fqdn}:5000/v2.0",
-            identity_uri    => "https://${::fqdn}:35357",
-            admin_password  => 'a_big_secret',
             ironic_password => 'a_big_secret',
             ironic_auth_url => "https://${::fqdn}:5000/v2.0",
             dnsmasq_interface => 'eth0',
