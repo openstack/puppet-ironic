@@ -15,27 +15,27 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 #
-# ironic::params
+# == Class: ironic::params
 #
-
+# Parameters for puppet-ironic
+#
 class ironic::params {
   include ::openstacklib::defaults
 
-  $dbsync_command =
+  $dbsync_command           =
     'ironic-dbsync --config-file /etc/ironic/ironic.conf'
-
   $inspector_dbsync_command =
     'ironic-inspector-dbsync --config-file /etc/ironic-inspector/inspector.conf upgrade'
+  $client_package           = 'python-ironicclient'
+  $lib_package_name         = 'python-ironic-lib'
 
   case $::osfamily {
     'RedHat': {
       $common_package_name       = 'openstack-ironic-common'
-      $lib_package_name          = 'python-ironic-lib'
       $api_package               = 'openstack-ironic-api'
       $api_service               = 'openstack-ironic-api'
       $conductor_package         = 'openstack-ironic-conductor'
       $conductor_service         = 'openstack-ironic-conductor'
-      $client_package            = 'python-ironicclient'
       $inspector_package         = 'openstack-ironic-inspector'
       $inspector_service         = 'openstack-ironic-inspector'
       $inspector_dnsmasq_service = 'openstack-ironic-inspector-dnsmasq'
@@ -50,12 +50,10 @@ class ironic::params {
     }
     'Debian': {
       $common_package_name       = 'ironic-common'
-      $lib_package_name          = 'python-ironic-lib'
       $api_service               = 'ironic-api'
       $api_package               = 'ironic-api'
       $conductor_service         = 'ironic-conductor'
       $conductor_package         = 'ironic-conductor'
-      $client_package            = 'python-ironicclient'
       $inspector_package         = 'ironic-inspector'
       $inspector_service         = 'ironic-inspector'
       # it seems like there is not currently a builtin dnsmasq in the debian packaging
