@@ -1,0 +1,6 @@
+---
+deprecations:
+  - ironic::rabbit_host, ironic::rabbit_hosts, ironic::rabbit_password,
+    ironic::rabbit_port, ironic::rabbit_userid and
+    ironic::rabbit_virtual_host are deprecated.
+    ironic::default_transport_url should be used instead.
