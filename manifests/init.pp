@@ -61,30 +61,6 @@
 #   (optional) what rpc/queuing service to use (string value)
 #   Defaults to $::os_service_default
 #
-# [*rabbit_host*]
-#   (optional) IP or hostname of the rabbit server. (string value)
-#   Defaults to $::os_service_default
-#
-# [*rabbit_hosts*]
-#   (optional) List of clustered rabbit servers. (string value)
-#   Defaults to $::os_service_default
-#
-# [*rabbit_userid*]
-#   (optional) User used to connect to rabbitmq. (string value)
-#   Defaults to $::os_service_default
-#
-# [*rabbit_port*]
-#   (optional) Port for rabbitmq instance. (port value)
-#   Defaults to $::os_service_default
-#
-# [*rabbit_password*]
-#   (optional) Password used to connect to rabbitmq. (string value)
-#   Defaults to $::os_service_default
-#
-# [*rabbit_virtual_host*]
-#   (optional) The RabbitMQ virtual host. (string value)
-#   Defaults to $::os_service_default
-#
 # [*rabbit_use_ssl*]
 #   (optional) Connect over SSL for RabbitMQ. (boolean value)
 #   Defaults to $::os_service_default
@@ -289,6 +265,30 @@
 #  initialization. Deprecated and moved to conductor.
 #  Defaults to undef
 #
+# [*rabbit_host*]
+#   (optional) IP or hostname of the rabbit server. (string value)
+#   Defaults to $::os_service_default
+#
+# [*rabbit_hosts*]
+#   (optional) List of clustered rabbit servers. (string value)
+#   Defaults to $::os_service_default
+#
+# [*rabbit_userid*]
+#   (optional) User used to connect to rabbitmq. (string value)
+#   Defaults to $::os_service_default
+#
+# [*rabbit_port*]
+#   (optional) Port for rabbitmq instance. (port value)
+#   Defaults to $::os_service_default
+#
+# [*rabbit_password*]
+#   (optional) Password used to connect to rabbitmq. (string value)
+#   Defaults to $::os_service_default
+#
+# [*rabbit_virtual_host*]
+#   (optional) The RabbitMQ virtual host. (string value)
+#   Defaults to $::os_service_default
+#
 class ironic (
   $enabled                            = true,
   $package_ensure                     = 'present',
@@ -303,12 +303,6 @@ class ironic (
   $rpc_response_timeout               = $::os_service_default,
   $default_transport_url              = $::os_service_default,
   $rpc_backend                        = $::os_service_default,
-  $rabbit_host                        = $::os_service_default,
-  $rabbit_hosts                       = $::os_service_default,
-  $rabbit_password                    = $::os_service_default,
-  $rabbit_port                        = $::os_service_default,
-  $rabbit_userid                      = $::os_service_default,
-  $rabbit_virtual_host                = $::os_service_default,
   $rabbit_use_ssl                     = $::os_service_default,
   $rabbit_heartbeat_timeout_threshold = $::os_service_default,
   $rabbit_heartbeat_rate              = $::os_service_default,
@@ -352,6 +346,12 @@ class ironic (
   # DEPRECATED PARAMETERS
   $rabbit_user                        = undef,
   $enabled_drivers                    = undef,
+  $rabbit_host                        = $::os_service_default,
+  $rabbit_hosts                       = $::os_service_default,
+  $rabbit_password                    = $::os_service_default,
+  $rabbit_port                        = $::os_service_default,
+  $rabbit_userid                      = $::os_service_default,
+  $rabbit_virtual_host                = $::os_service_default,
 ) {
 
   include ::ironic::deps
@@ -364,6 +364,17 @@ class ironic (
     $rabbit_user_real = $rabbit_user
   } else {
     $rabbit_user_real = $rabbit_userid
+  }
+
+  if !is_service_default($rabbit_host) or
+    !is_service_default($rabbit_hosts) or
+    !is_service_default($rabbit_password) or
+    !is_service_default($rabbit_port) or
+    !is_service_default($rabbit_userid) or
+    !is_service_default($rabbit_virtual_host) {
+    warning("ironic::rabbit_host, ironic::rabbit_hosts, ironic::rabbit_password, \
+ironic::rabbit_port, ironic::rabbit_userid and ironic::rabbit_virtual_host are \
+deprecated. Please use ironic::default_transport_url instead.")
   }
 
   package { 'ironic-common':
