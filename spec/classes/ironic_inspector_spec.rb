@@ -93,6 +93,7 @@ describe 'ironic::inspector' do
     it 'configures inspector.conf' do
       is_expected.to contain_ironic_inspector_config('DEFAULT/listen_address').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('DEFAULT/auth_strategy').with_value(p[:auth_strategy])
+      is_expected.to contain_ironic_inspector_config('capabilities/boot_mode').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('keystone_authtoken/auth_type').with_value('password')
       is_expected.to contain_ironic_inspector_config('keystone_authtoken/auth_uri').with_value(p[:auth_uri])
       is_expected.to contain_ironic_inspector_config('keystone_authtoken/auth_url').with_value(p[:identity_uri])
@@ -163,11 +164,13 @@ describe 'ironic::inspector' do
           :http_port                   => 3816,
           :tftp_root                   => '/var/lib/tftpboot',
           :http_root                   => '/var/www/httpboot',
+          :detect_boot_mode            => true,
         )
       end
       it 'should replace default parameter with new value' do
         is_expected.to contain_ironic_inspector_config('DEFAULT/listen_address').with_value(p[:listen_address])
         is_expected.to contain_ironic_inspector_config('DEFAULT/debug').with_value(p[:debug])
+        is_expected.to contain_ironic_inspector_config('capabilities/boot_mode').with_value(p[:detect_boot_mode])
         is_expected.to contain_ironic_inspector_config('keystone_authtoken/auth_uri').with_value(p[:auth_uri])
         is_expected.to contain_ironic_inspector_config('keystone_authtoken/auth_url').with_value(p[:identity_uri])
         is_expected.to contain_ironic_inspector_config('keystone_authtoken/password').with_value(p[:admin_password])

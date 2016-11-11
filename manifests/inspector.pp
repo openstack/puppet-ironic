@@ -159,6 +159,10 @@
 #   (optional) Folder location to deploy HTTP PXE boot
 #   Defaults to '/httpboot'
 #
+# [*detect_boot_mode*]
+#   (optional) Whether to store the boot mode (BIOS or UEFI).
+#   Defaults to $::os_service_default
+#
 # DEPRECATED PARAMETERS
 #
 # [*identity_uri*]
@@ -215,6 +219,7 @@ class ironic::inspector (
   $ramdisk_kernel_args             = undef,
   $ipxe_timeout                    = $::os_service_default,
   $http_port                       = '8088',
+  $detect_boot_mode                = $::os_service_default,
   $tftp_root                       = '/tftpboot',
   $http_root                       = '/httpboot',
   # DEPRECATED PARAMETERS
@@ -317,6 +322,7 @@ tftpboot and httpboot setup, please include ::ironic::pxe")
   ironic_inspector_config {
     'DEFAULT/listen_address':                     value => $listen_address;
     'DEFAULT/auth_strategy':                      value => $auth_strategy;
+    'capabilities/boot_mode':                     value => $detect_boot_mode;
     'firewall/dnsmasq_interface':                 value => $dnsmasq_interface;
     'processing/ramdisk_logs_dir':                value => $ramdisk_logs_dir;
     'processing/enable_setting_ipmi_credentials': value => $enable_setting_ipmi_credentials;
