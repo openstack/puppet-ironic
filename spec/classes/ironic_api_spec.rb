@@ -146,41 +146,26 @@ describe 'ironic::api' do
     end
   end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily        => 'Debian',
-        :operatingsystem => 'Debian',
-        :operatingsystemrelease => '8.0',
-        :concat_basedir  => '/var/lib/puppet/concat',
-        :fqdn            => 'some.host.tld',
-      })
+  on_supported_os({
+    :supported_os => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
+      end
+
+      let :platform_params do
+        case facts[:osfamily]
+        when 'Debian'
+          { :api_package => 'ironic-api',
+            :api_service => 'ironic-api' }
+        when 'RedHat'
+          { :api_service => 'openstack-ironic-api' }
+        end
+      end
+
+      it_behaves_like 'ironic api'
     end
-
-    let :platform_params do
-      { :api_package => 'ironic-api',
-        :api_service => 'ironic-api' }
-    end
-
-    it_configures 'ironic api'
-  end
-
-  context 'on RedHat platforms' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily               => 'RedHat',
-        :operatingsystem        => 'RedHat',
-        :operatingsystemrelease => '7.2',
-        :concat_basedir         => '/var/lib/puppet/concat',
-        :fqdn                   => 'some.host.tld',
-      })
-    end
-
-    let :platform_params do
-      { :api_service => 'openstack-ironic-api' }
-    end
-
-    it_configures 'ironic api'
   end
 
 end

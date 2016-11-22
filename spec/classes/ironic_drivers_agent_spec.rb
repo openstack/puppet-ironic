@@ -69,7 +69,7 @@ describe 'ironic::drivers::agent' do
       let (:facts) do
         facts.merge(OSDefaults.get_facts())
       end
-      it_configures 'ironic agent driver'
+      it_behaves_like 'ironic agent driver'
     end
   end
 

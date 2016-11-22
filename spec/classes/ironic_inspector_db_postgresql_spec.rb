@@ -32,7 +32,7 @@ describe 'ironic::inspector::db::postgresql' do
         facts.merge(OSDefaults.get_facts())
       end
 
-      it_configures 'ironic::inspector::db::postgresql'
+      it_behaves_like 'ironic::inspector::db::postgresql'
     end
   end
 

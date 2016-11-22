@@ -22,135 +22,146 @@ require 'spec_helper'
 
 describe 'ironic::keystone::auth_inspector' do
 
-  let :facts do
-    @default_facts.merge({ :osfamily => 'Debian' })
-  end
+  shared_examples_for 'ironic keystone auth inspector' do
 
-  describe 'with default class parameters' do
-    let :params do
-      { :password => 'ironic_inspector_password',
-        :tenant   => 'foobar' }
+    describe 'with default class parameters' do
+      let :params do
+        { :password => 'ironic_inspector_password',
+          :tenant   => 'foobar' }
+      end
+
+      it { is_expected.to contain_keystone_user('ironic-inspector').with(
+        :ensure   => 'present',
+        :password => 'ironic_inspector_password',
+      ) }
+
+      it { is_expected.to contain_keystone_user_role('ironic-inspector@foobar').with(
+        :ensure  => 'present',
+        :roles   => ['admin']
+      )}
+
+      it { is_expected.to contain_keystone_service('ironic-inspector::baremetal-introspection').with(
+        :ensure      => 'present',
+        :type        => 'baremetal-introspection',
+        :description => 'Bare Metal Introspection Service'
+      ) }
+
+      it { is_expected.to contain_keystone_endpoint('RegionOne/ironic-inspector::baremetal-introspection').with(
+        :ensure       => 'present',
+        :public_url   => "http://127.0.0.1:5050",
+        :admin_url    => "http://127.0.0.1:5050",
+        :internal_url => "http://127.0.0.1:5050"
+      ) }
     end
 
-    it { is_expected.to contain_keystone_user('ironic-inspector').with(
-      :ensure   => 'present',
-      :password => 'ironic_inspector_password',
-    ) }
+    describe 'when configuring ironic-inspector' do
+      let :pre_condition do
+        "class { 'ironic::inspector': auth_password => 'test' }"
+      end
 
-    it { is_expected.to contain_keystone_user_role('ironic-inspector@foobar').with(
-      :ensure  => 'present',
-      :roles   => ['admin']
-    )}
+      let :params do
+        { :password => 'ironic_password',
+          :tenant   => 'foobar' }
+      end
 
-    it { is_expected.to contain_keystone_service('ironic-inspector::baremetal-introspection').with(
-      :ensure      => 'present',
-      :type        => 'baremetal-introspection',
-      :description => 'Bare Metal Introspection Service'
-    ) }
-
-    it { is_expected.to contain_keystone_endpoint('RegionOne/ironic-inspector::baremetal-introspection').with(
-      :ensure       => 'present',
-      :public_url   => "http://127.0.0.1:5050",
-      :admin_url    => "http://127.0.0.1:5050",
-      :internal_url => "http://127.0.0.1:5050"
-    ) }
-  end
-
-  describe 'when configuring ironic-inspector' do
-    let :pre_condition do
-      "class { 'ironic::inspector': auth_password => 'test' }"
     end
 
-    let :params do
-      { :password => 'ironic_password',
-        :tenant   => 'foobar' }
-    end
+    describe 'with endpoint parameters' do
+      let :params do
+        { :password     => 'ironic_password',
+          :public_url   => 'https://10.0.0.10:5050',
+          :admin_url    => 'https://10.0.0.11:5050',
+          :internal_url => 'https://10.0.0.11:5050' }
+      end
 
-  end
-
-  describe 'with endpoint parameters' do
-    let :params do
-      { :password     => 'ironic_password',
+      it { is_expected.to contain_keystone_endpoint('RegionOne/ironic-inspector::baremetal-introspection').with(
+        :ensure       => 'present',
         :public_url   => 'https://10.0.0.10:5050',
         :admin_url    => 'https://10.0.0.11:5050',
-        :internal_url => 'https://10.0.0.11:5050' }
+        :internal_url => 'https://10.0.0.11:5050'
+      ) }
     end
 
-    it { is_expected.to contain_keystone_endpoint('RegionOne/ironic-inspector::baremetal-introspection').with(
-      :ensure       => 'present',
-      :public_url   => 'https://10.0.0.10:5050',
-      :admin_url    => 'https://10.0.0.11:5050',
-      :internal_url => 'https://10.0.0.11:5050'
-    ) }
+    describe 'when overriding auth name' do
+      let :params do
+        { :password => 'foo',
+          :auth_name => 'inspecty' }
+      end
+
+      it { is_expected.to contain_keystone_user('inspecty') }
+      it { is_expected.to contain_keystone_user_role('inspecty@services') }
+      it { is_expected.to contain_keystone_service('inspecty::baremetal-introspection') }
+      it { is_expected.to contain_keystone_endpoint('RegionOne/inspecty::baremetal-introspection') }
+    end
+
+    describe 'when overriding service name' do
+      let :params do
+        {
+          :service_name => 'inspector_service',
+          :password     => 'ironic_password',
+        }
+      end
+
+      it { is_expected.to contain_keystone_user('ironic-inspector') }
+      it { is_expected.to contain_keystone_user_role('ironic-inspector@services') }
+      it { is_expected.to contain_keystone_service('inspector_service::baremetal-introspection') }
+      it { is_expected.to contain_keystone_endpoint('RegionOne/inspector_service::baremetal-introspection') }
+    end
+
+    describe 'when disabling user configuration' do
+
+      let :params do
+        {
+          :password       => 'ironic_password',
+          :configure_user => false
+        }
+      end
+
+      it { is_expected.not_to contain_keystone_user('ironic-inspector') }
+
+      it { is_expected.to contain_keystone_user_role('ironic-inspector@services') }
+
+      it { is_expected.to contain_keystone_service('ironic-inspector::baremetal-introspection').with(
+        :ensure      => 'present',
+        :type        => 'baremetal-introspection',
+        :description => 'Bare Metal Introspection Service'
+      ) }
+
+    end
+
+    describe 'when disabling user and user role configuration' do
+
+      let :params do
+        {
+          :password            => 'ironic_password',
+          :configure_user      => false,
+          :configure_user_role => false
+        }
+      end
+
+      it { is_expected.not_to contain_keystone_user('ironic-inspector') }
+
+      it { is_expected.not_to contain_keystone_user_role('ironic-inspector@services') }
+
+      it { is_expected.to contain_keystone_service('ironic-inspector::baremetal-introspection').with(
+        :ensure      => 'present',
+        :type        => 'baremetal-introspection',
+        :description => 'Bare Metal Introspection Service'
+      ) }
+
+    end
   end
 
-  describe 'when overriding auth name' do
-    let :params do
-      { :password => 'foo',
-        :auth_name => 'inspecty' }
+  on_supported_os({
+    :supported_os   => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge(OSDefaults.get_facts())
+      end
+
+      it_behaves_like 'ironic keystone auth inspector'
     end
-
-    it { is_expected.to contain_keystone_user('inspecty') }
-    it { is_expected.to contain_keystone_user_role('inspecty@services') }
-    it { is_expected.to contain_keystone_service('inspecty::baremetal-introspection') }
-    it { is_expected.to contain_keystone_endpoint('RegionOne/inspecty::baremetal-introspection') }
-  end
-
-  describe 'when overriding service name' do
-    let :params do
-      {
-        :service_name => 'inspector_service',
-        :password     => 'ironic_password',
-      }
-    end
-
-    it { is_expected.to contain_keystone_user('ironic-inspector') }
-    it { is_expected.to contain_keystone_user_role('ironic-inspector@services') }
-    it { is_expected.to contain_keystone_service('inspector_service::baremetal-introspection') }
-    it { is_expected.to contain_keystone_endpoint('RegionOne/inspector_service::baremetal-introspection') }
-  end
-
-  describe 'when disabling user configuration' do
-
-    let :params do
-      {
-        :password       => 'ironic_password',
-        :configure_user => false
-      }
-    end
-
-    it { is_expected.not_to contain_keystone_user('ironic-inspector') }
-
-    it { is_expected.to contain_keystone_user_role('ironic-inspector@services') }
-
-    it { is_expected.to contain_keystone_service('ironic-inspector::baremetal-introspection').with(
-      :ensure      => 'present',
-      :type        => 'baremetal-introspection',
-      :description => 'Bare Metal Introspection Service'
-    ) }
-
-  end
-
-  describe 'when disabling user and user role configuration' do
-
-    let :params do
-      {
-        :password            => 'ironic_password',
-        :configure_user      => false,
-        :configure_user_role => false
-      }
-    end
-
-    it { is_expected.not_to contain_keystone_user('ironic-inspector') }
-
-    it { is_expected.not_to contain_keystone_user_role('ironic-inspector@services') }
-
-    it { is_expected.to contain_keystone_service('ironic-inspector::baremetal-introspection').with(
-      :ensure      => 'present',
-      :type        => 'baremetal-introspection',
-      :description => 'Bare Metal Introspection Service'
-    ) }
-
   end
 
 end

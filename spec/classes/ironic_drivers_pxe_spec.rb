@@ -111,20 +111,20 @@ describe 'ironic::drivers::pxe' do
 
   end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge({ :osfamily => 'Debian' })
+  on_supported_os({
+    :supported_os => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts({
+          :concat_basedir         => '/var/lib/puppet/concat',
+          :fqdn                   => 'some.host.tld',
+        }))
+      end
+
+      it_behaves_like 'ironic pxe driver'
+
     end
-
-    it_configures 'ironic pxe driver'
-  end
-
-  context 'on RedHat platforms' do
-    let :facts do
-      @default_facts.merge({ :osfamily => 'RedHat' })
-    end
-
-    it_configures 'ironic pxe driver'
   end
 
 end

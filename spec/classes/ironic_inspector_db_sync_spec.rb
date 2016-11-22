@@ -23,7 +23,7 @@ describe 'ironic::inspector::db::sync' do
       let (:facts) do
         facts.merge(OSDefaults.get_facts())
       end
-      it_configures 'inspector-dbsync'
+      it_behaves_like 'inspector-dbsync'
     end
   end
 

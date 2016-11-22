@@ -220,37 +220,29 @@ describe 'ironic::inspector' do
     end
   end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily               => 'Debian',
-        :operatingsystem        => 'Debian',
-        :operatingsystemrelease => '7.0'
-      })
+  on_supported_os({
+    :supported_os => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts({
+          :concat_basedir         => '/var/lib/puppet/concat',
+          :fqdn                   => 'some.host.tld',
+        }))
+      end
+
+      let :platform_params do
+        case facts[:osfamily]
+        when 'Debian'
+          { :inspector_package => 'ironic-inspector',
+            :inspector_service => 'ironic-inspector' }
+        when 'RedHat'
+          { :inspector_service => 'ironic-inspector' }
+        end
+      end
+
+      it_behaves_like 'ironic inspector'
     end
-
-    let :platform_params do
-      { :inspector_package => 'ironic-inspector',
-        :inspector_service => 'ironic-inspector' }
-    end
-
-    it_configures 'ironic inspector'
-  end
-
-  context 'on RedHat platforms' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily               => 'RedHat',
-        :operatingsystem        => 'CentOS',
-        :operatingsystemrelease => '7.2.1511'
-      })
-    end
-
-    let :platform_params do
-      { :inspector_service => 'ironic-inspector' }
-    end
-
-    it_configures 'ironic inspector'
   end
 
 end

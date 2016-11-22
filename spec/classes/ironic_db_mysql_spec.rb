@@ -30,34 +30,22 @@ describe 'ironic::db::mysql' do
     { :password => 'passw0rd' }
   end
 
-  let :facts do
-      @default_facts.merge({ :osfamily => 'Debian' })
-  end
+  on_supported_os({
+    :supported_os => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
+      end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge({ :osfamily => 'Debian' })
+      it { is_expected.to contain_openstacklib__db__mysql('ironic').with(
+        :user          => 'ironic',
+        :password_hash => '*74B1C21ACE0C2D6B0678A5E503D2A60E8F9651A3',
+        :charset       => 'utf8',
+        :collate       => 'utf8_general_ci',
+      )}
+
     end
-
-    it { is_expected.to contain_openstacklib__db__mysql('ironic').with(
-      :user          => 'ironic',
-      :password_hash => '*74B1C21ACE0C2D6B0678A5E503D2A60E8F9651A3',
-      :charset       => 'utf8',
-      :collate       => 'utf8_general_ci',
-    )}
-  end
-
-  context 'on RedHat platforms' do
-    let :facts do
-      @default_facts.merge({ :osfamily => 'RedHat' })
-    end
-
-    it { is_expected.to contain_openstacklib__db__mysql('ironic').with(
-      :user          => 'ironic',
-      :password_hash => '*74B1C21ACE0C2D6B0678A5E503D2A60E8F9651A3',
-      :charset       => 'utf8',
-      :collate       => 'utf8_general_ci',
-    )}
   end
 
   describe "overriding allowed_hosts param to array" do
