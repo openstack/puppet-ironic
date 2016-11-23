@@ -35,7 +35,7 @@ describe 'ironic::db::postgresql' do
         }))
       end
 
-      it_configures 'ironic::db::postgresql'
+      it_behaves_like 'ironic::db::postgresql'
     end
   end
 

@@ -138,7 +138,7 @@ describe 'ironic::inspector::authtoken' do
         facts.merge!(OSDefaults.get_facts())
       end
 
-      it_configures 'ironic inspector authtoken'
+      it_behaves_like 'ironic inspector authtoken'
     end
   end
 

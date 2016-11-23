@@ -138,7 +138,7 @@ describe 'ironic::api::authtoken' do
         facts.merge!(OSDefaults.get_facts())
       end
 
-      it_configures 'ironic api authtoken'
+      it_behaves_like 'ironic api authtoken'
     end
   end
 

@@ -124,38 +124,36 @@ describe 'ironic::conductor' do
 
   end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge({ :osfamily => 'Debian' })
+  on_supported_os({
+    :supported_os => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
+      end
+
+        case facts[:osfamily]
+        when 'Debian'
+          let :platform_params do
+            { :conductor_package => 'ironic-conductor',
+              :conductor_service => 'ironic-conductor' }
+          end
+          # https://bugs.launchpad.net/cloud-archive/+bug/1572800
+          it 'installs ipmitool package' do
+            is_expected.to contain_package('ipmitool').with(
+              :ensure => 'present',
+              :name   => 'ipmitool',
+              :tag    => ['openstack', 'ironic-package'],
+            )
+          end
+        when 'RedHat'
+          let :platform_params do
+            { :conductor_service => 'ironic-conductor' }
+          end
+        end
+
+      it_behaves_like 'ironic conductor'
     end
-
-    let :platform_params do
-      { :conductor_package => 'ironic-conductor',
-        :conductor_service => 'ironic-conductor' }
-    end
-
-    it_configures 'ironic conductor'
-
-    # https://bugs.launchpad.net/cloud-archive/+bug/1572800
-    it 'installs ipmitool package' do
-      is_expected.to contain_package('ipmitool').with(
-        :ensure => 'present',
-        :name   => 'ipmitool',
-        :tag    => ['openstack', 'ironic-package'],
-      )
-    end
-  end
-
-  context 'on RedHat platforms' do
-    let :facts do
-      @default_facts.merge({ :osfamily => 'RedHat' })
-    end
-
-    let :platform_params do
-      { :conductor_service => 'ironic-conductor' }
-    end
-
-    it_configures 'ironic conductor'
   end
 
 end

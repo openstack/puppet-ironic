@@ -74,15 +74,7 @@ describe 'ironic::inspector::db' do
 
   end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge({ :osfamily => 'Debian',
-        :operatingsystem => 'Debian',
-        :operatingsystemrelease => 'jessie',
-      })
-    end
-
-    it_configures 'ironic::inspector::db'
+  shared_examples 'ironic::inspector::db on Debian platforms' do
 
     context 'using pymysql driver' do
       let :params do
@@ -114,14 +106,7 @@ describe 'ironic::inspector::db' do
 
   end
 
-  context 'on Redhat platforms' do
-    let :facts do
-      @default_facts.merge({ :osfamily => 'RedHat',
-        :operatingsystemrelease => '7.1',
-      })
-    end
-
-    it_configures 'ironic::inspector::db'
+  shared_examples 'ironic::inspector::db on Redhat platforms' do
 
     context 'using pymysql driver' do
       let :params do
@@ -129,6 +114,28 @@ describe 'ironic::inspector::db' do
       end
 
       it { is_expected.not_to contain_package('db_backend_package') }
+    end
+  end
+
+  on_supported_os({
+    :supported_os => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts({
+          :concat_basedir         => '/var/lib/puppet/concat',
+          :fqdn                   => 'some.host.tld',
+        }))
+      end
+
+      case facts[:osfamily]
+      when 'Debian'
+        it_behaves_like 'ironic::inspector::db on Debian platforms'
+      when 'RedHat'
+        it_behaves_like 'ironic::inspector::db on Redhat platforms'
+      end
+
+      it_behaves_like 'ironic::inspector::db'
     end
   end
 

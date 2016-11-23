@@ -123,28 +123,17 @@ describe 'ironic::pxe' do
     end
   end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily               => 'Debian',
-        :operatingsystem        => 'Debian',
-        :operatingsystemrelease => '7.0'
-      })
+  on_supported_os({
+    :supported_os => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
+      end
+
+      it_behaves_like 'ironic pxe'
+
     end
-
-    it_configures 'ironic pxe'
-  end
-
-  context 'on RedHat platforms' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily               => 'RedHat',
-        :operatingsystem        => 'CentOS',
-        :operatingsystemrelease => '7.2.1511'
-      })
-    end
-
-    it_configures 'ironic pxe'
   end
 
 end

@@ -65,7 +65,7 @@ describe 'ironic::drivers::ilo' do
       let (:facts) do
         facts.merge!(OSDefaults.get_facts())
       end
-      it_configures 'ironic ilo driver'
+      it_behaves_like 'ironic ilo driver'
     end
   end
 

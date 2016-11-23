@@ -32,7 +32,7 @@ describe 'ironic::policy' do
         facts.merge!(OSDefaults.get_facts())
       end
 
-      it_configures 'ironic policies'
+      it_behaves_like 'ironic policies'
     end
   end
 

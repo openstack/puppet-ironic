@@ -42,7 +42,7 @@ describe 'ironic::cors' do
         facts.merge!(OSDefaults.get_facts())
       end
 
-      it_configures 'ironic cors'
+      it_behaves_like 'ironic cors'
     end
   end
 

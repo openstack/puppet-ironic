@@ -42,7 +42,7 @@ describe 'ironic::db::sync' do
         }))
       end
 
-      it_configures 'ironic-dbsync'
+      it_behaves_like 'ironic-dbsync'
     end
   end
 

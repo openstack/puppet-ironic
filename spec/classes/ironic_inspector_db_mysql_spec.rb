@@ -54,7 +54,7 @@ describe 'ironic::inspector::db::mysql' do
         facts.merge(OSDefaults.get_facts())
       end
 
-      it_configures 'ironic::inspector::db::mysql'
+      it_behaves_like 'ironic::inspector::db::mysql'
     end
   end
 
