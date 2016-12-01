@@ -10,7 +10,13 @@ describe 'ironic::db::sync' do
         :path        => '/usr/bin',
         :user        => 'root',
         :refreshonly => 'true',
-        :logoutput   => 'on_failure'
+        :try_sleep   => 5,
+        :tries       => 10,
+        :logoutput   => 'on_failure',
+        :subscribe   => ['Anchor[ironic::install::end]',
+                         'Anchor[ironic::config::end]',
+                         'Anchor[ironic::dbsync::begin]'],
+        :notify      => 'Anchor[ironic::dbsync::end]',
       )
     end
 
@@ -25,7 +31,13 @@ describe 'ironic::db::sync' do
             :path        => '/usr/bin',
             :user        => 'root',
             :refreshonly => true,
-            :logoutput   => 'on_failure'
+            :try_sleep   => 5,
+            :tries       => 10,
+            :logoutput   => 'on_failure',
+            :subscribe   => ['Anchor[ironic::install::end]',
+                             'Anchor[ironic::config::end]',
+                             'Anchor[ironic::dbsync::begin]'],
+            :notify      => 'Anchor[ironic::dbsync::end]',
         )
         }
     end
