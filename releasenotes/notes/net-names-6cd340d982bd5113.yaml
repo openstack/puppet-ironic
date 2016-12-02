@@ -1,0 +1,5 @@
+---
+deprecations:
+  - Parameters "cleaning_network_uuid" and "provisionig_network_uuid" in
+    "ironic::conductor" manifest replaced with "cleaning_network" and
+    "provisioning_network" accordingly. The old names are deprecated.

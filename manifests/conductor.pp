@@ -69,9 +69,9 @@
 #   valid for.
 #   Defaults to $::os_service_default
 #
-# [*cleaning_network_uuid*]
-#   (optional) UUID of the network to create Neutron ports on, when booting
-#   to a ramdisk for cleaning using Neutron DHCP.
+# [*cleaning_network*]
+#   (optional) UUID or name of the network to create Neutron ports on, when
+#   booting to a ramdisk for cleaning using Neutron DHCP.
 #   Defaults to $::os_service_default
 #
 # [*cleaning_disk_erase*]
@@ -91,10 +91,10 @@
 #   (optional) Ironic API URL.
 #   Defaults to $::os_service_default
 #
-# [*provisioning_network_uuid*]
-#   (optional) Neutron network UUID for the ramdisk to be booted into for
-#    provisioning nodes. Required for neutron network interface.
-#    Defaults to $::os_service_default
+# [*provisioning_network*]
+#   (optional) Neutron network UUID or name for the ramdisk to be booted into
+#   for provisioning nodes. Required for neutron network interface.
+#   Defaults to $::os_service_default
 #
 # [*configdrive_use_swift*]
 #   (optional) Whether to use Swift for storing config drives instead of
@@ -111,6 +111,16 @@
 #   requested. One of "netboot" or "local".
 #   Defaults to $::os_service_default
 #
+# DEPRECATED
+#
+# [*cleaning_network_uuid*]
+#   (optional) Use cleaning_network instead.
+#   Defaults to $::os_service_default
+#
+# [*provisioning_network_uuid*]
+#   (optional) Use provisioning_network instead.
+#   Defaults to $::os_service_default
+#
 class ironic::conductor (
   $package_ensure                       = 'present',
   $enabled                              = true,
@@ -123,14 +133,17 @@ class ironic::conductor (
   $swift_account                        = $::os_service_default,
   $swift_temp_url_key                   = $::os_service_default,
   $swift_temp_url_duration              = $::os_service_default,
-  $cleaning_network_uuid                = $::os_service_default,
+  $cleaning_network                     = $::os_service_default,
   $cleaning_disk_erase                  = undef,
   $continue_if_disk_secure_erase_fails  = $::os_service_default,
   $api_url                              = $::os_service_default,
-  $provisioning_network_uuid            = $::os_service_default,
+  $provisioning_network                 = $::os_service_default,
   $configdrive_use_swift                = $::os_service_default,
   $configdrive_swift_container          = $::os_service_default,
   $default_boot_option                  = $::os_service_default,
+  # DEPRECATED
+  $cleaning_network_uuid                = $::os_service_default,
+  $provisioning_network_uuid            = $::os_service_default,
 ) {
 
   include ::ironic::deps
@@ -138,6 +151,15 @@ class ironic::conductor (
   include ::ironic::drivers::deploy
 
   $enabled_drivers_real = pick($::ironic::enabled_drivers, $enabled_drivers)
+
+  if !is_service_default($cleaning_network_uuid) {
+    warning('cleaning_network_uuid is deprecated, use cleaning_network')
+  }
+  if !is_service_default($provisioning_network_uuid) {
+    warning('provisioning_network_uuid is deprecated, use provisioning_network')
+  }
+  $cleaning_network_real = pick($cleaning_network, $cleaning_network_uuid)
+  $provisioning_network_real = pick($provisioning_network, $provisioning_network_uuid)
 
   validate_array($enabled_drivers_real)
 
@@ -192,8 +214,8 @@ class ironic::conductor (
     'glance/swift_account': value => $swift_account;
     'glance/swift_temp_url_key': value => $swift_temp_url_key, secret => true;
     'glance/swift_temp_url_duration': value => $swift_temp_url_duration;
-    'neutron/cleaning_network_uuid': value => $cleaning_network_uuid;
-    'neutron/provisioning_network_uuid': value => $provisioning_network_uuid;
+    'neutron/cleaning_network': value => $cleaning_network_real;
+    'neutron/provisioning_network': value => $provisioning_network_real;
     'deploy/http_url':  value => $http_url_real;
     'deploy/http_root': value => $http_root_real;
     'deploy/erase_devices_priority': value => $erase_devices_priority;
