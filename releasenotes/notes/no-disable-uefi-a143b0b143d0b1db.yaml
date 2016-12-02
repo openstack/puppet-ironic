@@ -1,0 +1,4 @@
+---
+deprecations:
+  - Ability to disable UEFI support for inspection via "enable_uefi" parameter
+    is deprecated. This option will be removed in the future.
