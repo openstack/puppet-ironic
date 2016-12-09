@@ -34,10 +34,6 @@
 #  (optional) Protocol to be used for transferring the ramdisk
 #  Defaults to 'tftp'. Valid values are 'tftp' or 'http'.
 #
-# [*enable_uefi*]
-# (optional) Allow introspection of machines with UEFI firmware.
-# Defaults to false. Ignored unless $pxe_transfer_protocol='http'.
-#
 # [*debug*]
 #   (optional) Enable debug logging
 #   Defaults to undef
@@ -163,12 +159,19 @@
 #   (optional) Whether to store the boot mode (BIOS or UEFI).
 #   Defaults to $::os_service_default
 #
+# DEPRECATED
+#
+# [*enable_uefi*]
+#  (optional) Allow introspection of machines with UEFI firmware.
+#  This parameter is deprecated and will be removed. UEFI will always be
+#  enabled. Ignored unless $pxe_transfer_protocol='http'.
+#  Defaults to false.
+#
 class ironic::inspector (
   $package_ensure                  = 'present',
   $enabled                         = true,
   $listen_address                  = $::os_service_default,
   $pxe_transfer_protocol           = 'tftp',
-  $enable_uefi                     = false,
   $debug                           = undef,
   $auth_strategy                   = 'keystone',
   $dnsmasq_interface               = 'br-ctlplane',
@@ -200,6 +203,8 @@ class ironic::inspector (
   $detect_boot_mode                = $::os_service_default,
   $tftp_root                       = '/tftpboot',
   $http_root                       = '/httpboot',
+  # DEPRECATED
+  $enable_uefi                     = undef,
 ) {
 
   include ::ironic::deps
@@ -210,6 +215,12 @@ class ironic::inspector (
 
   if $auth_strategy == 'keystone' {
     include ::ironic::inspector::authtoken
+  }
+
+  if $enable_uefi == undef {
+    warning('UEFI will be enabled by default starting with Pike')
+  } else {
+    warning('enable_uefi is deprecated and will be hardcoded to true in Pike')
   }
 
   warning("After Newton cycle ::ironic::inspector won't provide \
