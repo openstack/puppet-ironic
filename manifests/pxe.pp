@@ -100,7 +100,6 @@ class ironic::pxe (
     server      => '/usr/sbin/in.tftpd',
     socket_type => 'dgram',
     cps         => '100 2',
-    flags       => 'IPv4',
     per_source  => '11',
     wait        => 'yes',
     subscribe   => Anchor['ironic::install::end'],
