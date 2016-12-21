@@ -37,6 +37,13 @@ describe 'ironic::wsgi::apache' do
         'docroot_group'               => 'ironic',
         'ssl'                         => 'true',
         'wsgi_daemon_process'         => 'ironic',
+        'wsgi_daemon_process_options' => {
+          'user'         => 'ironic',
+          'group'        => 'ironic',
+          'processes'    => 1,
+          'threads'      => '8',
+          'display-name' => 'ironic_wsgi',
+        },
         'wsgi_process_group'          => 'ironic',
         'wsgi_script_aliases'         => { '/' => "#{platform_params[:wsgi_script_path]}/app" },
         'require'                     => 'File[ironic_wsgi]'
@@ -47,11 +54,12 @@ describe 'ironic::wsgi::apache' do
     describe 'when overriding parameters using different ports' do
       let :params do
         {
-          :servername  => 'dummy.host',
-          :bind_host   => '10.42.51.1',
-          :port        => 12345,
-          :ssl         => false,
-          :workers     => 37,
+          :servername                => 'dummy.host',
+          :bind_host                 => '10.42.51.1',
+          :port                      => 12345,
+          :ssl                       => false,
+          :wsgi_process_display_name => 'ironic',
+          :workers                   => 37,
         }
       end
 
@@ -64,6 +72,13 @@ describe 'ironic::wsgi::apache' do
         'docroot_group'               => 'ironic',
         'ssl'                         => 'false',
         'wsgi_daemon_process'         => 'ironic',
+        'wsgi_daemon_process_options' => {
+            'user'         => 'ironic',
+            'group'        => 'ironic',
+            'processes'    => '37',
+            'threads'      => '8',
+            'display-name' => 'ironic',
+        },
         'wsgi_process_group'          => 'ironic',
         'wsgi_script_aliases'         => { '/' => "#{platform_params[:wsgi_script_path]}/app" },
         'require'                     => 'File[ironic_wsgi]'
