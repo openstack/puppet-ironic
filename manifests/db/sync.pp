@@ -30,6 +30,8 @@ class ironic::db::sync(
     # https://bugs.launchpad.net/cloud-archive/+bug/1450942
     user        => 'root',
     refreshonly => true,
+    try_sleep   => 5,
+    tries       => 10,
     logoutput   => on_failure,
   }
 }
