@@ -115,11 +115,11 @@
 #
 # [*cleaning_network_uuid*]
 #   (optional) Use cleaning_network instead.
-#   Defaults to $::os_service_default
+#   Defaults to undef
 #
 # [*provisioning_network_uuid*]
 #   (optional) Use provisioning_network instead.
-#   Defaults to $::os_service_default
+#   Defaults to undef
 #
 class ironic::conductor (
   $package_ensure                       = 'present',
@@ -142,8 +142,8 @@ class ironic::conductor (
   $configdrive_swift_container          = $::os_service_default,
   $default_boot_option                  = $::os_service_default,
   # DEPRECATED
-  $cleaning_network_uuid                = $::os_service_default,
-  $provisioning_network_uuid            = $::os_service_default,
+  $cleaning_network_uuid                = undef,
+  $provisioning_network_uuid            = undef,
 ) {
 
   include ::ironic::deps
@@ -152,14 +152,14 @@ class ironic::conductor (
 
   $enabled_drivers_real = pick($::ironic::enabled_drivers, $enabled_drivers)
 
-  if !is_service_default($cleaning_network_uuid) {
+  if $cleaning_network_uuid {
     warning('cleaning_network_uuid is deprecated, use cleaning_network')
   }
-  if !is_service_default($provisioning_network_uuid) {
+  if $provisioning_network_uuid {
     warning('provisioning_network_uuid is deprecated, use provisioning_network')
   }
-  $cleaning_network_real = pick($cleaning_network, $cleaning_network_uuid)
-  $provisioning_network_real = pick($provisioning_network, $provisioning_network_uuid)
+  $cleaning_network_real = pick($cleaning_network_uuid, $cleaning_network)
+  $provisioning_network_real = pick($provisioning_network_uuid, $provisioning_network)
 
   validate_array($enabled_drivers_real)
 

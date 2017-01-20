@@ -1,0 +1,4 @@
+---
+fixes:
+  - Fix compatibility with deprecated options "cleaning_network_uuid" and
+    "provisioning_network_uuid".
