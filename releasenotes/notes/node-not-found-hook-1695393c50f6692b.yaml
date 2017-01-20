@@ -1,0 +1,8 @@
+---
+features:
+  - New parameter "node_not_found_hook" allows configuring ironic-inspector
+    plugin to run when a node is not found during lookup. For example,
+    "enroll" hook implements node auto-discovery.
+  - New parameter "discovery_default_driver" allows configuring the default
+    driver to be set by ironic-inspector for newly discovered nodes, when
+    "node_not_found_hook" is set to "enroll".
