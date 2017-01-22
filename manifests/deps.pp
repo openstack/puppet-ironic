@@ -29,6 +29,10 @@ class ironic::deps {
   -> Ironic_api_paste_ini<||>
   ~> Anchor['ironic::config::end']
 
+  # all db settings should be applied and all packages should be installed
+  # before dbsync starts
+  Oslo::Db<||> -> Anchor['ironic::dbsync::begin']
+
   # ironic-inspector is supported by this module.  This service uses a
   # specific conf file and uses it's own config provider. Split out install
   # and configure of this service so that other services are not affected.
