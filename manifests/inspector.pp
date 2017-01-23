@@ -159,6 +159,16 @@
 #   (optional) Whether to store the boot mode (BIOS or UEFI).
 #   Defaults to $::os_service_default
 #
+# [*node_not_found_hook*]
+#   (optional) Plugin to run when a node is not found during lookup.
+#   For example, "enroll" hook can be used for node auto-discovery.
+#   Defaults to $::os_service_default
+#
+# [*discovery_default_driver*]
+#   (optional) The default driver to use for auto-discovered nodes.
+#   Requires node_not_found_hook set to "enroll".
+#   Defaults to $::os_service_default
+#
 # DEPRECATED
 #
 # [*enable_uefi*]
@@ -203,6 +213,8 @@ class ironic::inspector (
   $detect_boot_mode                = $::os_service_default,
   $tftp_root                       = '/tftpboot',
   $http_root                       = '/httpboot',
+  $node_not_found_hook             = $::os_service_default,
+  $discovery_default_driver        = $::os_service_default,
   # DEPRECATED
   $enable_uefi                     = undef,
 ) {
@@ -301,6 +313,8 @@ tftpboot and httpboot setup, please include ::ironic::pxe")
     # Here we use oslo.config interpolation with another option default_processing_hooks,
     # which we don't change as it might break introspection completely.
     'processing/processing_hooks':                value => $p_hooks;
+    'processing/node_not_found_hook':             value => $node_not_found_hook;
+    'discovery/enroll_node_driver':               value => $discovery_default_driver;
   }
 
   # Install package

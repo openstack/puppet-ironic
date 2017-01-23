@@ -110,6 +110,8 @@ describe 'ironic::inspector' do
       is_expected.to contain_ironic_inspector_config('swift/project_name').with_value(p[:swift_tenant_name])
       is_expected.to contain_ironic_inspector_config('swift/auth_url').with_value(p[:swift_auth_url])
       is_expected.to contain_ironic_inspector_config('processing/processing_hooks').with_value('$default_processing_hooks')
+      is_expected.to contain_ironic_inspector_config('processing/node_not_found_hook').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_inspector_config('discovery/enroll_node_driver').with_value('<SERVICE DEFAULT>')
     end
 
     it 'should contain file /etc/ironic-inspector/inspector.conf' do
@@ -156,6 +158,8 @@ describe 'ironic::inspector' do
           :tftp_root                   => '/var/lib/tftpboot',
           :http_root                   => '/var/www/httpboot',
           :detect_boot_mode            => true,
+          :node_not_found_hook         => 'enroll',
+          :discovery_default_driver    => 'pxe_ipmitool',
         )
       end
       it 'should replace default parameter with new value' do
@@ -167,6 +171,8 @@ describe 'ironic::inspector' do
         is_expected.to contain_ironic_inspector_config('swift/password').with_value(p[:swift_password])
         is_expected.to contain_ironic_inspector_config('swift/auth_url').with_value(p[:swift_auth_url])
         is_expected.to contain_ironic_inspector_config('processing/processing_hooks').with_value('$default_processing_hooks,hook1,hook2')
+        is_expected.to contain_ironic_inspector_config('processing/node_not_found_hook').with_value('enroll')
+        is_expected.to contain_ironic_inspector_config('discovery/enroll_node_driver').with_value('pxe_ipmitool')
       end
 
       it 'should contain file /etc/ironic-inspector/dnsmasq.conf' do
