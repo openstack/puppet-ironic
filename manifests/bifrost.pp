@@ -200,7 +200,7 @@ class ironic::bifrost (
   }
 
   file { $bifrost_config_folder:
-    ensure => directory
+    ensure => directory,
   }
 
   file { "${bifrost_config_folder}/bifrost_global_vars":
