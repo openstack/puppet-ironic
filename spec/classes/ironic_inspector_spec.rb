@@ -33,7 +33,6 @@ describe 'ironic::inspector' do
       :auth_strategy                   => 'keystone',
       :dnsmasq_interface               => 'br-ctlplane',
       :ramdisk_logs_dir                => '/var/log/ironic-inspector/ramdisk/',
-      :enable_setting_ipmi_credentials => false,
       :keep_ports                      => 'all',
       :store_data                      => 'none',
       :ironic_auth_type                => 'password',
@@ -96,7 +95,7 @@ describe 'ironic::inspector' do
       is_expected.to contain_ironic_inspector_config('capabilities/boot_mode').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('firewall/dnsmasq_interface').with_value(p[:dnsmasq_interface])
       is_expected.to contain_ironic_inspector_config('processing/ramdisk_logs_dir').with_value(p[:ramdisk_logs_dir])
-      is_expected.to contain_ironic_inspector_config('processing/enable_setting_ipmi_credentials').with_value(p[:enable_setting_ipmi_credentials])
+      is_expected.to contain_ironic_inspector_config('processing/enable_setting_ipmi_credentials').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('processing/keep_ports').with_value(p[:keep_ports])
       is_expected.to contain_ironic_inspector_config('processing/store_data').with_value(p[:store_data])
       is_expected.to contain_ironic_inspector_config('ironic/auth_type').with_value(p[:ironic_auth_type])

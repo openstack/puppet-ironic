@@ -55,10 +55,6 @@
 #   (optional) Location to store logs retrieved from the ramdisk
 #   Defaults to '/var/log/ironic-inspector/ramdisk/'
 #
-# [*enable_setting_ipmi_credentials*]
-#   (optional) Enable setting of IPMI credentials
-#   Defaults to false
-#
 # [*keep_ports*]
 #   (optional) Which ports to keep after introspection
 #   Defaults to 'all'
@@ -177,6 +173,10 @@
 #  enabled. Ignored unless $pxe_transfer_protocol='http'.
 #  Defaults to false.
 #
+# [*enable_setting_ipmi_credentials*]
+#   (optional) Enable setting of IPMI credentials
+#   Defaults to $::os::service_default
+#
 class ironic::inspector (
   $package_ensure                  = 'present',
   $enabled                         = true,
@@ -187,7 +187,6 @@ class ironic::inspector (
   $dnsmasq_interface               = 'br-ctlplane',
   $db_connection                   = undef,
   $ramdisk_logs_dir                = '/var/log/ironic-inspector/ramdisk/',
-  $enable_setting_ipmi_credentials = false,
   $keep_ports                      = 'all',
   $store_data                      = 'none',
   $ironic_auth_type                = 'password',
@@ -217,6 +216,7 @@ class ironic::inspector (
   $discovery_default_driver        = $::os_service_default,
   # DEPRECATED
   $enable_uefi                     = undef,
+  $enable_setting_ipmi_credentials = $::os_service_default,
 ) {
 
   include ::ironic::deps
@@ -227,6 +227,10 @@ class ironic::inspector (
 
   if $auth_strategy == 'keystone' {
     include ::ironic::inspector::authtoken
+  }
+
+  if !is_service_default($enable_setting_ipmi_credentials) {
+    warning('enable_setting_ipmi_credentials is deprecated')
   }
 
   if $enable_uefi == undef {
