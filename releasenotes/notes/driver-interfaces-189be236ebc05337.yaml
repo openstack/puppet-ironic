@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    Add options for configuring enabled hardware types and all currently
+    supported hardware interfaces. See the driver composition spec for details:
+    http://specs.openstack.org/openstack/ironic-specs/specs/approved/driver-composition-reform.html
