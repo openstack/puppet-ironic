@@ -1,0 +1,12 @@
+---
+features:
+  - |
+    New manifest "ironic::glance" to set parameters for connecting to glance.
+    Please set credentials for ironic to access glance using this manifest,
+    otherwise ironic falls back to using "keystone_authtoken" credentials,
+    which are deprecated for this purpose.
+deprecations:
+  - |
+    Parameters "glance_api_services", "glance_api_insecure" and
+    "glance_num_retries" are deprecated, please use parameters "api_services",
+    "api_insecure" and "num_retries" for new "ironic::glance" manifest.

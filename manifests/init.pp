@@ -231,19 +231,6 @@
 #   (optional) If set, use this value for max_overflow with sqlalchemy.
 #   Defaults to: undef
 #
-# [*glance_api_servers*]
-#   (optional) A list of the glance api servers available to ironic.
-#   Should be an array with [hostname|ip]:port
-#   Defaults to undef
-#
-# [*glance_num_retries*]
-#   (optional) Number retries when downloading an image from glance.
-#   Defaults to 0
-#
-# [*glance_api_insecure*]
-#   (optional) Allow to perform insecure SSL (https) requests to glance.
-#   Defaults to false
-#
 # [*sync_db*]
 #   Enable dbsync
 #   Defaults to true
@@ -288,6 +275,19 @@
 # [*rabbit_virtual_host*]
 #   (optional) The RabbitMQ virtual host. (string value)
 #   Defaults to $::os_service_default
+#
+# [*glance_api_servers*]
+#   (optional) A list of the glance api servers available to ironic.
+#   Should be an array with [hostname|ip]:port
+#   Defaults to undef
+#
+# [*glance_num_retries*]
+#   (optional) Number retries when downloading an image from glance.
+#   Defaults to undef
+#
+# [*glance_api_insecure*]
+#   (optional) Allow to perform insecure SSL (https) requests to glance.
+#   Defaults to undef
 #
 class ironic (
   $enabled                            = true,
@@ -338,9 +338,6 @@ class ironic (
   $database_min_pool_size             = undef,
   $database_max_pool_size             = undef,
   $database_max_overflow              = undef,
-  $glance_api_servers                 = undef,
-  $glance_num_retries                 = '0',
-  $glance_api_insecure                = false,
   $sync_db                            = true,
   $purge_config                       = false,
   # DEPRECATED PARAMETERS
@@ -352,12 +349,17 @@ class ironic (
   $rabbit_port                        = $::os_service_default,
   $rabbit_userid                      = $::os_service_default,
   $rabbit_virtual_host                = $::os_service_default,
+  $glance_api_servers                 = undef,
+  $glance_num_retries                 = undef,
+  $glance_api_insecure                = undef,
 ) {
 
   include ::ironic::deps
   include ::ironic::logging
   include ::ironic::db
   include ::ironic::params
+
+  include ::ironic::glance
 
   if $rabbit_user {
     warning('The rabbit_user parameter is deprecated. Please use rabbit_userid instead.')
@@ -377,6 +379,12 @@ ironic::rabbit_port, ironic::rabbit_userid and ironic::rabbit_virtual_host are \
 deprecated. Please use ironic::default_transport_url instead.")
   }
 
+  if $glance_api_servers or $glance_api_insecure or $glance_num_retries {
+    warning("ironic::glance_api_servers, ironic::glance_api_insecure, \
+ironic::glance_num_retries are deprecated in favor of ironic::glance::api_servers, \
+ironic::glance::api_insecure and ironic::glance::num_retries accordingly")
+  }
+
   package { 'ironic-common':
     ensure => $package_ensure,
     name   => $::ironic::params::common_package_name,
@@ -393,21 +401,9 @@ deprecated. Please use ironic::default_transport_url instead.")
     purge => $purge_config,
   }
 
-  if is_array($glance_api_servers) {
-    ironic_config {
-      'glance/glance_api_servers': value => join($glance_api_servers, ',');
-    }
-  } elsif is_string($glance_api_servers) {
-    ironic_config {
-      'glance/glance_api_servers': value => $glance_api_servers;
-    }
-  }
-
   ironic_config {
     'DEFAULT/auth_strategy':           value => $auth_strategy;
     'DEFAULT/my_ip':                   value => $my_ip;
-    'glance/glance_num_retries':       value => $glance_num_retries;
-    'glance/glance_api_insecure':      value => $glance_api_insecure;
   }
 
   if $sync_db {
