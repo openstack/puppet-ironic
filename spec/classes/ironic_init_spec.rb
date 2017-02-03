@@ -72,6 +72,7 @@ describe 'ironic' do
     it { is_expected.to contain_class('ironic::params') }
 
     it { is_expected.to contain_class('ironic::glance') }
+    it { is_expected.to contain_class('ironic::neutron') }
 
     it 'installs ironic-common package' do
       is_expected.to contain_package('ironic-common').with(
