@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    New manifest "ironic::swift" to set parameters for connecting to swift.
+    Please set credentials for ironic to access swift using this manifest,
+    otherwise ironic falls back to using "keystone_authtoken" credentials,
+    which are deprecated for this purpose.
