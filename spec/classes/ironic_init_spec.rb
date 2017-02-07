@@ -30,8 +30,6 @@ describe 'ironic' do
       :database_idle_timeout       => 3600,
       :database_reconnect_interval => 10,
       :database_retry_interval     => 10,
-      :glance_num_retries          => 0,
-      :glance_api_insecure         => false,
       :purge_config                => false,
     }
   end
@@ -45,8 +43,6 @@ describe 'ironic' do
       it_configures 'with SSL enabled with kombu'
       it_configures 'with amqp_durable_queues disabled'
       it_configures 'with amqp_durable_queues enabled'
-      it_configures 'with one glance server'
-      it_configures 'with two glance servers'
     end
 
     context 'and if rabbit_hosts parameter is provided' do
@@ -74,6 +70,8 @@ describe 'ironic' do
 
     it { is_expected.to contain_class('ironic::logging') }
     it { is_expected.to contain_class('ironic::params') }
+
+    it { is_expected.to contain_class('ironic::glance') }
 
     it 'installs ironic-common package' do
       is_expected.to contain_package('ironic-common').with(
@@ -109,11 +107,6 @@ describe 'ironic' do
       is_expected.to contain_ironic_config('database/max_retries').with_value(params[:database_max_retries])
       is_expected.to contain_ironic_config('database/idle_timeout').with_value(params[:database_idle_timeout])
       is_expected.to contain_ironic_config('database/retry_interval').with_value(params[:database_retry_interval])
-    end
-
-    it 'configures glance connection' do
-      is_expected.to contain_ironic_config('glance/glance_num_retries').with_value(params[:glance_num_retries])
-      is_expected.to contain_ironic_config('glance/glance_api_insecure').with_value(params[:glance_api_insecure])
     end
 
     it 'configures ironic.conf' do
@@ -206,26 +199,6 @@ describe 'ironic' do
     end
 
     it { is_expected.to contain_ironic_config('oslo_messaging_rabbit/amqp_durable_queues').with_value(true) }
-  end
-
-  shared_examples_for 'with one glance server' do
-    before do
-      params.merge!(:glance_api_servers => '10.0.0.1:9292')
-    end
-
-    it 'should configure one glance server' do
-      is_expected.to contain_ironic_config('glance/glance_api_servers').with_value(params[:glance_api_servers])
-    end
-  end
-
-  shared_examples_for 'with two glance servers' do
-    before do
-      params.merge!(:glance_api_servers => ['10.0.0.1:9292','10.0.0.2:9292'])
-    end
-
-    it 'should configure one glance server' do
-       is_expected.to contain_ironic_config('glance/glance_api_servers').with_value(params[:glance_api_servers].join(','))
-    end
   end
 
   shared_examples_for 'amqp support' do
