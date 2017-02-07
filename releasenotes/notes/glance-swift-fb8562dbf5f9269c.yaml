@@ -1,0 +1,6 @@
+---
+deprecations:
+  - |
+    Parameters "swift_account", "swift_temp_url_key" and
+    "swift_temp_url_duration" were moved from "ironic::conductor" to
+    "ironic::glance" manifest.

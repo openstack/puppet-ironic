@@ -54,21 +54,6 @@
 #   (optional) Whether to enable automated cleaning on nodes.
 #   Defaults to $::os_service_default
 #
-# [*swift_account*]
-#   (optional) The account that Glance uses to communicate with Swift.
-#   The format is "AUTH_uuid"
-#   Defaults to $::os_service_default
-#
-# [*swift_temp_url_key*]
-#   (optional) The secret token given to Swift to allow temporary URL
-#   downloads. Required for several drivers (e.g. agent_ipmitool).
-#   Defaults to $::os_service_default
-#
-# [*swift_temp_url_duration*]
-#   (optional) The length of time in seconds that the temporary URL will be
-#   valid for.
-#   Defaults to $::os_service_default
-#
 # [*cleaning_network*]
 #   (optional) UUID or name of the network to create Neutron ports on, when
 #   booting to a ramdisk for cleaning using Neutron DHCP.
@@ -121,6 +106,21 @@
 #   (optional) Use provisioning_network instead.
 #   Defaults to undef
 #
+# [*swift_account*]
+#   (optional) The account that Glance uses to communicate with Swift.
+#   The format is "AUTH_uuid"
+#   Defaults to $::os_service_default
+#
+# [*swift_temp_url_key*]
+#   (optional) The secret token given to Swift to allow temporary URL
+#   downloads. Required for several drivers (e.g. agent_ipmitool).
+#   Defaults to $::os_service_default
+#
+# [*swift_temp_url_duration*]
+#   (optional) The length of time in seconds that the temporary URL will be
+#   valid for.
+#   Defaults to $::os_service_default
+#
 class ironic::conductor (
   $package_ensure                       = 'present',
   $enabled                              = true,
@@ -130,9 +130,6 @@ class ironic::conductor (
   $http_url                             = $::os_service_default,
   $http_root                            = $::os_service_default,
   $automated_clean                      = $::os_service_default,
-  $swift_account                        = $::os_service_default,
-  $swift_temp_url_key                   = $::os_service_default,
-  $swift_temp_url_duration              = $::os_service_default,
   $cleaning_network                     = $::os_service_default,
   $cleaning_disk_erase                  = undef,
   $continue_if_disk_secure_erase_fails  = $::os_service_default,
@@ -144,11 +141,17 @@ class ironic::conductor (
   # DEPRECATED
   $cleaning_network_uuid                = undef,
   $provisioning_network_uuid            = undef,
+  $swift_account                        = undef,
+  $swift_temp_url_key                   = undef,
+  $swift_temp_url_duration              = undef,
 ) {
 
   include ::ironic::deps
   include ::ironic::params
   include ::ironic::drivers::deploy
+
+  # For backward compatibility
+  include ::ironic::glance
 
   $enabled_drivers_real = pick($::ironic::enabled_drivers, $enabled_drivers)
 
@@ -160,6 +163,11 @@ class ironic::conductor (
   }
   $cleaning_network_real = pick($cleaning_network_uuid, $cleaning_network)
   $provisioning_network_real = pick($provisioning_network_uuid, $provisioning_network)
+
+  if $swift_account or $swift_temp_url_key or $swift_temp_url_duration {
+    warning("swift_account, swift_temp_url_key and swift_temp_url_duration were \
+moved to ironic::glance manifest")
+  }
 
   validate_array($enabled_drivers_real)
 
@@ -211,9 +219,6 @@ class ironic::conductor (
     'conductor/force_power_state_during_sync': value => $force_power_state_during_sync;
     'conductor/automated_clean': value => $automated_clean;
     'conductor/api_url': value => $api_url;
-    'glance/swift_account': value => $swift_account;
-    'glance/swift_temp_url_key': value => $swift_temp_url_key, secret => true;
-    'glance/swift_temp_url_duration': value => $swift_temp_url_duration;
     'neutron/cleaning_network': value => $cleaning_network_real;
     'neutron/provisioning_network': value => $provisioning_network_real;
     'deploy/http_url':  value => $http_url_real;

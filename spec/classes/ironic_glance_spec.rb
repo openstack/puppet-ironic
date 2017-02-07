@@ -42,19 +42,25 @@ describe 'ironic::glance' do
       is_expected.to contain_ironic_config('glance/glance_api_servers').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('glance/glance_api_insecure').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('glance/glance_num_retries').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('glance/swift_account').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('glance/swift_temp_url_key').with(:value => '<SERVICE DEFAULT>').with_secret(true)
+      is_expected.to contain_ironic_config('glance/swift_temp_url_duration').with(:value => '<SERVICE DEFAULT>')
     end
 
     context 'when overriding parameters' do
       before :each do
         params.merge!(
-            :auth_type      => 'noauth',
-            :auth_url       => 'http://example.com',
-            :project_name   => 'project1',
-            :username       => 'admin',
-            :password       => 'pa$$w0rd',
-            :api_servers    => '10.0.0.1:9292',
-            :api_insecure   => true,
-            :num_retries    => 42
+            :auth_type               => 'noauth',
+            :auth_url                => 'http://example.com',
+            :project_name            => 'project1',
+            :username                => 'admin',
+            :password                => 'pa$$w0rd',
+            :api_servers             => '10.0.0.1:9292',
+            :api_insecure            => true,
+            :num_retries             => 42,
+            :swift_account           => '00000000-0000-0000-0000-000000000000',
+            :swift_temp_url_key      => 'the-key',
+            :swift_temp_url_duration => 3600,
         )
       end
 
@@ -67,6 +73,9 @@ describe 'ironic::glance' do
         is_expected.to contain_ironic_config('glance/glance_api_servers').with_value(p[:api_servers])
         is_expected.to contain_ironic_config('glance/glance_api_insecure').with_value(p[:api_insecure])
         is_expected.to contain_ironic_config('glance/glance_num_retries').with_value(p[:num_retries])
+        is_expected.to contain_ironic_config('glance/swift_account').with_value(p[:swift_account])
+        is_expected.to contain_ironic_config('glance/swift_temp_url_key').with_value(p[:swift_temp_url_key]).with_secret(true)
+        is_expected.to contain_ironic_config('glance/swift_temp_url_duration').with_value(p[:swift_temp_url_duration])
       end
     end
 
