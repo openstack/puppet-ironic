@@ -360,6 +360,7 @@ class ironic (
   include ::ironic::params
 
   include ::ironic::glance
+  include ::ironic::neutron
 
   if $rabbit_user {
     warning('The rabbit_user parameter is deprecated. Please use rabbit_userid instead.')
