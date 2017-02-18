@@ -69,7 +69,6 @@ describe 'ironic::api' do
       is_expected.to contain_ironic_config('api/max_limit').with_value(p[:max_limit])
       is_expected.to contain_ironic_config('api/api_workers').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('api/public_endpoint').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('neutron/url').with_value('http://127.0.0.1:9696/')
       is_expected.to contain_ironic_config('oslo_middleware/enable_proxy_headers_parsing').with_value('<SERVICE DEFAULT>')
     end
 

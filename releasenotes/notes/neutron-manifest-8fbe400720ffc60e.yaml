@@ -1,0 +1,17 @@
+---
+features:
+  - |
+    New manifest "ironic::neutron" to set parameters for connecting to neutron.
+    Please set credentials for ironic to access neutron using this manifest,
+    otherwise ironic falls back to using "keystone_authtoken" credentials,
+    which are deprecated for this purpose.
+deprecations:
+  - |
+    Parameter "ironic::api::neutron_url" is deprecated, use
+    "ironic::neutron::api_endpoint" instead.
+upgrade:
+  - |
+    Value of "ironic::neutron::api_endpoint" parameter (former
+    "ironic::api::neutron_url") was reset to the service default. The default
+    of "127.0.0.1:9696" was often wrong, without it ironic will fetch the
+    corrent one from the service catalog.
