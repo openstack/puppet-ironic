@@ -67,6 +67,11 @@ class ironic::pxe (
     before  => Anchor['ironic::config::end'],
   }
 
+  ensure_resource( 'package', 'ironic-common', {
+      ensure => $package_ensure,
+      name   => $::ironic::params::common_package_name,
+      tag    => ['openstack', 'ironic-package'],})
+
   file { "${tftp_root_real}/pxelinux.cfg":
     ensure  => 'directory',
     seltype => 'tftpdir_t',

@@ -386,11 +386,10 @@ ironic::glance_num_retries are deprecated in favor of ironic::glance::api_server
 ironic::glance::api_insecure and ironic::glance::num_retries accordingly")
   }
 
-  package { 'ironic-common':
-    ensure => $package_ensure,
-    name   => $::ironic::params::common_package_name,
-    tag    => ['openstack', 'ironic-package'],
-  }
+  ensure_resource( 'package', 'ironic-common', {
+      ensure => $package_ensure,
+      name   => $::ironic::params::common_package_name,
+      tag    => ['openstack', 'ironic-package'],})
 
   package { 'ironic-lib':
     ensure => $package_ensure,
