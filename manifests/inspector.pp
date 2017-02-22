@@ -115,6 +115,20 @@
 #   (optional) IP range to use for nodes being introspected
 #   Defaults to '192.168.0.100,192.168.0.120'
 #
+# [*dnsmasq_ip_subnets*]
+#    (optional) List of hashes with keys: 'tag', 'ip_range', 'netmask', and
+#     'gateway'. Assigning additional subnets allow dnsmasq to serve dhcp
+#     request that came in via dhcp relay/helper.
+#    [ { tag      => 'subnet1',
+#        ip_range => '192.168.0.100,192.168.0.200',
+#        netmask  => '255.255.255.0',
+#        gateway  => '192.168.0.254' },
+#      { tag      => 'subnet2',
+#        ip_range => '192.168.1.100,192.168.1.200',
+#        netmask  => '255.255.255.0',
+#        gateway  => '192.168.1.254' } ]
+#    Defaults to undef
+#
 # [*dnsmasq_local_ip*]
 #   (optional) IP interface for the dnsmasq process
 #   Defaults to '192.168.0.1'
@@ -202,6 +216,7 @@ class ironic::inspector (
   $swift_tenant_name               = 'services',
   $swift_auth_url                  = 'http://127.0.0.1:5000/v2.0',
   $dnsmasq_ip_range                = '192.168.0.100,192.168.0.120',
+  $dnsmasq_ip_subnets               = undef,
   $dnsmasq_local_ip                = '192.168.0.1',
   $sync_db                         = true,
   $ramdisk_collectors              = 'default',

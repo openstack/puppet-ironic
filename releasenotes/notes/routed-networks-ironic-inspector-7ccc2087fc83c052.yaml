@@ -1,0 +1,6 @@
+---
+features:
+  - Assigning additional subnets allow dnsmasq to serve dhcp request that came
+    in via dhcp relay/helper.
+    Adds parameter 'dnsmasq_ip_subnets' and enable configuration of dhcp-range
+    and dhcp-option 'option:router' for additional subnets in dnsmasq.

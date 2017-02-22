@@ -1,6 +1,12 @@
 port=0
 interface=<%= @dnsmasq_interface %>
 bind-interfaces
+<% if @dnsmasq_ip_subnets.is_a?(Array) -%>
+<% @dnsmasq_ip_subnets.each do |s| -%>
+dhcp-range=set:<%= s['tag'] -%>,<%= s['ip_range'] -%>,<%= s['netmask'] -%>,29
+dhcp-option=tag:<%= s['tag'] -%>,option:router,<%= s['gateway'] %>
+<% end -%>
+<% end -%>
 dhcp-range=<%= @dnsmasq_ip_range %>,29
 dhcp-sequential-ip
 dhcp-match=ipxe,175
