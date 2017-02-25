@@ -1,6 +1,6 @@
 {
   "name": "openstack-ironic",
-  "version": "10.3.0",
+  "version": "10.4.0",
   "author": "eNovance and OpenStack Contributors",
   "summary": "Puppet module for OpenStack Ironic",
   "license": "Apache-2.0",
