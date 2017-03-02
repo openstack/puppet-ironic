@@ -127,23 +127,22 @@
 #   (optional) Keystone authentication URL for Swift
 #   Defautls to 'http://127.0.0.1:5000/v2.0'
 #
-# [*dnsmasq_ip_range*]
-#   (optional) IP range to use for nodes being introspected
-#   Defaults to '192.168.0.100,192.168.0.120'
-#
 # [*dnsmasq_ip_subnets*]
 #    (optional) List of hashes with keys: 'tag', 'ip_range', 'netmask', and
-#     'gateway'. Assigning additional subnets allow dnsmasq to serve dhcp
-#     request that came in via dhcp relay/helper.
-#    [ { tag      => 'subnet1',
-#        ip_range => '192.168.0.100,192.168.0.200',
-#        netmask  => '255.255.255.0',
-#        gateway  => '192.168.0.254' },
-#      { tag      => 'subnet2',
-#        ip_range => '192.168.1.100,192.168.1.200',
-#        netmask  => '255.255.255.0',
-#        gateway  => '192.168.1.254' } ]
-#    Defaults to undef
+#    'gateway'. 'ip_range' is the only required key. Assigning multiple tagged
+#    subnets allow dnsmasq to serve dhcp request that came in via dhcp
+#    relay/helper.
+#    Example:
+#    [{'ip_range' => '192.168.0.100,192.168.0.120'},
+#     {'tag'      => 'subnet1',
+#      'ip_range' => '192.168.1.100,192.168.1.200',
+#      'netmask'  => '255.255.255.0',
+#      'gateway'  => '192.168.1.254'},
+#     {'tag'      => 'subnet2',
+#      'ip_range' => '192.168.2.100,192.168.2.200',
+#      'netmask'  => '255.255.255.0',
+#      'gateway'  => '192.168.2.254'}]
+#    Defaults to []
 #
 # [*dnsmasq_local_ip*]
 #   (optional) IP interface for the dnsmasq process
@@ -207,6 +206,9 @@
 #   (optional) Enable setting of IPMI credentials
 #   Defaults to $::os::service_default
 #
+# [*dnsmasq_ip_range*]
+#   (optional) IP range to use for nodes being introspected
+#   Defaults to undef
 class ironic::inspector (
   $package_ensure                  = 'present',
   $enabled                         = true,
@@ -235,8 +237,7 @@ class ironic::inspector (
   $swift_project_domain_name       = $::os_service_default,
   $swift_user_domain_name          = $::os_service_default,
   $swift_auth_url                  = 'http://127.0.0.1:5000/v2.0',
-  $dnsmasq_ip_range                = '192.168.0.100,192.168.0.120',
-  $dnsmasq_ip_subnets               = undef,
+  $dnsmasq_ip_subnets              = [],
   $dnsmasq_local_ip                = '192.168.0.1',
   $sync_db                         = true,
   $ramdisk_collectors              = 'default',
@@ -250,6 +251,7 @@ class ironic::inspector (
   $node_not_found_hook             = $::os_service_default,
   $discovery_default_driver        = $::os_service_default,
   # DEPRECATED
+  $dnsmasq_ip_range                = undef,
   $enable_uefi                     = undef,
   $enable_setting_ipmi_credentials = $::os_service_default,
 ) {
@@ -266,6 +268,18 @@ class ironic::inspector (
 
   if !is_service_default($enable_setting_ipmi_credentials) {
     warning('enable_setting_ipmi_credentials is deprecated')
+  }
+
+  if !is_array($dnsmasq_ip_subnets) {
+    fail('Invalid data type, parameter dnsmasq_ip_subnets must be Array type')
+  }
+
+  if $dnsmasq_ip_range {
+    warning('dnsmasq_ip_range is deprecated, replaced by dnsmasq_ip_subnets')
+    $dnsmasq_ip_subnets_real = concat($dnsmasq_ip_subnets,
+                                      {'ip_range' => $dnsmasq_ip_range})
+  } else {
+    $dnsmasq_ip_subnets_real = $dnsmasq_ip_subnets
   }
 
   if $enable_uefi == undef {

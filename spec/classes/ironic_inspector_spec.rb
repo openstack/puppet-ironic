@@ -26,32 +26,40 @@ describe 'ironic::inspector' do
   end
 
   let :params do
-    { :package_ensure                  => 'present',
-      :enabled                         => true,
-      :pxe_transfer_protocol           => 'tftp',
-      :enable_uefi                     => false,
-      :auth_strategy                   => 'keystone',
-      :dnsmasq_interface               => 'br-ctlplane',
-      :ramdisk_logs_dir                => '/var/log/ironic-inspector/ramdisk/',
-      :keep_ports                      => 'all',
-      :store_data                      => 'none',
-      :ironic_auth_type                => 'password',
-      :ironic_username                 => 'ironic',
-      :ironic_tenant_name              => 'services',
-      :ironic_auth_url                 => 'http://127.0.0.1:5000/v2.0',
-      :ironic_max_retries              => 30,
-      :ironic_retry_interval           => 2,
-      :swift_auth_type                 => 'password',
-      :swift_username                  => 'ironic',
-      :swift_tenant_name               => 'services',
-      :swift_auth_url                  => 'http://127.0.0.1:5000/v2.0',
-      :dnsmasq_ip_range                => '192.168.0.100,192.168.0.120',
-      :dnsmasq_ip_subnets              => false,
-      :dnsmasq_local_ip                => '192.168.0.1',
-      :ipxe_timeout                    => 0,
-      :http_port                       => 8088,
-      :tftp_root                       => '/tftpboot',
-      :http_root                       => '/httpboot', }
+    { :package_ensure        => 'present',
+      :enabled               => true,
+      :pxe_transfer_protocol => 'tftp',
+      :enable_uefi           => false,
+      :auth_strategy         => 'keystone',
+      :dnsmasq_interface     => 'br-ctlplane',
+      :ramdisk_logs_dir      => '/var/log/ironic-inspector/ramdisk/',
+      :keep_ports            => 'all',
+      :store_data            => 'none',
+      :ironic_auth_type      => 'password',
+      :ironic_username       => 'ironic',
+      :ironic_tenant_name    => 'services',
+      :ironic_auth_url       => 'http://127.0.0.1:5000/v2.0',
+      :ironic_max_retries    => 30,
+      :ironic_retry_interval => 2,
+      :swift_auth_type       => 'password',
+      :swift_username        => 'ironic',
+      :swift_tenant_name     => 'services',
+      :swift_auth_url        => 'http://127.0.0.1:5000/v2.0',
+      :dnsmasq_ip_subnets    => [{ 'ip_range' =>
+                                      '192.168.0.100,192.168.0.120' },
+                                 { 'tag'      => 'subnet1',
+                                   'ip_range' => '192.168.1.100,192.168.1.200',
+                                   'netmask'  => '255.255.255.0',
+                                   'gateway'  => '192.168.1.254' },
+                                 { 'tag'      => 'subnet2',
+                                   'ip_range' => '192.168.2.100,192.168.2.200',
+                                   'netmask'  => '255.255.255.0',
+                                   'gateway'  => '192.168.2.254' }],
+      :dnsmasq_local_ip      => '192.168.0.1',
+      :ipxe_timeout          => 0,
+      :http_port             => 8088,
+      :tftp_root             => '/tftpboot',
+      :http_root             => '/httpboot', }
   end
 
 
@@ -130,6 +138,21 @@ describe 'ironic::inspector' do
         'require' => 'Anchor[ironic-inspector::config::begin]',
         'content' => /pxelinux/,
       )
+      is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
+        /dhcp-range=192.168.0.100,192.168.0.120,29/
+      )
+      is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
+        /dhcp-range=set:subnet1,192.168.1.100,192.168.1.200,255.255.255.0,29/
+      )
+      is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
+        /dhcp-option=tag:subnet1,option:router,192.168.1.254/
+      )
+      is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
+        /dhcp-range=set:subnet2,192.168.2.100,192.168.2.200,255.255.255.0,29/
+      )
+      is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
+        /dhcp-option=tag:subnet2,option:router,192.168.2.254/
+      )
     end
     it 'should contain file /tftpboot/pxelinux.cfg/default' do
       is_expected.to contain_file('/tftpboot/pxelinux.cfg/default').with(
@@ -168,14 +191,8 @@ describe 'ironic::inspector' do
           :detect_boot_mode            => true,
           :node_not_found_hook         => 'enroll',
           :discovery_default_driver    => 'pxe_ipmitool',
-          :dnsmasq_ip_subnets          => [ { 'tag'      => 'subnet1',
-                                              'ip_range' => '192.168.1.100,192.168.1.200',
-                                              'netmask'  => '255.255.255.0',
-                                              'gateway'  => '192.168.1.254' },
-                                            { 'tag'      => 'subnet2',
-                                              'ip_range' => '192.168.2.100,192.168.2.200',
-                                              'netmask'  => '255.255.255.0',
-                                              'gateway'  => '192.168.2.254' } ],
+          :dnsmasq_ip_subnets          => [],
+          :dnsmasq_ip_range            => '192.168.0.100,192.168.0.120',
         )
       end
       it 'should replace default parameter with new value' do
@@ -205,16 +222,7 @@ describe 'ironic::inspector' do
             /dhcp-boot=tag:ipxe,http:\/\/192.168.0.1:3816\/inspector.ipxe/
         )
         is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-           /dhcp-range=set:subnet1,192.168.1.100,192.168.1.200,255.255.255.0,29/
-        )
-        is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-           /dhcp-option=tag:subnet1,option:router,192.168.1.254/
-        )
-        is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-           /dhcp-range=set:subnet2,192.168.2.100,192.168.2.200,255.255.255.0,29/
-        )
-        is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-           /dhcp-option=tag:subnet2,option:router,192.168.2.254/
+            /dhcp-range=192.168.0.100,192.168.0.120,29/
         )
       end
       it 'should contain file /var/www/httpboot/inspector.ipxe' do
