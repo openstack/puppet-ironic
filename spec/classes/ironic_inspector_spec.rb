@@ -102,6 +102,8 @@ describe 'ironic::inspector' do
       is_expected.to contain_ironic_inspector_config('ironic/auth_type').with_value(p[:ironic_auth_type])
       is_expected.to contain_ironic_inspector_config('ironic/username').with_value(p[:ironic_username])
       is_expected.to contain_ironic_inspector_config('ironic/project_name').with_value(p[:ironic_tenant_name])
+      is_expected.to contain_ironic_inspector_config('ironic/project_domain_name').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_inspector_config('ironic/user_domain_name').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('ironic/auth_url').with_value(p[:ironic_auth_url])
       is_expected.to contain_ironic_inspector_config('ironic/max_retries').with_value(p[:ironic_max_retries])
       is_expected.to contain_ironic_inspector_config('ironic/retry_interval').with_value(p[:ironic_retry_interval])
@@ -147,6 +149,8 @@ describe 'ironic::inspector' do
           :debug                       => true,
           :listen_address              => '127.0.0.1',
           :ironic_password             => 'password',
+          :ironic_project_domain_name  => 'Default',
+          :ironic_user_domain_name     => 'Default',
           :ironic_auth_url             => 'http://192.168.0.1:5000/v2.0',
           :swift_password              => 'password',
           :swift_auth_url              => 'http://192.168.0.1:5000/v2.0',
@@ -175,6 +179,8 @@ describe 'ironic::inspector' do
         is_expected.to contain_ironic_inspector_config('DEFAULT/debug').with_value(p[:debug])
         is_expected.to contain_ironic_inspector_config('capabilities/boot_mode').with_value(p[:detect_boot_mode])
         is_expected.to contain_ironic_inspector_config('ironic/password').with_value(p[:ironic_password])
+        is_expected.to contain_ironic_inspector_config('ironic/project_domain_name').with_value(p[:ironic_project_domain_name])
+        is_expected.to contain_ironic_inspector_config('ironic/user_domain_name').with_value(p[:ironic_user_domain_name])
         is_expected.to contain_ironic_inspector_config('ironic/auth_url').with_value(p[:ironic_auth_url])
         is_expected.to contain_ironic_inspector_config('swift/password').with_value(p[:swift_password])
         is_expected.to contain_ironic_inspector_config('swift/auth_url').with_value(p[:swift_auth_url])

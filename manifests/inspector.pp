@@ -79,6 +79,14 @@
 #   (optional) Tenant name for accessing Ironic API
 #   Defaults to 'services'
 #
+# [*ironic_project_domain_name*]
+#   (Optional) Name of domain for $ironic_tenant_name
+#   Defaults to $::os_service_default
+#
+# [*ironic_user_domain_name*]
+#   (Optional) Name of domain for $ironic_username
+#   Defaults to $::os_service_default
+#
 # [*ironic_auth_url*]
 #   (optional) Keystone authentication URL for Ironic
 #   Defautls to 'http://127.0.0.1:5000/v2.0'
@@ -207,6 +215,8 @@ class ironic::inspector (
   $ironic_username                 = 'ironic',
   $ironic_password                 = undef,
   $ironic_tenant_name              = 'services',
+  $ironic_project_domain_name      = $::os_service_default,
+  $ironic_user_domain_name         = $::os_service_default,
   $ironic_auth_url                 = 'http://127.0.0.1:5000/v2.0',
   $ironic_max_retries              = 30,
   $ironic_retry_interval           = 2,
@@ -321,6 +331,8 @@ tftpboot and httpboot setup, please include ::ironic::pxe")
     'ironic/username':                            value => $ironic_username;
     'ironic/password':                            value => $ironic_password, secret => true;
     'ironic/project_name':                        value => $ironic_tenant_name;
+    'ironic/project_domain_name':                 value => $ironic_project_domain_name;
+    'ironic/user_domain_name':                    value => $ironic_user_domain_name;
     'ironic/auth_url':                            value => $ironic_auth_url;
     'ironic/max_retries':                         value => $ironic_max_retries;
     'ironic/retry_interval':                      value => $ironic_retry_interval;
