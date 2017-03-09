@@ -110,6 +110,8 @@ describe 'ironic::inspector' do
       is_expected.to contain_ironic_inspector_config('swift/auth_type').with_value(p[:swift_auth_type])
       is_expected.to contain_ironic_inspector_config('swift/username').with_value(p[:swift_username])
       is_expected.to contain_ironic_inspector_config('swift/project_name').with_value(p[:swift_tenant_name])
+      is_expected.to contain_ironic_inspector_config('swift/project_domain_name').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_inspector_config('swift/user_domain_name').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('swift/auth_url').with_value(p[:swift_auth_url])
       is_expected.to contain_ironic_inspector_config('processing/processing_hooks').with_value('$default_processing_hooks')
       is_expected.to contain_ironic_inspector_config('processing/node_not_found_hook').with_value('<SERVICE DEFAULT>')
@@ -153,6 +155,8 @@ describe 'ironic::inspector' do
           :ironic_user_domain_name     => 'Default',
           :ironic_auth_url             => 'http://192.168.0.1:5000/v2.0',
           :swift_password              => 'password',
+          :swift_project_domain_name   => 'Default',
+          :swift_user_domain_name      => 'Default',
           :swift_auth_url              => 'http://192.168.0.1:5000/v2.0',
           :pxe_transfer_protocol       => 'http',
           :additional_processing_hooks => 'hook1,hook2',
@@ -183,6 +187,8 @@ describe 'ironic::inspector' do
         is_expected.to contain_ironic_inspector_config('ironic/user_domain_name').with_value(p[:ironic_user_domain_name])
         is_expected.to contain_ironic_inspector_config('ironic/auth_url').with_value(p[:ironic_auth_url])
         is_expected.to contain_ironic_inspector_config('swift/password').with_value(p[:swift_password])
+        is_expected.to contain_ironic_inspector_config('swift/project_domain_name').with_value(p[:swift_project_domain_name])
+        is_expected.to contain_ironic_inspector_config('swift/user_domain_name').with_value(p[:swift_user_domain_name])
         is_expected.to contain_ironic_inspector_config('swift/auth_url').with_value(p[:swift_auth_url])
         is_expected.to contain_ironic_inspector_config('processing/processing_hooks').with_value('$default_processing_hooks,hook1,hook2')
         is_expected.to contain_ironic_inspector_config('processing/node_not_found_hook').with_value('enroll')

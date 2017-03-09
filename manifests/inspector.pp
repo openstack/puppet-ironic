@@ -115,6 +115,14 @@
 #   (optional) Tenant name for accessing Swift API
 #   Defaults to 'services'
 #
+# [*swift_project_domain_name*]
+#   (Optional) Name of domain for $swift_tenant_name
+#   Defaults to $::os_service_default
+#
+# [*swift_user_domain_name*]
+#   (Optional) Name of domain for $swift_username
+#   Defaults to $::os_service_default
+#
 # [*swift_auth_url*]
 #   (optional) Keystone authentication URL for Swift
 #   Defautls to 'http://127.0.0.1:5000/v2.0'
@@ -224,6 +232,8 @@ class ironic::inspector (
   $swift_username                  = 'ironic',
   $swift_password                  = undef,
   $swift_tenant_name               = 'services',
+  $swift_project_domain_name       = $::os_service_default,
+  $swift_user_domain_name          = $::os_service_default,
   $swift_auth_url                  = 'http://127.0.0.1:5000/v2.0',
   $dnsmasq_ip_range                = '192.168.0.100,192.168.0.120',
   $dnsmasq_ip_subnets               = undef,
@@ -340,6 +350,8 @@ tftpboot and httpboot setup, please include ::ironic::pxe")
     'swift/username':                             value => $swift_username;
     'swift/password':                             value => $swift_password, secret => true;
     'swift/project_name':                         value => $swift_tenant_name;
+    'swift/project_domain_name':                  value => $swift_project_domain_name;
+    'swift/user_domain_name':                     value => $swift_user_domain_name;
     'swift/auth_url':                             value => $swift_auth_url;
     # Here we use oslo.config interpolation with another option default_processing_hooks,
     # which we don't change as it might break introspection completely.
