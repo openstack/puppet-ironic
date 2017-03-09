@@ -1,5 +1,5 @@
 ---
 features:
   - One can now configure the keystone domain parameters for the swift config
-    group in ironic-inspector. These rae needed when one is deploying it with
+    group in ironic-inspector. These are needed when one is deploying it with
     keystone v3.
