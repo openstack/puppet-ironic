@@ -36,23 +36,35 @@
 #   The admin password for ironic to connect to neutron.
 #   Defaults to $::os_service_default
 #
+# [*user_domain_name*]
+#   The name of user's domain (required for Identity V3).
+#   Defaults to $::os_service_default
+#
+# [*project_domain_name*]
+#   The name of project's domain (required for Identity V3).
+#   Defaults to $::os_service_default
+#
 class ironic::neutron (
-  $api_endpoint = $::os_service_default,
-  $auth_type    = 'password',
-  $auth_url     = $::os_service_default,
-  $project_name = 'services',
-  $username     = 'ironic',
-  $password     = $::os_service_default,
+  $api_endpoint        = $::os_service_default,
+  $auth_type           = 'password',
+  $auth_url            = $::os_service_default,
+  $project_name        = 'services',
+  $username            = 'ironic',
+  $password            = $::os_service_default,
+  $user_domain_name    = $::os_service_default,
+  $project_domain_name = $::os_service_default,
 ) {
 
   $api_endpoint_real = pick($::ironic::api::neutron_url, $api_endpoint)
 
   ironic_config {
-    'neutron/url':          value => $api_endpoint_real;
-    'neutron/auth_type':    value => $auth_type;
-    'neutron/username':     value => $username;
-    'neutron/password':     value => $password, secret => true;
-    'neutron/auth_url':     value => $auth_url;
-    'neutron/project_name': value => $project_name;
+    'neutron/url':                 value => $api_endpoint_real;
+    'neutron/auth_type':           value => $auth_type;
+    'neutron/username':            value => $username;
+    'neutron/password':            value => $password, secret => true;
+    'neutron/auth_url':            value => $auth_url;
+    'neutron/project_name':        value => $project_name;
+    'neutron/user_domain_name':    value => $user_domain_name;
+    'neutron/project_domain_name': value => $project_domain_name;
   }
 }
