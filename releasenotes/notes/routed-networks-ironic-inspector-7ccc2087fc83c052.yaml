@@ -1,6 +1,33 @@
 ---
 features:
-  - Assigning additional subnets allow dnsmasq to serve dhcp request that came
-    in via dhcp relay/helper.
-    Adds parameter 'dnsmasq_ip_subnets' and enable configuration of dhcp-range
-    and dhcp-option 'option:router' for additional subnets in dnsmasq.
+  - |
+    Assigning additional subnets allow dnsmasq to serve dhcp request that came
+    in via dhcp relay/helper. New parameter 'dnsmasq_ip_subnets' enable
+    configuration of dhcp-range and dhcp-option 'option:router' for multiple
+    subnets in dnsmasq.
+
+    Example::
+
+      $dnsmasq_ip_subnets = [{'ip_range' => '192.168.0.100,192.168.0.120'},
+                             {'tag'      => 'subnet1',
+                              'ip_range' => '192.168.1.100,192.168.1.200',
+                              'netmask'  => '255.255.255.0',
+                              'gateway'  => '192.168.1.254'},
+                             {'tag'      => 'subnet2',
+                              'ip_range' => '192.168.2.100,192.168.2.200',
+                              'netmask'  => '255.255.255.0',
+                              'gateway'  => '192.168.2.254'}]
+
+deprecations:
+  - The "ironic::inspector::dnsmasq_ip_range" parameter was deprecated in favor
+    of "ironic::inspector::dnsmasq_ip_subnets"
+upgrade:
+  - |
+    Replace usage of "ironic::inspector::dnsmasq_ip_range" with
+    "ironic::inspector::dnsmasq_ip_subnets". For example, if you have::
+
+      $dnsmasq_ip_range = '192.168.0.100,192.168.0.120'
+
+    replace with::
+
+      $dnsmasq_ip_subnets = [{'ip_range' => '192.168.0.100,192.168.0.120'}]
