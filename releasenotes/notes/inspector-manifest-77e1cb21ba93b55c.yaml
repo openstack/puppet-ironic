@@ -1,0 +1,10 @@
+---
+features:
+  - |
+    New manifest "ironic::drivers::inspector" to set parameters for connecting
+    from ironic to to ironic-inspector.
+    Please set credentials for ironic to access ironic-inspector using this
+    manifest, otherwise ironic falls back to using "keystone_authtoken"
+    credentials, which are deprecated for this purpose.
+
+    Also allows configuring "enabled" and "service_url" parameters.
