@@ -32,6 +32,14 @@
 #   The admin password for ironic to connect to glance.
 #   Defaults to $::os_service_default
 #
+# [*user_domain_name*]
+#   The name of user's domain (required for Identity V3).
+#   Defaults to $::os_service_default
+#
+# [*project_domain_name*]
+#   The name of project's domain (required for Identity V3).
+#   Defaults to $::os_service_default
+#
 # [*api_servers*]
 #   (optional) A list of the glance api servers available to ironic.
 #   Should be an array with [hostname|ip]:port
@@ -66,6 +74,8 @@ class ironic::glance (
   $project_name            = 'services',
   $username                = 'ironic',
   $password                = $::os_service_default,
+  $user_domain_name        = $::os_service_default,
+  $project_domain_name     = $::os_service_default,
   $api_servers             = $::os_service_default,
   $num_retries             = $::os_service_default,
   $api_insecure            = $::os_service_default,
@@ -94,6 +104,8 @@ class ironic::glance (
     'glance/password':                value => $password, secret => true;
     'glance/auth_url':                value => $auth_url;
     'glance/project_name':            value => $project_name;
+    'glance/user_domain_name':        value => $user_domain_name;
+    'glance/project_domain_name':     value => $project_domain_name;
     'glance/glance_api_servers':      value => $api_servers_converted;
     'glance/glance_num_retries':      value => $num_retries_real;
     'glance/glance_api_insecure':     value => $api_insecure_real;

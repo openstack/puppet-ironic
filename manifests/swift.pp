@@ -32,19 +32,31 @@
 #   The admin password for ironic to connect to swift.
 #   Defaults to $::os_service_default
 #
+# [*user_domain_name*]
+#   The name of user's domain (required for Identity V3).
+#   Defaults to $::os_service_default
+#
+# [*project_domain_name*]
+#   The name of project's domain (required for Identity V3).
+#   Defaults to $::os_service_default
+#
 class ironic::swift (
-  $auth_type    = 'password',
-  $auth_url     = $::os_service_default,
-  $project_name = 'services',
-  $username     = 'ironic',
-  $password     = $::os_service_default,
+  $auth_type           = 'password',
+  $auth_url            = $::os_service_default,
+  $project_name        = 'services',
+  $username            = 'ironic',
+  $password            = $::os_service_default,
+  $user_domain_name    = $::os_service_default,
+  $project_domain_name = $::os_service_default,
 ) {
 
   ironic_config {
-    'swift/auth_type':    value => $auth_type;
-    'swift/username':     value => $username;
-    'swift/password':     value => $password, secret => true;
-    'swift/auth_url':     value => $auth_url;
-    'swift/project_name': value => $project_name;
+    'swift/auth_type':           value => $auth_type;
+    'swift/username':            value => $username;
+    'swift/password':            value => $password, secret => true;
+    'swift/auth_url':            value => $auth_url;
+    'swift/project_name':        value => $project_name;
+    'swift/user_domain_name':    value => $user_domain_name;
+    'swift/project_domain_name': value => $project_domain_name;
   }
 }

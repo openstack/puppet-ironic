@@ -39,16 +39,20 @@ describe 'ironic::swift' do
       is_expected.to contain_ironic_config('swift/project_name').with_value(p[:project_name])
       is_expected.to contain_ironic_config('swift/username').with_value(p[:username])
       is_expected.to contain_ironic_config('swift/password').with_value('<SERVICE DEFAULT>').with_secret(true)
+      is_expected.to contain_ironic_config('swift/user_domain_name').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('swift/project_domain_name').with_value('<SERVICE DEFAULT>')
     end
 
     context 'when overriding parameters' do
       before :each do
         params.merge!(
-            :auth_type    => 'noauth',
-            :auth_url     => 'http://example.com',
-            :project_name => 'project1',
-            :username     => 'admin',
-            :password     => 'pa$$w0rd',
+            :auth_type           => 'noauth',
+            :auth_url            => 'http://example.com',
+            :project_name        => 'project1',
+            :username            => 'admin',
+            :password            => 'pa$$w0rd',
+            :user_domain_name    => 'NonDefault',
+            :project_domain_name => 'NonDefault',
         )
       end
 
@@ -58,6 +62,8 @@ describe 'ironic::swift' do
         is_expected.to contain_ironic_config('swift/project_name').with_value(p[:project_name])
         is_expected.to contain_ironic_config('swift/username').with_value(p[:username])
         is_expected.to contain_ironic_config('swift/password').with_value(p[:password]).with_secret(true)
+        is_expected.to contain_ironic_config('swift/user_domain_name').with_value(p[:user_domain_name])
+        is_expected.to contain_ironic_config('swift/project_domain_name').with_value(p[:project_domain_name])
       end
     end
 
