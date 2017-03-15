@@ -23,6 +23,8 @@ class ironic::drivers::drac (
   $package_ensure = 'present',
 ) {
 
+  include ::ironic::deps
+
   ensure_packages('python-dracclient',
     {
       ensure => $package_ensure,

@@ -24,7 +24,6 @@
 #   Should be an interger value
 #   Defaults to '10'.
 #
-
 class ironic::drivers::ipmi (
   $retry_timeout = '10'
 ) {
