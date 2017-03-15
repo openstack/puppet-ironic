@@ -38,21 +38,22 @@
 #   (optional) The state of the proliantutils package
 #   Defaults to 'present'
 #
-
 class ironic::drivers::ilo (
-  $client_timeout               = $::os_service_default,
-  $client_port                  = $::os_service_default,
-  $use_web_server_for_images    = $::os_service_default,
-  $default_boot_mode            = $::os_service_default,
-  $package_ensure               = 'present',
+  $client_timeout            = $::os_service_default,
+  $client_port               = $::os_service_default,
+  $use_web_server_for_images = $::os_service_default,
+  $default_boot_mode         = $::os_service_default,
+  $package_ensure            = 'present',
 ) {
+
+  include ::ironic::deps
 
   # Configure ironic.conf
   ironic_config {
-    'ilo/client_timeout': value => $client_timeout;
-    'ilo/client_port': value => $client_port;
+    'ilo/client_timeout':            value => $client_timeout;
+    'ilo/client_port':               value => $client_port;
     'ilo/use_web_server_for_images': value => $use_web_server_for_images;
-    'ilo/default_boot_mode': value => $default_boot_mode;
+    'ilo/default_boot_mode':         value => $default_boot_mode;
   }
 
   ensure_packages('python-proliantutils',

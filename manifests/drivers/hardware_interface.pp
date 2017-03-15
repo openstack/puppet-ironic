@@ -34,6 +34,9 @@ define ironic::drivers::hardware_interface (
   $enabled_list   = $::os_service_default,
   $default        = $::os_service_default,
 ) {
+
+  include ::ironic::deps
+
   if !is_service_default($enabled_list) and !empty($enabled_list){
     validate_array($enabled_list)
     $enabled_list_real = join($enabled_list, ',')

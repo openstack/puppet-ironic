@@ -21,7 +21,6 @@
 #   (optional) libvirt URI.
 #   Defaults to $::os_service_default.
 #
-
 class ironic::drivers::ssh (
   $libvirt_uri = $::os_service_default,
 ) {
