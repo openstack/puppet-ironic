@@ -1,0 +1,8 @@
+---
+features:
+  - |
+    New manifest "ironic::service_catalog" to set parameters for connecting to
+    the service catalog (used to fetch the ironic internal API URL)
+    Please set credentials for ironic to access the service catalog using this
+    manifest, otherwise ironic falls back to using "keystone_authtoken"
+    credentials, which are deprecated for this purpose.
