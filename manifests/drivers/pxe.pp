@@ -77,23 +77,6 @@
 #   Should be an valid integer
 #   Defaults to $::os_service_default.
 #
-# DEPRECATED
-#
-# [*deploy_kernel*]
-#   (optional) Default kernel image ID used in deployment phase.
-#   Should be an valid id
-#   Defaults to undef.
-#
-# [*deploy_ramdisk*]
-#   (optional) Default kernel image ID used in deployment phase.
-#   Should be an valid id
-#   Defaults to undef.
-#
-# [*pxe_deploy_timeout*]
-#   (optional) Timeout for PXE deployments.
-#   Should be an valid integer
-#   Defaults to undef
-
 class ironic::drivers::pxe (
   $ipxe_enabled             = false,
   $pxe_append_params        = $::os_service_default,
@@ -107,10 +90,6 @@ class ironic::drivers::pxe (
   $uefi_pxe_bootfile_name   = $::os_service_default,
   $uefi_pxe_config_template = $::os_service_default,
   $ipxe_timeout             = $::os_service_default,
-  # Deprecated
-  $deploy_kernel            = undef,
-  $deploy_ramdisk           = undef,
-  $pxe_deploy_timeout       = undef,
 ) {
 
   include ::ironic::deps
@@ -140,18 +119,6 @@ class ironic::drivers::pxe (
     'pxe/uefi_pxe_bootfile_name': value   => $uefi_pxe_bootfile_name;
     'pxe/uefi_pxe_config_template': value => $uefi_pxe_config_template;
     'pxe/ipxe_timeout': value             => $ipxe_timeout_real;
-  }
-
-  if $deploy_kernel {
-    warning('deploy_kernel option does nothing and will be removed soon')
-  }
-
-  if $deploy_ramdisk {
-    warning('deploy_ramdisk option does nothing and will be removed soon')
-  }
-
-  if $pxe_deploy_timeout {
-    warning('deploy_ramdisk option does nothing and will be removed soon')
   }
 
 }

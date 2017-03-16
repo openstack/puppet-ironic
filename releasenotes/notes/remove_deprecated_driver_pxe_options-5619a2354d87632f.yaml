@@ -1,0 +1,5 @@
+---
+other:
+  - Removed deprecated option ironic::drivers::pxe::deploy_kernel.
+  - Removed deprecated option ironic::drivers::pxe::deploy_ramdisk.
+  - Removed deprecated option ironic::drivers::pxe::pxe_deploy_timeout.
