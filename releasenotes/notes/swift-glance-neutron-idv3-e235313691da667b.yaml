@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    Add "user_domain_name" and "project_domain_name" to "ironic::glance",
+    "ironic::swift" and "ironic::neutron" manifests. These are required to
+    support Identity v3 authentication.
