@@ -242,16 +242,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*rabbit_user*]
-#   (optional) User to connect to the rabbit server.
-#   Defaults to undef.
-#   Deprecated, use rabbit_userid instead.
-#
-# [*enabled_drivers*]
-#  (optional) Array of drivers to load during service
-#  initialization. Deprecated and moved to conductor.
-#  Defaults to undef
-#
 # [*rabbit_host*]
 #   (optional) IP or hostname of the rabbit server. (string value)
 #   Defaults to $::os_service_default
@@ -341,8 +331,6 @@ class ironic (
   $sync_db                            = true,
   $purge_config                       = false,
   # DEPRECATED PARAMETERS
-  $rabbit_user                        = undef,
-  $enabled_drivers                    = undef,
   $rabbit_host                        = $::os_service_default,
   $rabbit_hosts                       = $::os_service_default,
   $rabbit_password                    = $::os_service_default,
@@ -361,13 +349,6 @@ class ironic (
 
   include ::ironic::glance
   include ::ironic::neutron
-
-  if $rabbit_user {
-    warning('The rabbit_user parameter is deprecated. Please use rabbit_userid instead.')
-    $rabbit_user_real = $rabbit_user
-  } else {
-    $rabbit_user_real = $rabbit_userid
-  }
 
   if !is_service_default($rabbit_host) or
     !is_service_default($rabbit_hosts) or
@@ -419,7 +400,7 @@ ironic::glance::api_insecure and ironic::glance::num_retries accordingly")
   if $rpc_backend in [$::os_service_default, 'ironic.openstack.common.rpc.impl_kombu', 'rabbit'] {
     oslo::messaging::rabbit {'ironic_config':
       rabbit_password             => $rabbit_password,
-      rabbit_userid               => $rabbit_user_real,
+      rabbit_userid               => $rabbit_userid,
       rabbit_virtual_host         => $rabbit_virtual_host,
       rabbit_use_ssl              => $rabbit_use_ssl,
       heartbeat_timeout_threshold => $rabbit_heartbeat_timeout_threshold,

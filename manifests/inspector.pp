@@ -196,12 +196,6 @@
 #
 # DEPRECATED
 #
-# [*enable_uefi*]
-#  (optional) Allow introspection of machines with UEFI firmware.
-#  This parameter is deprecated and will be removed. UEFI will always be
-#  enabled. Ignored unless $pxe_transfer_protocol='http'.
-#  Defaults to false.
-#
 # [*enable_setting_ipmi_credentials*]
 #   (optional) Enable setting of IPMI credentials
 #   Defaults to $::os::service_default
@@ -252,7 +246,6 @@ class ironic::inspector (
   $discovery_default_driver        = $::os_service_default,
   # DEPRECATED
   $dnsmasq_ip_range                = undef,
-  $enable_uefi                     = undef,
   $enable_setting_ipmi_credentials = $::os_service_default,
 ) {
 
@@ -280,12 +273,6 @@ class ironic::inspector (
                                       {'ip_range' => $dnsmasq_ip_range})
   } else {
     $dnsmasq_ip_subnets_real = $dnsmasq_ip_subnets
-  }
-
-  if $enable_uefi == undef {
-    warning('UEFI will be enabled by default starting with Pike')
-  } else {
-    warning('enable_uefi is deprecated and will be hardcoded to true in Pike')
   }
 
   warning("After Newton cycle ::ironic::inspector won't provide \

@@ -175,12 +175,9 @@ class ironic::conductor (
 
   include ::ironic::deps
   include ::ironic::params
-  include ::ironic::drivers::deploy
 
   # For backward compatibility
   include ::ironic::glance
-
-  $enabled_drivers_real = pick($::ironic::enabled_drivers, $enabled_drivers)
 
   if $cleaning_network_uuid {
     warning('cleaning_network_uuid is deprecated, use cleaning_network')
@@ -206,7 +203,7 @@ specified in the same time.")
 moved to ironic::glance manifest")
   }
 
-  validate_array($enabled_drivers_real)
+  validate_array($enabled_drivers)
   validate_array($enabled_hardware_types)
 
   # NOTE(dtantsur): all in-tree drivers are IPA-based, so it won't hurt
@@ -215,7 +212,7 @@ moved to ironic::glance manifest")
 
   # On Ubuntu, ipmitool dependency is missing and ironic-conductor fails to start.
   # https://bugs.launchpad.net/cloud-archive/+bug/1572800
-  if (member($enabled_drivers_real, 'pxe_ipmitool') or
+  if (member($enabled_drivers, 'pxe_ipmitool') or
       member($enabled_hardware_types, 'ipmi')) and $::osfamily == 'Debian' {
     ensure_packages('ipmitool',
       {
@@ -248,19 +245,16 @@ moved to ironic::glance manifest")
     }
   }
 
-  $http_url_real = pick($::ironic::drivers::deploy::http_url, $http_url)
-  $http_root_real = pick($::ironic::drivers::deploy::http_root, $http_root)
-
   # Configure ironic.conf
   ironic_config {
-    'DEFAULT/enabled_drivers':                    value => join($enabled_drivers_real, ',');
+    'DEFAULT/enabled_drivers':                    value => join($enabled_drivers, ',');
     'DEFAULT/enabled_hardware_types':             value => join($enabled_hardware_types, ',');
     'conductor/max_time_interval':                value => $max_time_interval;
     'conductor/force_power_state_during_sync':    value => $force_power_state_during_sync;
     'conductor/automated_clean':                  value => $automated_clean;
     'conductor/api_url':                          value => $api_url;
-    'deploy/http_url':                            value => $http_url_real;
-    'deploy/http_root':                           value => $http_root_real;
+    'deploy/http_url':                            value => $http_url;
+    'deploy/http_root':                           value => $http_root;
     'deploy/erase_devices_priority':              value => $erase_devices_priority;
     'deploy/erase_devices_metadata_priority':     value => $erase_devices_metadata_priority;
     'deploy/continue_if_disk_secure_erase_fails': value => $continue_if_disk_secure_erase_fails;

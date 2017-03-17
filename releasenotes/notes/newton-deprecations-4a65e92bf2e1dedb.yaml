@@ -1,0 +1,16 @@
+---
+upgrade:
+  - |
+    Manifest ``ironic::drivers::deploy`` deprecated in Newton was removed.
+  - |
+    Deprecated parameter ``ironic::inspector::enable_uefi`` was removed.
+    UEFI support is now always enabled, when iPXE is used.
+  - |
+    Deprecated parameter ``signing_dir`` was removed from
+    ``ironic::api::authtoken`` and ``ironic::inspector::authtoken``.
+  - |
+    Manifest ``ironic::db::inspector_sync`` deprecated in Newton was removed.
+    Use ``ironic::inspector::db::sync`` instead.
+  - |
+    Deprecated parameters ``rabbit_user`` and ``enabled_drivers`` were
+    removed from ``ironic`` manifest.
