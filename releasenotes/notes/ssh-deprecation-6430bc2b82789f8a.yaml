@@ -1,0 +1,10 @@
+---
+deprecations:
+  - |
+    The ``*_ssh`` family of drivers was deprecated in Ironic in the Newton
+    release and will be completely removed in Pike. The
+    ``ironic::drivers::ssh`` manifest is also deprecated now, will become
+    noop in Pike, and will be removed in Queens.
+
+    Please switch to ``*_ipmitool`` family of drivers with ``virtualbmc``
+    for virtual testing.

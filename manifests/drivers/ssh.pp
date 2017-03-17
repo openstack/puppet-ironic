@@ -27,6 +27,11 @@ class ironic::drivers::ssh (
 
   include ::ironic::deps
 
+  warning("The *_ssh family of drivers was deprecated in Ironic in the Newton \
+release, and will be removed in Pike. The ironic::drivers::ssh module will \
+become noop then, and will be removed in Queens. Please switch to using \
+*_ipmitool family of drivers with virtualbmc for virtual testing.")
+
   # Configure ironic.conf
   ironic_config {
     'ssh/libvirt_uri': value => $libvirt_uri;
