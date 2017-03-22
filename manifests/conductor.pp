@@ -126,29 +126,29 @@
 #   Defaults to $::os_service_default
 #
 class ironic::conductor (
-  $package_ensure                       = 'present',
-  $enabled                              = true,
-  $enabled_drivers                      = ['pxe_ipmitool'],
-  $enabled_hardware_types               = ['ipmi'],
-  $max_time_interval                    = '120',
-  $force_power_state_during_sync        = true,
-  $http_url                             = $::os_service_default,
-  $http_root                            = $::os_service_default,
-  $automated_clean                      = $::os_service_default,
-  $cleaning_network                     = $::os_service_default,
-  $cleaning_disk_erase                  = undef,
-  $continue_if_disk_secure_erase_fails  = $::os_service_default,
-  $api_url                              = $::os_service_default,
-  $provisioning_network                 = $::os_service_default,
-  $configdrive_use_swift                = $::os_service_default,
-  $configdrive_swift_container          = $::os_service_default,
-  $default_boot_option                  = $::os_service_default,
+  $package_ensure                      = 'present',
+  $enabled                             = true,
+  $enabled_drivers                     = ['pxe_ipmitool'],
+  $enabled_hardware_types              = ['ipmi'],
+  $max_time_interval                   = '120',
+  $force_power_state_during_sync       = true,
+  $http_url                            = $::os_service_default,
+  $http_root                           = $::os_service_default,
+  $automated_clean                     = $::os_service_default,
+  $cleaning_network                    = $::os_service_default,
+  $cleaning_disk_erase                 = undef,
+  $continue_if_disk_secure_erase_fails = $::os_service_default,
+  $api_url                             = $::os_service_default,
+  $provisioning_network                = $::os_service_default,
+  $configdrive_use_swift               = $::os_service_default,
+  $configdrive_swift_container         = $::os_service_default,
+  $default_boot_option                 = $::os_service_default,
   # DEPRECATED
-  $cleaning_network_uuid                = undef,
-  $provisioning_network_uuid            = undef,
-  $swift_account                        = undef,
-  $swift_temp_url_key                   = undef,
-  $swift_temp_url_duration              = undef,
+  $cleaning_network_uuid               = undef,
+  $provisioning_network_uuid           = undef,
+  $swift_account                       = undef,
+  $swift_temp_url_key                  = undef,
+  $swift_temp_url_duration             = undef,
 ) {
 
   include ::ironic::deps
@@ -199,19 +199,19 @@ moved to ironic::glance manifest")
 
   case $cleaning_disk_erase {
     'full': {
-      $erase_devices_priority = 10
+      $erase_devices_priority          = 10
       $erase_devices_metadata_priority = 0
     }
     'metadata': {
-      $erase_devices_priority = 0
+      $erase_devices_priority          = 0
       $erase_devices_metadata_priority = 10
     }
     'none': {
-      $erase_devices_priority = 0
+      $erase_devices_priority          = 0
       $erase_devices_metadata_priority = 0
     }
     default: {
-      $erase_devices_priority = $::os_service_default
+      $erase_devices_priority          = $::os_service_default
       $erase_devices_metadata_priority = $::os_service_default
     }
   }
@@ -221,22 +221,22 @@ moved to ironic::glance manifest")
 
   # Configure ironic.conf
   ironic_config {
-    'DEFAULT/enabled_drivers': value => join($enabled_drivers_real, ',');
-    'DEFAULT/enabled_hardware_types': value => join($enabled_hardware_types, ',');
-    'conductor/max_time_interval': value => $max_time_interval;
-    'conductor/force_power_state_during_sync': value => $force_power_state_during_sync;
-    'conductor/automated_clean': value => $automated_clean;
-    'conductor/api_url': value => $api_url;
-    'neutron/cleaning_network': value => $cleaning_network_real;
-    'neutron/provisioning_network': value => $provisioning_network_real;
-    'deploy/http_url':  value => $http_url_real;
-    'deploy/http_root': value => $http_root_real;
-    'deploy/erase_devices_priority': value => $erase_devices_priority;
-    'deploy/erase_devices_metadata_priority': value => $erase_devices_metadata_priority;
+    'DEFAULT/enabled_drivers':                    value => join($enabled_drivers_real, ',');
+    'DEFAULT/enabled_hardware_types':             value => join($enabled_hardware_types, ',');
+    'conductor/max_time_interval':                value => $max_time_interval;
+    'conductor/force_power_state_during_sync':    value => $force_power_state_during_sync;
+    'conductor/automated_clean':                  value => $automated_clean;
+    'conductor/api_url':                          value => $api_url;
+    'neutron/cleaning_network':                   value => $cleaning_network_real;
+    'neutron/provisioning_network':               value => $provisioning_network_real;
+    'deploy/http_url':                            value => $http_url_real;
+    'deploy/http_root':                           value => $http_root_real;
+    'deploy/erase_devices_priority':              value => $erase_devices_priority;
+    'deploy/erase_devices_metadata_priority':     value => $erase_devices_metadata_priority;
     'deploy/continue_if_disk_secure_erase_fails': value => $continue_if_disk_secure_erase_fails;
-    'conductor/configdrive_use_swift': value => $configdrive_use_swift;
-    'conductor/configdrive_swift_container': value => $configdrive_swift_container;
-    'deploy/default_boot_option': value => $default_boot_option;
+    'conductor/configdrive_use_swift':            value => $configdrive_use_swift;
+    'conductor/configdrive_swift_container':      value => $configdrive_swift_container;
+    'deploy/default_boot_option':                 value => $default_boot_option;
   }
 
   # Install package

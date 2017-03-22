@@ -18,9 +18,9 @@ require 'spec_helper'
 describe 'ironic::glance' do
 
   let :default_params do
-    { :auth_type        => 'password',
-      :project_name     => 'services',
-      :username         => 'ironic',
+    { :auth_type    => 'password',
+      :project_name => 'services',
+      :username     => 'ironic',
     }
   end
 
