@@ -409,6 +409,7 @@ tftpboot and httpboot setup, please include ::ironic::pxe")
     enable    => $enabled,
     hasstatus => true,
     tag       => 'ironic-inspector-dnsmasq-service',
+    subscribe => File['/etc/ironic-inspector/dnsmasq.conf'],
   }
 
 }
