@@ -373,6 +373,7 @@ class ironic::inspector (
     enable    => $enabled,
     hasstatus => true,
     tag       => 'ironic-inspector-dnsmasq-service',
+    subscribe => File['/etc/ironic-inspector/dnsmasq.conf'],
   }
 
 }
