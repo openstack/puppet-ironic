@@ -1,0 +1,7 @@
+---
+features:
+  - Add the ability to specify a name string for the provisioning_network in
+    ironic_config using the transform_to argument.
+    Add ``cleaning_network_name`` and ``provisioning_network_name`` options to
+    ::ironic::conductor class. Theirs names will be automatically converted to
+    UUIDs and appropriate config options will be set.
