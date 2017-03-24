@@ -1,0 +1,7 @@
+---
+features:
+  - Add the ability to convert swift project name to UUID and
+    set glance/swift_account configuration option. By adding
+    transform_to => 'project_uuid' parameter to ironic_conifg
+    option. Or setting ``swift_account_project_name`` parameter
+    in ::ironic::glance class.
