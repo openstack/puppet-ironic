@@ -61,6 +61,7 @@
 # [*cleaning_network*]
 #   (optional) UUID or name of the network to create Neutron ports on, when
 #   booting to a ramdisk for cleaning using Neutron DHCP.
+#   Can not be specified together with cleaning_network_name.
 #   Defaults to $::os_service_default
 #
 # [*cleaning_disk_erase*]
@@ -83,6 +84,7 @@
 # [*provisioning_network*]
 #   (optional) Neutron network UUID or name for the ramdisk to be booted into
 #   for provisioning nodes. Required for neutron network interface.
+#   Can not be specified together with provisioning_network_name.
 #   Defaults to $::os_service_default
 #
 # [*configdrive_use_swift*]
@@ -99,6 +101,18 @@
 #   (optional) Default boot option to use when no boot option is explicitly
 #   requested. One of "netboot" or "local".
 #   Defaults to $::os_service_default
+#
+# [*cleaning_network_name*]
+#   (optional) If provided the name will be converted to UUID and set
+#   as value of neutron/cleaning_network option in ironic.conf
+#   Can not be specified together with cleaning_network.
+#   Defaults to undef, which leaves the configuration intact
+#
+# [*provisioning_network_name*]
+#   (optional) If provided the name will be converted to UUID and set
+#   as value of neutron/provisioning_network option in ironic.conf
+#   Can not be specified together with provisioning_network.
+#   Defaults to undef, which leaves the configuration intact
 #
 # DEPRECATED
 #
@@ -143,6 +157,8 @@ class ironic::conductor (
   $configdrive_use_swift               = $::os_service_default,
   $configdrive_swift_container         = $::os_service_default,
   $default_boot_option                 = $::os_service_default,
+  $cleaning_network_name               = undef,
+  $provisioning_network_name           = undef,
   # DEPRECATED
   $cleaning_network_uuid               = undef,
   $provisioning_network_uuid           = undef,
@@ -168,6 +184,16 @@ class ironic::conductor (
   }
   $cleaning_network_real = pick($cleaning_network_uuid, $cleaning_network)
   $provisioning_network_real = pick($provisioning_network_uuid, $provisioning_network)
+
+  if ($cleaning_network_name and !is_service_default($cleaning_network_real)) {
+    fail("cleaning_network_name and cleaning_network or cleaning_network_uuid can not be \
+specified in the same time.")
+  }
+
+  if ($provisioning_network_name and !is_service_default($provisioning_network_real)) {
+    fail("provisioning_network_name and provisioning_network or provisioning_network_uuid can not be \
+specified in the same time.")
+  }
 
   if $swift_account or $swift_temp_url_key or $swift_temp_url_duration {
     warning("swift_account, swift_temp_url_key and swift_temp_url_duration were \
@@ -227,8 +253,6 @@ moved to ironic::glance manifest")
     'conductor/force_power_state_during_sync':    value => $force_power_state_during_sync;
     'conductor/automated_clean':                  value => $automated_clean;
     'conductor/api_url':                          value => $api_url;
-    'neutron/cleaning_network':                   value => $cleaning_network_real;
-    'neutron/provisioning_network':               value => $provisioning_network_real;
     'deploy/http_url':                            value => $http_url_real;
     'deploy/http_root':                           value => $http_root_real;
     'deploy/erase_devices_priority':              value => $erase_devices_priority;
@@ -237,6 +261,26 @@ moved to ironic::glance manifest")
     'conductor/configdrive_use_swift':            value => $configdrive_use_swift;
     'conductor/configdrive_swift_container':      value => $configdrive_swift_container;
     'deploy/default_boot_option':                 value => $default_boot_option;
+  }
+
+  if $cleaning_network_name {
+    ironic_config {
+      'neutron/cleaning_network': value => $cleaning_network_name, transform_to => 'net_uuid';
+    }
+  } else {
+    ironic_config {
+      'neutron/cleaning_network': value => $cleaning_network_real;
+    }
+  }
+
+  if $provisioning_network_name {
+    ironic_config {
+      'neutron/provisioning_network': value => $provisioning_network_name, transform_to => 'net_uuid';
+    }
+  } else {
+    ironic_config {
+      'neutron/provisioning_network': value => $provisioning_network_real;
+    }
   }
 
   # Install package
