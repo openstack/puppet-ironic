@@ -119,6 +119,20 @@ describe 'ironic::conductor' do
       end
     end
 
+    context 'when overriding parameters' do
+      before :each do
+        params.merge!(
+          :provisioning_network_name => 'abc',
+          :cleaning_network_name => 'abc',
+        )
+      end
+      it 'should set provisioning/cleaning with new value' do
+          is_expected.to contain_ironic_config('neutron/cleaning_network_uuid').with_value('abc').with_transform_to('net_uuid')
+          is_expected.to contain_ironic_config('neutron/provisioning_network_uuid').with_value('abc').with_transform_to('net_uuid')
+      end
+    end
+
+
   end
 
   context 'on Debian platforms' do

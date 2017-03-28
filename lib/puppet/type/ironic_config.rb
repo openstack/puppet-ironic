@@ -46,6 +46,8 @@ Puppet::Type.newtype(:ironic_config) do
     defaultto('<SERVICE DEFAULT>')
   end
 
+  newparam(:transform_to)
+
   autorequire(:package) do
     'ironic-common'
   end
