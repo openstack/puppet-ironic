@@ -1,0 +1,5 @@
+---
+features:
+    - Add port_setup_delay parameter to ::ironic::conductor
+      class. Defines delay value to wait for Neutron agents
+      to setup sufficient DHCP configuration.
