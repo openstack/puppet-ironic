@@ -55,8 +55,16 @@
 #
 # [*swift_account*]
 #   (optional) The account that Glance uses to communicate with Swift.
-#   The format is "AUTH_uuid"
+#   The format is "AUTH_uuid".
+#   Can not be set together with swift_account_project_name.
 #   Defaults to $::os_service_default
+#
+# [*swift_account_project_name*]
+#   (optional) The project of account that Glance uses to communicate with Swift.
+#   Will be converted to UUID, and option glance/swift_account will be set in
+#   the "AUTH_uuid" format.
+#   Can not be set together with swift_account.
+#   Defaults to undef, which leaves the configuration intact
 #
 # [*swift_temp_url_key*]
 #   (optional) The secret token given to Swift to allow temporary URL
@@ -69,19 +77,20 @@
 #   Defaults to $::os_service_default
 #
 class ironic::glance (
-  $auth_type               = 'password',
-  $auth_url                = $::os_service_default,
-  $project_name            = 'services',
-  $username                = 'ironic',
-  $password                = $::os_service_default,
-  $user_domain_name        = $::os_service_default,
-  $project_domain_name     = $::os_service_default,
-  $api_servers             = $::os_service_default,
-  $num_retries             = $::os_service_default,
-  $api_insecure            = $::os_service_default,
-  $swift_account           = $::os_service_default,
-  $swift_temp_url_key      = $::os_service_default,
-  $swift_temp_url_duration = $::os_service_default,
+  $auth_type                  = 'password',
+  $auth_url                   = $::os_service_default,
+  $project_name               = 'services',
+  $username                   = 'ironic',
+  $password                   = $::os_service_default,
+  $user_domain_name           = $::os_service_default,
+  $project_domain_name        = $::os_service_default,
+  $api_servers                = $::os_service_default,
+  $num_retries                = $::os_service_default,
+  $api_insecure               = $::os_service_default,
+  $swift_account              = $::os_service_default,
+  $swift_temp_url_key         = $::os_service_default,
+  $swift_temp_url_duration    = $::os_service_default,
+  $swift_account_project_name = undef,
 ) {
 
   $api_servers_real = pick($::ironic::glance_api_servers, $api_servers)
@@ -98,6 +107,11 @@ class ironic::glance (
   $swift_temp_url_key_real = pick($::ironic::conductor::swift_temp_url_key, $swift_temp_url_key)
   $swift_temp_url_duration_real = pick($::ironic::conductor::swift_temp_url_duration, $swift_temp_url_duration)
 
+
+  if ($swift_account_project_name and !is_service_default($swift_account_real)) {
+    fail('swift_account_project_name and swift_account can not be specified in the same time.')
+  }
+
   ironic_config {
     'glance/auth_type':               value => $auth_type;
     'glance/username':                value => $username;
@@ -109,8 +123,17 @@ class ironic::glance (
     'glance/glance_api_servers':      value => $api_servers_converted;
     'glance/glance_num_retries':      value => $num_retries_real;
     'glance/glance_api_insecure':     value => $api_insecure_real;
-    'glance/swift_account':           value => $swift_account_real;
     'glance/swift_temp_url_key':      value => $swift_temp_url_key_real, secret => true;
     'glance/swift_temp_url_duration': value => $swift_temp_url_duration_real;
+  }
+
+  if $swift_account_project_name {
+    ironic_config {
+      'glance/swift_account':           value => $swift_account_project_name, transform_to => 'project_uuid';
+    }
+  } else {
+    ironic_config {
+      'glance/swift_account':           value => $swift_account_real;
+    }
   }
 }

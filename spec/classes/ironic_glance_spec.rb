@@ -115,6 +115,17 @@ describe 'ironic::glance' do
       end
     end
 
+    context 'when overriding parameters swift_account_project_name' do
+      before :each do
+        params.merge!(
+          :swift_account_project_name => 'abc',
+        )
+      end
+      it 'should set swift_account with new value' do
+        is_expected.to contain_ironic_config('glance/swift_account').with_value('abc').with_transform_to('project_uuid')
+      end
+    end
+
   end
 
   on_supported_os({
