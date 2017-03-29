@@ -77,6 +77,7 @@ describe 'ironic::conductor' do
       is_expected.to contain_ironic_config('conductor/configdrive_use_swift').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/configdrive_swift_container').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('deploy/default_boot_option').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('neutron/port_setup_delay').with(:value => '<SERVICE DEFAULT>')
     end
 
     context 'when overriding parameters' do
@@ -96,6 +97,7 @@ describe 'ironic::conductor' do
           :configdrive_use_swift         => true,
           :configdrive_swift_container   => 'cont',
           :default_boot_option           => 'local',
+          :port_setup_delay              => '15'
         )
       end
       it 'should replace default parameter with new value' do
@@ -114,6 +116,7 @@ describe 'ironic::conductor' do
         is_expected.to contain_ironic_config('conductor/configdrive_use_swift').with_value(p[:configdrive_use_swift])
         is_expected.to contain_ironic_config('conductor/configdrive_swift_container').with_value(p[:configdrive_swift_container])
         is_expected.to contain_ironic_config('deploy/default_boot_option').with_value(p[:default_boot_option])
+        is_expected.to contain_ironic_config('neutron/port_setup_delay').with_value(p[:port_setup_delay])
       end
     end
 

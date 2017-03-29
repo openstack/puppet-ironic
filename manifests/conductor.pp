@@ -114,6 +114,11 @@
 #   Can not be specified together with provisioning_network.
 #   Defaults to undef, which leaves the configuration intact
 #
+# [*port_setup_delay*]
+#   (optional) Delay value to wait for Neutron agents to setup
+#   sufficient DHCP configuration for port.
+#   Defaults to $::os_service_default
+#
 # DEPRECATED
 #
 # [*cleaning_network_uuid*]
@@ -157,6 +162,7 @@ class ironic::conductor (
   $configdrive_use_swift               = $::os_service_default,
   $configdrive_swift_container         = $::os_service_default,
   $default_boot_option                 = $::os_service_default,
+  $port_setup_delay                    = $::os_service_default,
   $cleaning_network_name               = undef,
   $provisioning_network_name           = undef,
   # DEPRECATED
@@ -261,6 +267,7 @@ moved to ironic::glance manifest")
     'conductor/configdrive_use_swift':            value => $configdrive_use_swift;
     'conductor/configdrive_swift_container':      value => $configdrive_swift_container;
     'deploy/default_boot_option':                 value => $default_boot_option;
+    'neutron/port_setup_delay':                   value => $port_setup_delay;
   }
 
   if $cleaning_network_name {
