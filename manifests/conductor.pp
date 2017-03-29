@@ -120,6 +120,11 @@
 #   Can not be specified together with provisioning_network_uuid.
 #   Defaults to undef, which leaves the configuration intact
 #
+# [*port_setup_delay*]
+#   (optional) Delay value to wait for Neutron agents to setup
+#   sufficient DHCP configuration for port.
+#   Defaults to $::os_service_default
+#
 class ironic::conductor (
   $package_ensure                       = 'present',
   $enabled                              = true,
@@ -139,6 +144,7 @@ class ironic::conductor (
   $provisioning_network_uuid            = $::os_service_default,
   $configdrive_use_swift                = $::os_service_default,
   $configdrive_swift_container          = $::os_service_default,
+  $port_setup_delay                     = $::os_service_default,
   $cleaning_network_name                = undef,
   $provisioning_network_name            = undef,
 ) {
@@ -219,6 +225,7 @@ specified in the same time.")
     'deploy/continue_if_disk_secure_erase_fails': value => $continue_if_disk_secure_erase_fails;
     'conductor/configdrive_use_swift': value => $configdrive_use_swift;
     'conductor/configdrive_swift_container': value => $configdrive_swift_container;
+    'neutron/port_setup_delay': value => $port_setup_delay;
   }
 
   if $cleaning_network_name {
