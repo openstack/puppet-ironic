@@ -73,6 +73,7 @@ describe 'basic ironic' do
           class { '::ironic::inspector::authtoken':
             password => 'a_big_secret',
           }
+          class { '::ironic::pxe': }
           class { '::ironic::inspector':
             ironic_password => 'a_big_secret',
             ironic_auth_url => "https://${::fqdn}:5000/v2.0",

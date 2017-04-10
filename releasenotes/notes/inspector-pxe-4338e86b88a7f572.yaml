@@ -1,0 +1,9 @@
+---
+upgrade:
+  - |
+    Manifest ``ironic::pxe`` is no longer included from ``ironic::inspector``.
+    This was deprecated in the Newton release. Please include it explicitly.
+issues:
+  - |
+    ironic::pxe may not work under Ubuntu when using tftp due to packagaing
+    issues. Currently this is only tested under Red Hat based systems.
