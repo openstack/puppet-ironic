@@ -8,7 +8,7 @@ describe 'ironic::db::sync' do
       is_expected.to contain_exec('ironic-dbsync').with(
         :command     => 'ironic-dbsync --config-file /etc/ironic/ironic.conf ',
         :path        => '/usr/bin',
-        :user        => 'root',
+        :user        => 'ironic',
         :refreshonly => 'true',
         :try_sleep   => 5,
         :tries       => 10,
@@ -29,7 +29,7 @@ describe 'ironic::db::sync' do
         it { is_expected.to contain_exec('ironic-dbsync').with(
             :command     => 'ironic-dbsync --config-file /etc/ironic/ironic.conf --config-file /etc/ironic/ironic_01.conf',
             :path        => '/usr/bin',
-            :user        => 'root',
+            :user        => 'ironic',
             :refreshonly => true,
             :try_sleep   => 5,
             :tries       => 10,
