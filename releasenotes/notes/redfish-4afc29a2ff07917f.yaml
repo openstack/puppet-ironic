@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Support configuring the Redfish driver via new ``ironic::drivers::redfish``
+    manifest.
