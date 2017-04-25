@@ -27,6 +27,7 @@ class ironic::params {
   $inspector_dbsync_command =
     'ironic-inspector-dbsync --config-file /etc/ironic-inspector/inspector.conf upgrade'
   $client_package           = 'python-ironicclient'
+  $inspector_client_package = 'python-ironic-inspector-client'
   $lib_package_name         = 'python-ironic-lib'
 
   case $::osfamily {
