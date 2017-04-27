@@ -1,0 +1,5 @@
+---
+features:
+  - add kernel_filename and ramdisk_filename parameters in inspector_pxelinux_cfg
+    and inspector_ipxelinux_cfg erb tempaltes to make kernel and ramdisk filename
+    configurable in tftp ipxelinux_cfg and pxelinux_cfg files.

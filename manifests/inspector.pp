@@ -164,6 +164,14 @@
 #   String with kernel arguments to send to the ramdisk on boot.
 #   Defaults to undef
 #
+# [*ramdisk_filename*]
+#   The filename of ramdisk which is used in pxelinux_cfg/ipxelinux_cfg templates
+#   Defaults to 'agent.ramdisk'
+#
+# [*kernel_filename*]
+#   The filename of kernel which is used in pxelinux_cfg/ipxelinux_cfg templates
+#   Defaults to 'agent.kernel'
+#
 # [*ipxe_timeout*]
 #   (optional) ipxe timeout in second. Should be an integer.
 #   Defaults to $::os_service_default
@@ -235,6 +243,8 @@ class ironic::inspector (
   $dnsmasq_local_ip                = '192.168.0.1',
   $sync_db                         = true,
   $ramdisk_collectors              = 'default',
+  $ramdisk_filename                = 'agent.ramdisk',
+  $kernel_filename                 = 'agent.kernel',
   $additional_processing_hooks     = undef,
   $ramdisk_kernel_args             = undef,
   $ipxe_timeout                    = $::os_service_default,
@@ -280,10 +290,10 @@ tftpboot and httpboot setup, please include ::ironic::pxe")
 
   include ::ironic::pxe
 
-  $tftp_root_real = pick($::ironic::pxe::common::tftp_root, $tftp_root)
-  $http_root_real = pick($::ironic::pxe::common::http_root, $http_root)
-  $http_port_real = pick($::ironic::pxe::common::http_port, $http_port)
-  $ipxe_timeout_real     = pick($::ironic::pxe::common::ipxe_timeout, $ipxe_timeout)
+  $tftp_root_real    = pick($::ironic::pxe::common::tftp_root, $tftp_root)
+  $http_root_real    = pick($::ironic::pxe::common::http_root, $http_root)
+  $http_port_real    = pick($::ironic::pxe::common::http_port, $http_port)
+  $ipxe_timeout_real = pick($::ironic::pxe::common::ipxe_timeout, $ipxe_timeout)
 
   file { '/etc/ironic-inspector/inspector.conf':
     ensure  => 'present',
