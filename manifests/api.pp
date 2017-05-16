@@ -43,9 +43,6 @@
 #   Should be an valid interger
 #   Defaults to '1000'.
 #
-# [*admin_password*]
-#   (required) The password to set for the ironic admin user in keystone
-#
 # [*workers*]
 #   (Optional) The number of workers to spawn.
 #   Defaults to $::os_service_default.
