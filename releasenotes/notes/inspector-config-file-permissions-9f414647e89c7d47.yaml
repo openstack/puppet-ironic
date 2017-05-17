@@ -1,0 +1,4 @@
+---
+fixes:
+  - Permissions of inspector.conf are now changed to ironic-inspector user
+    and group from previous root:root.
