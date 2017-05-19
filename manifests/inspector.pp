@@ -297,6 +297,8 @@ tftpboot and httpboot setup, please include ::ironic::pxe")
 
   file { '/etc/ironic-inspector/inspector.conf':
     ensure  => 'present',
+    owner   => 'ironic-inspector',
+    group   => 'ironic-inspector',
     require => Anchor['ironic-inspector::config::begin'],
   }
 

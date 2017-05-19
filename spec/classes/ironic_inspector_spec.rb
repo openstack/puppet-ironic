@@ -128,6 +128,8 @@ describe 'ironic::inspector' do
     it 'should contain file /etc/ironic-inspector/inspector.conf' do
       is_expected.to contain_file('/etc/ironic-inspector/inspector.conf').with(
         'ensure'  => 'present',
+        'owner'   => 'ironic-inspector',
+        'group'   => 'ironic-inspector',
         'require' => 'Anchor[ironic-inspector::config::begin]',
       )
     end
