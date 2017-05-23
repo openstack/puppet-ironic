@@ -20,7 +20,9 @@ describe 'ironic::policy' do
         :key   => 'context_is_admin',
         :value => 'foo:bar'
       })
-      is_expected.to contain_ironic_config('oslo_policy/policy_file').with_value('/etc/ironic/policy.json')
+      is_expected.to contain_oslo__policy('ironic_config').with(
+        :policy_file => '/etc/ironic/policy.json',
+      )
     end
   end
 
