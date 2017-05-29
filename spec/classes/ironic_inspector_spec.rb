@@ -32,6 +32,7 @@ describe 'ironic::inspector' do
       :auth_strategy         => 'keystone',
       :dnsmasq_interface     => 'br-ctlplane',
       :ramdisk_logs_dir      => '/var/log/ironic-inspector/ramdisk/',
+      :add_ports             => 'pxe',
       :keep_ports            => 'all',
       :store_data            => 'none',
       :ironic_auth_type      => 'password',
@@ -104,6 +105,7 @@ describe 'ironic::inspector' do
       is_expected.to contain_ironic_inspector_config('firewall/dnsmasq_interface').with_value(p[:dnsmasq_interface])
       is_expected.to contain_ironic_inspector_config('processing/ramdisk_logs_dir').with_value(p[:ramdisk_logs_dir])
       is_expected.to contain_ironic_inspector_config('processing/enable_setting_ipmi_credentials').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_inspector_config('processing/add_ports').with_value(p[:add_ports])
       is_expected.to contain_ironic_inspector_config('processing/keep_ports').with_value(p[:keep_ports])
       is_expected.to contain_ironic_inspector_config('processing/store_data').with_value(p[:store_data])
       is_expected.to contain_ironic_inspector_config('ironic/auth_type').with_value(p[:ironic_auth_type])
@@ -193,6 +195,7 @@ describe 'ironic::inspector' do
           :discovery_default_driver    => 'pxe_ipmitool',
           :dnsmasq_ip_subnets          => [],
           :dnsmasq_ip_range            => '192.168.0.100,192.168.0.120',
+          :add_ports                   => 'all',
         )
       end
       it 'should replace default parameter with new value' do
@@ -209,6 +212,7 @@ describe 'ironic::inspector' do
         is_expected.to contain_ironic_inspector_config('swift/auth_url').with_value(p[:swift_auth_url])
         is_expected.to contain_ironic_inspector_config('processing/processing_hooks').with_value('$default_processing_hooks,hook1,hook2')
         is_expected.to contain_ironic_inspector_config('processing/node_not_found_hook').with_value('enroll')
+        is_expected.to contain_ironic_inspector_config('processing/add_ports').with_value('all')
         is_expected.to contain_ironic_inspector_config('discovery/enroll_node_driver').with_value('pxe_ipmitool')
       end
 

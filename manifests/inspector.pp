@@ -55,6 +55,11 @@
 #   (optional) Location to store logs retrieved from the ramdisk
 #   Defaults to '/var/log/ironic-inspector/ramdisk/'
 #
+# [*add_ports*]
+#   (optional)  Which MAC addresses to add as ports during introspection.
+#   Allowed values: all, active, pxe.
+#   Defaults to $::os_service_default
+#
 # [*keep_ports*]
 #   (optional) Which ports to keep after introspection
 #   Defaults to 'all'
@@ -211,6 +216,7 @@
 # [*dnsmasq_ip_range*]
 #   (optional) IP range to use for nodes being introspected
 #   Defaults to undef
+#
 class ironic::inspector (
   $package_ensure                  = 'present',
   $enabled                         = true,
@@ -221,6 +227,7 @@ class ironic::inspector (
   $dnsmasq_interface               = 'br-ctlplane',
   $db_connection                   = undef,
   $ramdisk_logs_dir                = '/var/log/ironic-inspector/ramdisk/',
+  $add_ports                       = $::os_service_default,
   $keep_ports                      = 'all',
   $store_data                      = 'none',
   $ironic_auth_type                = 'password',
@@ -348,6 +355,7 @@ tftpboot and httpboot setup, please include ::ironic::pxe")
     'firewall/dnsmasq_interface':                 value => $dnsmasq_interface;
     'processing/ramdisk_logs_dir':                value => $ramdisk_logs_dir;
     'processing/enable_setting_ipmi_credentials': value => $enable_setting_ipmi_credentials;
+    'processing/add_ports':                       value => $add_ports;
     'processing/keep_ports':                      value => $keep_ports;
     'processing/store_data':                      value => $store_data;
     'ironic/auth_type':                           value => $ironic_auth_type;
