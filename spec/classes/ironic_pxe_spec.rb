@@ -33,7 +33,7 @@ describe 'ironic::pxe' do
       is_expected.to contain_file('/tftpboot/pxelinux.cfg').with(
         'owner'   => 'ironic',
         'group'   => 'ironic',
-        'require' => 'Package[ironic-common]',
+        'require' => 'Anchor[ironic::install::end]',
         'ensure'  => 'directory',
         'seltype' => 'tftpdir_t',
       )
@@ -103,7 +103,7 @@ describe 'ironic::pxe' do
         is_expected.to contain_file('/var/lib/tftpboot/undionly.kpxe').with(
           'owner'   => 'ironic',
           'group'   => 'ironic',
-          'require' => 'Package[ipxe]',
+          'require' => 'Anchor[ironic-inspector::install::end]',
           'seltype' => 'tftpdir_t',
           'ensure'  => 'present',
           'backup'  => false,
@@ -113,7 +113,7 @@ describe 'ironic::pxe' do
         is_expected.to contain_file('/var/lib/tftpboot/ipxe.efi').with(
           'owner'   => 'ironic',
           'group'   => 'ironic',
-          'require' => 'Package[ipxe]',
+          'require' => 'Anchor[ironic-inspector::install::end]',
           'seltype' => 'tftpdir_t',
           'ensure'  => 'present',
           'backup'  => false,

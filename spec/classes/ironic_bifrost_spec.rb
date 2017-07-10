@@ -75,7 +75,6 @@ describe 'ironic::bifrost' do
   it 'should contain file /etc/bifrost/bifrost_global_vars' do
     is_expected.to contain_file('/etc/bifrost/bifrost_global_vars').with(
       'ensure'  => 'present',
-      'require' => 'File[/etc/bifrost]',
       'content' => /ironic_url/,
     )
   end
@@ -83,7 +82,6 @@ describe 'ironic::bifrost' do
   it 'should contain file /etc/bifrost/baremetal.json' do
     is_expected.to contain_file('/etc/bifrost/baremetal.json').with(
       'ensure'  => 'present',
-      'require' => 'File[/etc/bifrost]',
       'content' => /test/,
     )
   end

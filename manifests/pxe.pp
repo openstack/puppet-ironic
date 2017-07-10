@@ -77,7 +77,7 @@ class ironic::pxe (
     seltype => 'tftpdir_t',
     owner   => 'ironic',
     group   => 'ironic',
-    require => Package['ironic-common'],
+    require => Anchor['ironic::install::end'],
   }
 
   file { $http_root_real:
@@ -118,13 +118,13 @@ class ironic::pxe (
   ensure_resource( 'package', 'syslinux', {
     ensure => $package_ensure,
     name   => $::ironic::params::syslinux_package,
-    tag    => ['openstack', 'ironic-ipxe'],
+    tag    => ['openstack', 'ironic-ipxe', 'ironic-support-package'],
   })
 
   ironic::pxe::tftpboot_file { $syslinux_files:
     source_directory      => $syslinux_path,
     destination_directory => $tftp_root_real,
-    require               => Package['syslinux'],
+    require               => Anchor['ironic-inspector::install::end'],
   }
 
   ensure_resource( 'package', 'ipxe', {
@@ -141,7 +141,7 @@ class ironic::pxe (
     mode    => '0744',
     source  => "${::ironic::params::ipxe_rom_dir}/undionly.kpxe",
     backup  => false,
-    require => Package['ipxe'],
+    require => Anchor['ironic-inspector::install::end'],
   }
 
   file { "${tftp_root_real}/ipxe.efi":
@@ -152,7 +152,7 @@ class ironic::pxe (
     mode    => '0744',
     source  => "${::ironic::params::ipxe_rom_dir}/ipxe.efi",
     backup  => false,
-    require => Package['ipxe'],
+    require => Anchor['ironic-inspector::install::end'],
   }
 
   include ::apache
