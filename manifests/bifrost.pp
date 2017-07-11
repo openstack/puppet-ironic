@@ -206,13 +206,16 @@ class ironic::bifrost (
   file { "${bifrost_config_folder}/bifrost_global_vars":
     ensure  => present,
     content => template('ironic/bifrost_global_vars.erb'),
-    require => File[$bifrost_config_folder],
+    tag     => 'bifrost-file',
   }
 
   file { "${bifrost_config_folder}/baremetal.json":
     ensure  => present,
     content => template('ironic/baremetal.json.erb'),
-    require => File[$bifrost_config_folder],
+    tag     => 'bifrost-file',
   }
+
+  File<| title == $bifrost_config_folder |> ~> File<| tag == 'bifrost-file' |>
+
 }
 
