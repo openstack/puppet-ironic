@@ -3,55 +3,29 @@ require 'spec_helper'
 describe 'ironic::wsgi::apache' do
 
   shared_examples_for 'apache serving ironic with mod_wsgi' do
-    it { is_expected.to contain_service('httpd').with_name(platform_params[:httpd_service_name]) }
-    it { is_expected.to contain_class('ironic::params') }
-    it { is_expected.to contain_class('apache') }
-    it { is_expected.to contain_class('apache::mod::wsgi') }
-
-    describe 'with default parameters' do
-
-      it { is_expected.to contain_file("#{platform_params[:wsgi_script_path]}").with(
-        'ensure'  => 'directory',
-        'owner'   => 'ironic',
-        'group'   => 'ironic',
-        'require' => 'Package[httpd]'
+    context 'with default parameters' do
+      it { is_expected.to contain_class('ironic::params') }
+      it { is_expected.to contain_class('apache') }
+      it { is_expected.to contain_class('apache::mod::wsgi') }
+      it { is_expected.to contain_class('apache::mod::ssl') }
+      it { is_expected.to contain_openstacklib__wsgi__apache('ironic_wsgi').with(
+        :bind_port           => 6385,
+        :group               => 'ironic',
+        :path                => '/',
+        :servername          => facts[:fqdn],
+        :ssl                 => true,
+        :threads             => facts[:os_workers],
+        :user                => 'ironic',
+        :workers             => 1,
+        :wsgi_daemon_process => 'ironic',
+        :wsgi_process_group  => 'ironic',
+        :wsgi_script_dir     => platform_params[:wsgi_script_path],
+        :wsgi_script_file    => 'app',
+        :wsgi_script_source  => platform_params[:wsgi_script_source],
       )}
-
-
-      it { is_expected.to contain_file('ironic_wsgi').with(
-        'ensure'  => 'file',
-        'path'    => "#{platform_params[:wsgi_script_path]}/app",
-        'source'  => "#{platform_params[:wsgi_script_source]}",
-        'owner'   => 'ironic',
-        'group'   => 'ironic',
-        'mode'    => '0644'
-      )}
-      it { is_expected.to contain_file('ironic_wsgi').that_requires("File[#{platform_params[:wsgi_script_path]}]") }
-
-      it { is_expected.to contain_apache__vhost('ironic_wsgi').with(
-        'servername'                  => 'some.host.tld',
-        'ip'                          => nil,
-        'port'                        => '6385',
-        'docroot'                     => "#{platform_params[:wsgi_script_path]}",
-        'docroot_owner'               => 'ironic',
-        'docroot_group'               => 'ironic',
-        'ssl'                         => 'true',
-        'wsgi_daemon_process'         => 'ironic',
-        'wsgi_daemon_process_options' => {
-          'user'         => 'ironic',
-          'group'        => 'ironic',
-          'processes'    => 1,
-          'threads'      => '8',
-          'display-name' => 'ironic_wsgi',
-        },
-        'wsgi_process_group'          => 'ironic',
-        'wsgi_script_aliases'         => { '/' => "#{platform_params[:wsgi_script_path]}/app" },
-        'require'                     => 'File[ironic_wsgi]'
-      )}
-      it { is_expected.to contain_concat("#{platform_params[:httpd_ports_file]}") }
     end
 
-    describe 'when overriding parameters using different ports' do
+    context 'when overriding parameters using different ports' do
       let :params do
         {
           :servername                => 'dummy.host',
@@ -62,29 +36,27 @@ describe 'ironic::wsgi::apache' do
           :workers                   => 37,
         }
       end
-
-      it { is_expected.to contain_apache__vhost('ironic_wsgi').with(
-        'servername'                  => 'dummy.host',
-        'ip'                          => '10.42.51.1',
-        'port'                        => '12345',
-        'docroot'                     => "#{platform_params[:wsgi_script_path]}",
-        'docroot_owner'               => 'ironic',
-        'docroot_group'               => 'ironic',
-        'ssl'                         => 'false',
-        'wsgi_daemon_process'         => 'ironic',
-        'wsgi_daemon_process_options' => {
-            'user'         => 'ironic',
-            'group'        => 'ironic',
-            'processes'    => '37',
-            'threads'      => '8',
-            'display-name' => 'ironic',
-        },
-        'wsgi_process_group'          => 'ironic',
-        'wsgi_script_aliases'         => { '/' => "#{platform_params[:wsgi_script_path]}/app" },
-        'require'                     => 'File[ironic_wsgi]'
+      it { is_expected.to contain_class('ironic::params') }
+      it { is_expected.to contain_class('apache') }
+      it { is_expected.to contain_class('apache::mod::wsgi') }
+      it { is_expected.to_not contain_class('apache::mod::ssl') }
+      it { is_expected.to contain_openstacklib__wsgi__apache('ironic_wsgi').with(
+        :bind_host                 => '10.42.51.1',
+        :bind_port                 => 12345,
+        :group                     => 'ironic',
+        :path                      => '/',
+        :servername                => 'dummy.host',
+        :ssl                       => false,
+        :threads                   => facts[:os_workers],
+        :user                      => 'ironic',
+        :workers                   => 37,
+        :wsgi_daemon_process       => 'ironic',
+        :wsgi_process_display_name => 'ironic',
+        :wsgi_process_group        => 'ironic',
+        :wsgi_script_dir           => platform_params[:wsgi_script_path],
+        :wsgi_script_file          => 'app',
+        :wsgi_script_source        => platform_params[:wsgi_script_source],
       )}
-
-      it { is_expected.to contain_concat("#{platform_params[:httpd_ports_file]}") }
     end
   end
 
