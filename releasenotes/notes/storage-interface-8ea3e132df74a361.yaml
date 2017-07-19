@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    Add new parameters ``enabled_storage_interfaces`` and
+    ``default_storage_interface`` to the ``ironic::drivers::interfaces``
+    manifest. This allows configuring the newly introduced storage interface.
