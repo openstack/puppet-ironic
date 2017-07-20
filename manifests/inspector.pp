@@ -292,11 +292,6 @@ class ironic::inspector (
     $dnsmasq_ip_subnets_real = $dnsmasq_ip_subnets
   }
 
-  warning("After Newton cycle ::ironic::inspector won't provide \
-tftpboot and httpboot setup, please include ::ironic::pxe")
-
-  include ::ironic::pxe
-
   $tftp_root_real    = pick($::ironic::pxe::common::tftp_root, $tftp_root)
   $http_root_real    = pick($::ironic::pxe::common::http_root, $http_root)
   $http_port_real    = pick($::ironic::pxe::common::http_port, $http_port)
