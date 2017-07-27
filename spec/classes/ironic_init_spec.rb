@@ -60,7 +60,7 @@ describe 'ironic' do
       end
     end
 
-    context 'with amqp rpc_backend value' do
+    context 'with amqp messaging' do
       it_configures 'amqp support'
     end
 
@@ -196,8 +196,6 @@ describe 'ironic' do
 
   shared_examples_for 'amqp support' do
     context 'with default parameters' do
-      before { params.merge!( :rpc_backend => 'amqp' ) }
-
       it { is_expected.to contain_ironic_config('oslo_messaging_amqp/server_request_prefix').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_ironic_config('oslo_messaging_amqp/broadcast_prefix').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_ironic_config('oslo_messaging_amqp/group_request_prefix').with_value('<SERVICE DEFAULT>') }
@@ -218,7 +216,6 @@ describe 'ironic' do
 
     context 'with overriden amqp parameters' do
       before { params.merge!(
-        :rpc_backend        => 'amqp',
         :amqp_idle_timeout  => '60',
         :amqp_trace         => true,
         :amqp_ssl_ca_file   => '/path/to/ca.cert',

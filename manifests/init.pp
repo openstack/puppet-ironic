@@ -57,10 +57,6 @@
 #      transport://user:pass@host1:port[,hostN:portN]/virtual_host
 #    Defaults to $::os_service_default
 #
-# [*rpc_backend*]
-#   (optional) what rpc/queuing service to use (string value)
-#   Defaults to $::os_service_default
-#
 # [*rabbit_use_ssl*]
 #   (optional) Connect over SSL for RabbitMQ. (boolean value)
 #   Defaults to $::os_service_default
@@ -279,6 +275,10 @@
 #   (optional) Allow to perform insecure SSL (https) requests to glance.
 #   Defaults to undef
 #
+# [*rpc_backend*]
+#   (optional) what rpc/queuing service to use (string value)
+#   Defaults to $::os_service_default
+#
 class ironic (
   $enabled                            = true,
   $package_ensure                     = 'present',
@@ -292,7 +292,6 @@ class ironic (
   $control_exchange                   = $::os_service_default,
   $rpc_response_timeout               = $::os_service_default,
   $default_transport_url              = $::os_service_default,
-  $rpc_backend                        = $::os_service_default,
   $rabbit_use_ssl                     = $::os_service_default,
   $rabbit_heartbeat_timeout_threshold = $::os_service_default,
   $rabbit_heartbeat_rate              = $::os_service_default,
@@ -340,6 +339,7 @@ class ironic (
   $glance_api_servers                 = undef,
   $glance_num_retries                 = undef,
   $glance_api_insecure                = undef,
+  $rpc_backend                        = $::os_service_default,
 ) {
 
   include ::ironic::deps
@@ -355,10 +355,12 @@ class ironic (
     !is_service_default($rabbit_password) or
     !is_service_default($rabbit_port) or
     !is_service_default($rabbit_userid) or
-    !is_service_default($rabbit_virtual_host) {
+    !is_service_default($rabbit_virtual_host) or
+    !is_service_default($rpc_backend) {
     warning("ironic::rabbit_host, ironic::rabbit_hosts, ironic::rabbit_password, \
-ironic::rabbit_port, ironic::rabbit_userid and ironic::rabbit_virtual_host are \
-deprecated. Please use ironic::default_transport_url instead.")
+ironic::rabbit_port, ironic::rabbit_userid, ironic::rabbit_virtual_host and \
+ironic::rpc_backend are deprecated. Please use ironic::default_transport_url \
+instead.")
   }
 
   if $glance_api_servers or $glance_api_insecure or $glance_num_retries {
@@ -397,47 +399,43 @@ ironic::glance::api_insecure and ironic::glance::num_retries accordingly")
       control_exchange     => $control_exchange,
   }
 
-  if $rpc_backend in [$::os_service_default, 'ironic.openstack.common.rpc.impl_kombu', 'rabbit'] {
-    oslo::messaging::rabbit {'ironic_config':
-      rabbit_password             => $rabbit_password,
-      rabbit_userid               => $rabbit_userid,
-      rabbit_virtual_host         => $rabbit_virtual_host,
-      rabbit_use_ssl              => $rabbit_use_ssl,
-      heartbeat_timeout_threshold => $rabbit_heartbeat_timeout_threshold,
-      heartbeat_rate              => $rabbit_heartbeat_rate,
-      kombu_reconnect_delay       => $kombu_reconnect_delay,
-      amqp_durable_queues         => $amqp_durable_queues,
-      kombu_compression           => $kombu_compression,
-      kombu_ssl_ca_certs          => $kombu_ssl_ca_certs,
-      kombu_ssl_certfile          => $kombu_ssl_certfile,
-      kombu_ssl_keyfile           => $kombu_ssl_keyfile,
-      kombu_ssl_version           => $kombu_ssl_version,
-      rabbit_hosts                => $rabbit_hosts,
-      rabbit_host                 => $rabbit_host,
-      rabbit_port                 => $rabbit_port,
-      rabbit_ha_queues            => $rabbit_ha_queues,
-    }
-  } elsif $rpc_backend == 'amqp' {
-    oslo::messaging::amqp { 'ironic_config':
-      server_request_prefix  => $amqp_server_request_prefix,
-      broadcast_prefix       => $amqp_broadcast_prefix,
-      group_request_prefix   => $amqp_group_request_prefix,
-      container_name         => $amqp_container_name,
-      idle_timeout           => $amqp_idle_timeout,
-      trace                  => $amqp_trace,
-      ssl_ca_file            => $amqp_ssl_ca_file,
-      ssl_cert_file          => $amqp_ssl_cert_file,
-      ssl_key_file           => $amqp_ssl_key_file,
-      ssl_key_password       => $amqp_ssl_key_password,
-      allow_insecure_clients => $amqp_allow_insecure_clients,
-      sasl_mechanisms        => $amqp_sasl_mechanisms,
-      sasl_config_dir        => $amqp_sasl_config_dir,
-      sasl_config_name       => $amqp_sasl_config_name,
-      username               => $amqp_username,
-      password               => $amqp_password,
-    }
-  } else {
-    ironic_config { 'DEFAULT/rpc_backend': value => $rpc_backend }
+  oslo::messaging::rabbit {'ironic_config':
+    rabbit_password             => $rabbit_password,
+    rabbit_userid               => $rabbit_userid,
+    rabbit_virtual_host         => $rabbit_virtual_host,
+    rabbit_use_ssl              => $rabbit_use_ssl,
+    heartbeat_timeout_threshold => $rabbit_heartbeat_timeout_threshold,
+    heartbeat_rate              => $rabbit_heartbeat_rate,
+    kombu_reconnect_delay       => $kombu_reconnect_delay,
+    amqp_durable_queues         => $amqp_durable_queues,
+    kombu_compression           => $kombu_compression,
+    kombu_ssl_ca_certs          => $kombu_ssl_ca_certs,
+    kombu_ssl_certfile          => $kombu_ssl_certfile,
+    kombu_ssl_keyfile           => $kombu_ssl_keyfile,
+    kombu_ssl_version           => $kombu_ssl_version,
+    rabbit_hosts                => $rabbit_hosts,
+    rabbit_host                 => $rabbit_host,
+    rabbit_port                 => $rabbit_port,
+    rabbit_ha_queues            => $rabbit_ha_queues,
+  }
+
+  oslo::messaging::amqp { 'ironic_config':
+    server_request_prefix  => $amqp_server_request_prefix,
+    broadcast_prefix       => $amqp_broadcast_prefix,
+    group_request_prefix   => $amqp_group_request_prefix,
+    container_name         => $amqp_container_name,
+    idle_timeout           => $amqp_idle_timeout,
+    trace                  => $amqp_trace,
+    ssl_ca_file            => $amqp_ssl_ca_file,
+    ssl_cert_file          => $amqp_ssl_cert_file,
+    ssl_key_file           => $amqp_ssl_key_file,
+    ssl_key_password       => $amqp_ssl_key_password,
+    allow_insecure_clients => $amqp_allow_insecure_clients,
+    sasl_mechanisms        => $amqp_sasl_mechanisms,
+    sasl_config_dir        => $amqp_sasl_config_dir,
+    sasl_config_name       => $amqp_sasl_config_name,
+    username               => $amqp_username,
+    password               => $amqp_password,
   }
 
 }
