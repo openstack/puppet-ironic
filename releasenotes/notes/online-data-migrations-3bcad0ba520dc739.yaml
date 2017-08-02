@@ -1,0 +1,5 @@
+---
+features:
+  - Added a class to run the db online_data_migrations. This needs to happen
+    after a dbsync when you when you upgrade to Pike. More info at
+    http://specs.openstack.org/openstack/ironic-specs/specs/approved/support-rolling-upgrade.html

@@ -20,6 +20,8 @@ class ironic::deps {
   -> anchor { 'ironic::db::end': }
   ~> anchor { 'ironic::dbsync::begin': }
   -> anchor { 'ironic::dbsync::end': }
+  ~> anchor { 'ironic::db_online_data_migrations::begin': }
+  -> anchor { 'ironic::db_online_data_migrations::end': }
   ~> anchor { 'ironic::service::begin': }
   ~> Service<| tag == 'ironic-service' |>
   ~> anchor { 'ironic::service::end': }

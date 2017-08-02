@@ -231,6 +231,10 @@
 #   Enable dbsync
 #   Defaults to true
 #
+# [*db_online_data_migrations*]
+#   (optional) Run online_data_migrations - required on upgrade.
+#   Defaults to false.
+#
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
 #   in the ironic config.
@@ -328,6 +332,7 @@ class ironic (
   $database_max_pool_size             = undef,
   $database_max_overflow              = undef,
   $sync_db                            = true,
+  $db_online_data_migrations          = false,
   $purge_config                       = false,
   # DEPRECATED PARAMETERS
   $rabbit_host                        = $::os_service_default,
@@ -391,6 +396,10 @@ ironic::glance::api_insecure and ironic::glance::num_retries accordingly")
 
   if $sync_db {
     include ::ironic::db::sync
+  }
+
+  if $db_online_data_migrations {
+    include ::ironic::db::online_data_migrations
   }
 
   oslo::messaging::default {'ironic_config':
