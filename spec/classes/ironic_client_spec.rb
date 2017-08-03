@@ -22,6 +22,20 @@ require 'spec_helper'
 
 describe 'ironic::client' do
 
+  shared_examples_for 'ironic client' do
+
+    it { is_expected.to contain_class('ironic::deps') }
+    it { is_expected.to contain_class('ironic::params') }
+
+    it 'installs ironic client package' do
+      is_expected.to contain_package('python-ironicclient').with(
+        :ensure => 'present',
+        :name   => platform_params[:client_package],
+        :tag    => ['openstack', 'ironic-support-package']
+      )
+    end
+  end
+
   on_supported_os({
     :supported_os => OSDefaults.get_supported_os
   }).each do |os,facts|
@@ -30,8 +44,11 @@ describe 'ironic::client' do
         facts.merge!(OSDefaults.get_facts())
       end
 
-      it { is_expected.to contain_class('ironic::client') }
+      let :platform_params do
+        { :client_package => 'python-ironicclient' }
+      end
 
+      it_behaves_like 'ironic client'
     end
   end
 
