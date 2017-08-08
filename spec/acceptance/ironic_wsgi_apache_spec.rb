@@ -46,9 +46,7 @@ describe 'basic ironic' do
         password => 'a_big_secret',
       }
       class { '::ironic::client': }
-      class { '::ironic::conductor':
-        enabled_drivers     => ['pxe_ssh'],
-      }
+      class { '::ironic::conductor': }
       class { '::ironic::api::authtoken':
         password => 'a_big_secret',
       }
