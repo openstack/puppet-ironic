@@ -142,16 +142,16 @@ describe 'ironic::inspector' do
         'content' => /pxelinux/,
       )
       is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-        /dhcp-range=192.168.0.100,192.168.0.120,29/
+        /dhcp-range=192.168.0.100,192.168.0.120,2m/
       )
       is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-        /dhcp-range=set:subnet1,192.168.1.100,192.168.1.200,255.255.255.0,29/
+        /dhcp-range=set:subnet1,192.168.1.100,192.168.1.200,255.255.255.0,2m/
       )
       is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
         /dhcp-option=tag:subnet1,option:router,192.168.1.254/
       )
       is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-        /dhcp-range=set:subnet2,192.168.2.100,192.168.2.200,255.255.255.0,29/
+        /dhcp-range=set:subnet2,192.168.2.100,192.168.2.200,255.255.255.0,2m/
       )
       is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
         /dhcp-option=tag:subnet2,option:router,192.168.2.254/
@@ -226,7 +226,7 @@ describe 'ironic::inspector' do
             /dhcp-boot=tag:ipxe,http:\/\/192.168.0.1:3816\/inspector.ipxe/
         )
         is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-            /dhcp-range=192.168.0.100,192.168.0.120,29/
+            /dhcp-range=192.168.0.100,192.168.0.120,2m/
         )
       end
       it 'should contain file /var/www/httpboot/inspector.ipxe' do

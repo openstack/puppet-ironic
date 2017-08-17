@@ -3,11 +3,11 @@ interface=<%= @dnsmasq_interface %>
 bind-interfaces
 <% @dnsmasq_ip_subnets_real.each do |s| -%>
 <% if s['tag'] and s['netmask'] -%>
-dhcp-range=set:<%= s['tag'] -%>,<%= s['ip_range'] -%>,<%= s['netmask'] -%>,29
+dhcp-range=set:<%= s['tag'] -%>,<%= s['ip_range'] -%>,<%= s['netmask'] -%>,2m
 <% elsif s['tag'] -%>
-dhcp-range=set:<%= s['tag'] -%>,<%= s['ip_range'] -%>,29
+dhcp-range=set:<%= s['tag'] -%>,<%= s['ip_range'] -%>,2m
 <% else -%>
-dhcp-range=<%= s['ip_range'] -%>,29
+dhcp-range=<%= s['ip_range'] -%>,2m
 <% end -%>
 <% if s['gateway'] -%>
 <% if s['tag'] -%>
