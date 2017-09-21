@@ -104,7 +104,6 @@ describe 'ironic::inspector' do
       is_expected.to contain_ironic_inspector_config('capabilities/boot_mode').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('firewall/dnsmasq_interface').with_value(p[:dnsmasq_interface])
       is_expected.to contain_ironic_inspector_config('processing/ramdisk_logs_dir').with_value(p[:ramdisk_logs_dir])
-      is_expected.to contain_ironic_inspector_config('processing/enable_setting_ipmi_credentials').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('processing/add_ports').with_value(p[:add_ports])
       is_expected.to contain_ironic_inspector_config('processing/keep_ports').with_value(p[:keep_ports])
       is_expected.to contain_ironic_inspector_config('processing/store_data').with_value(p[:store_data])

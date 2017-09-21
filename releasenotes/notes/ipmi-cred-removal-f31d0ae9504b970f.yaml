@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The deprecated parameter ``inspector::enable_setting_ipmi_credentials``
+    was removed. This feature was already removed from ironic-inspector.

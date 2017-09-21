@@ -209,10 +209,6 @@
 #
 # DEPRECATED
 #
-# [*enable_setting_ipmi_credentials*]
-#   (optional) Enable setting of IPMI credentials
-#   Defaults to $::os::service_default
-#
 # [*dnsmasq_ip_range*]
 #   (optional) IP range to use for nodes being introspected
 #   Defaults to undef
@@ -263,7 +259,6 @@ class ironic::inspector (
   $discovery_default_driver        = $::os_service_default,
   # DEPRECATED
   $dnsmasq_ip_range                = undef,
-  $enable_setting_ipmi_credentials = $::os_service_default,
 ) {
 
   include ::ironic::deps
@@ -274,10 +269,6 @@ class ironic::inspector (
 
   if $auth_strategy == 'keystone' {
     include ::ironic::inspector::authtoken
-  }
-
-  if !is_service_default($enable_setting_ipmi_credentials) {
-    warning('enable_setting_ipmi_credentials is deprecated')
   }
 
   if !is_array($dnsmasq_ip_subnets) {
@@ -349,7 +340,6 @@ class ironic::inspector (
     'capabilities/boot_mode':                     value => $detect_boot_mode;
     'firewall/dnsmasq_interface':                 value => $dnsmasq_interface;
     'processing/ramdisk_logs_dir':                value => $ramdisk_logs_dir;
-    'processing/enable_setting_ipmi_credentials': value => $enable_setting_ipmi_credentials;
     'processing/add_ports':                       value => $add_ports;
     'processing/keep_ports':                      value => $keep_ports;
     'processing/store_data':                      value => $store_data;
