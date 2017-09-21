@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    Removed support for setting options related to the SSH drivers. These
+    drivers were removed from Ironic in the Pike release.
