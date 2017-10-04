@@ -1,0 +1,5 @@
+---
+fixes:
+  - Increase the Inspector DHCP lease time that is provide by dnsmasq to 10
+    minutes.  A shorter lease time may cause the provided IP address to expire
+    and IPA may not add the address to the introspection report.
