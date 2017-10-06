@@ -40,8 +40,8 @@ describe 'ironic::neutron' do
       is_expected.to contain_ironic_config('neutron/project_name').with_value(p[:project_name])
       is_expected.to contain_ironic_config('neutron/username').with_value(p[:username])
       is_expected.to contain_ironic_config('neutron/password').with_value('<SERVICE DEFAULT>').with_secret(true)
-      is_expected.to contain_ironic_config('neutron/user_domain_name').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('neutron/project_domain_name').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('neutron/user_domain_name').with_value('Default')
+      is_expected.to contain_ironic_config('neutron/project_domain_name').with_value('Default')
     end
 
     context 'when overriding parameters' do

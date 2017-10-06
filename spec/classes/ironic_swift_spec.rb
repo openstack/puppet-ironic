@@ -39,8 +39,8 @@ describe 'ironic::swift' do
       is_expected.to contain_ironic_config('swift/project_name').with_value(p[:project_name])
       is_expected.to contain_ironic_config('swift/username').with_value(p[:username])
       is_expected.to contain_ironic_config('swift/password').with_value('<SERVICE DEFAULT>').with_secret(true)
-      is_expected.to contain_ironic_config('swift/user_domain_name').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('swift/project_domain_name').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('swift/user_domain_name').with_value('Default')
+      is_expected.to contain_ironic_config('swift/project_domain_name').with_value('Default')
     end
 
     context 'when overriding parameters' do

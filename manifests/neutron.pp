@@ -38,11 +38,11 @@
 #
 # [*user_domain_name*]
 #   The name of user's domain (required for Identity V3).
-#   Defaults to $::os_service_default
+#   Defaults to 'Default'
 #
 # [*project_domain_name*]
 #   The name of project's domain (required for Identity V3).
-#   Defaults to $::os_service_default
+#   Defaults to 'Default'
 #
 class ironic::neutron (
   $api_endpoint        = $::os_service_default,
@@ -51,8 +51,8 @@ class ironic::neutron (
   $project_name        = 'services',
   $username            = 'ironic',
   $password            = $::os_service_default,
-  $user_domain_name    = $::os_service_default,
-  $project_domain_name = $::os_service_default,
+  $user_domain_name    = 'Default',
+  $project_domain_name = 'Default',
 ) {
 
   $api_endpoint_real = pick($::ironic::api::neutron_url, $api_endpoint)

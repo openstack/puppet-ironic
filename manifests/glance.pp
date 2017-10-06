@@ -34,11 +34,11 @@
 #
 # [*user_domain_name*]
 #   The name of user's domain (required for Identity V3).
-#   Defaults to $::os_service_default
+#   Defaults to 'Default'
 #
 # [*project_domain_name*]
 #   The name of project's domain (required for Identity V3).
-#   Defaults to $::os_service_default
+#   Defaults to 'Default'
 #
 # [*api_servers*]
 #   (optional) A list of the glance api servers available to ironic.
@@ -82,8 +82,8 @@ class ironic::glance (
   $project_name               = 'services',
   $username                   = 'ironic',
   $password                   = $::os_service_default,
-  $user_domain_name           = $::os_service_default,
-  $project_domain_name        = $::os_service_default,
+  $user_domain_name           = 'Default',
+  $project_domain_name        = 'Default',
   $api_servers                = $::os_service_default,
   $num_retries                = $::os_service_default,
   $api_insecure               = $::os_service_default,

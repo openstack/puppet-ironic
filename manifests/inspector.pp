@@ -86,11 +86,11 @@
 #
 # [*ironic_project_domain_name*]
 #   (Optional) Name of domain for $ironic_tenant_name
-#   Defaults to $::os_service_default
+#   Defaults to 'Default'
 #
 # [*ironic_user_domain_name*]
 #   (Optional) Name of domain for $ironic_username
-#   Defaults to $::os_service_default
+#   Defaults to 'Default'
 #
 # [*ironic_auth_url*]
 #   (optional) Keystone authentication URL for Ironic
@@ -122,11 +122,11 @@
 #
 # [*swift_project_domain_name*]
 #   (Optional) Name of domain for $swift_tenant_name
-#   Defaults to $::os_service_default
+#   Defaults to 'Default'
 #
 # [*swift_user_domain_name*]
 #   (Optional) Name of domain for $swift_username
-#   Defaults to $::os_service_default
+#   Defaults to 'Default'
 #
 # [*swift_auth_url*]
 #   (optional) Keystone authentication URL for Swift
@@ -230,8 +230,8 @@ class ironic::inspector (
   $ironic_username                 = 'ironic',
   $ironic_password                 = undef,
   $ironic_tenant_name              = 'services',
-  $ironic_project_domain_name      = $::os_service_default,
-  $ironic_user_domain_name         = $::os_service_default,
+  $ironic_project_domain_name      = 'Default',
+  $ironic_user_domain_name         = 'Default',
   $ironic_auth_url                 = 'http://127.0.0.1:5000/v2.0',
   $ironic_max_retries              = 30,
   $ironic_retry_interval           = 2,
@@ -239,8 +239,8 @@ class ironic::inspector (
   $swift_username                  = 'ironic',
   $swift_password                  = undef,
   $swift_tenant_name               = 'services',
-  $swift_project_domain_name       = $::os_service_default,
-  $swift_user_domain_name          = $::os_service_default,
+  $swift_project_domain_name       = 'Default',
+  $swift_user_domain_name          = 'Default',
   $swift_auth_url                  = 'http://127.0.0.1:5000/v2.0',
   $dnsmasq_ip_subnets              = [],
   $dnsmasq_local_ip                = '192.168.0.1',
