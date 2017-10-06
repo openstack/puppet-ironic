@@ -22,6 +22,8 @@ describe 'ironic::wsgi::apache' do
         :wsgi_script_dir     => platform_params[:wsgi_script_path],
         :wsgi_script_file    => 'app',
         :wsgi_script_source  => platform_params[:wsgi_script_source],
+        :access_log_file     => false,
+        :access_log_format   => false,
       )}
     end
 
@@ -34,6 +36,9 @@ describe 'ironic::wsgi::apache' do
           :ssl                       => false,
           :wsgi_process_display_name => 'ironic',
           :workers                   => 37,
+          :access_log_file           => '/var/log/httpd/access_log',
+          :access_log_format         => 'some format',
+          :error_log_file            => '/var/log/httpd/error_log'
         }
       end
       it { is_expected.to contain_class('ironic::params') }
@@ -56,6 +61,9 @@ describe 'ironic::wsgi::apache' do
         :wsgi_script_dir           => platform_params[:wsgi_script_path],
         :wsgi_script_file          => 'app',
         :wsgi_script_source        => platform_params[:wsgi_script_source],
+        :access_log_file           => '/var/log/httpd/access_log',
+        :access_log_format         => 'some format',
+        :error_log_file            => '/var/log/httpd/error_log'
       )}
     end
   end

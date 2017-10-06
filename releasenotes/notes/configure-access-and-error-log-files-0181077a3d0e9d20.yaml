@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    It is now possible to configure the access log (through the
+    ``access_log_file`` and ``access_log_format`` variables) and the error log
+    file path (through the error_log_file variable) in the apache vhost.
