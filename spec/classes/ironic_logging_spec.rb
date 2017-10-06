@@ -31,6 +31,13 @@ describe 'ironic::logging' do
     }
   end
 
+  let :empty_log_dir_param do
+    {
+      :log_dir => '',
+    }
+  end
+
+
   shared_examples_for 'ironic-logging' do
 
     context 'with basic logging options and default settings' do
@@ -49,6 +56,11 @@ describe 'ironic::logging' do
 
     context 'without extended logging options' do
       it_configures 'logging params unset'
+    end
+
+    context 'with empty log_dir' do
+      before { params.merge!( empty_log_dir_param ) }
+      it_configures 'empty log dir'
     end
 
   end
@@ -108,6 +120,14 @@ describe 'ironic::logging' do
      :log_date_format, ].each { |param|
         it { is_expected.to contain_oslo__log('ironic_config').with("#{param}" => '<SERVICE DEFAULT>') }
       }
+  end
+
+  shared_examples 'empty log dir' do
+    it 'configures ironic logging with empty log dir' do
+      is_expected.to contain_oslo__log('ironic_config').with(
+        :log_dir => '',
+      )
+    end
   end
 
   on_supported_os({
