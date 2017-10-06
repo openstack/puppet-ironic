@@ -1,0 +1,5 @@
+---
+fixes:
+  - |
+    It is now possible to pass empty strings to the log_dir option. This enables
+    logging to stdout/stderr.
