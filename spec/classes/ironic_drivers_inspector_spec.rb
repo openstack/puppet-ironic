@@ -41,8 +41,8 @@ describe 'ironic::drivers::inspector' do
       is_expected.to contain_ironic_config('inspector/project_name').with_value(p[:project_name])
       is_expected.to contain_ironic_config('inspector/username').with_value(p[:username])
       is_expected.to contain_ironic_config('inspector/password').with_value('<SERVICE DEFAULT>').with_secret(true)
-      is_expected.to contain_ironic_config('inspector/user_domain_name').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('inspector/project_domain_name').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('inspector/user_domain_name').with_value('Default')
+      is_expected.to contain_ironic_config('inspector/project_domain_name').with_value('Default')
     end
 
     context 'when overriding parameters' do

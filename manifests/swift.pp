@@ -34,11 +34,11 @@
 #
 # [*user_domain_name*]
 #   The name of user's domain (required for Identity V3).
-#   Defaults to $::os_service_default
+#   Defaults to 'Default'
 #
 # [*project_domain_name*]
 #   The name of project's domain (required for Identity V3).
-#   Defaults to $::os_service_default
+#   Defaults to 'Default'
 #
 class ironic::swift (
   $auth_type           = 'password',
@@ -46,8 +46,8 @@ class ironic::swift (
   $project_name        = 'services',
   $username            = 'ironic',
   $password            = $::os_service_default,
-  $user_domain_name    = $::os_service_default,
-  $project_domain_name = $::os_service_default,
+  $user_domain_name    = 'Default',
+  $project_domain_name = 'Default',
 ) {
 
   ironic_config {

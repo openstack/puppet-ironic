@@ -39,8 +39,8 @@ describe 'ironic::service_catalog' do
       is_expected.to contain_ironic_config('service_catalog/project_name').with_value(p[:project_name])
       is_expected.to contain_ironic_config('service_catalog/username').with_value(p[:username])
       is_expected.to contain_ironic_config('service_catalog/password').with_value('<SERVICE DEFAULT>').with_secret(true)
-      is_expected.to contain_ironic_config('service_catalog/user_domain_name').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('service_catalog/project_domain_name').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('service_catalog/user_domain_name').with_value('Default')
+      is_expected.to contain_ironic_config('service_catalog/project_domain_name').with_value('Default')
     end
 
     context 'when overriding parameters' do

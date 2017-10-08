@@ -39,8 +39,8 @@ describe 'ironic::cinder' do
       is_expected.to contain_ironic_config('cinder/project_name').with_value(p[:project_name])
       is_expected.to contain_ironic_config('cinder/username').with_value(p[:username])
       is_expected.to contain_ironic_config('cinder/password').with_value('<SERVICE DEFAULT>').with_secret(true)
-      is_expected.to contain_ironic_config('cinder/user_domain_name').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('cinder/project_domain_name').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('cinder/user_domain_name').with_value('Default')
+      is_expected.to contain_ironic_config('cinder/project_domain_name').with_value('Default')
     end
 
     context 'when overriding parameters' do
