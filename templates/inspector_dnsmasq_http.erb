@@ -21,6 +21,7 @@ dhcp-sequential-ip
 dhcp-match=ipxe,175
 dhcp-match=set:efi,option:client-arch,7
 dhcp-match=set:efi,option:client-arch,9
+dhcp-match=set:efi,option:client-arch,11
 # Client is already running iPXE; move to next stage of chainloading
 dhcp-boot=tag:ipxe,http://<%= @dnsmasq_local_ip %>:<%= @http_port_real %>/inspector.ipxe
 # Client is PXE booting over EFI without iPXE ROM; send EFI version of iPXE chainloader
