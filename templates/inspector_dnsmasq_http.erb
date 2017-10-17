@@ -1,6 +1,10 @@
 port=0
 interface=<%= @dnsmasq_interface %>
 bind-interfaces
+<% if @debug %>
+log-dhcp
+log-queries
+<% end %>
 <% @dnsmasq_ip_subnets_real.each do |s| -%>
 <% if s['tag'] and s['netmask'] -%>
 dhcp-range=set:<%= s['tag'] -%>,<%= s['ip_range'] -%>,<%= s['netmask'] -%>,10m

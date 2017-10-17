@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    When ``inspector::debug`` is set to ``true``, DHCP queries and responses
+    will be logged by the ironic-inspector dnsmasq services.

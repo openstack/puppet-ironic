@@ -228,6 +228,12 @@ describe 'ironic::inspector' do
         is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
             /dhcp-range=192.168.0.100,192.168.0.120,10m/
         )
+        is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
+            /log-dhcp/
+        )
+        is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
+            /log-queries/
+        )
       end
       it 'should contain file /var/www/httpboot/inspector.ipxe' do
         is_expected.to contain_file('/var/www/httpboot/inspector.ipxe').with(
