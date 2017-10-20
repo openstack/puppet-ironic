@@ -1,0 +1,3 @@
+---
+features:
+  -  Add support for DHCP client arch 11 to detect an aarch64 uefi host.
