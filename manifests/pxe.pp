@@ -36,6 +36,7 @@
 #
 # [*syslinux_path*]
 #   (optional) Path to directory containing syslinux files.
+#   Setting this to False will skip syslinux related resources.
 #   Defaults to '$::ironic::params::syslinux_path'
 #
 # [*syslinux_files*]
@@ -115,16 +116,18 @@ class ironic::pxe (
     content => "r ^([^/]) ${tftp_root_real}/\\1",
   }
 
-  ensure_resource( 'package', 'syslinux', {
-    ensure => $package_ensure,
-    name   => $::ironic::params::syslinux_package,
-    tag    => ['openstack', 'ironic-ipxe', 'ironic-support-package'],
-  })
+  if $syslinux_path {
+    ensure_resource( 'package', 'syslinux', {
+      ensure => $package_ensure,
+      name   => $::ironic::params::syslinux_package,
+      tag    => ['openstack', 'ironic-ipxe', 'ironic-support-package'],
+    })
 
-  ironic::pxe::tftpboot_file { $syslinux_files:
-    source_directory      => $syslinux_path,
-    destination_directory => $tftp_root_real,
-    require               => Anchor['ironic-inspector::install::end'],
+    ironic::pxe::tftpboot_file { $syslinux_files:
+      source_directory      => $syslinux_path,
+      destination_directory => $tftp_root_real,
+      require               => Anchor['ironic-inspector::install::end'],
+    }
   }
 
   ensure_resource( 'package', 'ipxe', {

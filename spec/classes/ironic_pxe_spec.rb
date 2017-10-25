@@ -120,6 +120,19 @@ describe 'ironic::pxe' do
         )
       end
     end
+    context 'when excluding syslinux' do
+      before :each do
+        params.merge!(
+          :syslinux_path => false,
+        )
+      end
+      it 'should not contain package syslinux' do
+        is_expected.not_to contain_package('syslinux')
+      end
+      it 'should not contain tftpboot syslinux file' do
+        is_expected.not_to contain_file('/tftpboot/pxelinux.0')
+      end
+    end
   end
 
   on_supported_os({

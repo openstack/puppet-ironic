@@ -1,0 +1,4 @@
+---
+features:
+  - Allow skipping installation of syslinux. UEFI exclusive archiectures do
+    not have syslinux support.
