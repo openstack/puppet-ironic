@@ -12,6 +12,12 @@ describe 'ironic::db::sync' do
         :refreshonly => 'true',
         :logoutput   => 'on_failure'
       )
+
+      is_expected.to contain_file('/var/log/ironic/ironic-dbsync.log').with(
+        :ensure  => 'present',
+        :owner   => 'ironic',
+        :group   => 'ironic',
+      )
     end
 
     describe "overriding extra_params" do
