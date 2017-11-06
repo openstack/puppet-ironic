@@ -1,0 +1,5 @@
+---
+fixes:
+  - |
+    Fixes ownership of ``/var/log/ironic/ironic-dbsync.log`` before trying
+    to run ``ironic-dbsync``. This file was owned by *root* previously.

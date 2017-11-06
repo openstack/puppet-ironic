@@ -18,6 +18,12 @@ describe 'ironic::db::sync' do
                          'Anchor[ironic::dbsync::begin]'],
         :notify      => 'Anchor[ironic::dbsync::end]',
       )
+
+      is_expected.to contain_file('/var/log/ironic/ironic-dbsync.log').with(
+        :ensure  => 'present',
+        :owner   => 'ironic',
+        :group   => 'ironic',
+      )
     end
 
     describe "overriding extra_params" do
