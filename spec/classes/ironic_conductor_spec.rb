@@ -76,6 +76,7 @@ describe 'ironic::conductor' do
       is_expected.to contain_ironic_config('deploy/http_root').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/configdrive_use_swift').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/configdrive_swift_container').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('conductor/inspect_timeout').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('deploy/default_boot_option').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('neutron/port_setup_delay').with(:value => '<SERVICE DEFAULT>')
     end

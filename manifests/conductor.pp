@@ -97,6 +97,11 @@
 #   configdrive_use_swift is true.
 #   Defaults to $::os_service_default
 #
+# [*inspect_timeout*]
+#   (optional) Timeout (seconds) for waiting for node inspection.
+#   0 for unlimited.
+#   Defaults to $::os_service_default
+#
 # [*default_boot_option*]
 #   (optional) Default boot option to use when no boot option is explicitly
 #   requested. One of "netboot" or "local".
@@ -161,6 +166,7 @@ class ironic::conductor (
   $provisioning_network                = $::os_service_default,
   $configdrive_use_swift               = $::os_service_default,
   $configdrive_swift_container         = $::os_service_default,
+  $inspect_timeout                     = $::os_service_default,
   $default_boot_option                 = $::os_service_default,
   $port_setup_delay                    = $::os_service_default,
   $cleaning_network_name               = undef,
@@ -260,6 +266,7 @@ moved to ironic::glance manifest")
     'deploy/continue_if_disk_secure_erase_fails': value => $continue_if_disk_secure_erase_fails;
     'conductor/configdrive_use_swift':            value => $configdrive_use_swift;
     'conductor/configdrive_swift_container':      value => $configdrive_swift_container;
+    'conductor/inspect_timeout':                  value => $inspect_timeout;
     'deploy/default_boot_option':                 value => $default_boot_option;
     'neutron/port_setup_delay':                   value => $port_setup_delay;
   }

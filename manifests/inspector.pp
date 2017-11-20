@@ -42,6 +42,11 @@
 #   (optional) API authentication strategy: keystone or noauth
 #   Defaults to 'keystone'
 #
+# [*timeout*]
+#   (optional) Timeout after which introspection is considered failed,
+#   set to 0 to disable.
+#   Defaults to $::os_service_default
+#
 # [*dnsmasq_interface*]
 #   (optional) The interface for the ironic-inspector dnsmasq process
 #   to listen on
@@ -220,6 +225,7 @@ class ironic::inspector (
   $pxe_transfer_protocol           = 'tftp',
   $debug                           = undef,
   $auth_strategy                   = 'keystone',
+  $timeout                         = $::os_service_default,
   $dnsmasq_interface               = 'br-ctlplane',
   $db_connection                   = undef,
   $ramdisk_logs_dir                = '/var/log/ironic-inspector/ramdisk/',
@@ -337,6 +343,7 @@ class ironic::inspector (
   ironic_inspector_config {
     'DEFAULT/listen_address':                     value => $listen_address;
     'DEFAULT/auth_strategy':                      value => $auth_strategy;
+    'DEFAULT/timeout':                            value => $timeout;
     'capabilities/boot_mode':                     value => $detect_boot_mode;
     'firewall/dnsmasq_interface':                 value => $dnsmasq_interface;
     'processing/ramdisk_logs_dir':                value => $ramdisk_logs_dir;
