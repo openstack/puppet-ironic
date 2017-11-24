@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Add support for installing the ``ironic-staging-drivers`` package via
+    the new ``ironic::drivers::staging`` manifest.
