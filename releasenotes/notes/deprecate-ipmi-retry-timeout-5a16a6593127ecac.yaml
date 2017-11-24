@@ -1,0 +1,3 @@
+---
+deprecations:
+    - ipmi/retry_timeout is now deprecated in favour of ipmi/command_retry_timeout
