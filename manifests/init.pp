@@ -43,6 +43,11 @@
 #   (optional) Default protocol to use when connecting to glance
 #   Defaults to 'keystone'. 'https' is the only other valid option for SSL
 #
+# [*default_resource_class*]
+#   (optional) Default resource class to use for new nodes when no resource
+#   class is explicitly requested.
+#   Defaults to $::os_service_default
+#
 # [*rpc_response_timeout*]
 #   (optional) Seconds to wait for a response from a call. (integer value)
 #   Defaults to $::os_service_default.
@@ -293,6 +298,7 @@ class ironic (
   $log_facility                       = undef,
   $log_dir                            = undef,
   $auth_strategy                      = 'keystone',
+  $default_resource_class             = $::os_service_default,
   $control_exchange                   = $::os_service_default,
   $rpc_response_timeout               = $::os_service_default,
   $default_transport_url              = $::os_service_default,
@@ -392,6 +398,7 @@ ironic::glance::api_insecure and ironic::glance::num_retries accordingly")
   ironic_config {
     'DEFAULT/auth_strategy':           value => $auth_strategy;
     'DEFAULT/my_ip':                   value => $my_ip;
+    'DEFAULT/default_resource_class':  value => $default_resource_class;
   }
 
   if $sync_db {
