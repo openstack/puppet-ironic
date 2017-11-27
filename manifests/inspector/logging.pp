@@ -12,6 +12,10 @@
 #    (Optional) Use syslog for logging.
 #    Defaults to $::os_service_default
 #
+#  [*use_json*]
+#    (Optional) Use json for logging.
+#    Defaults to $::os_service_default
+#
 #  [*use_stderr*]
 #    (optional) Use stderr for logging
 #    Defaults to $::os_service_default
@@ -87,6 +91,7 @@
 #
 class ironic::inspector::logging(
   $use_syslog                    = $::os_service_default,
+  $use_json                      = $::os_service_default,
   $use_stderr                    = $::os_service_default,
   $log_facility                  = $::os_service_default,
   $log_dir                       = '/var/log/ironic-inspector',
@@ -112,6 +117,7 @@ class ironic::inspector::logging(
     debug                         => $debug_real,
     use_stderr                    => $use_stderr,
     use_syslog                    => $use_syslog,
+    use_json                      => $use_json,
     log_dir                       => $log_dir,
     syslog_log_facility           => $log_facility,
     logging_context_format_string => $logging_context_format_string,
