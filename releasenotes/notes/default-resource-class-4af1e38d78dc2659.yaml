@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    Adds support for setting the ``default_resource_class`` option.
