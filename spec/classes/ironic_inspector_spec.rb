@@ -103,7 +103,7 @@ describe 'ironic::inspector' do
       is_expected.to contain_ironic_inspector_config('DEFAULT/auth_strategy').with_value(p[:auth_strategy])
       is_expected.to contain_ironic_inspector_config('DEFAULT/timeout').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('capabilities/boot_mode').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_inspector_config('firewall/dnsmasq_interface').with_value(p[:dnsmasq_interface])
+      is_expected.to contain_ironic_inspector_config('iptables/dnsmasq_interface').with_value(p[:dnsmasq_interface])
       is_expected.to contain_ironic_inspector_config('processing/ramdisk_logs_dir').with_value(p[:ramdisk_logs_dir])
       is_expected.to contain_ironic_inspector_config('processing/add_ports').with_value(p[:add_ports])
       is_expected.to contain_ironic_inspector_config('processing/keep_ports').with_value(p[:keep_ports])

@@ -23,3 +23,6 @@ dhcp-option=option:router,<%= s['gateway'] %>
 <% end -%>
 dhcp-boot=pxelinux.0,localhost.localdomain,<%= @dnsmasq_local_ip %>
 dhcp-sequential-ip
+<% if @dnsmasq_dhcp_hostsdir %>
+dhcp-hostsdir=<%= @dnsmasq_dhcp_hostsdir %>
+<% end %>
