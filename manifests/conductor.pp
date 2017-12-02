@@ -124,6 +124,11 @@
 #   sufficient DHCP configuration for port.
 #   Defaults to $::os_service_default
 #
+# [*power_state_change_timeout*]
+#   (optional) Timeout value to wait for a power operation to complete,
+#   so that the baremetal node is in the desired new power state.
+#   Defaults to $::os_service_default
+#
 # DEPRECATED
 #
 # [*cleaning_network_uuid*]
@@ -171,6 +176,7 @@ class ironic::conductor (
   $port_setup_delay                    = $::os_service_default,
   $cleaning_network_name               = undef,
   $provisioning_network_name           = undef,
+  $power_state_change_timeout          = $::os_service_default,
   # DEPRECATED
   $cleaning_network_uuid               = undef,
   $provisioning_network_uuid           = undef,
@@ -269,6 +275,7 @@ moved to ironic::glance manifest")
     'conductor/inspect_timeout':                  value => $inspect_timeout;
     'deploy/default_boot_option':                 value => $default_boot_option;
     'neutron/port_setup_delay':                   value => $port_setup_delay;
+    'conductor/power_state_change_timeout':       value => $power_state_change_timeout;
   }
 
   if $cleaning_network_name {
