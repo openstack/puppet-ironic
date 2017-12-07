@@ -66,6 +66,15 @@
 #   Can not be set together with swift_account.
 #   Defaults to undef, which leaves the configuration intact
 #
+# [*swift_container*]
+#   (optional) Swift container where Glance images are stored. Used for
+#   generating temporary URLs.
+#   Defaults to $::os_service_default
+#
+# [*swift_endpoint_url*]
+#   (optional) Swift endpoint to use for generating temporary URLs.
+#   Defaults to $::os_service_default
+#
 # [*swift_temp_url_key*]
 #   (optional) The secret token given to Swift to allow temporary URL
 #   downloads. Required for several drivers (e.g. agent_ipmitool).
@@ -88,6 +97,8 @@ class ironic::glance (
   $num_retries                = $::os_service_default,
   $api_insecure               = $::os_service_default,
   $swift_account              = $::os_service_default,
+  $swift_container            = $::os_service_default,
+  $swift_endpoint_url         = $::os_service_default,
   $swift_temp_url_key         = $::os_service_default,
   $swift_temp_url_duration    = $::os_service_default,
   $swift_account_project_name = undef,
@@ -123,6 +134,8 @@ class ironic::glance (
     'glance/glance_api_servers':      value => $api_servers_converted;
     'glance/glance_num_retries':      value => $num_retries_real;
     'glance/glance_api_insecure':     value => $api_insecure_real;
+    'glance/swift_container':         value => $swift_container;
+    'glance/swift_endpoint_url':      value => $swift_endpoint_url;
     'glance/swift_temp_url_key':      value => $swift_temp_url_key_real, secret => true;
     'glance/swift_temp_url_duration': value => $swift_temp_url_duration_real;
   }

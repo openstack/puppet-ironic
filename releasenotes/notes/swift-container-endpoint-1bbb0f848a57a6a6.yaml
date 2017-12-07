@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    Exposes ``swift_container`` and ``swift_endpoint_url`` in the
+    ``ironic::glance`` manifest. The latter is required for ``ansible`` and
+    ``direct`` deploy interfaces.
