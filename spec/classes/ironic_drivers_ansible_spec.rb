@@ -33,6 +33,19 @@ describe 'ironic::drivers::ansible' do
       is_expected.to contain_ironic_config('ansible/image_store_insecure').with_value('<SERVICE DEFAULT>')
     end
 
+    it 'installs ansible package' do
+      is_expected.to contain_package('ansible').with(
+        :ensure => 'present',
+        :name   => 'ansible',
+        :tag    => ['openstack', 'ironic-package'],
+      )
+      is_expected.to contain_package('systemd-python').with(
+        :ensure => 'present',
+        :name   => platform_params[:systemd_python_package],
+        :tag    => ['openstack', 'ironic-package'],
+      )
+    end
+
     context 'when overriding parameters' do
       before do
         params.merge!(:ansible_extra_args => '--foo',
@@ -57,6 +70,16 @@ describe 'ironic::drivers::ansible' do
       let (:facts) do
         facts.merge(OSDefaults.get_facts())
       end
+
+      let :platform_params do
+        case facts[:osfamily]
+        when 'Debian'
+          { :systemd_python_package => 'python-systemd' }
+        when 'RedHat'
+          { :systemd_python_package => 'systemd-python' }
+        end
+      end
+
       it_behaves_like 'ironic ansible deploy interface'
     end
   end

@@ -41,6 +41,7 @@ class ironic::params {
       $inspector_service         = 'openstack-ironic-inspector'
       $inspector_dnsmasq_service = 'openstack-ironic-inspector-dnsmasq'
       $staging_drivers_package   = 'openstack-ironic-staging-drivers'
+      $systemd_python_package    = 'systemd-python'
       $ipxe_rom_dir              = '/usr/share/ipxe'
       $ironic_wsgi_script_path   = '/var/www/cgi-bin/ironic'
       $ironic_wsgi_script_source = '/usr/lib/python2.7/site-packages/ironic/api/app.wsgi'
@@ -64,6 +65,7 @@ class ironic::params {
       $inspector_dnsmasq_service = 'ironic-inspector-dnsmasq'
       # guessing the name, ironic-staging-drivers is not packaged in debian yet
       $staging_drivers_package   = 'ironic-staging-drivers'
+      $systemd_python_package    = 'python-systemd'
       $ipxe_rom_dir              = '/usr/lib/ipxe'
       $ironic_wsgi_script_path   = '/usr/lib/cgi-bin/ironic'
       $ironic_wsgi_script_source = '/usr/lib/python2.7/dist-packages/ironic/api/app.wsgi'

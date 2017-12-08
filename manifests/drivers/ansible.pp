@@ -14,6 +14,10 @@
 #
 # === Parameters
 #
+# [*package_ensure*]
+#   (optional) The state of the required packages
+#   Defaults to 'present'
+#
 # [*ansible_extra_args*]
 #   (optional) Extra arguments to pass on every invocation of ansible.
 #   Defaults to $::os_service_default
@@ -33,6 +37,7 @@
 #
 
 class ironic::drivers::ansible (
+  $package_ensure       = 'present',
   $ansible_extra_args   = $::os_service_default,
   $playbooks_path       = $::os_service_default,
   $config_file_path     = $::os_service_default,
@@ -40,6 +45,7 @@ class ironic::drivers::ansible (
 ) {
 
   include ::ironic::deps
+  include ::ironic::params
 
   # Configure ironic.conf
   ironic_config {
@@ -48,5 +54,20 @@ class ironic::drivers::ansible (
     'ansible/config_file_path':     value => $config_file_path;
     'ansible/image_store_insecure': value => $image_store_insecure;
   }
+
+  ensure_packages('ansible',
+    {
+      ensure => $package_ensure,
+      tag    => ['openstack', 'ironic-package'],
+    }
+  )
+
+  ensure_packages('systemd-python',
+    {
+      ensure => $package_ensure,
+      name   => $::ironic::params::systemd_python_package,
+      tag    => ['openstack', 'ironic-package'],
+    }
+  )
 
 }

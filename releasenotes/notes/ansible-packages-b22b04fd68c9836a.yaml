@@ -1,0 +1,5 @@
+---
+fixes:
+  - |
+    The ``ironic::drivers::ansible`` manifest now installs dependencies of
+    the *ansible* deploy method - ``ansible`` and ``systemd-python`` packages.
