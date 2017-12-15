@@ -76,6 +76,7 @@ describe 'ironic::pxe' do
           :tftp_root => '/var/lib/tftpboot',
           :http_root => '/var/www/httpboot',
           :http_port => 3816,
+          :tftp_bind_host => '1.2.3.4',
         )
       end
 
@@ -117,6 +118,11 @@ describe 'ironic::pxe' do
           'seltype' => 'tftpdir_t',
           'ensure'  => 'present',
           'backup'  => false,
+        )
+      end
+      it 'should setup tftp xinetd service' do
+        is_expected.to contain_xinetd__service('tftp').with(
+         'bind' => '1.2.3.4',
         )
       end
     end
