@@ -1,0 +1,4 @@
+---
+features:
+  - New option "tftp_bind_host" added to specify
+    IP address TFTP will bind too

@@ -43,6 +43,10 @@
 #   (optional) Array of PXE boot files to copy from $syslinux_path to $tftp_root.
 #   Defaults to '$::ironic::params::syslinux_files'
 #
+# [*tftp_bind_host*]
+#   (optional) The IP address xinetd will listen on for TFTP.
+#   Defaults to undef (listen on all ip addresses).
+#
 class ironic::pxe (
   $package_ensure = 'present',
   $tftp_root      = '/tftpboot',
@@ -50,6 +54,7 @@ class ironic::pxe (
   $http_port      = '8088',
   $syslinux_path  = $::ironic::params::syslinux_path,
   $syslinux_files = $::ironic::params::syslinux_files,
+  $tftp_bind_host = undef,
 ) inherits ::ironic::params {
 
   include ::ironic::deps
@@ -101,6 +106,7 @@ class ironic::pxe (
 
   xinetd::service { 'tftp':
     port        => '69',
+    bind        => $tftp_bind_host,
     protocol    => 'udp',
     server_args => "${options} ${tftp_root_real}",
     server      => '/usr/sbin/in.tftpd',
