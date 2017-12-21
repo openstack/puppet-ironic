@@ -31,6 +31,12 @@ describe 'ironic::drivers::ansible' do
       is_expected.to contain_ironic_config('ansible/playbooks_path').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('ansible/config_file_path').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('ansible/image_store_insecure').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('ansible/default_username').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('ansible/default_key_file').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('ansible/default_deploy_playbook').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('ansible/default_shutdown_playbook').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('ansible/default_clean_playbook').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('ansible/default_clean_steps_config').with_value('<SERVICE DEFAULT>')
     end
 
     it 'installs ansible package' do
@@ -51,13 +57,25 @@ describe 'ironic::drivers::ansible' do
         params.merge!(:ansible_extra_args => '--foo',
                       :playbooks_path => '/home/stack/playbooks',
                       :config_file_path => '/home/stack/ansible.cfg',
-                      :image_store_insecure => true)
+                      :image_store_insecure => true,
+                      :default_username => 'root',
+                      :default_key_file => '/etc/ironic/ipa-ssh',
+                      :default_deploy_playbook => 'deploy-extra.yaml',
+                      :default_shutdown_playbook => 'shutdown-extra.yaml',
+                      :default_clean_playbook => 'clean-extra.yaml',
+                      :default_clean_steps_config => 'custom-clean-steps.yaml')
       end
       it 'should replace default parameter with new value' do
         is_expected.to contain_ironic_config('ansible/ansible_extra_args').with_value(p[:ansible_extra_args])
         is_expected.to contain_ironic_config('ansible/playbooks_path').with_value(p[:playbooks_path])
         is_expected.to contain_ironic_config('ansible/config_file_path').with_value(p[:config_file_path])
         is_expected.to contain_ironic_config('ansible/image_store_insecure').with_value(p[:image_store_insecure])
+        is_expected.to contain_ironic_config('ansible/default_username').with_value(p[:default_username])
+        is_expected.to contain_ironic_config('ansible/default_key_file').with_value(p[:default_key_file])
+        is_expected.to contain_ironic_config('ansible/default_deploy_playbook').with_value(p[:default_deploy_playbook])
+        is_expected.to contain_ironic_config('ansible/default_shutdown_playbook').with_value(p[:default_shutdown_playbook])
+        is_expected.to contain_ironic_config('ansible/default_clean_playbook').with_value(p[:default_clean_playbook])
+        is_expected.to contain_ironic_config('ansible/default_clean_steps_config').with_value(p[:default_clean_steps_config])
       end
     end
 

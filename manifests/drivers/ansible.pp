@@ -35,13 +35,46 @@
 #   downloading the image.
 #   Defaults to $::os_service_default
 #
+# [*default_username*]
+#   (optional) Default name of the user to use for Ansible when connecting to
+#   the ramdisk over SSH.
+#   Defaults to $::os_service_default
+#
+# [*default_key_file*]
+#   (optional) Absolute path to the private SSH key file to use by Ansible
+#   by default when connecting to the ramdisk over SSH.
+#   Defaults to $::os_service_default
+#
+# [*default_deploy_playbook*]
+#   (optional) Path to the default playbook used for deployment.
+#   Defaults to $::os_service_default
+#
+# [*default_shutdown_playbook*]
+#   (optional) Path to the default playbook used for graceful shutdown.
+#   Defaults to $::os_service_default
+#
+# [*default_clean_playbook*]
+#   (optional) Path to the default playbook used for cleaning.
+#   Defaults to $::os_service_default
+#
+# [*default_clean_steps_config*]
+#   (optional) Path to the default auxiliary cleaning steps file used during
+#   cleaning.
+#   Defaults to $::os_service_default
+#
 
 class ironic::drivers::ansible (
-  $package_ensure       = 'present',
-  $ansible_extra_args   = $::os_service_default,
-  $playbooks_path       = $::os_service_default,
-  $config_file_path     = $::os_service_default,
-  $image_store_insecure = $::os_service_default,
+  $package_ensure             = 'present',
+  $ansible_extra_args         = $::os_service_default,
+  $playbooks_path             = $::os_service_default,
+  $config_file_path           = $::os_service_default,
+  $image_store_insecure       = $::os_service_default,
+  $default_username           = $::os_service_default,
+  $default_key_file           = $::os_service_default,
+  $default_deploy_playbook    = $::os_service_default,
+  $default_shutdown_playbook  = $::os_service_default,
+  $default_clean_playbook     = $::os_service_default,
+  $default_clean_steps_config = $::os_service_default,
 ) {
 
   include ::ironic::deps
@@ -49,10 +82,16 @@ class ironic::drivers::ansible (
 
   # Configure ironic.conf
   ironic_config {
-    'ansible/ansible_extra_args':   value => $ansible_extra_args;
-    'ansible/playbooks_path':       value => $playbooks_path;
-    'ansible/config_file_path':     value => $config_file_path;
-    'ansible/image_store_insecure': value => $image_store_insecure;
+    'ansible/ansible_extra_args':         value => $ansible_extra_args;
+    'ansible/playbooks_path':             value => $playbooks_path;
+    'ansible/config_file_path':           value => $config_file_path;
+    'ansible/image_store_insecure':       value => $image_store_insecure;
+    'ansible/default_username':           value => $default_username;
+    'ansible/default_key_file':           value => $default_key_file;
+    'ansible/default_deploy_playbook':    value => $default_deploy_playbook;
+    'ansible/default_shutdown_playbook':  value => $default_shutdown_playbook;
+    'ansible/default_clean_playbook':     value => $default_clean_playbook;
+    'ansible/default_clean_steps_config': value => $default_clean_steps_config;
   }
 
   ensure_packages('ansible',

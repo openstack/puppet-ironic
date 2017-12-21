@@ -1,0 +1,8 @@
+---
+features:
+  - |
+    Allow configuring the defaults for the ansible deploy interface via new
+    parameters ``default_username``, ``default_key_file``,
+    ``default_deploy_playbook``, ``default_shutdown_playbook``,
+    ``default_clean_playbook`` and ``default_clean_steps_config`` in the
+    ``ironic::drivers::ansible`` manifest.
