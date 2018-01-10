@@ -29,6 +29,7 @@ class ironic::params {
   $client_package           = 'python-ironicclient'
   $inspector_client_package = 'python-ironic-inspector-client'
   $lib_package_name         = 'python-ironic-lib'
+  $group                    = 'ironic'
 
   case $::osfamily {
     'RedHat': {

@@ -6,7 +6,17 @@
 #
 # [*policies*]
 #   (optional) Set of policies to configure for ironic
-#   Example : { 'ironic-context_is_admin' => {'context_is_admin' => 'true'}, 'ironic-default' => {'default' => 'rule:admin_or_owner'} }
+#   Example :
+#     {
+#       'ironic-context_is_admin' => {
+#         'key' => 'context_is_admin',
+#         'value' => 'true'
+#       },
+#       'ironic-default' => {
+#         'key' => 'default',
+#         'value' => 'rule:admin_or_owner'
+#       }
+#     }
 #   Defaults to empty hash.
 #
 # [*policy_path*]
@@ -19,11 +29,14 @@ class ironic::policy (
 ) {
 
   include ::ironic::deps
+  include ::ironic::params
 
   validate_hash($policies)
 
   Openstacklib::Policy::Base {
-    file_path => $policy_path,
+    file_path  => $policy_path,
+    file_user  => 'root',
+    file_group => $::ironic::params::group,
   }
 
   create_resources('openstacklib::policy::base', $policies)

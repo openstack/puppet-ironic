@@ -17,8 +17,10 @@ describe 'ironic::policy' do
 
     it 'set up the policies' do
       is_expected.to contain_openstacklib__policy__base('context_is_admin').with({
-        :key   => 'context_is_admin',
-        :value => 'foo:bar'
+        :key        => 'context_is_admin',
+        :value      => 'foo:bar',
+        :file_user  => 'root',
+        :file_group => 'ironic',
       })
       is_expected.to contain_oslo__policy('ironic_config').with(
         :policy_file => '/etc/ironic/policy.json',
@@ -34,8 +36,7 @@ describe 'ironic::policy' do
         facts.merge!(OSDefaults.get_facts())
       end
 
-      it_behaves_like 'ironic policies'
+      it_configures 'ironic policies'
     end
   end
-
 end
