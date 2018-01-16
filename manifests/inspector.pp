@@ -221,6 +221,10 @@
 #   Requires node_not_found_hook set to "enroll".
 #   Defaults to $::os_service_default
 #
+# [*enable_ppc64le*]
+#   (optional) Boolean value to dtermine if ppc64le support should be enabled
+#   Defaults to false (no ppc64le support)
+#
 class ironic::inspector (
   $package_ensure                  = 'present',
   $enabled                         = true,
@@ -268,6 +272,7 @@ class ironic::inspector (
   $http_root                       = '/httpboot',
   $node_not_found_hook             = $::os_service_default,
   $discovery_default_driver        = $::os_service_default,
+  $enable_ppc64le                  = false,
 ) {
 
   include ::ironic::deps
@@ -309,6 +314,16 @@ class ironic::inspector (
       group   => 'ironic-inspector',
       content => template('ironic/inspector_pxelinux_cfg.erb'),
       require => Anchor['ironic-inspector::config::begin'],
+    }
+    if $enable_ppc64le {
+      file { "${tftp_root_real}/ppc64le/default":
+        ensure  => 'present',
+        seltype => 'tftpdir_t',
+        owner   => 'ironic-inspector',
+        group   => 'ironic-inspector',
+        content => template('ironic/inspector_pxelinux_cfg.erb'),
+        require => Anchor['ironic-inspector::config::begin'],
+      }
     }
   }
 

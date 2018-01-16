@@ -47,6 +47,10 @@
 #   (optional) The IP address xinetd will listen on for TFTP.
 #   Defaults to undef (listen on all ip addresses).
 #
+# [*enable_ppc64le*]
+#   (optional) Boolean value to dtermine if ppc64le support should be enabled
+#   Defaults to false (no ppc64le support)
+#
 class ironic::pxe (
   $package_ensure = 'present',
   $tftp_root      = '/tftpboot',
@@ -55,6 +59,7 @@ class ironic::pxe (
   $syslinux_path  = $::ironic::params::syslinux_path,
   $syslinux_files = $::ironic::params::syslinux_files,
   $tftp_bind_host = undef,
+  $enable_ppc64le = false,
 ) inherits ::ironic::params {
 
   include ::ironic::deps
@@ -84,6 +89,16 @@ class ironic::pxe (
     owner   => 'ironic',
     group   => 'ironic',
     require => Anchor['ironic::install::end'],
+  }
+
+  if $enable_ppc64le {
+    file { "${tftp_root_real}/ppc64le":
+        ensure  => 'directory',
+        seltype => 'tftpdir_t',
+        owner   => 'ironic',
+        group   => 'ironic',
+        require => Anchor['ironic::install::end'],
+    }
   }
 
   file { $http_root_real:
