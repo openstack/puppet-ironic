@@ -26,3 +26,10 @@ dhcp-sequential-ip
 <% if @dnsmasq_dhcp_hostsdir %>
 dhcp-hostsdir=<%= @dnsmasq_dhcp_hostsdir %>
 <% end %>
+<% if @enable_ppc64le -%>
+# Client is ppc64le (OPAL) box and doesn't need a chain loader, but does need a custom config
+dhcp-match=set:ppc64le,option:client-arch,14
+dhcp-boot=tag:ppc64le,
+dhcp-option=tag:ppc64le, 210,<%= @tftp_root_real %>/ppc64le/
+dhcp-option=tag:ppc64le, 209,default
+<% end -%>

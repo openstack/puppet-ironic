@@ -77,6 +77,10 @@
 #   Should be an valid integer
 #   Defaults to $::os_service_default.
 #
+# [*enable_ppc64le*]
+#   (optional) Boolean value to dtermine if ppc64le support should be enabled
+#   Defaults to false (no ppc64le support)
+#
 class ironic::drivers::pxe (
   $ipxe_enabled             = false,
   $pxe_append_params        = $::os_service_default,
@@ -90,6 +94,7 @@ class ironic::drivers::pxe (
   $uefi_pxe_bootfile_name   = $::os_service_default,
   $uefi_pxe_config_template = $::os_service_default,
   $ipxe_timeout             = $::os_service_default,
+  $enable_ppc64le           = false,
 ) {
 
   include ::ironic::deps
@@ -119,6 +124,17 @@ class ironic::drivers::pxe (
     'pxe/uefi_pxe_bootfile_name': value   => $uefi_pxe_bootfile_name;
     'pxe/uefi_pxe_config_template': value => $uefi_pxe_config_template;
     'pxe/ipxe_timeout': value             => $ipxe_timeout_real;
+  }
+
+  if $enable_ppc64le {
+    # FXIME(tonyb): As these are really hash values it would beter to model
+    # them that way.  We can do that later, probably when we add another
+    # architecture
+    ironic_config {
+      # NOTE(tonyb): This first value shouldn't be needed but seems to be?
+      'pxe/pxe_config_template_by_arch': value => "ppc64le:${pxe_config_template_real}";
+      'pxe/pxe_bootfile_name_by_arch': value   => 'ppc64le:config';
+    }
   }
 
 }

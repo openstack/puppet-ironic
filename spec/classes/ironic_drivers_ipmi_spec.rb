@@ -37,14 +37,17 @@ describe 'ironic::drivers::ipmi' do
 
     it 'configures ironic.conf' do
       is_expected.to contain_ironic_config('ipmi/command_retry_timeout').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('ipmi/min_command_interval').with_value('<SERVICE DEFAULT>')
     end
 
     context 'when overriding parameters' do
       before do
         params.merge!(:command_retry_timeout => '50')
+        params.merge!(:min_command_interval => '5')
       end
       it 'should replace default parameter with new value' do
         is_expected.to contain_ironic_config('ipmi/command_retry_timeout').with_value('50')
+        is_expected.to contain_ironic_config('ipmi/min_command_interval').with_value('5')
       end
     end
 

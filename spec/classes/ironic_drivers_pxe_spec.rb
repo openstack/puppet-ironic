@@ -75,6 +75,19 @@ describe 'ironic::drivers::pxe' do
       end
     end
 
+    context 'when overriding only enable_ppc64le' do
+      before do
+        params.merge!(
+          :enable_ppc64le             => true,
+        )
+      end
+
+      it 'detects correct ppc64le parameters' do
+        is_expected.to contain_ironic_config('pxe/pxe_config_template_by_arch').with_value('ppc64le:$pybasedir/drivers/modules/pxe_config.template')
+        is_expected.to contain_ironic_config('pxe/pxe_bootfile_name_by_arch').with_value('ppc64le:config')
+      end
+    end
+
     context 'when overriding parameters' do
       before do
         params.merge!(
