@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    Add new parameter ``ironic::db::online_data_migrations::migration_params``
+    to allow passing arguments to migration themselves (``extra_params`` passes
+    arguments to the ``ironic-dbsync`` command itself and cannot be used to
+    tune migrations).
