@@ -74,7 +74,7 @@ describe 'basic ironic' do
           class { '::ironic::pxe': }
           class { '::ironic::inspector':
             ironic_password => 'a_big_secret',
-            ironic_auth_url => "https://${::fqdn}:5000/v2.0",
+            ironic_auth_url => "http://127.0.0.1:5000/v3",
             dnsmasq_interface => 'eth0',
             db_connection   => 'mysql+pymysql://ironic-inspector:a_big_secret@127.0.0.1/ironic-inspector?charset=utf8',
           }
