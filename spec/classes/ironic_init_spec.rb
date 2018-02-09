@@ -101,6 +101,7 @@ describe 'ironic' do
       is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_password').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_virtual_host').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_password').with_secret( true )
+      is_expected.to contain_ironic_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>')
     end
 
     it 'should perform default database configuration' do
