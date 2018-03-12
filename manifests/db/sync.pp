@@ -41,5 +41,6 @@ class ironic::db::sync(
     ],
     notify      => Anchor['ironic::dbsync::end'],
     require     => File['/var/log/ironic/ironic-dbsync.log'],
+    tag         => 'openstack-db',
   }
 }
