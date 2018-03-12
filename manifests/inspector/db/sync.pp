@@ -18,5 +18,6 @@ class ironic::inspector::db::sync {
       Anchor['ironic-inspector::dbsync::begin']
     ],
     notify      => Anchor['ironic-inspector::dbsync::end'],
+    tag         => 'openstack-db',
   }
 }
