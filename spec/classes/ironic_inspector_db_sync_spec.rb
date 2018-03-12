@@ -10,7 +10,8 @@ describe 'ironic::inspector::db::sync' do
         :path        => '/usr/bin',
         :user        => 'ironic-inspector',
         :refreshonly => 'true',
-        :logoutput   => 'on_failure'
+        :logoutput   => 'on_failure',
+        :tag         => 'openstack-db',
       )
     end
 

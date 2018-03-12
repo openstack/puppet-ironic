@@ -17,6 +17,7 @@ describe 'ironic::db::sync' do
                          'Anchor[ironic::config::end]',
                          'Anchor[ironic::dbsync::begin]'],
         :notify      => 'Anchor[ironic::dbsync::end]',
+        :tag         => 'openstack-db',
       )
 
       is_expected.to contain_file('/var/log/ironic/ironic-dbsync.log').with(
@@ -44,6 +45,7 @@ describe 'ironic::db::sync' do
                              'Anchor[ironic::config::end]',
                              'Anchor[ironic::dbsync::begin]'],
             :notify      => 'Anchor[ironic::dbsync::end]',
+            :tag         => 'openstack-db',
         )
         }
     end
