@@ -60,6 +60,10 @@
 #   (optional) Location to store logs retrieved from the ramdisk
 #   Defaults to '/var/log/ironic-inspector/ramdisk/'
 #
+# [*always_store_ramdisk_logs*]
+#   (optional) Whether to store ramdisk logs even for successful introspection.
+#   Defaults to $::os_service_default
+#
 # [*add_ports*]
 #   (optional)  Which MAC addresses to add as ports during introspection.
 #   Allowed values: all, active, pxe.
@@ -234,6 +238,7 @@ class ironic::inspector (
   $dnsmasq_interface               = 'br-ctlplane',
   $db_connection                   = undef,
   $ramdisk_logs_dir                = '/var/log/ironic-inspector/ramdisk/',
+  $always_store_ramdisk_logs       = $::os_service_default,
   $add_ports                       = $::os_service_default,
   $keep_ports                      = 'all',
   $store_data                      = 'none',
@@ -353,6 +358,7 @@ class ironic::inspector (
     'capabilities/boot_mode':                     value => $detect_boot_mode;
     'iptables/dnsmasq_interface':                 value => $dnsmasq_interface;
     'processing/ramdisk_logs_dir':                value => $ramdisk_logs_dir;
+    'processing/always_store_ramdisk_logs':       value => $always_store_ramdisk_logs;
     'processing/add_ports':                       value => $add_ports;
     'processing/keep_ports':                      value => $keep_ports;
     'processing/store_data':                      value => $store_data;

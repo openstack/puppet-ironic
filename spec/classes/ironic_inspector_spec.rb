@@ -105,6 +105,7 @@ describe 'ironic::inspector' do
       is_expected.to contain_ironic_inspector_config('capabilities/boot_mode').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('iptables/dnsmasq_interface').with_value(p[:dnsmasq_interface])
       is_expected.to contain_ironic_inspector_config('processing/ramdisk_logs_dir').with_value(p[:ramdisk_logs_dir])
+      is_expected.to contain_ironic_inspector_config('processing/always_store_ramdisk_logs').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('processing/add_ports').with_value(p[:add_ports])
       is_expected.to contain_ironic_inspector_config('processing/keep_ports').with_value(p[:keep_ports])
       is_expected.to contain_ironic_inspector_config('processing/store_data').with_value(p[:store_data])
@@ -196,6 +197,7 @@ describe 'ironic::inspector' do
           :dnsmasq_ip_subnets          => [],
           :dnsmasq_ip_range            => '192.168.0.100,192.168.0.120',
           :add_ports                   => 'all',
+          :always_store_ramdisk_logs   => true,
         )
       end
       it 'should replace default parameter with new value' do
@@ -214,6 +216,7 @@ describe 'ironic::inspector' do
         is_expected.to contain_ironic_inspector_config('processing/node_not_found_hook').with_value('enroll')
         is_expected.to contain_ironic_inspector_config('processing/add_ports').with_value('all')
         is_expected.to contain_ironic_inspector_config('discovery/enroll_node_driver').with_value('pxe_ipmitool')
+        is_expected.to contain_ironic_inspector_config('processing/always_store_ramdisk_logs').with_value(true)
       end
 
       it 'should contain file /etc/ironic-inspector/dnsmasq.conf' do
