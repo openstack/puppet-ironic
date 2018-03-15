@@ -1,0 +1,3 @@
+features:
+  - |
+    Adds ``ironic::inspector::always_store_ramdisk_logs`` parameter.
