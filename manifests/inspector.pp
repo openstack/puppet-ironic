@@ -158,6 +158,11 @@
 #   (optional) IP interface for the dnsmasq process
 #   Defaults to '192.168.0.1'
 #
+# [*dnsmasq_dhcp_hostsdir*]
+#   (optional) directory with DHCP hosts, only used with the "dnsmasq" PXE
+#   filter.
+#   Defaults to undef
+#
 # [*sync_db*]
 #   Enable dbsync
 #   Defaults to true
@@ -250,6 +255,7 @@ class ironic::inspector (
   $swift_auth_url                  = 'http://127.0.0.1:5000/v2.0',
   $dnsmasq_ip_subnets              = [],
   $dnsmasq_local_ip                = '192.168.0.1',
+  $dnsmasq_dhcp_hostsdir           = undef,
   $sync_db                         = true,
   $ramdisk_collectors              = 'default',
   $ramdisk_filename                = 'agent.ramdisk',
@@ -345,7 +351,7 @@ class ironic::inspector (
     'DEFAULT/auth_strategy':                      value => $auth_strategy;
     'DEFAULT/timeout':                            value => $timeout;
     'capabilities/boot_mode':                     value => $detect_boot_mode;
-    'firewall/dnsmasq_interface':                 value => $dnsmasq_interface;
+    'iptables/dnsmasq_interface':                 value => $dnsmasq_interface;
     'processing/ramdisk_logs_dir':                value => $ramdisk_logs_dir;
     'processing/add_ports':                       value => $add_ports;
     'processing/keep_ports':                      value => $keep_ports;

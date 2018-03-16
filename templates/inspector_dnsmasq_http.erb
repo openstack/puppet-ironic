@@ -32,3 +32,6 @@ dhcp-boot=tag:ipxe,http://<%= @dnsmasq_local_ip %>:<%= @http_port_real %>/inspec
 dhcp-boot=tag:efi,tag:!ipxe,ipxe.efi
 # Client is running PXE over BIOS; send BIOS version of iPXE chainloader
 dhcp-boot=undionly.kpxe,localhost.localdomain,<%= @dnsmasq_local_ip %>
+<% if @dnsmasq_dhcp_hostsdir %>
+dhcp-hostsdir=<%= @dnsmasq_dhcp_hostsdir %>
+<% end %>
