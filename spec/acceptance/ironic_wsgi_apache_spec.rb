@@ -11,78 +11,7 @@ describe 'basic ironic' do
       include ::openstack_integration::rabbitmq
       include ::openstack_integration::mysql
       include ::openstack_integration::keystone
-
-      rabbitmq_user { 'ironic':
-        admin    => true,
-        password => 'an_even_bigger_secret',
-        provider => 'rabbitmqctl',
-        require  => Class['rabbitmq'],
-      }
-
-      rabbitmq_user_permissions { 'ironic@/':
-        configure_permission => '.*',
-        write_permission     => '.*',
-        read_permission      => '.*',
-        provider             => 'rabbitmqctl',
-        require              => Class['rabbitmq'],
-      }
-
-      # https://bugs.launchpad.net/ironic/+bug/1564075
-      Rabbitmq_user_permissions['ironic@/'] -> Service<| tag == 'ironic-service' |>
-
-      # Ironic resources
-      class { '::ironic':
-        default_transport_url => 'rabbit://ironic:an_even_bigger_secret@127.0.0.1:5672/',
-        database_connection   => 'mysql+pymysql://ironic:a_big_secret@127.0.0.1/ironic?charset=utf8',
-        debug                 => true,
-      }
-      class { '::ironic::db::mysql':
-        password => 'a_big_secret',
-      }
-      class { '::ironic::keystone::auth':
-        password => 'a_big_secret',
-      }
-      class { '::ironic::keystone::auth_inspector':
-        password => 'a_big_secret',
-      }
-      class { '::ironic::client': }
-      class { '::ironic::conductor': }
-      class { '::ironic::api::authtoken':
-        password => 'a_big_secret',
-      }
-      class { '::ironic::api':
-        service_name   => 'httpd',
-      }
-      include ::apache
-      class { '::ironic::wsgi::apache':
-        ssl => false,
-      }
-      class { '::ironic::drivers::ipmi': }
-
-      # Ironic inspector resources
-      case $::osfamily {
-        'Debian': {
-          warning("Ironic inspector packaging is not ready on ${::osfamily}.")
-        }
-        'RedHat': {
-          class { '::ironic::inspector::db::mysql':
-            password => 'a_big_secret',
-          }
-          class { '::ironic::inspector::authtoken':
-            password => 'a_big_secret',
-          }
-          class { '::ironic::pxe': }
-          class { '::ironic::inspector':
-            ironic_password => 'a_big_secret',
-            ironic_auth_url => "http://127.0.0.1:5000/v3",
-            dnsmasq_interface => 'eth0',
-            db_connection   => 'mysql+pymysql://ironic-inspector:a_big_secret@127.0.0.1/ironic-inspector?charset=utf8',
-          }
-        }
-        default: {
-          fail("Unsupported osfamily (${::osfamily})")
-        }
-      }
+      include ::openstack_integration::ironic
       EOS
 
 
