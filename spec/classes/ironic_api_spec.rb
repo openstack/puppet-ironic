@@ -69,7 +69,9 @@ describe 'ironic::api' do
       is_expected.to contain_ironic_config('api/max_limit').with_value(p[:max_limit])
       is_expected.to contain_ironic_config('api/api_workers').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('api/public_endpoint').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('oslo_middleware/enable_proxy_headers_parsing').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_oslo__middleware('ironic_config').with(
+        :enable_proxy_headers_parsing => '<SERVICE DEFAULT>',
+      )
     end
 
     context 'when overriding parameters' do
@@ -96,7 +98,9 @@ describe 'ironic::api' do
         params.merge!({:enable_proxy_headers_parsing => true })
       end
 
-      it { is_expected.to contain_ironic_config('oslo_middleware/enable_proxy_headers_parsing').with_value(true) }
+      it { is_expected.to contain_oslo__middleware('ironic_config').with(
+        :enable_proxy_headers_parsing => true,
+      )}
     end
 
     context 'when running ironic-api in wsgi' do
