@@ -87,6 +87,11 @@
 #   Can not be specified together with provisioning_network_name.
 #   Defaults to $::os_service_default
 #
+# [*rescuing_network*]
+#   (optional) Neutron network UUID or name for the ramdisk to be booted into
+#   for rescue. Can not be specified together with rescuing_network_name.
+#   Defaults to $::os_service_default
+#
 # [*configdrive_use_swift*]
 #   (optional) Whether to use Swift for storing config drives instead of
 #   the database. Recommended for bigger config drives.
@@ -117,6 +122,12 @@
 #   (optional) If provided the name will be converted to UUID and set
 #   as value of neutron/provisioning_network option in ironic.conf
 #   Can not be specified together with provisioning_network.
+#   Defaults to undef, which leaves the configuration intact
+#
+# [*rescuing_network_name*]
+#   (optional) If provided the name will be converted to UUID and set
+#   as value of neutron/rescuing option in ironic.conf
+#   Can not be specified together with rescuing_network.
 #   Defaults to undef, which leaves the configuration intact
 #
 # [*port_setup_delay*]
@@ -169,6 +180,7 @@ class ironic::conductor (
   $continue_if_disk_secure_erase_fails = $::os_service_default,
   $api_url                             = $::os_service_default,
   $provisioning_network                = $::os_service_default,
+  $rescuing_network                    = $::os_service_default,
   $configdrive_use_swift               = $::os_service_default,
   $configdrive_swift_container         = $::os_service_default,
   $inspect_timeout                     = $::os_service_default,
@@ -176,6 +188,7 @@ class ironic::conductor (
   $port_setup_delay                    = $::os_service_default,
   $cleaning_network_name               = undef,
   $provisioning_network_name           = undef,
+  $rescuing_network_name               = undef,
   $power_state_change_timeout          = $::os_service_default,
   # DEPRECATED
   $cleaning_network_uuid               = undef,
@@ -208,6 +221,10 @@ specified in the same time.")
   if ($provisioning_network_name and !is_service_default($provisioning_network_real)) {
     fail("provisioning_network_name and provisioning_network or provisioning_network_uuid can not be \
 specified in the same time.")
+  }
+
+  if ($rescuing_network_name and !is_service_default($rescuing_network)) {
+    fail('rescuing_network_name and rescuing_network can not be specified in the same time.')
   }
 
   if $swift_account or $swift_temp_url_key or $swift_temp_url_duration {
@@ -295,6 +312,16 @@ moved to ironic::glance manifest")
   } else {
     ironic_config {
       'neutron/provisioning_network': value => $provisioning_network_real;
+    }
+  }
+
+  if $rescuing_network_name {
+    ironic_config {
+      'neutron/rescuing_network': value => $rescuing_network_name, transform_to => 'net_uuid';
+    }
+  } else {
+    ironic_config {
+      'neutron/rescuing_network': value => $rescuing_network;
     }
   }
 
