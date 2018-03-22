@@ -54,6 +54,11 @@
 #   raid_interface field set.
 #   Defaults to $::os_service_default
 #
+# [*default_rescue_interface*]
+#   (optional) Default rescue interface to be used for nodes that do not have
+#   rescue_interface field set.
+#   Defaults to $::os_service_default
+#
 # [*default_storage_interface*]
 #   (optional) Default storage interface to be used for nodes that do not have
 #   storage_interface field set.
@@ -104,6 +109,11 @@
 #   service initialization.
 #   Defaults to $::os_service_default
 #
+# [*enabled_rescue_interfaces*]
+#   (optional) Specify the list of rescue interfaces to load during
+#   service initialization.
+#   Defaults to $::os_service_default
+#
 # [*enabled_storage_interfaces*]
 #   (optional) Specify the list of storage interfaces to load during
 #   service initialization.
@@ -123,6 +133,7 @@ class ironic::drivers::interfaces (
   $default_network_interface     = $::os_service_default,
   $default_power_interface       = $::os_service_default,
   $default_raid_interface        = $::os_service_default,
+  $default_rescue_interface      = $::os_service_default,
   $default_storage_interface     = $::os_service_default,
   $default_vendor_interface      = $::os_service_default,
   $enabled_boot_interfaces       = $::os_service_default,
@@ -133,6 +144,7 @@ class ironic::drivers::interfaces (
   $enabled_network_interfaces    = $::os_service_default,
   $enabled_power_interfaces      = $::os_service_default,
   $enabled_raid_interfaces       = $::os_service_default,
+  $enabled_rescue_interfaces     = $::os_service_default,
   $enabled_storage_interfaces    = $::os_service_default,
   $enabled_vendor_interfaces     = $::os_service_default,
 ) {
@@ -154,6 +166,8 @@ class ironic::drivers::interfaces (
                       'default'      => $default_power_interface },
     'raid'       => { 'enabled_list' => $enabled_raid_interfaces,
                       'default'      => $default_raid_interface },
+    'rescue'     => { 'enabled_list' => $enabled_rescue_interfaces,
+                      'default'      => $default_rescue_interface },
     'storage'    => { 'enabled_list' => $enabled_storage_interfaces,
                       'default'      => $default_storage_interface },
     'vendor'     => { 'enabled_list' => $enabled_vendor_interfaces,

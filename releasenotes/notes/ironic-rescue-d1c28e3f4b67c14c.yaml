@@ -1,0 +1,10 @@
+---
+features:
+  - |
+    Supports configuring rescue mode:
+
+    * Adds support for ``default_rescue_interface`` and
+      ``enabled_rescue_interfaces`` to ``ironic::drivers::interfaces``.
+
+    * Adds support for configuring rescue network via ``rescuing_network``
+      or ``rescuing_network_name`` in ``ironic::conductor``.

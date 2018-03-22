@@ -28,6 +28,7 @@ describe 'ironic::drivers::interfaces' do
       it { is_expected.to contain_ironic_config('DEFAULT/enabled_network_interfaces').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_ironic_config('DEFAULT/enabled_power_interfaces').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_ironic_config('DEFAULT/enabled_raid_interfaces').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_ironic_config('DEFAULT/enabled_rescue_interfaces').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_ironic_config('DEFAULT/enabled_storage_interfaces').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_ironic_config('DEFAULT/enabled_vendor_interfaces').with_value('<SERVICE DEFAULT>') }
     end
@@ -42,6 +43,7 @@ describe 'ironic::drivers::interfaces' do
           :enabled_network_interfaces    => ['flat','neutron'],
           :enabled_power_interfaces      => ['irmc', 'ipmitool'],
           :enabled_raid_interfaces       => ['agent', 'no-raid'],
+          :enabled_rescue_interfaces     => ['agent', 'no-rescue'],
           :enabled_storage_interfaces    => ['cinder'],
           :enabled_vendor_interfaces     => ['no-vendor'] }
       end
@@ -54,6 +56,7 @@ describe 'ironic::drivers::interfaces' do
       it { is_expected.to contain_ironic_config('DEFAULT/enabled_network_interfaces').with_value('flat,neutron') }
       it { is_expected.to contain_ironic_config('DEFAULT/enabled_power_interfaces').with_value('irmc,ipmitool') }
       it { is_expected.to contain_ironic_config('DEFAULT/enabled_raid_interfaces').with_value('agent,no-raid') }
+      it { is_expected.to contain_ironic_config('DEFAULT/enabled_rescue_interfaces').with_value('agent,no-rescue') }
       it { is_expected.to contain_ironic_config('DEFAULT/enabled_storage_interfaces').with_value('cinder') }
       it { is_expected.to contain_ironic_config('DEFAULT/enabled_vendor_interfaces').with_value('no-vendor') }
     end
