@@ -22,11 +22,17 @@
 class ironic::params {
   include ::openstacklib::defaults
 
+  if ($::os_package_type == 'debian') {
+    $pyvers = '3'
+  } else {
+    $pyvers = ''
+  }
+
   $dbsync_command           =
     'ironic-dbsync --config-file /etc/ironic/ironic.conf'
   $inspector_dbsync_command =
     'ironic-inspector-dbsync --config-file /etc/ironic-inspector/inspector.conf upgrade'
-  $client_package           = 'python-ironicclient'
+  $client_package           = "python${pyvers}-ironicclient"
   $inspector_client_package = 'python-ironic-inspector-client'
   $lib_package_name         = 'python-ironic-lib'
   $group                    = 'ironic'
