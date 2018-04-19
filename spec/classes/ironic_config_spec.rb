@@ -16,6 +16,8 @@ describe 'ironic::config' do
     }
   end
 
+  it { is_expected.to contain_class('ironic::deps') }
+
   it 'configures arbitrary ironic configurations' do
     is_expected.to contain_ironic_config('DEFAULT/foo').with_value('fooValue')
     is_expected.to contain_ironic_config('DEFAULT/bar').with_value('barValue')
