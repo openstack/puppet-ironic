@@ -69,7 +69,7 @@ class { '::ironic::api':
 class { '::ironic::drivers::ipmi': }
 
 # alternatively, you can deploy Ironic with Bifrost. It's a collection of Ansible playbooks to configure
-# and install Ironic in a stand-alone fashion (for more information visit http://git.openstack.org/openstack/bifrost)
+# and install Ironic in a stand-alone fashion (for more information visit https://docs.openstack.org/bifrost/latest/)
 class { 'ironic::bifrost':
   ironic_db_password => 'a_big_secret',
   mysql_password => 'yet_another_big_secret',
