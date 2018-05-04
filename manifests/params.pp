@@ -24,8 +24,10 @@ class ironic::params {
 
   if ($::os_package_type == 'debian') {
     $pyvers = '3'
+    $pyver3 = '3'
   } else {
     $pyvers = ''
+    $pyver3 = '2.7'
   }
 
   $dbsync_command           =
@@ -75,7 +77,7 @@ class ironic::params {
       $systemd_python_package    = 'python-systemd'
       $ipxe_rom_dir              = '/usr/lib/ipxe'
       $ironic_wsgi_script_path   = '/usr/lib/cgi-bin/ironic'
-      $ironic_wsgi_script_source = '/usr/lib/python2.7/dist-packages/ironic/api/app.wsgi'
+      $ironic_wsgi_script_source = "/usr/lib/python${$pyver3}/dist-packages/ironic/api/app.wsgi"
       $tftpd_package             = 'tftpd'
       $ipxe_package              = 'ipxe'
       $syslinux_package          = 'syslinux-common'
