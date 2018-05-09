@@ -35,6 +35,7 @@ class ironic::drivers::redfish (
 ) {
 
   include ::ironic::deps
+  include ::ironic::params
 
   ironic_config {
     'redfish/connection_attempts':       value => $connection_attempts;
@@ -44,6 +45,7 @@ class ironic::drivers::redfish (
   ensure_packages('python-sushy',
     {
       ensure => $package_ensure,
+      name   => $::ironic::params::sushy_package_name,
       tag    => ['openstack', 'ironic-package'],
     }
   )

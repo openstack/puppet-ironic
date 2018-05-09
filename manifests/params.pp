@@ -30,14 +30,17 @@ class ironic::params {
     $pyver3 = '2.7'
   }
 
-  $dbsync_command           =
+  $dbsync_command             =
     'ironic-dbsync --config-file /etc/ironic/ironic.conf'
-  $inspector_dbsync_command =
+  $inspector_dbsync_command   =
     'ironic-inspector-dbsync --config-file /etc/ironic-inspector/inspector.conf upgrade'
-  $client_package           = "python${pyvers}-ironicclient"
-  $inspector_client_package = 'python-ironic-inspector-client'
-  $lib_package_name         = 'python-ironic-lib'
-  $group                    = 'ironic'
+  $client_package             = "python${pyvers}-ironicclient"
+  $inspector_client_package   = "python${pyvers}-ironic-inspector-client"
+  $lib_package_name           = "python${pyvers}-ironic-lib"
+  $group                      = 'ironic'
+  $sushy_package_name         = "python${pyvers}-sushy"
+  $proliantutils_package_name = "python${pyvers}-proliantutils"
+  $dracclient_package_name    = "python${pyvers}-dracclient"
 
   case $::osfamily {
     'RedHat': {

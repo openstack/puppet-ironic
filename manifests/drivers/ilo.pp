@@ -47,6 +47,7 @@ class ironic::drivers::ilo (
 ) {
 
   include ::ironic::deps
+  include ::ironic::params
 
   # Configure ironic.conf
   ironic_config {
@@ -59,6 +60,7 @@ class ironic::drivers::ilo (
   ensure_packages('python-proliantutils',
     {
       ensure => $package_ensure,
+      name   => $::ironic::params::proliantutils_package_name,
       tag    => ['openstack', 'ironic-package'],
     }
   )

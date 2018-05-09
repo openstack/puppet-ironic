@@ -94,7 +94,7 @@ describe 'ironic::db' do
       it 'install the proper backend package' do
         is_expected.to contain_package('python-pymysql').with(
           :ensure => 'present',
-          :name   => 'python-pymysql',
+          :name   => platform_params[:pymysql_package_name],
           :tag    => ['openstack'],
         )
       end
@@ -135,6 +135,24 @@ describe 'ironic::db' do
           :concat_basedir => '/var/lib/puppet/concat',
           :fqdn           => 'some.host.tld',
         }))
+      end
+
+      let(:platform_params) do
+        case facts[:osfamily]
+        when 'Debian'
+          if facts[:os_package_type] == 'debian' then
+            pymysql_pkgname = 'python3-pymysql'
+          else
+            pymysql_pkgname = 'python-pymysql'
+          end
+          {
+            :pymysql_package_name => pymysql_pkgname,
+          }
+        when 'RedHat'
+          {
+            :pymysql_package_name => 'python-pymysql',
+          }
+        end
       end
 
       case facts[:osfamily]

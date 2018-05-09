@@ -24,10 +24,12 @@ class ironic::drivers::drac (
 ) {
 
   include ::ironic::deps
+  include ::ironic::params
 
   ensure_packages('python-dracclient',
     {
       ensure => $package_ensure,
+      name   => $::ironic::params::dracclient_package_name,
       tag    => ['openstack', 'ironic-package'],
     }
   )
