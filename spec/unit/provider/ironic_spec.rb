@@ -14,7 +14,7 @@ describe Puppet::Provider::Ironic do
       'project_name'         => 'admin_tenant',
       'username'             => 'admin',
       'password'             => 'password',
-      'www_authenticate_uri' => 'https://192.168.56.210:35357/',
+      'www_authenticate_uri' => 'https://192.168.56.210:5000/',
       'project_domain_name'  => 'admin_tenant_domain',
       'user_domain_name'     => 'admin_domain',
     }
