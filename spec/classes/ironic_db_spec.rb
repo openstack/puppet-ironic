@@ -13,6 +13,7 @@ describe 'ironic::db' do
         :min_pool_size  => '<SERVICE DEFAULT>',
         :max_pool_size  => '<SERVICE DEFAULT>',
         :max_retries    => '<SERVICE DEFAULT>',
+        :pool_timeout   => '<SERVICE DEFAULT>',
         :retry_interval => '<SERVICE DEFAULT>',
         :max_overflow   => '<SERVICE DEFAULT>',
       )}
@@ -26,6 +27,7 @@ describe 'ironic::db' do
           :database_min_pool_size  => '2',
           :database_max_pool_size  => '21',
           :database_max_retries    => '11',
+          :database_pool_timeout   => '21',
           :database_max_overflow   => '21',
           :database_retry_interval => '11',
           :database_db_max_retries => '-1',
@@ -41,6 +43,7 @@ describe 'ironic::db' do
         :max_retries    => '11',
         :retry_interval => '11',
         :max_overflow   => '21',
+        :pool_timeout   => '21',
       )}
 
     end
