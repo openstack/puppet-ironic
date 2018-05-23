@@ -13,6 +13,7 @@ describe 'ironic::inspector::db' do
       it { is_expected.to contain_ironic_inspector_config('database/max_overflow').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_ironic_inspector_config('database/pool_timeout').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_ironic_inspector_config('database/max_retries').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_ironic_inspector_config('database/db_max_retries').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_ironic_inspector_config('database/retry_interval').with_value('<SERVICE DEFAULT>') }
 
     end
@@ -24,6 +25,7 @@ describe 'ironic::inspector::db' do
           :database_min_pool_size  => '2',
           :database_max_pool_size  => '21',
           :database_max_retries    => '11',
+          :database_db_max_retries => '11',
           :database_max_overflow   => '21',
           :database_pool_timeout   => '21',
           :database_retry_interval => '11', }
@@ -33,6 +35,7 @@ describe 'ironic::inspector::db' do
       it { is_expected.to contain_ironic_inspector_config('database/idle_timeout').with_value('3601') }
       it { is_expected.to contain_ironic_inspector_config('database/min_pool_size').with_value('2') }
       it { is_expected.to contain_ironic_inspector_config('database/max_retries').with_value('11') }
+      it { is_expected.to contain_ironic_inspector_config('database/db_max_retries').with_value('11') }
       it { is_expected.to contain_ironic_inspector_config('database/max_pool_size').with_value('21') }
       it { is_expected.to contain_ironic_inspector_config('database/max_overflow').with_value('21') }
       it { is_expected.to contain_ironic_inspector_config('database/pool_timeout').with_value('21') }

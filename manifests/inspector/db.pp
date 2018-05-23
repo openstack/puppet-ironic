@@ -12,6 +12,11 @@
 #   Timeout when db connections should be reaped.
 #   (Optional) Defaults to $::os_service_default
 #
+# [*database_db_max_retries*]
+#   (Optional) Maximum retries in case of connection error or deadlock error
+#   before error is raised. Set to -1 to specify an infinite retry count.
+#   Defaults to $::os_service_default
+#
 # [*database_max_retries*]
 #   Maximum db connection retries during startup.
 #   Setting -1 implies an infinite retry count.
@@ -41,6 +46,7 @@ class ironic::inspector::db (
   $database_connection     = 'sqlite:////var/lib/ironic-inspector/inspector.sqlite',
   $database_idle_timeout   = $::os_service_default,
   $database_max_retries    = $::os_service_default,
+  $database_db_max_retries = $::os_service_default,
   $database_retry_interval = $::os_service_default,
   $database_min_pool_size  = $::os_service_default,
   $database_max_pool_size  = $::os_service_default,
@@ -61,6 +67,7 @@ class ironic::inspector::db (
     min_pool_size  => $database_min_pool_size,
     max_pool_size  => $database_max_pool_size,
     max_retries    => $database_max_retries,
+    db_max_retries => $database_max_retries,
     retry_interval => $database_retry_interval,
     max_overflow   => $database_max_overflow,
     pool_timeout   => $database_pool_timeout,
