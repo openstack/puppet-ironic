@@ -1,0 +1,6 @@
+---
+upgrade:
+  - |
+    The deprecated ironic::rabbit_host, ironic::rabbit_hosts, ironic::rabbit_password,
+    ironic::rabbit_port, ironic::rabbit_userid and ironic::rabit_virtual_host are now
+    removed. Please use ironic::default_transport_url instead.

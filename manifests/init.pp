@@ -253,30 +253,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*rabbit_host*]
-#   (optional) IP or hostname of the rabbit server. (string value)
-#   Defaults to $::os_service_default
-#
-# [*rabbit_hosts*]
-#   (optional) List of clustered rabbit servers. (string value)
-#   Defaults to $::os_service_default
-#
-# [*rabbit_userid*]
-#   (optional) User used to connect to rabbitmq. (string value)
-#   Defaults to $::os_service_default
-#
-# [*rabbit_port*]
-#   (optional) Port for rabbitmq instance. (port value)
-#   Defaults to $::os_service_default
-#
-# [*rabbit_password*]
-#   (optional) Password used to connect to rabbitmq. (string value)
-#   Defaults to $::os_service_default
-#
-# [*rabbit_virtual_host*]
-#   (optional) The RabbitMQ virtual host. (string value)
-#   Defaults to $::os_service_default
-#
 # [*glance_api_servers*]
 #   (optional) A list of the glance api servers available to ironic.
 #   Should be an array with [hostname|ip]:port
@@ -289,10 +265,6 @@
 # [*glance_api_insecure*]
 #   (optional) Allow to perform insecure SSL (https) requests to glance.
 #   Defaults to undef
-#
-# [*rpc_backend*]
-#   (optional) what rpc/queuing service to use (string value)
-#   Defaults to $::os_service_default
 #
 class ironic (
   $enabled                            = true,
@@ -348,16 +320,9 @@ class ironic (
   $db_online_data_migrations          = false,
   $purge_config                       = false,
   # DEPRECATED PARAMETERS
-  $rabbit_host                        = $::os_service_default,
-  $rabbit_hosts                       = $::os_service_default,
-  $rabbit_password                    = $::os_service_default,
-  $rabbit_port                        = $::os_service_default,
-  $rabbit_userid                      = $::os_service_default,
-  $rabbit_virtual_host                = $::os_service_default,
   $glance_api_servers                 = undef,
   $glance_num_retries                 = undef,
   $glance_api_insecure                = undef,
-  $rpc_backend                        = $::os_service_default,
 ) {
 
   include ::ironic::deps
@@ -367,19 +332,6 @@ class ironic (
 
   include ::ironic::glance
   include ::ironic::neutron
-
-  if !is_service_default($rabbit_host) or
-    !is_service_default($rabbit_hosts) or
-    !is_service_default($rabbit_password) or
-    !is_service_default($rabbit_port) or
-    !is_service_default($rabbit_userid) or
-    !is_service_default($rabbit_virtual_host) or
-    !is_service_default($rpc_backend) {
-    warning("ironic::rabbit_host, ironic::rabbit_hosts, ironic::rabbit_password, \
-ironic::rabbit_port, ironic::rabbit_userid, ironic::rabbit_virtual_host and \
-ironic::rpc_backend are deprecated. Please use ironic::default_transport_url \
-instead.")
-  }
 
   if $glance_api_servers or $glance_api_insecure or $glance_num_retries {
     warning("ironic::glance_api_servers, ironic::glance_api_insecure, \
@@ -423,9 +375,6 @@ ironic::glance::api_insecure and ironic::glance::num_retries accordingly")
   }
 
   oslo::messaging::rabbit {'ironic_config':
-    rabbit_password             => $rabbit_password,
-    rabbit_userid               => $rabbit_userid,
-    rabbit_virtual_host         => $rabbit_virtual_host,
     rabbit_use_ssl              => $rabbit_use_ssl,
     heartbeat_timeout_threshold => $rabbit_heartbeat_timeout_threshold,
     heartbeat_rate              => $rabbit_heartbeat_rate,
@@ -437,9 +386,6 @@ ironic::glance::api_insecure and ironic::glance::num_retries accordingly")
     kombu_ssl_certfile          => $kombu_ssl_certfile,
     kombu_ssl_keyfile           => $kombu_ssl_keyfile,
     kombu_ssl_version           => $kombu_ssl_version,
-    rabbit_hosts                => $rabbit_hosts,
-    rabbit_host                 => $rabbit_host,
-    rabbit_port                 => $rabbit_port,
     rabbit_ha_queues            => $rabbit_ha_queues,
   }
 

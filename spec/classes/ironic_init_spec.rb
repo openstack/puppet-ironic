@@ -48,13 +48,12 @@ describe 'ironic' do
     context 'and if rabbit_hosts parameter is provided' do
 
       context 'with one server' do
-        before { params.merge!( :rabbit_hosts => ['127.0.0.1:5672'] ) }
         it_configures 'a ironic base installation'
         it_configures 'rabbit HA with a single virtual host'
       end
 
       context 'with multiple servers' do
-        before { params.merge!( :rabbit_hosts => ['rabbit1:5672', 'rabbit2:5672'] ) }
+        before { params.merge!( :rabbit_ha_queues => true ) }
         it_configures 'a ironic base installation'
         it_configures 'rabbit HA with multiple hosts'
       end
@@ -97,10 +96,6 @@ describe 'ironic' do
     end
 
     it 'configures credentials for rabbit' do
-      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_userid').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_password').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_virtual_host').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_password').with_secret( true )
       is_expected.to contain_ironic_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>')
     end
 
@@ -123,18 +118,12 @@ describe 'ironic' do
 
   shared_examples_for 'rabbit HA with a single virtual host' do
     it 'in ironic.conf' do
-      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_host').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_port').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_hosts').with_value( params[:rabbit_hosts] )
       is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('<SERVICE DEFAULT>')
     end
   end
 
   shared_examples_for 'rabbit HA with multiple hosts' do
     it 'in ironic.conf' do
-      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_host').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_port').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') )
       is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value(true)
     end
   end
