@@ -65,12 +65,6 @@
 #   HTTPProxyToWSGI middleware.
 #   Defaults to $::os_service_default.
 #
-# DEPRECATED
-#
-# [*neutron_url*]
-#   (optional) The Neutron URL to be used for requests from ironic
-#   Defaults to undef
-#
 class ironic::api (
   $package_ensure               = 'present',
   $enabled                      = true,
@@ -81,21 +75,12 @@ class ironic::api (
   $workers                      = $::os_service_default,
   $public_endpoint              = $::os_service_default,
   $enable_proxy_headers_parsing = $::os_service_default,
-  # DEPRECATED
-  $neutron_url                  = undef,
 ) inherits ironic::params {
 
   include ::ironic::deps
   include ::ironic::params
   include ::ironic::policy
   include ::ironic::api::authtoken
-
-  # For backward compatibility only, remove when neutron_url is removed
-  include ::ironic::neutron
-
-  if $neutron_url {
-    warning('Using ironic::api::neutron_url is deprecated, use ironic::neutron::api_endpoint instead')
-  }
 
   # Configure ironic.conf
   ironic_config {

@@ -194,8 +194,7 @@ describe 'ironic::inspector' do
           :detect_boot_mode            => true,
           :node_not_found_hook         => 'enroll',
           :discovery_default_driver    => 'pxe_ipmitool',
-          :dnsmasq_ip_subnets          => [],
-          :dnsmasq_ip_range            => '192.168.0.100,192.168.0.120',
+          :dnsmasq_ip_subnets          => [{'ip_range' => '192.168.0.100,192.168.0.120'}],
           :add_ports                   => 'all',
           :always_store_ramdisk_logs   => true,
         )

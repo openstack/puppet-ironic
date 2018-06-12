@@ -251,21 +251,6 @@
 #   in the ironic config.
 #   Defaults to false.
 #
-# DEPRECATED PARAMETERS
-#
-# [*glance_api_servers*]
-#   (optional) A list of the glance api servers available to ironic.
-#   Should be an array with [hostname|ip]:port
-#   Defaults to undef
-#
-# [*glance_num_retries*]
-#   (optional) Number retries when downloading an image from glance.
-#   Defaults to undef
-#
-# [*glance_api_insecure*]
-#   (optional) Allow to perform insecure SSL (https) requests to glance.
-#   Defaults to undef
-#
 class ironic (
   $enabled                            = true,
   $package_ensure                     = 'present',
@@ -319,10 +304,6 @@ class ironic (
   $sync_db                            = true,
   $db_online_data_migrations          = false,
   $purge_config                       = false,
-  # DEPRECATED PARAMETERS
-  $glance_api_servers                 = undef,
-  $glance_num_retries                 = undef,
-  $glance_api_insecure                = undef,
 ) {
 
   include ::ironic::deps
@@ -332,12 +313,6 @@ class ironic (
 
   include ::ironic::glance
   include ::ironic::neutron
-
-  if $glance_api_servers or $glance_api_insecure or $glance_num_retries {
-    warning("ironic::glance_api_servers, ironic::glance_api_insecure, \
-ironic::glance_num_retries are deprecated in favor of ironic::glance::api_servers, \
-ironic::glance::api_insecure and ironic::glance::num_retries accordingly")
-  }
 
   ensure_resource( 'package', 'ironic-common', {
       ensure => $package_ensure,

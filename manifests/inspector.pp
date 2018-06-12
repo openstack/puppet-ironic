@@ -221,12 +221,6 @@
 #   Requires node_not_found_hook set to "enroll".
 #   Defaults to $::os_service_default
 #
-# DEPRECATED
-#
-# [*dnsmasq_ip_range*]
-#   (optional) IP range to use for nodes being introspected
-#   Defaults to undef
-#
 class ironic::inspector (
   $package_ensure                  = 'present',
   $enabled                         = true,
@@ -274,8 +268,6 @@ class ironic::inspector (
   $http_root                       = '/httpboot',
   $node_not_found_hook             = $::os_service_default,
   $discovery_default_driver        = $::os_service_default,
-  # DEPRECATED
-  $dnsmasq_ip_range                = undef,
 ) {
 
   include ::ironic::deps
@@ -290,14 +282,6 @@ class ironic::inspector (
 
   if !is_array($dnsmasq_ip_subnets) {
     fail('Invalid data type, parameter dnsmasq_ip_subnets must be Array type')
-  }
-
-  if $dnsmasq_ip_range {
-    warning('dnsmasq_ip_range is deprecated, replaced by dnsmasq_ip_subnets')
-    $dnsmasq_ip_subnets_real = concat($dnsmasq_ip_subnets,
-                                      {'ip_range' => $dnsmasq_ip_range})
-  } else {
-    $dnsmasq_ip_subnets_real = $dnsmasq_ip_subnets
   }
 
   $tftp_root_real    = pick($::ironic::pxe::common::tftp_root, $tftp_root)

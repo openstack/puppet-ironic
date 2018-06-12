@@ -104,22 +104,13 @@ class ironic::glance (
   $swift_account_project_name = undef,
 ) {
 
-  $api_servers_real = pick($::ironic::glance_api_servers, $api_servers)
-  if is_array($api_servers_real) {
-    $api_servers_converted = join($api_servers_real, ',')
+  if is_array($api_servers) {
+    $api_servers_converted = join($api_servers, ',')
   } else {
-    $api_servers_converted = $api_servers_real
+    $api_servers_converted = $api_servers
   }
 
-  $num_retries_real = pick($::ironic::glance_num_retries, $num_retries)
-  $api_insecure_real = pick($::ironic::glance_api_insecure, $api_insecure)
-
-  $swift_account_real = pick($::ironic::conductor::swift_account, $swift_account)
-  $swift_temp_url_key_real = pick($::ironic::conductor::swift_temp_url_key, $swift_temp_url_key)
-  $swift_temp_url_duration_real = pick($::ironic::conductor::swift_temp_url_duration, $swift_temp_url_duration)
-
-
-  if ($swift_account_project_name and !is_service_default($swift_account_real)) {
+  if ($swift_account_project_name and !is_service_default($swift_account)) {
     fail('swift_account_project_name and swift_account can not be specified in the same time.')
   }
 
@@ -132,12 +123,12 @@ class ironic::glance (
     'glance/user_domain_name':        value => $user_domain_name;
     'glance/project_domain_name':     value => $project_domain_name;
     'glance/glance_api_servers':      value => $api_servers_converted;
-    'glance/glance_num_retries':      value => $num_retries_real;
-    'glance/glance_api_insecure':     value => $api_insecure_real;
+    'glance/glance_num_retries':      value => $num_retries;
+    'glance/glance_api_insecure':     value => $api_insecure;
     'glance/swift_container':         value => $swift_container;
     'glance/swift_endpoint_url':      value => $swift_endpoint_url;
-    'glance/swift_temp_url_key':      value => $swift_temp_url_key_real, secret => true;
-    'glance/swift_temp_url_duration': value => $swift_temp_url_duration_real;
+    'glance/swift_temp_url_key':      value => $swift_temp_url_key, secret => true;
+    'glance/swift_temp_url_duration': value => $swift_temp_url_duration;
   }
 
   if $swift_account_project_name {
@@ -146,7 +137,7 @@ class ironic::glance (
     }
   } else {
     ironic_config {
-      'glance/swift_account':           value => $swift_account_real;
+      'glance/swift_account':           value => $swift_account;
     }
   }
 }

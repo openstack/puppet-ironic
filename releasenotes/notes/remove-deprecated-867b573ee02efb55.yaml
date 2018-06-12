@@ -1,0 +1,27 @@
+---
+upgrade:
+  - |
+    The deprecated parameter ironic::api::neutron_url is now removed.
+    Please use the ironic::neutron::api_endpoint parameter instead.
+  - |
+    The deprecated parameter ironic::conductor::cleaning_network_uuid is now removed.
+    Please use the ironic::conductor::cleaning_network parameter instead.
+  - |
+    The deprecated parameters swift_account, swift_temp_url_key and swift_temp_url_duration
+    in ironic::conductor is removed. Please set these in ironic::glance instead.
+  - |
+    The deprecated parameter ironic::drivers::ipmi::retry_timeout is now removed.
+    Please use ironic::drivers::ipmi::command_retry_timeout instead. 
+  - |
+    The deprecated parameter ironic::inspector::dnsmasq_ip_range is now removed.
+    Please use ironic::inspector::dnsmasq_ip_subnets.
+    If you are using dnsmasq_ip_range please change, example::
+
+      $dnsmasq_ip_range = '192.168.0.100,192.168.0.120'
+
+    Replace with::
+
+      $dnsmasq_ip_subnets = [{'ip_range' => '192.168.0.100,192.168.0.120'}]
+  - |
+    The deprecated parameters glance_api_services, glance_api_insecure and
+    glance_num_retries in ::ironic is now removed. Please set these in ::ironic::glance instead.

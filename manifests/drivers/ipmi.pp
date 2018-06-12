@@ -24,32 +24,15 @@
 #   Should be an interger value
 #   Defaults to $::os_service_default
 #
-# DEPRECATED PARAMETERS
-#
-# [*retry_timeout*]
-#   (optional) Maximum time in seconds to retry IPMI operations.
-#   Should be an interger value
-#   Defaults to undef.
-#
 class ironic::drivers::ipmi (
   $command_retry_timeout = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $retry_timeout = undef
 ) {
 
   include ::ironic::deps
 
-  if $retry_timeout {
-    warning('retry_timeout parameter is replaced by command_retry_timeout and power_state_change_timeout, will be removed in the future.')
-    $_command_retry_timeout = $retry_timeout
-  }
-  else {
-    $_command_retry_timeout = $command_retry_timeout
-  }
-
   # Configure ironic.conf
   ironic_config {
-    'ipmi/command_retry_timeout': value => $_command_retry_timeout;
+    'ipmi/command_retry_timeout': value => $command_retry_timeout;
   }
 
 }

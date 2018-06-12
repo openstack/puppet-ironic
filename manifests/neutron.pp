@@ -55,10 +55,8 @@ class ironic::neutron (
   $project_domain_name = 'Default',
 ) {
 
-  $api_endpoint_real = pick($::ironic::api::neutron_url, $api_endpoint)
-
   ironic_config {
-    'neutron/url':                 value => $api_endpoint_real;
+    'neutron/url':                 value => $api_endpoint;
     'neutron/auth_type':           value => $auth_type;
     'neutron/username':            value => $username;
     'neutron/password':            value => $password, secret => true;

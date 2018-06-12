@@ -140,31 +140,6 @@
 #   so that the baremetal node is in the desired new power state.
 #   Defaults to $::os_service_default
 #
-# DEPRECATED
-#
-# [*cleaning_network_uuid*]
-#   (optional) Use cleaning_network instead.
-#   Defaults to undef
-#
-# [*provisioning_network_uuid*]
-#   (optional) Use provisioning_network instead.
-#   Defaults to undef
-#
-# [*swift_account*]
-#   (optional) The account that Glance uses to communicate with Swift.
-#   The format is "AUTH_uuid"
-#   Defaults to $::os_service_default
-#
-# [*swift_temp_url_key*]
-#   (optional) The secret token given to Swift to allow temporary URL
-#   downloads. Required for several drivers (e.g. agent_ipmitool).
-#   Defaults to $::os_service_default
-#
-# [*swift_temp_url_duration*]
-#   (optional) The length of time in seconds that the temporary URL will be
-#   valid for.
-#   Defaults to $::os_service_default
-#
 class ironic::conductor (
   $package_ensure                      = 'present',
   $enabled                             = true,
@@ -190,12 +165,6 @@ class ironic::conductor (
   $provisioning_network_name           = undef,
   $rescuing_network_name               = undef,
   $power_state_change_timeout          = $::os_service_default,
-  # DEPRECATED
-  $cleaning_network_uuid               = undef,
-  $provisioning_network_uuid           = undef,
-  $swift_account                       = undef,
-  $swift_temp_url_key                  = undef,
-  $swift_temp_url_duration             = undef,
 ) {
 
   include ::ironic::deps
@@ -204,32 +173,16 @@ class ironic::conductor (
   # For backward compatibility
   include ::ironic::glance
 
-  if $cleaning_network_uuid {
-    warning('cleaning_network_uuid is deprecated, use cleaning_network')
-  }
-  if $provisioning_network_uuid {
-    warning('provisioning_network_uuid is deprecated, use provisioning_network')
-  }
-  $cleaning_network_real = pick($cleaning_network_uuid, $cleaning_network)
-  $provisioning_network_real = pick($provisioning_network_uuid, $provisioning_network)
-
-  if ($cleaning_network_name and !is_service_default($cleaning_network_real)) {
-    fail("cleaning_network_name and cleaning_network or cleaning_network_uuid can not be \
-specified in the same time.")
+  if ($cleaning_network_name and !is_service_default($cleaning_network)) {
+    fail('cleaning_network_name and cleaning_network can not be specified at the same time.')
   }
 
-  if ($provisioning_network_name and !is_service_default($provisioning_network_real)) {
-    fail("provisioning_network_name and provisioning_network or provisioning_network_uuid can not be \
-specified in the same time.")
+  if ($provisioning_network_name and !is_service_default($provisioning_network)) {
+    fail('provisioning_network_name and provisioning_network can not be specified in the same time.')
   }
 
   if ($rescuing_network_name and !is_service_default($rescuing_network)) {
     fail('rescuing_network_name and rescuing_network can not be specified in the same time.')
-  }
-
-  if $swift_account or $swift_temp_url_key or $swift_temp_url_duration {
-    warning("swift_account, swift_temp_url_key and swift_temp_url_duration were \
-moved to ironic::glance manifest")
   }
 
   validate_array($enabled_drivers)
@@ -301,7 +254,7 @@ moved to ironic::glance manifest")
     }
   } else {
     ironic_config {
-      'neutron/cleaning_network': value => $cleaning_network_real;
+      'neutron/cleaning_network': value => $cleaning_network;
     }
   }
 
@@ -311,7 +264,7 @@ moved to ironic::glance manifest")
     }
   } else {
     ironic_config {
-      'neutron/provisioning_network': value => $provisioning_network_real;
+      'neutron/provisioning_network': value => $provisioning_network;
     }
   }
 
