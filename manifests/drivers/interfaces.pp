@@ -14,6 +14,11 @@
 #
 # === Parameters
 #
+# [*default_bios_interface*]
+#   (optional) Default bios interface to be used for nodes that do not have
+#   bios_interface field set.
+#   Defaults to $::os_service_default
+#
 # [*default_boot_interface*]
 #   (optional) Default boot interface to be used for nodes that do not have
 #   boot_interface field set.
@@ -67,6 +72,11 @@
 # [*default_vendor_interface*]
 #   (optional) Default vendor interface to be used for nodes that do not have
 #   vendor_interface field set.
+#   Defaults to $::os_service_default
+#
+# [*enabled_bios_interfaces*]
+#   (optional) Specify the list of bios interfaces to load during
+#   service initialization.
 #   Defaults to $::os_service_default
 #
 # [*enabled_boot_interfaces*]
@@ -125,6 +135,7 @@
 #   Defaults to $::os_service_default
 #
 class ironic::drivers::interfaces (
+  $default_bios_interface        = $::os_service_default,
   $default_boot_interface        = $::os_service_default,
   $default_console_interface     = $::os_service_default,
   $default_deploy_interface      = $::os_service_default,
@@ -136,6 +147,7 @@ class ironic::drivers::interfaces (
   $default_rescue_interface      = $::os_service_default,
   $default_storage_interface     = $::os_service_default,
   $default_vendor_interface      = $::os_service_default,
+  $enabled_bios_interfaces       = $::os_service_default,
   $enabled_boot_interfaces       = $::os_service_default,
   $enabled_console_interfaces    = $::os_service_default,
   $enabled_deploy_interfaces     = $::os_service_default,
@@ -150,6 +162,8 @@ class ironic::drivers::interfaces (
 ) {
 
   $interfaces = {
+    'bios'       => { 'enabled_list' => $enabled_bios_interfaces,
+                      'default'      => $default_bios_interface },
     'boot'       => { 'enabled_list' => $enabled_boot_interfaces,
                       'default'      => $default_boot_interface },
     'console'    => { 'enabled_list' => $enabled_console_interfaces,
