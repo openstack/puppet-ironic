@@ -20,7 +20,9 @@ describe 'ironic::drivers::interfaces' do
   shared_examples_for 'ironic hardware interfaces' do
 
     context 'with default parameters' do
+      it { is_expected.to contain_ironic_config('DEFAULT/enabled_bios_interfaces').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_ironic_config('DEFAULT/enabled_boot_interfaces').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_ironic_config('DEFAULT/enabled_console_interfaces').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_ironic_config('DEFAULT/enabled_console_interfaces').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_ironic_config('DEFAULT/enabled_deploy_interfaces').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_ironic_config('DEFAULT/enabled_inspect_interfaces').with_value('<SERVICE DEFAULT>') }
@@ -35,7 +37,9 @@ describe 'ironic::drivers::interfaces' do
 
     context 'when overriding parameters' do
       let :params do
-        { :enabled_boot_interfaces       => ['pxe'],
+        {
+          :enabled_bios_interfaces       => ['no-bios'],
+          :enabled_boot_interfaces       => ['pxe'],
           :enabled_console_interfaces    => ['socat', 'shellinabox'],
           :enabled_deploy_interfaces     => ['iscsi'],
           :enabled_inspect_interfaces    => ['inspector'],
@@ -48,6 +52,7 @@ describe 'ironic::drivers::interfaces' do
           :enabled_vendor_interfaces     => ['no-vendor'] }
       end
 
+      it { is_expected.to contain_ironic_config('DEFAULT/enabled_bios_interfaces').with_value('no-bios') }
       it { is_expected.to contain_ironic_config('DEFAULT/enabled_boot_interfaces').with_value('pxe') }
       it { is_expected.to contain_ironic_config('DEFAULT/enabled_console_interfaces').with_value('socat,shellinabox') }
       it { is_expected.to contain_ironic_config('DEFAULT/enabled_deploy_interfaces').with_value('iscsi') }
