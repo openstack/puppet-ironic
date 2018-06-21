@@ -142,3 +142,8 @@ Contributors
 ------------
 
 * https://github.com/openstack/puppet-ironic/graphs/contributors
+
+Release Notes
+-------------
+
+* https://docs.openstack.org/releasenotes/puppet-ironic
