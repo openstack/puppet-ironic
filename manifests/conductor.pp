@@ -27,10 +27,6 @@
 #   (optional) Define if the service must be enabled or not.
 #   Defaults to true.
 #
-# [*enabled_drivers*]
-#  (optional) Array of drivers to load during service initialization.
-#  Defaults to ['pxe_ipmitool'].
-#
 # [*enabled_hardware_types*]
 #  (optional) Array of hardware types to load during service initialization.
 #  Defaults to ['ipmi'].
@@ -140,10 +136,16 @@
 #   so that the baremetal node is in the desired new power state.
 #   Defaults to $::os_service_default
 #
+# DEPRECATED PARAMETERS
+#
+# [*enabled_drivers*]
+#  (optional) Array of drivers to load during service initialization.
+#  Deprecated and does nothing since the classic drivers have been removed.
+#  Defaults to undef
+#
 class ironic::conductor (
   $package_ensure                      = 'present',
   $enabled                             = true,
-  $enabled_drivers                     = ['pxe_ipmitool'],
   $enabled_hardware_types              = ['ipmi'],
   $max_time_interval                   = '120',
   $force_power_state_during_sync       = true,
@@ -165,6 +167,7 @@ class ironic::conductor (
   $provisioning_network_name           = undef,
   $rescuing_network_name               = undef,
   $power_state_change_timeout          = $::os_service_default,
+  $enabled_drivers                     = undef,
 ) {
 
   include ::ironic::deps
@@ -185,7 +188,6 @@ class ironic::conductor (
     fail('rescuing_network_name and rescuing_network can not be specified in the same time.')
   }
 
-  validate_array($enabled_drivers)
   validate_array($enabled_hardware_types)
 
   # NOTE(dtantsur): all in-tree drivers are IPA-based, so it won't hurt
@@ -194,8 +196,7 @@ class ironic::conductor (
 
   # On Ubuntu, ipmitool dependency is missing and ironic-conductor fails to start.
   # https://bugs.launchpad.net/cloud-archive/+bug/1572800
-  if (member($enabled_drivers, 'pxe_ipmitool') or
-      member($enabled_hardware_types, 'ipmi')) and $::osfamily == 'Debian' {
+  if member($enabled_hardware_types, 'ipmi') and $::osfamily == 'Debian' {
     ensure_packages('ipmitool',
       {
         ensure => $package_ensure,
@@ -229,7 +230,8 @@ class ironic::conductor (
 
   # Configure ironic.conf
   ironic_config {
-    'DEFAULT/enabled_drivers':                    value => join($enabled_drivers, ',');
+    # Force removal of the deprecated options to avoid failures. Remove in Stein.
+    'DEFAULT/enabled_drivers':                    ensure => absent;
     'DEFAULT/enabled_hardware_types':             value => join($enabled_hardware_types, ',');
     'conductor/max_time_interval':                value => $max_time_interval;
     'conductor/force_power_state_during_sync':    value => $force_power_state_during_sync;

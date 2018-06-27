@@ -1,0 +1,9 @@
+---
+upgrade:
+  - |
+    The ``enabled_drivers`` configuration option will be unset on upgrade.
+deprecations:
+  - |
+    The ``ironic::conductor::enabled_drivers`` option is deprecated and has
+    no effect. Use ``ironic::conductor::enabled_hardware_types`` to configure
+    the enabled hardware types.
