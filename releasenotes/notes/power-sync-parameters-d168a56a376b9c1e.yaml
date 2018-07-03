@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Expose the ``sync_power_state_interval`` and
+    ``power_state_sync_max_retries`` parametes in ``ironic::conductor``.

@@ -136,6 +136,16 @@
 #   so that the baremetal node is in the desired new power state.
 #   Defaults to $::os_service_default
 #
+# [*sync_power_state_interval*]
+#   (optional) Interval between syncing the node power state to the database,
+#   in seconds.
+#   Defaults to $::os_service_default
+#
+# [*power_state_sync_max_retries*]
+#   (optional) The number of times Ironic should try syncing the hardware node
+#   power state with the node power state in the database.
+#   Defaults to $::os_service_default
+#
 # DEPRECATED PARAMETERS
 #
 # [*enabled_drivers*]
@@ -167,6 +177,8 @@ class ironic::conductor (
   $provisioning_network_name           = undef,
   $rescuing_network_name               = undef,
   $power_state_change_timeout          = $::os_service_default,
+  $sync_power_state_interval           = $::os_service_default,
+  $power_state_sync_max_retries        = $::os_service_default,
   $enabled_drivers                     = undef,
 ) {
 
@@ -248,6 +260,8 @@ class ironic::conductor (
     'deploy/default_boot_option':                 value => $default_boot_option;
     'neutron/port_setup_delay':                   value => $port_setup_delay;
     'conductor/power_state_change_timeout':       value => $power_state_change_timeout;
+    'conductor/sync_power_state_interval':        value => $sync_power_state_interval;
+    'conductor/power_state_sync_max_retries':     value => $power_state_sync_max_retries;
   }
 
   if $cleaning_network_name {
