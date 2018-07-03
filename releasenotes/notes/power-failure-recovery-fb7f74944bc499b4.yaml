@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    Adds the ``ironic::conductor::power_failure_recovery_interval`` parameter.

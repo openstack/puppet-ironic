@@ -82,29 +82,31 @@ describe 'ironic::conductor' do
       is_expected.to contain_ironic_config('conductor/power_state_change_timeout').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/sync_power_state_interval').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/power_state_sync_max_retries').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('conductor/power_failure_recovery_interval').with(:value => '<SERVICE DEFAULT>')
     end
 
     context 'when overriding parameters' do
       before :each do
         params.merge!(
-          :enabled_hardware_types        => ['ipmi', 'irmc'],
-          :max_time_interval             => '50',
-          :force_power_state_during_sync => false,
-          :automated_clean               => false,
-          :cleaning_network              => '00000000-0000-0000-0000-000000000000',
-          :api_url                       => 'https://127.0.0.1:6385',
-          :provisioning_network          => '00000000-0000-0000-0000-000000000000',
-          :rescuing_network              => '00000000-0000-0000-0000-000000000000',
-          :cleaning_disk_erase           => 'metadata',
-          :http_url                      => 'http://host:port',
-          :http_root                     => '/src/www',
-          :configdrive_use_swift         => true,
-          :configdrive_swift_container   => 'cont',
-          :default_boot_option           => 'local',
-          :port_setup_delay              => '15',
-          :power_state_change_timeout    => '300',
-          :sync_power_state_interval     => 120,
-          :power_state_sync_max_retries  => 5,
+          :enabled_hardware_types          => ['ipmi', 'irmc'],
+          :max_time_interval               => '50',
+          :force_power_state_during_sync   => false,
+          :automated_clean                 => false,
+          :cleaning_network                => '00000000-0000-0000-0000-000000000000',
+          :api_url                         => 'https://127.0.0.1:6385',
+          :provisioning_network            => '00000000-0000-0000-0000-000000000000',
+          :rescuing_network                => '00000000-0000-0000-0000-000000000000',
+          :cleaning_disk_erase             => 'metadata',
+          :http_url                        => 'http://host:port',
+          :http_root                       => '/src/www',
+          :configdrive_use_swift           => true,
+          :configdrive_swift_container     => 'cont',
+          :default_boot_option             => 'local',
+          :port_setup_delay                => '15',
+          :power_state_change_timeout      => '300',
+          :sync_power_state_interval       => 120,
+          :power_state_sync_max_retries    => 5,
+          :power_failure_recovery_interval => 120,
         )
       end
       it 'should replace default parameter with new value' do
@@ -127,6 +129,7 @@ describe 'ironic::conductor' do
         is_expected.to contain_ironic_config('conductor/power_state_change_timeout').with_value(p[:power_state_change_timeout])
         is_expected.to contain_ironic_config('conductor/sync_power_state_interval').with_value(p[:sync_power_state_interval])
         is_expected.to contain_ironic_config('conductor/power_state_sync_max_retries').with_value(p[:power_state_sync_max_retries])
+        is_expected.to contain_ironic_config('conductor/power_failure_recovery_interval').with_value(p[:power_failure_recovery_interval])
       end
     end
 

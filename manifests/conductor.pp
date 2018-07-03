@@ -146,6 +146,12 @@
 #   power state with the node power state in the database.
 #   Defaults to $::os_service_default
 #
+# [*power_failure_recovery_interval*]
+#   (optional) Interval (in seconds) between checking the power
+#   state for nodes previously put into maintenance mode due to power
+#   synchronization failure.
+#   Defaults to $::os_service_default
+#
 # DEPRECATED PARAMETERS
 #
 # [*enabled_drivers*]
@@ -179,6 +185,7 @@ class ironic::conductor (
   $power_state_change_timeout          = $::os_service_default,
   $sync_power_state_interval           = $::os_service_default,
   $power_state_sync_max_retries        = $::os_service_default,
+  $power_failure_recovery_interval     = $::os_service_default,
   $enabled_drivers                     = undef,
 ) {
 
@@ -262,6 +269,7 @@ class ironic::conductor (
     'conductor/power_state_change_timeout':       value => $power_state_change_timeout;
     'conductor/sync_power_state_interval':        value => $sync_power_state_interval;
     'conductor/power_state_sync_max_retries':     value => $power_state_sync_max_retries;
+    'conductor/power_failure_recovery_interval':  value => $power_failure_recovery_interval;
   }
 
   if $cleaning_network_name {
