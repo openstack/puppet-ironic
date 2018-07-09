@@ -24,8 +24,14 @@
 #   Should be an interger value
 #   Defaults to $::os_service_default
 #
+# [*min_command_interval*]
+#   (optional) Minimum time, in seconds, between IPMI operations.
+#   Should be an interger value
+#   Defaults to $::os_service_default
+#
 class ironic::drivers::ipmi (
   $command_retry_timeout = $::os_service_default,
+  $min_command_interval  = $::os_service_default,
 ) {
 
   include ::ironic::deps
@@ -33,6 +39,7 @@ class ironic::drivers::ipmi (
   # Configure ironic.conf
   ironic_config {
     'ipmi/command_retry_timeout': value => $command_retry_timeout;
+    'ipmi/min_command_interval':  value => $min_command_interval;
   }
 
 }

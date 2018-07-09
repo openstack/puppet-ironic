@@ -139,6 +139,23 @@ describe 'ironic::pxe' do
         is_expected.not_to contain_file('/tftpboot/pxelinux.0')
       end
     end
+
+    context 'when enabling ppc64le support' do
+      before :each do
+        params.merge!(
+          :enable_ppc64le => true,
+        )
+      end
+      it 'should contain directory /tftpboot/ppc64le with selinux type tftpdir_t' do
+        is_expected.to contain_file('/tftpboot/ppc64le').with(
+          'owner'   => 'ironic',
+          'group'   => 'ironic',
+          'require' => 'Anchor[ironic::install::end]',
+          'ensure'  => 'directory',
+          'seltype' => 'tftpdir_t',
+        )
+      end
+    end
   end
 
   on_supported_os({
