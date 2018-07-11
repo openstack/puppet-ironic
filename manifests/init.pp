@@ -251,6 +251,21 @@
 #   in the ironic config.
 #   Defaults to false.
 #
+# [*notification_transport_url*]
+#   (optional) A URL representing the messaging driver to use for notifications
+#   and its full configuration. Transport URLs take the form:
+#     transport://user:pass@host1:port[,hostN:portN]/virtual_host
+#   Defaults to $::os_service_default
+#
+# [*notification_driver*]
+#   (Optional) Driver or drivers to handle sending notifications.
+#   Value can be a string or a list.
+#   Defaults to $::os_service_default
+#
+# [*notification_topics*]
+#   (optional) AMQP topic used for OpenStack notifications
+#   Defaults to $::os_service_default
+#
 class ironic (
   $enabled                            = true,
   $package_ensure                     = 'present',
@@ -304,6 +319,9 @@ class ironic (
   $sync_db                            = true,
   $db_online_data_migrations          = false,
   $purge_config                       = false,
+  $notification_transport_url         = $::os_service_default,
+  $notification_driver                = $::os_service_default,
+  $notification_topics                = $::os_service_default,
 ) {
 
   include ::ironic::deps
@@ -344,9 +362,9 @@ class ironic (
   }
 
   oslo::messaging::default {'ironic_config':
-      transport_url        => $default_transport_url,
-      rpc_response_timeout => $rpc_response_timeout,
-      control_exchange     => $control_exchange,
+    transport_url        => $default_transport_url,
+    rpc_response_timeout => $rpc_response_timeout,
+    control_exchange     => $control_exchange,
   }
 
   oslo::messaging::rabbit {'ironic_config':
@@ -383,4 +401,9 @@ class ironic (
     password               => $amqp_password,
   }
 
+  oslo::messaging::notifications { 'ironic_config':
+    transport_url => $notification_transport_url,
+    driver        => $notification_driver,
+    topics        => $notification_topics,
+  }
 }

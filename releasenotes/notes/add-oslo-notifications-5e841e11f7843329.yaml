@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Expose the ``notification_transport_url``, ``notification_driver`` and
+    ``notification_driver`` parameters in ``::ironic``
