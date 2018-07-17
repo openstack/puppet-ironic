@@ -142,6 +142,7 @@ class ironic::api (
       enable => false,
       tag    => 'ironic-service',
     }
+    Service <| title == 'httpd' |> { tag +> 'ironic-service' }
 
     # we need to make sure ironic-api/eventlet is stopped before trying to start apache
     Service['ironic-api'] -> Service[$service_name]
