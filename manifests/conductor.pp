@@ -263,7 +263,7 @@ class ironic::conductor (
     'deploy/continue_if_disk_secure_erase_fails': value => $continue_if_disk_secure_erase_fails;
     'conductor/configdrive_use_swift':            value => $configdrive_use_swift;
     'conductor/configdrive_swift_container':      value => $configdrive_swift_container;
-    'conductor/inspect_timeout':                  value => $inspect_timeout;
+    'conductor/inspect_wait_timeout':             value => $inspect_timeout;
     'deploy/default_boot_option':                 value => $default_boot_option;
     'neutron/port_setup_delay':                   value => $port_setup_delay;
     'conductor/power_state_change_timeout':       value => $power_state_change_timeout;
