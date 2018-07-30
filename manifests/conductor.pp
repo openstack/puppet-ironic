@@ -152,6 +152,11 @@
 #   synchronization failure.
 #   Defaults to $::os_service_default
 #
+# [*conductor_group*]
+#   (optional) Name of the conductor group to join. This conductor will only
+#   manage nodes with a matching "conductor_group" field set on the node.
+#   Defaults to $::os_service_default
+#
 # DEPRECATED PARAMETERS
 #
 # [*enabled_drivers*]
@@ -186,6 +191,7 @@ class ironic::conductor (
   $sync_power_state_interval           = $::os_service_default,
   $power_state_sync_max_retries        = $::os_service_default,
   $power_failure_recovery_interval     = $::os_service_default,
+  $conductor_group                     = $::os_service_default,
   $enabled_drivers                     = undef,
 ) {
 
@@ -270,6 +276,7 @@ class ironic::conductor (
     'conductor/sync_power_state_interval':        value => $sync_power_state_interval;
     'conductor/power_state_sync_max_retries':     value => $power_state_sync_max_retries;
     'conductor/power_failure_recovery_interval':  value => $power_failure_recovery_interval;
+    'conductor/conductor_group':                  value => $conductor_group;
   }
 
   if $cleaning_network_name {

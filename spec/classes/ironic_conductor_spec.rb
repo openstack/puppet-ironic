@@ -83,6 +83,7 @@ describe 'ironic::conductor' do
       is_expected.to contain_ironic_config('conductor/sync_power_state_interval').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/power_state_sync_max_retries').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/power_failure_recovery_interval').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('conductor/conductor_group').with(:value => '<SERVICE DEFAULT>')
     end
 
     context 'when overriding parameters' do
@@ -107,6 +108,7 @@ describe 'ironic::conductor' do
           :sync_power_state_interval       => 120,
           :power_state_sync_max_retries    => 5,
           :power_failure_recovery_interval => 120,
+          :conductor_group                 => 'in-the-closet-to-the-left',
         )
       end
       it 'should replace default parameter with new value' do
@@ -130,6 +132,7 @@ describe 'ironic::conductor' do
         is_expected.to contain_ironic_config('conductor/sync_power_state_interval').with_value(p[:sync_power_state_interval])
         is_expected.to contain_ironic_config('conductor/power_state_sync_max_retries').with_value(p[:power_state_sync_max_retries])
         is_expected.to contain_ironic_config('conductor/power_failure_recovery_interval').with_value(p[:power_failure_recovery_interval])
+        is_expected.to contain_ironic_config('conductor/conductor_group').with_value(p[:conductor_group])
       end
     end
 

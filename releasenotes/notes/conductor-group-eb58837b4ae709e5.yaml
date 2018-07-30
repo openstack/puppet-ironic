@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Adds ``ironic::conductor::conductor_group`` parameter to assign a group
+    to the conductor.
