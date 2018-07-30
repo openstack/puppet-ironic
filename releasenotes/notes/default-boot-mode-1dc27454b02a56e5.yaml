@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    Adds new parameter ``ironic::conductor::default_boot_mode`` to specify
+    the default boot mode ("bios" or "uefi") to use when no boot mode is
+    required explicitly.

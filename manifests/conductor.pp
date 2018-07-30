@@ -108,6 +108,12 @@
 #   requested. One of "netboot" or "local".
 #   Defaults to $::os_service_default
 #
+# [*default_boot_mode*]
+#   (optional) Default boot mode to use when no boot mode is explicitly
+#   requested in node's driver_info, capabilities or in the "instance_info"
+#   configuration.requested. One of "bios" or "uefi".
+#   Defaults to $::os_service_default
+#
 # [*cleaning_network_name*]
 #   (optional) If provided the name will be converted to UUID and set
 #   as value of neutron/cleaning_network option in ironic.conf
@@ -178,6 +184,7 @@ class ironic::conductor (
   $configdrive_swift_container         = $::os_service_default,
   $inspect_timeout                     = $::os_service_default,
   $default_boot_option                 = $::os_service_default,
+  $default_boot_mode                   = $::os_service_default,
   $port_setup_delay                    = $::os_service_default,
   $cleaning_network_name               = undef,
   $provisioning_network_name           = undef,
@@ -265,6 +272,7 @@ class ironic::conductor (
     'conductor/configdrive_swift_container':      value => $configdrive_swift_container;
     'conductor/inspect_timeout':                  value => $inspect_timeout;
     'deploy/default_boot_option':                 value => $default_boot_option;
+    'deploy/default_boot_mode':                   value => $default_boot_mode;
     'neutron/port_setup_delay':                   value => $port_setup_delay;
     'conductor/power_state_change_timeout':       value => $power_state_change_timeout;
     'conductor/sync_power_state_interval':        value => $sync_power_state_interval;
