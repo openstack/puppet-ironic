@@ -29,7 +29,7 @@ class Puppet::Provider::Ironic < Puppet::Provider
   end
 
   def self.get_ironic_credentials
-    auth_keys = ['www_authenticate_uri', 'project_name', 'username', 'password']
+    auth_keys = ['auth_url', 'project_name', 'username', 'password']
     conf = ironic_conf
     if conf and conf['keystone_authtoken'] and
         auth_keys.all?{|k| !conf['keystone_authtoken'][k].nil?}
@@ -67,7 +67,7 @@ correctly configured.")
   def self.auth_ironic(*args)
     q = ironic_credentials
     authenv = {
-      :OS_AUTH_URL            => q['www_authenticate_uri'],
+      :OS_AUTH_URL            => q['auth_url'],
       :OS_USERNAME            => q['username'],
       :OS_PROJECT_NAME        => q['project_name'],
       :OS_PASSWORD            => q['password'],
