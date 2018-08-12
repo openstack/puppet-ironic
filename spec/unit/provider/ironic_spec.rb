@@ -14,7 +14,7 @@ describe Puppet::Provider::Ironic do
       'project_name'        => 'admin_tenant',
       'username'            => 'admin',
       'password'            => 'password',
-      'auth_uri'            => 'https://192.168.56.210:35357/',
+      'auth_url'            => 'https://192.168.56.210:35357/',
       'project_domain_name' => 'admin_tenant_domain',
       'user_domain_name'    => 'admin_domain',
     }
@@ -60,7 +60,7 @@ describe Puppet::Provider::Ironic do
 
     it 'should set auth credentials in the environment' do
       authenv = {
-        :OS_AUTH_URL            => credential_hash['auth_uri'],
+        :OS_AUTH_URL            => credential_hash['auth_url'],
         :OS_USERNAME            => credential_hash['username'],
         :OS_PROJECT_NAME        => credential_hash['project_name'],
         :OS_PASSWORD            => credential_hash['password'],
