@@ -50,7 +50,7 @@
 #
 #   [*threads*]
 #     (optional) The number of threads for the vhost.
-#     Defaults to 1
+#     Defaults to 15
 #
 #   [*wsgi_process_display_name*]
 #     (optional) Name of the WSGI process display-name.
@@ -112,7 +112,7 @@ class ironic::wsgi::apache (
   $ssl_crl                     = undef,
   $ssl_certs_dir               = undef,
   $wsgi_process_display_name   = undef,
-  $threads                     = 1,
+  $threads                     = 15,
   $priority                    = '10',
   $access_log_file             = false,
   $access_log_format           = false,
