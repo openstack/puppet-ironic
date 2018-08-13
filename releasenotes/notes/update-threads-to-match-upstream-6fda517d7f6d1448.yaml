@@ -1,0 +1,9 @@
+---
+fixes:
+  - |
+    Fixes default configuration where only a single concurrent thread was
+    permitted per WSGI worker process, which does not match the upstream
+    configuration where threads are enabled per each spawned worker process.
+    This allows for greater request concurrency to prevent situations where
+    the webserver may incorrectly return a 500 error due to the server being
+    unable to process the request in time.
