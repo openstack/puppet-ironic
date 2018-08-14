@@ -1,0 +1,7 @@
+---
+deprecations:
+  - |
+    The ``ironic::drivers::inspector::enabled`` parameter is now deprecated and
+    has no effect. This option does not work with hardware types, and classic
+    drivers have been removed. Use the ``enabled_inspect_interfaces`` parameter
+    from ``ironic::drivers::hardware_interfaces`` instead.

@@ -14,11 +14,6 @@
 #
 # Configure how Ironic talks to Ironic Inspector.
 #
-# [*enabled*]
-#   Whether or not to enable ironic-inspector support for inspection.
-#   This option does not affect new-style dynamic drivers and fake_inspector.
-#   Defaults to $::os_service_default
-#
 # [*service_url*]
 #   Ironic Inspector API endpoint. If not provided, the service catalog
 #   is used instead.
@@ -52,8 +47,14 @@
 #   The name of project's domain (required for Identity V3).
 #   Defaults to 'Default'
 #
+# DEPRECATED PARAMETERS
+#
+# [*enabled*]
+#   Whether or not to enable ironic-inspector support for inspection.
+#   This option does not affect new-style dynamic drivers and fake_inspector.
+#   Defaults to $::os_service_default
+#
 class ironic::drivers::inspector (
-  $enabled             = $::os_service_default,
   $service_url         = $::os_service_default,
   $auth_type           = 'password',
   $auth_url            = $::os_service_default,
@@ -62,12 +63,18 @@ class ironic::drivers::inspector (
   $password            = $::os_service_default,
   $user_domain_name    = 'Default',
   $project_domain_name = 'Default',
+  # DEPRECATED PARAMETERS
+  $enabled             = undef,
 ) {
 
   include ::ironic::deps
 
+  if $enabled {
+    warning("The ironic::drivers::inspector::enabled parameter is deprecated. \
+Please use ironic::drivers::hardware_interfaces::enabled_inspect_interfaces instead.")
+  }
+
   ironic_config {
-    'inspector/enabled':             value => $enabled;
     'inspector/service_url':         value => $service_url;
     'inspector/auth_type':           value => $auth_type;
     'inspector/username':            value => $username;
