@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    Expose the ``notification_level`` parameter in ``::ironic``
