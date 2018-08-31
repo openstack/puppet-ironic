@@ -3,4 +3,17 @@
       - puppet-openstack-check-jobs
       - puppet-openstack-module-unit-jobs
       - puppet-openstack-integration-jobs-scenario002
-      - puppet-openstack-beaker-jobs
+      - release-notes-jobs
+    check:
+      jobs:
+        - puppet-openstack-beaker-centos-7
+        - puppet-openstack-beaker-xenial:
+            voting: false
+    gate:
+      jobs:
+        - puppet-openstack-beaker-centos-7
+        - puppet-openstack-beaker-xenial:
+          # TODO(AJaeger): Remove once jobs are removed
+          # from project-config.
+            voting: false
+
