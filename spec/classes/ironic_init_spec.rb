@@ -63,6 +63,10 @@ describe 'ironic' do
       it_configures 'amqp support'
     end
 
+    context 'with oslo messaging notifications' do
+      it_configures 'oslo messaging notifications'
+    end
+
   end
 
   shared_examples_for 'a ironic base installation' do
@@ -183,6 +187,25 @@ describe 'ironic' do
     end
 
     it { is_expected.to contain_ironic_config('oslo_messaging_rabbit/amqp_durable_queues').with_value(true) }
+  end
+
+  shared_examples_for 'oslo messaging notifications' do
+    context 'with default parameters' do
+      it { is_expected.to contain_ironic_config('oslo_messaging_notifications/transport_url').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_ironic_config('oslo_messaging_notifications/driver').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_ironic_config('oslo_messaging_notifications/topics').with_value('<SERVICE DEFAULT>') }
+    end
+
+    context 'with overridden notification parameters' do
+      before { params.merge!(
+        :notification_driver        => 'messagingv2',
+        :notification_transport_url => 'http://host:port',
+      ) }
+
+      it { is_expected.to contain_ironic_config('oslo_messaging_notifications/transport_url').with_value('http://host:port') }
+      it { is_expected.to contain_ironic_config('oslo_messaging_notifications/driver').with_value('messagingv2') }
+      it { is_expected.to contain_ironic_config('oslo_messaging_notifications/topics').with_value('<SERVICE DEFAULT>') }
+    end
   end
 
   shared_examples_for 'amqp support' do
