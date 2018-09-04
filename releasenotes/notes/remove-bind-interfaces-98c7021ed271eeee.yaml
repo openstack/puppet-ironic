@@ -1,0 +1,25 @@
+---
+fixes:
+  - |
+    In order to allow the ironic inspector dnsmasq service to receive packets
+    after the network service is restarted, the bind-interfaces option should
+    not be set.  Since the ironic inspector is bound to the br-ctlplane
+    interface, its not necessary to set this field as this dnsmasq instance
+    will only service this interface.
+
+    From the `dnsmasq man page
+    <http://www.thekelleys.org.uk/dnsmasq/docs/dnsmasq-man.html>`_:
+
+        -z, --bind-interfaces
+        On systems which support it, dnsmasq binds the wildcard address, even
+        when it is listening on only some interfaces. It then discards requests
+        that it shouldn't reply to. This has the advantage of working even when
+        interfaces come and go and change address. This option forces dnsmasq
+        to really bind only the interfaces it is listening on. About the only
+        time when this is useful is when running another nameserver (or another
+        instance of dnsmasq) on the same machine. Setting this option also
+        enables multiple instances of dnsmasq which provide DHCP service to run
+        in the same machine.
+
+    We do run another dnsmasq instance for neutron but that is bound to the tap
+    interface in the namespace.
