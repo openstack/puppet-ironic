@@ -1,0 +1,9 @@
+---
+features:
+  - |
+    Adds ``ironic::conductor::force_raw_images`` which controls whether ironic
+    forces the image format to be raw before deployment.
+  - |
+    Adds ``ironic::drivers::agent::image_download_source`` which controls how
+    ironic serves the image when using the ``direct`` deploy interface: via
+    swift or via its local HTTP server.

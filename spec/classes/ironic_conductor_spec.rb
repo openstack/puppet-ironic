@@ -74,6 +74,7 @@ describe 'ironic::conductor' do
       is_expected.to contain_ironic_config('deploy/continue_if_disk_secure_erase_fails').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('deploy/http_url').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('deploy/http_root').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('DEFAULT/force_raw_images').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/configdrive_use_swift').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/configdrive_swift_container').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/inspect_wait_timeout').with(:value => '<SERVICE DEFAULT>')
@@ -101,6 +102,7 @@ describe 'ironic::conductor' do
           :cleaning_disk_erase             => 'metadata',
           :http_url                        => 'http://host:port',
           :http_root                       => '/src/www',
+          :force_raw_images                => false,
           :configdrive_use_swift           => true,
           :configdrive_swift_container     => 'cont',
           :inspect_timeout                 => 600,
@@ -127,6 +129,7 @@ describe 'ironic::conductor' do
         is_expected.to contain_ironic_config('deploy/erase_devices_metadata_priority').with_value(10)
         is_expected.to contain_ironic_config('deploy/http_url').with_value(p[:http_url])
         is_expected.to contain_ironic_config('deploy/http_root').with_value(p[:http_root])
+        is_expected.to contain_ironic_config('DEFAULT/force_raw_images').with_value(p[:force_raw_images])
         is_expected.to contain_ironic_config('conductor/configdrive_use_swift').with_value(p[:configdrive_use_swift])
         is_expected.to contain_ironic_config('conductor/configdrive_swift_container').with_value(p[:configdrive_swift_container])
         is_expected.to contain_ironic_config('conductor/inspect_wait_timeout').with_value(p[:inspect_timeout])

@@ -50,6 +50,10 @@
 #   (optional) ironic-conductor node's HTTP root path.
 #   Defaults to $::os_service_default
 #
+# [*force_raw_images*]
+#   (optional) If true, convert backing images to "raw" disk image format.
+#   Defaults to $::os_service_default
+#
 # [*automated_clean*]
 #   (optional) Whether to enable automated cleaning on nodes.
 #   Defaults to $::os_service_default
@@ -178,6 +182,7 @@ class ironic::conductor (
   $force_power_state_during_sync       = true,
   $http_url                            = $::os_service_default,
   $http_root                           = $::os_service_default,
+  $force_raw_images                    = $::os_service_default,
   $automated_clean                     = $::os_service_default,
   $cleaning_network                    = $::os_service_default,
   $cleaning_disk_erase                 = undef,
@@ -271,6 +276,7 @@ class ironic::conductor (
     'conductor/api_url':                          value => $api_url;
     'deploy/http_url':                            value => $http_url;
     'deploy/http_root':                           value => $http_root;
+    'DEFAULT/force_raw_images':                   value => $force_raw_images;
     'deploy/erase_devices_priority':              value => $erase_devices_priority;
     'deploy/erase_devices_metadata_priority':     value => $erase_devices_metadata_priority;
     'deploy/continue_if_disk_secure_erase_fails': value => $continue_if_disk_secure_erase_fails;
