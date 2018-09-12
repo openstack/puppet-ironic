@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    Expose the ``endpoint_override`` parameter in both
+    ``::ironic::drivers::inspector`` and ``::ironic::service_catalog``
+

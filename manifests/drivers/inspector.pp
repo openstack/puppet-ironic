@@ -47,6 +47,10 @@
 #   The name of project's domain (required for Identity V3).
 #   Defaults to 'Default'
 #
+# [*endpoint_override*]
+#   The endpoint URL for requests for this client
+#   Defaults to $::os_service_default
+#
 # DEPRECATED PARAMETERS
 #
 # [*enabled*]
@@ -63,6 +67,7 @@ class ironic::drivers::inspector (
   $password            = $::os_service_default,
   $user_domain_name    = 'Default',
   $project_domain_name = 'Default',
+  $endpoint_override   = $::os_service_default,
   # DEPRECATED PARAMETERS
   $enabled             = undef,
 ) {
@@ -83,5 +88,6 @@ Please use ironic::drivers::hardware_interfaces::enabled_inspect_interfaces inst
     'inspector/project_name':        value => $project_name;
     'inspector/user_domain_name':    value => $user_domain_name;
     'inspector/project_domain_name': value => $project_domain_name;
+    'inspector/endpoint_override':   value => $endpoint_override;
   }
 }
