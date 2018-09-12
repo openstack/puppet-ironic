@@ -12,8 +12,4 @@
     gate:
       jobs:
         - puppet-openstack-beaker-centos-7
-        - puppet-openstack-beaker-xenial:
-          # TODO(AJaeger): Remove once jobs are removed
-          # from project-config.
-            voting: false
 
