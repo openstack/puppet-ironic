@@ -40,6 +40,10 @@
 #   The name of project's domain (required for Identity V3).
 #   Defaults to 'Default'
 #
+# [*endpoint_override*]
+#   The endpoint URL for requests for this client
+#   Defaults to $::os_service_default
+#
 class ironic::service_catalog (
   $auth_type           = 'password',
   $auth_url            = $::os_service_default,
@@ -48,6 +52,7 @@ class ironic::service_catalog (
   $password            = $::os_service_default,
   $user_domain_name    = 'Default',
   $project_domain_name = 'Default',
+  $endpoint_override   = $::os_service_default,
 ) {
 
   include ::ironic::deps
@@ -60,5 +65,6 @@ class ironic::service_catalog (
     'service_catalog/project_name':        value => $project_name;
     'service_catalog/user_domain_name':    value => $user_domain_name;
     'service_catalog/project_domain_name': value => $project_domain_name;
+    'service_catalog/endpoint_override':   value => $endpoint_override;
   }
 }
