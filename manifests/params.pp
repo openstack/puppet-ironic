@@ -88,7 +88,8 @@ class ironic::params {
       $syslinux_files            = ['pxelinux.0', 'chain.c32', 'libcom32.c32', 'libutil.c32']
     }
     default: {
-      fail("Unsupported osfamily ${::osfamily}")
+      fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, \
+module ${module_name} only support osfamily RedHat and Debian")
     }
   }
 
