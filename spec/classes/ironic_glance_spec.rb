@@ -49,6 +49,7 @@ describe 'ironic::glance' do
       is_expected.to contain_ironic_config('glance/swift_endpoint_url').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('glance/swift_temp_url_key').with(:value => '<SERVICE DEFAULT>').with_secret(true)
       is_expected.to contain_ironic_config('glance/swift_temp_url_duration').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('glance/endpoint_override').with_value('<SERVICE DEFAULT>')
     end
 
     context 'when overriding parameters' do
@@ -69,6 +70,7 @@ describe 'ironic::glance' do
             :swift_endpoint_url      => 'http://example2.com',
             :swift_temp_url_key      => 'the-key',
             :swift_temp_url_duration => 3600,
+            :endpoint_override   => 'http://example2.com',
         )
       end
 
@@ -88,6 +90,7 @@ describe 'ironic::glance' do
         is_expected.to contain_ironic_config('glance/swift_endpoint_url').with_value(p[:swift_endpoint_url])
         is_expected.to contain_ironic_config('glance/swift_temp_url_key').with_value(p[:swift_temp_url_key]).with_secret(true)
         is_expected.to contain_ironic_config('glance/swift_temp_url_duration').with_value(p[:swift_temp_url_duration])
+        is_expected.to contain_ironic_config('glance/endpoint_override').with_value(p[:endpoint_override])
       end
     end
 
@@ -103,7 +106,8 @@ describe 'ironic::glance' do
             :project_domain_name => 'NonDefault',
             :api_servers         => ['10.0.0.1:9292','10.0.0.2:9292'],
             :api_insecure        => true,
-            :num_retries         => 42
+            :num_retries         => 42,
+            :endpoint_override   => 'http://example2.com',
         )
       end
 
@@ -118,6 +122,7 @@ describe 'ironic::glance' do
         is_expected.to contain_ironic_config('glance/glance_api_servers').with_value(p[:api_servers].join(','))
         is_expected.to contain_ironic_config('glance/glance_api_insecure').with_value(p[:api_insecure])
         is_expected.to contain_ironic_config('glance/glance_num_retries').with_value(p[:num_retries])
+        is_expected.to contain_ironic_config('glance/endpoint_override').with_value(p[:endpoint_override])
       end
     end
 
