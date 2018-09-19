@@ -19,6 +19,13 @@
 #   of first caching them in memory. Ignored when iSCSI is used for deploy.
 #   Defaults to $::os_service_default
 #
+# [*image_download_source*]
+#   (optional) Specifies whether direct deploy interface should try to use
+#   the image source directly or if ironic should cache the image on
+#   the conductor and serve it from ironic's own http server.
+#   Accepts values "swift" (the default) or "http".
+#   Defaults to $::os_service_default
+#
 # [*post_deploy_get_power_state_retries*]
 #   (optional) Number of retries getting power state after a soft power off.
 #   Must be a valid interger.
@@ -56,6 +63,7 @@
 
 class ironic::drivers::agent (
   $stream_raw_images                            = $::os_service_default,
+  $image_download_source                        = $::os_service_default,
   $post_deploy_get_power_state_retries          = $::os_service_default,
   $post_deploy_get_power_state_retry_interval   = $::os_service_default,
   $deploy_logs_collect                          = $::os_service_default,
@@ -70,6 +78,7 @@ class ironic::drivers::agent (
   # Configure ironic.conf
   ironic_config {
     'agent/stream_raw_images':                          value => $stream_raw_images;
+    'agent/image_download_source':                      value => $image_download_source;
     'agent/post_deploy_get_power_state_retries':        value => $post_deploy_get_power_state_retries;
     'agent/post_deploy_get_power_state_retry_interval': value => $post_deploy_get_power_state_retry_interval;
     'agent/deploy_logs_collect':                        value => $deploy_logs_collect;

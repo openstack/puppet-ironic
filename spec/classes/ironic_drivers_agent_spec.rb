@@ -28,6 +28,7 @@ describe 'ironic::drivers::agent' do
 
     it 'configures ironic.conf' do
       is_expected.to contain_ironic_config('agent/stream_raw_images').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('agent/image_download_source').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('agent/post_deploy_get_power_state_retries').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('agent/post_deploy_get_power_state_retry_interval').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('agent/deploy_logs_collect').with_value('<SERVICE DEFAULT>')
@@ -40,6 +41,7 @@ describe 'ironic::drivers::agent' do
     context 'when overriding parameters' do
       before do
         params.merge!(:stream_raw_images => false,
+                      :image_download_source => 'http',
                       :post_deploy_get_power_state_retries => 20,
                       :post_deploy_get_power_state_retry_interval => 10,
                       :deploy_logs_collect => 'always',
@@ -50,6 +52,7 @@ describe 'ironic::drivers::agent' do
       end
       it 'should replace default parameter with new value' do
         is_expected.to contain_ironic_config('agent/stream_raw_images').with_value(p[:stream_raw_images])
+        is_expected.to contain_ironic_config('agent/image_download_source').with_value(p[:image_download_source])
         is_expected.to contain_ironic_config('agent/post_deploy_get_power_state_retries').with_value(p[:post_deploy_get_power_state_retries])
         is_expected.to contain_ironic_config('agent/post_deploy_get_power_state_retry_interval').with_value(p[:post_deploy_get_power_state_retry_interval])
         is_expected.to contain_ironic_config('agent/deploy_logs_collect').with_value(p[:deploy_logs_collect])
