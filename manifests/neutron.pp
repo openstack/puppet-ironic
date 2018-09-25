@@ -44,6 +44,10 @@
 #   The name of project's domain (required for Identity V3).
 #   Defaults to 'Default'
 #
+# [*endpoint_override*]
+#   The endpoint URL for requests for this client
+#   Defaults to $::os_service_default
+#
 class ironic::neutron (
   $api_endpoint        = $::os_service_default,
   $auth_type           = 'password',
@@ -53,6 +57,7 @@ class ironic::neutron (
   $password            = $::os_service_default,
   $user_domain_name    = 'Default',
   $project_domain_name = 'Default',
+  $endpoint_override   = $::os_service_default,
 ) {
 
   ironic_config {
@@ -64,5 +69,6 @@ class ironic::neutron (
     'neutron/project_name':        value => $project_name;
     'neutron/user_domain_name':    value => $user_domain_name;
     'neutron/project_domain_name': value => $project_domain_name;
+    'neutron/endpoint_override':   value => $endpoint_override;
   }
 }

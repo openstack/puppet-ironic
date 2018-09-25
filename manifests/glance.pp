@@ -85,6 +85,10 @@
 #   valid for.
 #   Defaults to $::os_service_default
 #
+# [*endpoint_override*]
+#   The endpoint URL for requests for this client
+#   Defaults to $::os_service_default
+#
 class ironic::glance (
   $auth_type                  = 'password',
   $auth_url                   = $::os_service_default,
@@ -102,6 +106,7 @@ class ironic::glance (
   $swift_temp_url_key         = $::os_service_default,
   $swift_temp_url_duration    = $::os_service_default,
   $swift_account_project_name = undef,
+  $endpoint_override          = $::os_service_default,
 ) {
 
   if is_array($api_servers) {
@@ -129,6 +134,7 @@ class ironic::glance (
     'glance/swift_endpoint_url':      value => $swift_endpoint_url;
     'glance/swift_temp_url_key':      value => $swift_temp_url_key, secret => true;
     'glance/swift_temp_url_duration': value => $swift_temp_url_duration;
+    'glance/endpoint_override':       value => $endpoint_override;
   }
 
   if $swift_account_project_name {
