@@ -36,27 +36,19 @@ describe 'ironic' do
 
   shared_examples_for 'ironic' do
 
-    context 'and if rabbit_host parameter is provided' do
+    context 'ironic setup' do
       it_configures 'a ironic base installation'
       it_configures 'with SSL disabled'
       it_configures 'with SSL enabled without kombu'
       it_configures 'with SSL enabled with kombu'
       it_configures 'with amqp_durable_queues disabled'
       it_configures 'with amqp_durable_queues enabled'
+      it_configures 'without rabbit HA'
     end
 
-    context 'and if rabbit_hosts parameter is provided' do
-
-      context 'with one server' do
-        it_configures 'a ironic base installation'
-        it_configures 'rabbit HA with a single virtual host'
-      end
-
-      context 'with multiple servers' do
-        before { params.merge!( :rabbit_ha_queues => true ) }
-        it_configures 'a ironic base installation'
-        it_configures 'rabbit HA with multiple hosts'
-      end
+    context 'ironic setup with rabbit HA' do
+      before { params.merge!( :rabbit_ha_queues => true ) }
+      it_configures 'with rabbit HA'
     end
 
     context 'with amqp messaging' do
@@ -121,13 +113,13 @@ describe 'ironic' do
     end
   end
 
-  shared_examples_for 'rabbit HA with a single virtual host' do
+  shared_examples_for 'without rabbit HA' do
     it 'in ironic.conf' do
       is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('<SERVICE DEFAULT>')
     end
   end
 
-  shared_examples_for 'rabbit HA with multiple hosts' do
+  shared_examples_for 'with rabbit HA' do
     it 'in ironic.conf' do
       is_expected.to contain_ironic_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value(true)
     end

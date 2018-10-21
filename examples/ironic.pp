@@ -81,17 +81,19 @@ node 'db' {
 node 'controller' {
 
   class { '::ironic':
-    db_password         => $db_password,
-    db_name             => $db_name,
-    db_user             => $db_username,
-    db_host             => $db_host,
-
-    rabbit_password     => $rabbit_password,
-    rabbit_userid       => $rabbit_user,
-    rabbit_virtual_host => $rabbit_vhost,
-    rabbit_hosts        => $rabbit_hosts,
-
-    glance_api_servers  => $glance_api_servers,
+    db_password           => $db_password,
+    db_name               => $db_name,
+    db_user               => $db_username,
+    db_host               => $db_host,
+    default_transport_url => os_transport_url({
+      'transport'    => 'rabbit',
+      'hosts'        => $rabbit_hosts,
+      'port'         => $rabbit_port,
+      'username'     => $rabbit_user,
+      'password'     => $rabbit_password,
+      'virtual_host' => $rabbit_vhost,
+    }),
+    glance_api_servers    => $glance_api_servers,
   }
 
   class { '::ironic::api': }

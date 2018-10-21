@@ -46,10 +46,8 @@ To utilize the ironic module's functionality you will need to declare multiple r
 ```puppet
 # enable Ironic resources
 class { '::ironic':
-  rabbit_userid       => 'ironic',
-  rabbit_password     => 'an_even_bigger_secret',
-  rabbit_host         => '127.0.0.1',
-  database_connection => 'mysql://ironic:a_big_secret@127.0.0.1/ironic?charset=utf8',
+  default_transport_url => 'rabbit://ironic:an_even_bigger_secret@127.0.0.1:5672/ironic',
+  database_connection   => 'mysql://ironic:a_big_secret@127.0.0.1/ironic?charset=utf8',
 }
 
 class { '::ironic::db::mysql':
