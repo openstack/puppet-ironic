@@ -22,9 +22,18 @@
 #   (optional) A (shell) command line to stop the dnsmasq service.
 #   Defaults to $::os_service_default.
 #
+# [*purge_dhcp_hostsdir*]
+#   (optional) Purge the hostsdir upon driver initialization. Setting to false
+#   should only be performed when the deployment of inspector is such that
+#   there are multiple processes executing inside of the same host and
+#   namespace. In this case, the Operator is responsible for setting up a
+#   custom cleaning facility.
+#   Defaults to $::os_service_default.
+#
 class ironic::inspector::pxe_filter::dnsmasq (
   $dnsmasq_start_command = $::os_service_default,
   $dnsmasq_stop_command  = $::os_service_default,
+  $purge_dhcp_hostsdir   = $::os_service_default,
 ) {
 
   include ::ironic::deps
@@ -36,6 +45,7 @@ class ironic::inspector::pxe_filter::dnsmasq (
     'dnsmasq_pxe_filter/dhcp_hostsdir':         value => $hostsdir;
     'dnsmasq_pxe_filter/dnsmasq_start_command': value => $dnsmasq_start_command;
     'dnsmasq_pxe_filter/dnsmasq_stop_command':  value => $dnsmasq_stop_command;
+    'dnsmasq_pxe_filter/purge_dhcp_hostsdir':   value => $purge_dhcp_hostsdir;
   }
 
 }
