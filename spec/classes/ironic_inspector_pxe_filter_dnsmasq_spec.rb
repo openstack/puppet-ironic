@@ -33,6 +33,7 @@ describe 'ironic::inspector::pxe_filter::dnsmasq' do
       is_expected.to contain_ironic_inspector_config('dnsmasq_pxe_filter/dhcp_hostsdir').with_value('/etc/ironic-inspector/dhcp-hostsdir')
       is_expected.to contain_ironic_inspector_config('dnsmasq_pxe_filter/dnsmasq_start_command').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('dnsmasq_pxe_filter/dnsmasq_stop_command').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_inspector_config('dnsmasq_pxe_filter/purge_dhcp_hostsdir').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
         /dhcp-hostsdir=\/etc\/ironic-inspector\/dhcp-hostsdir/
       )
@@ -42,6 +43,7 @@ describe 'ironic::inspector::pxe_filter::dnsmasq' do
       let :params do
         { :dnsmasq_start_command => 'dnsmasq --conf-file /etc/ironic-inspector/dnsmasq.conf',
           :dnsmasq_stop_command  => 'kill $(cat /var/run/dnsmasq.pid)',
+          :purge_dhcp_hostsdir   => false,
         }
       end
 
@@ -53,6 +55,7 @@ describe 'ironic::inspector::pxe_filter::dnsmasq' do
         is_expected.to contain_ironic_inspector_config('dnsmasq_pxe_filter/dhcp_hostsdir').with_value('/etc/ironic-inspector/dhcp-hostsdir')
         is_expected.to contain_ironic_inspector_config('dnsmasq_pxe_filter/dnsmasq_start_command').with_value(p[:dnsmasq_start_command])
         is_expected.to contain_ironic_inspector_config('dnsmasq_pxe_filter/dnsmasq_stop_command').with_value(p[:dnsmasq_stop_command])
+        is_expected.to contain_ironic_inspector_config('dnsmasq_pxe_filter/purge_dhcp_hostsdir').with_value(p[:purge_dhcp_hostsdir])
         is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
           /dhcp-hostsdir=\/etc\/ironic-inspector\/dhcp-hostsdir/
         )
