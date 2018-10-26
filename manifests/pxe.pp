@@ -69,6 +69,13 @@ class ironic::pxe (
   $http_root_real = pick($::ironic::pxe::common::http_root, $http_root)
   $http_port_real = pick($::ironic::pxe::common::http_port, $http_port)
 
+  if ($::os['name'] == 'Fedora') or
+     ($::os['family'] == 'RedHat' and Integer.new($::os['release']['major']) > 7) {
+    $arch = "-${::os['architecture']}"
+  } else {
+    $arch = ''
+  }
+
   file { $tftp_root_real:
     ensure  => 'directory',
     seltype => 'tftpdir_t',
@@ -174,7 +181,7 @@ class ironic::pxe (
     owner   => 'ironic',
     group   => 'ironic',
     mode    => '0744',
-    source  => "${::ironic::params::ipxe_rom_dir}/ipxe.efi",
+    source  => "${::ironic::params::ipxe_rom_dir}/ipxe${arch}.efi",
     backup  => false,
     require => Anchor['ironic-inspector::install::end'],
   }

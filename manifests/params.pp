@@ -25,6 +25,10 @@ class ironic::params {
   if ($::os_package_type == 'debian') {
     $pyvers = '3'
     $pyver3 = '3'
+  } elsif ($::os['name'] == 'Fedora') or
+          ($::os['family'] == 'RedHat' and Integer.new($::os['release']['major']) > 7) {
+    $pyvers = '3'
+    $pyver3 = '3.6'
   } else {
     $pyvers = ''
     $pyver3 = '2.7'
@@ -56,7 +60,7 @@ class ironic::params {
       $systemd_python_package    = 'systemd-python'
       $ipxe_rom_dir              = '/usr/share/ipxe'
       $ironic_wsgi_script_path   = '/var/www/cgi-bin/ironic'
-      $ironic_wsgi_script_source = '/usr/lib/python2.7/site-packages/ironic/api/app.wsgi'
+      $ironic_wsgi_script_source = "/usr/lib/python${$pyver3}/site-packages/ironic/api/app.wsgi"
       $tftpd_package             = 'tftp-server'
       $ipxe_package              = 'ipxe-bootimgs'
       $syslinux_package          = 'syslinux-extlinux'
