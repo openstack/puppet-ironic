@@ -132,11 +132,11 @@ describe 'ironic::pxe' do
           :syslinux_path => false,
         )
       end
-      it 'should not contain package syslinux' do
-        is_expected.not_to contain_package('syslinux')
+      it 'should not contain package syslinux-tftpboot' do
+        is_expected.not_to contain_package('syslinux-tftpboot')
       end
       it 'should not contain tftpboot syslinux file' do
-        is_expected.not_to contain_file('/tftpboot/pxelinux.0')
+        is_expected.not_to contain_file('/var/lib/ironic/tftpboot/pxelinux.0')
       end
     end
 

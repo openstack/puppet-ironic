@@ -59,8 +59,8 @@ class ironic::params {
       $ironic_wsgi_script_source = '/usr/lib/python2.7/site-packages/ironic/api/app.wsgi'
       $tftpd_package             = 'tftp-server'
       $ipxe_package              = 'ipxe-bootimgs'
-      $syslinux_package          = 'syslinux-extlinux'
-      $syslinux_path             = '/usr/share/syslinux'
+      $syslinux_package          = 'syslinux-tftpboot'
+      $syslinux_path             = '/var/lib/tftpboot'
       $syslinux_files            = ['pxelinux.0', 'chain.c32']
     }
     'Debian': {
