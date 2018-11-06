@@ -1,0 +1,4 @@
+---
+fixes:
+  - In order to allow portability between x86_64 and ppc the
+    syslinux-tftpboot package is used for ironix-pxe.
