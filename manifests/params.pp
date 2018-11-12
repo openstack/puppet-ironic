@@ -25,13 +25,16 @@ class ironic::params {
   if ($::os_package_type == 'debian') {
     $pyvers = '3'
     $pyver3 = '3'
+    $syslinux_path_custom = '/usr/lib/syslinux'
   } elsif ($::os['name'] == 'Fedora') or
           ($::os['family'] == 'RedHat' and Integer.new($::os['release']['major']) > 7) {
     $pyvers = '3'
     $pyver3 = '3.6'
+    $syslinux_path_custom = '/tftpboot'
   } else {
     $pyvers = ''
     $pyver3 = '2.7'
+    $syslinux_path_custom = '/var/lib/tftpboot'
   }
 
   $dbsync_command             =
@@ -64,7 +67,7 @@ class ironic::params {
       $tftpd_package             = 'tftp-server'
       $ipxe_package              = 'ipxe-bootimgs'
       $syslinux_package          = 'syslinux-tftpboot'
-      $syslinux_path             = '/var/lib/tftpboot'
+      $syslinux_path             = $syslinux_path_custom
       $syslinux_files            = ['pxelinux.0', 'chain.c32']
     }
     'Debian': {
@@ -88,7 +91,7 @@ class ironic::params {
       $tftpd_package             = 'tftpd'
       $ipxe_package              = 'ipxe'
       $syslinux_package          = 'syslinux-common'
-      $syslinux_path             = '/usr/lib/syslinux'
+      $syslinux_path             = $syslinux_path_custom
       $syslinux_files            = ['pxelinux.0', 'chain.c32', 'libcom32.c32', 'libutil.c32']
     }
     default: {
