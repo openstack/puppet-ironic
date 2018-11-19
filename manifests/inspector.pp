@@ -225,6 +225,12 @@
 #   (optional) Boolean value to dtermine if ppc64le support should be enabled
 #   Defaults to false (no ppc64le support)
 #
+# [*default_transport_url*]
+#    (optional) A URL representing the messaging driver to use and its full
+#    configuration. Transport URLs take the form:
+#      transport://user:pass@host1:port[,hostN:portN]/virtual_host
+#    Defaults to 'fake://'
+#
 class ironic::inspector (
   $package_ensure                  = 'present',
   $enabled                         = true,
@@ -273,6 +279,7 @@ class ironic::inspector (
   $node_not_found_hook             = $::os_service_default,
   $discovery_default_driver        = $::os_service_default,
   $enable_ppc64le                  = false,
+  $default_transport_url           = 'fake://',
 ) {
 
   include ::ironic::deps
@@ -354,6 +361,7 @@ class ironic::inspector (
     'DEFAULT/listen_address':                     value => $listen_address;
     'DEFAULT/auth_strategy':                      value => $auth_strategy;
     'DEFAULT/timeout':                            value => $timeout;
+    'DEFAULT/transport_url':                      value => $default_transport_url;
     'capabilities/boot_mode':                     value => $detect_boot_mode;
     'iptables/dnsmasq_interface':                 value => $dnsmasq_interface;
     'processing/ramdisk_logs_dir':                value => $ramdisk_logs_dir;
