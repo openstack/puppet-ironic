@@ -1,6 +1,6 @@
 port=0
 interface=<%= @dnsmasq_interface %>
-<% if @debug %>
+<% if @dhcp_debug_real %>
 log-dhcp
 log-queries
 <% end %>

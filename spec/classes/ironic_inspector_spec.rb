@@ -70,7 +70,6 @@ describe 'ironic::inspector' do
     end
 
     it { is_expected.to contain_class('ironic::params') }
-    it { is_expected.to contain_class('ironic::inspector::logging') }
 
     it 'installs ironic inspector package' do
       if platform_params.has_key?(:inspector_package)
@@ -176,7 +175,7 @@ describe 'ironic::inspector' do
     context 'when overriding parameters' do
       before :each do
         params.merge!(
-          :debug                       => true,
+          :dhcp_debug                  => true,
           :listen_address              => '127.0.0.1',
           :ironic_password             => 'password',
           :ironic_project_domain_name  => 'Default',
@@ -202,7 +201,6 @@ describe 'ironic::inspector' do
       end
       it 'should replace default parameter with new value' do
         is_expected.to contain_ironic_inspector_config('DEFAULT/listen_address').with_value(p[:listen_address])
-        is_expected.to contain_ironic_inspector_config('DEFAULT/debug').with_value(p[:debug])
         is_expected.to contain_ironic_inspector_config('capabilities/boot_mode').with_value(p[:detect_boot_mode])
         is_expected.to contain_ironic_inspector_config('ironic/password').with_value(p[:ironic_password]).with_secret(true)
         is_expected.to contain_ironic_inspector_config('ironic/project_domain_name').with_value(p[:ironic_project_domain_name])

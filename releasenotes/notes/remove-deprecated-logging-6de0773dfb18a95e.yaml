@@ -1,0 +1,18 @@
+---
+features:
+  - |
+    ironic::inspector::dhcp_debug has been added and should be set to enable
+    dnsmasq debug logging.
+upgrade:
+  - |
+    The deprecated parameters use_syslog, use_stderr, log_facility, log_dir and
+    debug in the ::ironic class is now removed. Please set them in ::ironic::logging
+    instead.
+  - |
+    ironic::inspector::logging is not included in ironic::inspector by default, you
+    should define it to set logging options for the inspector.
+deprecations:
+  - |
+    ironic::inspector::debug is deprecated will be removed.
+    Please set ironic::inspector::logging::debug to enable debug logging and/or set
+    ironic::inspector::dhcp_debug to enable dnsmasq debugging.
