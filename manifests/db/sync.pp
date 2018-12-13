@@ -4,12 +4,12 @@
 # == Parameters
 #
 # [*extra_params*]
-#   (optional) String of extra command line parameters to append
+#   (Optional) String of extra command line parameters to append
 #   to the ironic-dbsync command.
 #   Defaults to undef
 #
 class ironic::db::sync(
-  $extra_params  = undef,
+  $extra_params = undef,
 ) {
 
   include ::ironic::deps

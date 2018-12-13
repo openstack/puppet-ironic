@@ -22,53 +22,62 @@
 # === Parameters
 #
 # [*password*]
-#   (required) Password for Ironic user.
+#   (Required) Password for Ironic user.
 #
 # [*auth_name*]
-#   Username for Ironic service. Defaults to 'ironic'.
+#   (Optional) Username for Ironic service.
+#   Defaults to 'ironic'.
 #
 # [*email*]
-#   Email for Ironic user. Defaults to 'ironic@localhost'.
+#   (Optional) Email for Ironic user.
+#   Defaults to 'ironic@localhost'.
 #
 # [*tenant*]
-#   Tenant for Ironic user. Defaults to 'services'.
+#   (Optional) Tenant for Ironic user.
+#   Defaults to 'services'.
 #
 # [*configure_endpoint*]
-#   Should Ironic endpoint be configured? Defaults to 'true'.
+#   (Optional) Should Ironic endpoint be configured?
+#   Defaults to true.
 #
 # [*configure_user*]
 #   (Optional) Should the service user be configured?
-#   Defaults to 'true'.
+#   Defaults to true.
 #
 # [*configure_user_role*]
 #   (Optional) Should the admin role be configured for the service user?
-#   Defaults to 'true'.
+#   Defaults to true.
 #
 # [*service_name*]
 #   (Optional) Name of the service.
 #   Defaults to the value of 'ironic'.
 #
 # [*service_type*]
-#   Type of service. Defaults to 'baremetal'.
+#   (Optional) Type of service.
+#   Defaults to 'baremetal'.
 #
 # [*service_description*]
 #   (Optional) Description for keystone service.
 #   Defaults to 'Ironic Bare Metal Provisioning Service'.
 #
 # [*region*]
-#   Region for endpoint. Defaults to 'RegionOne'.
+#   (Optional) Region for endpoint.
+#   Defaults to 'RegionOne'.
 #
 # [*public_url*]
-#   (optional) The endpoint's public url. (Defaults to 'http://127.0.0.1:6385')
+#   (0ptional) The endpoint's public url.
 #   This url should *not* contain any trailing '/'.
+#   Defaults to 'http://127.0.0.1:6385'
 #
 # [*admin_url*]
-#   (optional) The endpoint's admin url. (Defaults to 'http://127.0.0.1:6385')
+#   (Optional) The endpoint's admin url.
 #   This url should *not* contain any trailing '/'.
+#   Defaults to 'http://127.0.0.1:6385'
 #
 # [*internal_url*]
-#   (optional) The endpoint's internal url. (Defaults to 'http://127.0.0.1:6385')
+#   (Optional) The endpoint's internal url.
 #   This url should *not* contain any trailing '/'.
+#   Defaults to 'http://127.0.0.1:6385'
 #
 # === Examples
 #

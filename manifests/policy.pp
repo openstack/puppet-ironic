@@ -5,7 +5,7 @@
 # === Parameters
 #
 # [*policies*]
-#   (optional) Set of policies to configure for ironic
+#   (Optional) Set of policies to configure for ironic
 #   Example :
 #     {
 #       'ironic-context_is_admin' => {
@@ -20,7 +20,7 @@
 #   Defaults to empty hash.
 #
 # [*policy_path*]
-#   (optional) Path to the ironic policy.json file
+#   (Optional) Path to the ironic policy.json file
 #   Defaults to /etc/ironic/policy.json
 #
 class ironic::policy (
