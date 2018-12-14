@@ -29,10 +29,6 @@
 #   (optional) The state of the package
 #   Defaults to 'present'
 #
-# [*debug*]
-#   (optional) Print debug messages in the logs
-#   Defaults to False
-#
 # [*my_ip*]
 #   (optional) IP address of this host.
 #   If unset, will determine the IP programmatically. If unable to do so, will use
@@ -189,23 +185,6 @@
 #   (Optional) Password for message broker authentication
 #   Defaults to $::os_service_default.
 #
-# [*use_syslog*]
-#   (optional) Use syslog for logging
-#   Defaults to undef.
-#
-# [*log_facility*]
-#   (optional) Syslog facility to receive log lines
-#   Defaults to undef.
-#
-# [*use_stderr*]
-#   (optional) Use stderr for logging
-#   Defaults to undef.
-#
-# [*log_dir*]
-#   (optional) Directory where logs should be stored.
-#   If set to $::os_service_default, it will not log to any directory.
-#   Defaults to undef.
-#
 # [*database_connection*]
 #   (optional) Connection url for the ironic database.
 #   Defaults to: undef
@@ -273,12 +252,7 @@
 class ironic (
   $enabled                            = true,
   $package_ensure                     = 'present',
-  $debug                              = undef,
   $my_ip                              = $::os_service_default,
-  $use_syslog                         = undef,
-  $use_stderr                         = undef,
-  $log_facility                       = undef,
-  $log_dir                            = undef,
   $auth_strategy                      = 'keystone',
   $default_resource_class             = $::os_service_default,
   $control_exchange                   = $::os_service_default,
@@ -330,7 +304,6 @@ class ironic (
 ) {
 
   include ::ironic::deps
-  include ::ironic::logging
   include ::ironic::db
   include ::ironic::params
 

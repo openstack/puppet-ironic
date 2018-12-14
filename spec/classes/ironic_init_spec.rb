@@ -24,7 +24,6 @@ describe 'ironic' do
 
   let :params do
     { :package_ensure              => 'present',
-      :debug                       => false,
       :database_connection         => 'sqlite:////var/lib/ironic/ironic.sqlite',
       :database_max_retries        => 10,
       :database_idle_timeout       => 3600,
@@ -63,7 +62,6 @@ describe 'ironic' do
 
   shared_examples_for 'a ironic base installation' do
 
-    it { is_expected.to contain_class('ironic::logging') }
     it { is_expected.to contain_class('ironic::params') }
 
     it { is_expected.to contain_class('ironic::glance') }

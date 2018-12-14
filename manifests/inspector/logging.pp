@@ -111,10 +111,8 @@ class ironic::inspector::logging(
 
   include ::ironic::deps
 
-  $debug_real = pick($::ironic::inspector::debug,$debug)
-
   oslo::log { 'ironic_inspector_config':
-    debug                         => $debug_real,
+    debug                         => $debug,
     use_stderr                    => $use_stderr,
     use_syslog                    => $use_syslog,
     use_json                      => $use_json,
