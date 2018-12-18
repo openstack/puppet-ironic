@@ -70,7 +70,7 @@ class ironic::pxe (
   $http_port_real = pick($::ironic::pxe::common::http_port, $http_port)
 
   if ($::os['name'] == 'Fedora') or
-     ($::os['family'] == 'RedHat' and Integer.new($::os['release']['major']) > 7) {
+    ($::os['family'] == 'RedHat' and Integer.new($::os['release']['major']) > 7) {
     $arch = "-${::os['architecture']}"
   } else {
     $arch = ''
