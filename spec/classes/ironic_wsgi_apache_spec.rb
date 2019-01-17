@@ -94,7 +94,7 @@ describe 'ironic::wsgi::apache' do
               :httpd_service_name => 'apache2',
               :httpd_ports_file   => '/etc/apache2/ports.conf',
               :wsgi_script_path   => '/usr/lib/cgi-bin/ironic',
-              :wsgi_script_source => '/usr/lib/python2.7/dist-packages/ironic/api/app.wsgi',
+              :wsgi_script_source => '/usr/lib/python3/dist-packages/ironic/api/app.wsgi',
             }
         when 'RedHat'
             {

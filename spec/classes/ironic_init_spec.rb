@@ -262,13 +262,8 @@ describe 'ironic' do
       let :platform_params do
         case facts[:osfamily]
         when 'Debian'
-          if facts[:os_package_type] == 'debian' then
-            ironic_lib_pkgname = 'python3-ironic-lib'
-          else
-            ironic_lib_pkgname = 'python-ironic-lib'
-          end
           { :common_package_name => 'ironic-common',
-            :lib_package_name    => ironic_lib_pkgname }
+            :lib_package_name    => 'python3-ironic-lib' }
         when 'RedHat'
           { :common_package_name => 'openstack-ironic-common',
             :lib_package_name    => 'python-ironic-lib' }

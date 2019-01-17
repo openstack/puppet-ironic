@@ -35,7 +35,7 @@ describe 'ironic::inspector::client' do
     it 'installs ironic inspector client package' do
       is_expected.to contain_package('python-ironic-inspector-client').with(
         :ensure => 'present',
-        :name   => 'python-ironic-inspector-client',
+        :name   => platform_params[:ironic_inspector_client_package_name],
         :tag    => ['openstack', 'ironic-support-package'],
       )
     end
@@ -47,6 +47,15 @@ describe 'ironic::inspector::client' do
     context "on #{os}" do
       let (:facts) do
         facts.merge!(OSDefaults.get_facts())
+      end
+
+      let (:platform_params) do
+        case facts[:osfamily]
+        when 'Debian'
+          { :ironic_inspector_client_package_name => 'python3-ironic-inspector-client' }
+        when 'RedHat'
+          { :ironic_inspector_client_package_name => 'python-ironic-inspector-client' }
+        end
       end
 
       it_configures 'inspector client'

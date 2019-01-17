@@ -22,18 +22,15 @@
 class ironic::params {
   include ::openstacklib::defaults
 
+  $pyvers = $::openstacklib::defaults::pyvers
+  $pyver3 = $::openstacklib::defaults::pyver3
+
   if ($::os_package_type == 'debian') {
-    $pyvers = '3'
-    $pyver3 = '3'
     $syslinux_path_custom = '/usr/lib/syslinux'
   } elsif ($::os['name'] == 'Fedora') or
           ($::os['family'] == 'RedHat' and Integer.new($::os['release']['major']) > 7) {
-    $pyvers = '3'
-    $pyver3 = '3.6'
     $syslinux_path_custom = '/tftpboot'
   } else {
-    $pyvers = ''
-    $pyver3 = '2.7'
     $syslinux_path_custom = '/var/lib/tftpboot'
   }
 

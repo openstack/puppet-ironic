@@ -34,7 +34,7 @@ describe 'ironic::drivers::redfish' do
     it 'installs sushy package' do
       is_expected.to contain_package('python-sushy').with(
         :ensure => 'present',
-        :name   => 'python-sushy',
+        :name   => platform_params[:sushy_package_name],
         :tag    => ['openstack', 'ironic-package'],
       )
     end
@@ -59,6 +59,16 @@ describe 'ironic::drivers::redfish' do
       let (:facts) do
         facts.merge!(OSDefaults.get_facts())
       end
+
+      let (:platform_params) do
+        case facts[:osfamily]
+        when 'Debian'
+          { :sushy_package_name => 'python3-sushy' }
+        when 'RedHat'
+          { :sushy_package_name => 'python-sushy' }
+        end
+      end
+
       it_behaves_like 'ironic redfish driver'
     end
   end

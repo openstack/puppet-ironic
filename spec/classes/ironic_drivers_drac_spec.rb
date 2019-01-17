@@ -26,7 +26,7 @@ describe 'ironic::drivers::drac' do
     it 'installs dracclient package' do
       is_expected.to contain_package('python-dracclient').with(
         :ensure => 'present',
-        :name   => 'python-dracclient',
+        :name   => platform_params[:dracclient_package_name],
         :tag    => ['openstack', 'ironic-package'],
       )
     end
@@ -40,6 +40,16 @@ describe 'ironic::drivers::drac' do
       let (:facts) do
         facts.merge!(OSDefaults.get_facts())
       end
+
+      let (:platform_params) do
+        case facts[:osfamily]
+        when 'Debian'
+          { :dracclient_package_name => 'python3-dracclient' }
+        when 'RedHat'
+          { :dracclient_package_name => 'python-dracclient' }
+        end
+      end
+
       it_behaves_like 'ironic drac driver'
     end
   end
