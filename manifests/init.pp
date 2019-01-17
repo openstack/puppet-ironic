@@ -44,6 +44,10 @@
 #   class is explicitly requested.
 #   Defaults to $::os_service_default
 #
+# [*executor_thread_pool_size*]
+#   (optional) Size of executor thread pool when executor is threading or eventlet.
+#   Defaults to $::os_service_default.
+#
 # [*rpc_response_timeout*]
 #   (optional) Seconds to wait for a response from a call. (integer value)
 #   Defaults to $::os_service_default.
@@ -256,6 +260,7 @@ class ironic (
   $auth_strategy                      = 'keystone',
   $default_resource_class             = $::os_service_default,
   $control_exchange                   = $::os_service_default,
+  $executor_thread_pool_size          = $::os_service_default,
   $rpc_response_timeout               = $::os_service_default,
   $default_transport_url              = $::os_service_default,
   $rabbit_use_ssl                     = $::os_service_default,
@@ -341,9 +346,10 @@ class ironic (
   }
 
   oslo::messaging::default {'ironic_config':
-    transport_url        => $default_transport_url,
-    rpc_response_timeout => $rpc_response_timeout,
-    control_exchange     => $control_exchange,
+    executor_thread_pool_size => $executor_thread_pool_size,
+    transport_url             => $default_transport_url,
+    rpc_response_timeout      => $rpc_response_timeout,
+    control_exchange          => $control_exchange,
   }
 
   oslo::messaging::rabbit {'ironic_config':
