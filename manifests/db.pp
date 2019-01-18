@@ -53,6 +53,7 @@ class ironic::db (
   $database_db_max_retries = $::os_service_default,
   $database_pool_timeout   = $::os_service_default,
 ) {
+
   include ::ironic::deps
 
   # NOTE(spredzy): In order to keep backward compatibility we rely on the pick function
