@@ -36,7 +36,7 @@ describe 'ironic::drivers::ilo' do
     it 'installs proliantutils package' do
       is_expected.to contain_package('python-proliantutils').with(
         :ensure => 'present',
-        :name   => 'python-proliantutils',
+        :name   => platform_params[:proliantutils_package_name],
         :tag    => ['openstack', 'ironic-package'],
       )
     end
@@ -65,6 +65,16 @@ describe 'ironic::drivers::ilo' do
       let (:facts) do
         facts.merge!(OSDefaults.get_facts())
       end
+
+      let (:platform_params) do
+        case facts[:osfamily]
+        when 'Debian'
+          { :proliantutils_package_name => 'python3-proliantutils' }
+        when 'RedHat'
+          { :proliantutils_package_name => 'python-proliantutils' }
+        end
+      end
+
       it_behaves_like 'ironic ilo driver'
     end
   end
