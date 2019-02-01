@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    Expose the ``versioned_notifications_topics`` parameter in ``::ironic``

@@ -253,6 +253,10 @@
 #   (optional) Notification level for outgoing notifications
 #   Defaults to $::os_service_default
 #
+# [*versioned_notifications_topics*]
+#   (optional) Topics for the versioned notifications issued by Ironic
+#   Defaults to $::os_service_default
+#
 class ironic (
   $enabled                            = true,
   $package_ensure                     = 'present',
@@ -306,6 +310,7 @@ class ironic (
   $notification_driver                = $::os_service_default,
   $notification_topics                = $::os_service_default,
   $notification_level                 = $::os_service_default,
+  $versioned_notifications_topics     = $::os_service_default,
 ) {
 
   include ::ironic::deps
@@ -331,10 +336,11 @@ class ironic (
   }
 
   ironic_config {
-    'DEFAULT/auth_strategy':           value => $auth_strategy;
-    'DEFAULT/my_ip':                   value => $my_ip;
-    'DEFAULT/default_resource_class':  value => $default_resource_class;
-    'DEFAULT/notification_level':      value => $notification_level;
+    'DEFAULT/auth_strategy':                   value => $auth_strategy;
+    'DEFAULT/my_ip':                           value => $my_ip;
+    'DEFAULT/default_resource_class':          value => $default_resource_class;
+    'DEFAULT/notification_level':              value => $notification_level;
+    'DEFAULT/versioned_notifications_topics':  value => $versioned_notifications_topics;
   }
 
   if $sync_db {

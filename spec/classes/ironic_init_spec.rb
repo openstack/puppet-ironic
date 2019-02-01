@@ -109,6 +109,7 @@ describe 'ironic' do
       is_expected.to contain_ironic_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>').with_secret(true)
       is_expected.to contain_ironic_config('DEFAULT/default_resource_class').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('DEFAULT/notification_level').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('DEFAULT/versioned_notifications_topics').with_value('<SERVICE DEFAULT>')
     end
   end
 
