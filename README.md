@@ -33,7 +33,7 @@ Setup
 
 **What the ironic module affects:**
 
-* [Ironic](https://wiki.openstack.org/wiki/Ironic), the baremetal service for OpenStack.
+* [Ironic](https://docs.openstack.org/ironic/latest/), the baremetal service for OpenStack.
 
 ### Installing Ironic
 
