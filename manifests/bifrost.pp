@@ -192,11 +192,10 @@ class ironic::bifrost (
 
   include ::ironic::deps
 
-  vcsrepo { $git_dest_repo_folder:
-    ensure   => $ensure,
-    provider => git,
-    revision => $revision,
-    source   => $git_source_repo,
+  git { $git_dest_repo_folder:
+    ensure => $ensure,
+    branch => $revision,
+    origin => $git_source_repo,
   }
 
   file { $bifrost_config_folder:

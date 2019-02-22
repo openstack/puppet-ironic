@@ -59,11 +59,10 @@ describe 'ironic::bifrost' do
   end
 
   shared_examples 'ironic::bifrost' do
-    it { should contain_vcsrepo('/opt/stack/bifrost').with(
-      :ensure   => 'present',
-      :provider => 'git',
-      :revision => 'master',
-      :source   => 'https://git.openstack.org/openstack/bifrost',
+    it { should contain_git('/opt/stack/bifrost').with(
+      :ensure => 'present',
+      :branch => 'master',
+      :origin => 'https://git.openstack.org/openstack/bifrost',
     )}
 
     it { should contain_file('/etc/bifrost').with(
