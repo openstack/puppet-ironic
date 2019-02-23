@@ -66,8 +66,8 @@ class ironic::db (
   $database_max_pool_size_real = pick($::ironic::database_max_pool_size, $database_max_pool_size)
   $database_max_overflow_real = pick($::ironic::database_max_overflow, $database_max_overflow)
 
-  validate_re($database_connection_real,
-    '^(sqlite|mysql(\+pymysql)?|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
+  validate_legacy(Oslo::Dbconn, 'validate_re', $database_connection_real,
+    ['^(sqlite|mysql(\+pymysql)?|postgresql):\/\/(\S+:\S+@\S+\/\S+)?'])
 
   oslo::db { 'ironic_config':
     connection     => $database_connection_real,

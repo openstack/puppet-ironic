@@ -225,7 +225,7 @@ class ironic::conductor (
     fail('rescuing_network_name and rescuing_network can not be specified in the same time.')
   }
 
-  validate_array($enabled_hardware_types)
+  validate_legacy(Array, 'validate_array', $enabled_hardware_types)
 
   # NOTE(dtantsur): all in-tree drivers are IPA-based, so it won't hurt
   # including its manifest (which only contains configuration options)
@@ -243,7 +243,8 @@ class ironic::conductor (
   }
 
   if $cleaning_disk_erase {
-    validate_re($cleaning_disk_erase, ['^full$', '^metadata$', '^none$'])
+    validate_legacy(Enum['full', 'metadata', 'none'], 'validate_re', $cleaning_disk_erase,
+      [['^full$', '^metadata$', '^none$']])
   }
 
   case $cleaning_disk_erase {
