@@ -103,7 +103,7 @@
 #
 # [*ironic_auth_url*]
 #   (optional) Keystone authentication URL for Ironic
-#   Defautls to 'http://127.0.0.1:5000/v2.0'
+#   Defautls to 'http://127.0.0.1:5000/v3'
 #
 # [*ironic_max_retries*]
 #   (optional) Maximum number of retries in case of conflict error
@@ -139,7 +139,7 @@
 #
 # [*swift_auth_url*]
 #   (optional) Keystone authentication URL for Swift
-#   Defautls to 'http://127.0.0.1:5000/v2.0'
+#   Defautls to 'http://127.0.0.1:5000/v3'
 #
 # [*dnsmasq_ip_subnets*]
 #    (optional) List of hashes with keys: 'tag', 'ip_range', 'netmask', and
@@ -258,7 +258,7 @@ class ironic::inspector (
   $ironic_tenant_name              = 'services',
   $ironic_project_domain_name      = 'Default',
   $ironic_user_domain_name         = 'Default',
-  $ironic_auth_url                 = 'http://127.0.0.1:5000/v2.0',
+  $ironic_auth_url                 = 'http://127.0.0.1:5000/v3',
   $ironic_max_retries              = 30,
   $ironic_retry_interval           = 2,
   $swift_auth_type                 = 'password',
@@ -267,7 +267,7 @@ class ironic::inspector (
   $swift_tenant_name               = 'services',
   $swift_project_domain_name       = 'Default',
   $swift_user_domain_name          = 'Default',
-  $swift_auth_url                  = 'http://127.0.0.1:5000/v2.0',
+  $swift_auth_url                  = 'http://127.0.0.1:5000/v3',
   $dnsmasq_ip_subnets              = [],
   $dnsmasq_local_ip                = '192.168.0.1',
   $dnsmasq_dhcp_hostsdir           = undef,

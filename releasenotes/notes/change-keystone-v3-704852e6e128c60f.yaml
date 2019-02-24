@@ -1,0 +1,8 @@
+---
+upgrade:
+  - |
+    The default value of ironic::inspector::ironic_auth_url is
+    changed from http://127.0.0.1:5000/v2.0 to http://127.0.0.1:5000/v3
+  - |
+    The default value of ironic::inspector::swift_auth_url is
+    changed from http://127.0.0.1:5000/v2.0 to http://127.0.0.1:5000/v3
