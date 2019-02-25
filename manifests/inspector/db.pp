@@ -58,8 +58,8 @@ class ironic::inspector::db (
 
   $database_connection_real = pick($::ironic::inspector::db_connection, $database_connection)
 
-  validate_re($database_connection_real,
-    '^(sqlite|mysql(\+pymysql)?|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
+  validate_legacy(Oslo::Dbconn, 'validate_re', $database_connection_real,
+    ['^(sqlite|mysql(\+pymysql)?|postgresql):\/\/(\S+:\S+@\S+\/\S+)?'])
 
   oslo::db { 'ironic_inspector_config':
     connection     => $database_connection_real,
