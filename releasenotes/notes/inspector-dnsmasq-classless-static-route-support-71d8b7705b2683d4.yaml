@@ -1,0 +1,18 @@
+---
+features:
+  - |
+    *Classless static routes* can now be configured for ironic inspector
+    subnets. The ``dnsmasq_ip_subnets`` has been extended to support the
+    ``classless_static_routes`` key in a subnet defention. This allow advanced
+    routing options to be pushed to the inspection ramdisk. For example::
+
+      dnsmasq_ip_subnets = [
+          { 'tag'                     => 'subnet2',
+            'ip_range'                => '192.168.2.100,192.168.2.200',
+            'netmask'                 => '255.255.255.0',
+            'gateway'                 => '192.168.2.254',
+            'classless_static_routes' => [
+                {'destination' => '1.2.3.0/24', 'nexthop' => '192.168.2.1'},
+                {'destination' => '4.5.6.0/24', 'nexthop' => '192.168.2.1'}],
+          },
+      ]

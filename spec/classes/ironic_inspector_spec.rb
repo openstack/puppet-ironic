@@ -51,10 +51,14 @@ describe 'ironic::inspector' do
                                    'ip_range' => '192.168.1.100,192.168.1.200',
                                    'netmask'  => '255.255.255.0',
                                    'gateway'  => '192.168.1.254' },
-                                 { 'tag'      => 'subnet2',
-                                   'ip_range' => '192.168.2.100,192.168.2.200',
-                                   'netmask'  => '255.255.255.0',
-                                   'gateway'  => '192.168.2.254' }],
+                                 { 'tag'                     => 'subnet2',
+                                   'ip_range'                => '192.168.2.100,192.168.2.200',
+                                   'netmask'                 => '255.255.255.0',
+                                   'gateway'                 => '192.168.2.254',
+                                   'classless_static_routes' => [{'destination' => '1.2.3.0/24',
+                                                                  'nexthop'     => '192.168.2.1'},
+                                                                 {'destination' => '4.5.6.0/24',
+                                                                  'nexthop'     => '192.168.2.1'}]}],
       :dnsmasq_local_ip      => '192.168.0.1',
       :ipxe_timeout          => 0,
       :http_port             => 8088,
@@ -156,6 +160,9 @@ describe 'ironic::inspector' do
       )
       is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
         /dhcp-option=tag:subnet2,option:router,192.168.2.254/
+      )
+      is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
+        /dhcp-option=tag:subnet2,option:classless-static-route,1.2.3.0\/24,192.168.2.1,4.5.6.0\/24,192.168.2.1/
       )
     end
     it 'should contain file /tftpboot/pxelinux.cfg/default' do

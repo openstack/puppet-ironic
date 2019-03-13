@@ -142,20 +142,24 @@
 #   Defautls to 'http://127.0.0.1:5000/v3'
 #
 # [*dnsmasq_ip_subnets*]
-#    (optional) List of hashes with keys: 'tag', 'ip_range', 'netmask', and
-#    'gateway'. 'ip_range' is the only required key. Assigning multiple tagged
-#    subnets allow dnsmasq to serve dhcp request that came in via dhcp
-#    relay/helper.
+#    (optional) List of hashes with keys: 'tag', 'ip_range', 'netmask',
+#    'gateway' and 'classless_static_routes'. 'ip_range' is the only required
+#    key. Assigning multiple tagged subnets allow dnsmasq to serve dhcp request
+#    that came in via dhcp relay/helper.
 #    Example:
 #    [{'ip_range' => '192.168.0.100,192.168.0.120'},
 #     {'tag'      => 'subnet1',
 #      'ip_range' => '192.168.1.100,192.168.1.200',
 #      'netmask'  => '255.255.255.0',
 #      'gateway'  => '192.168.1.254'},
-#     {'tag'      => 'subnet2',
-#      'ip_range' => '192.168.2.100,192.168.2.200',
-#      'netmask'  => '255.255.255.0',
-#      'gateway'  => '192.168.2.254'}]
+#     {'tag'                     => 'subnet2',
+#      'ip_range'                => '192.168.2.100,192.168.2.200',
+#      'netmask'                 => '255.255.255.0',
+#      'gateway'                 => '192.168.2.254',
+#      'classless_static_routes' => [{'destination' => '1.2.3.0/24',
+#                                     'nexthop'     => '192.168.2.1'},
+#                                    {'destination' => '4.5.6.0/24',
+#                                     'nexthop'     => '192.168.2.1'}]}]
 #    Defaults to []
 #
 # [*dnsmasq_local_ip*]

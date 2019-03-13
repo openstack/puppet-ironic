@@ -19,6 +19,17 @@ dhcp-option=tag:<%= s['tag'] -%>,option:router,<%= s['gateway'] %>
 dhcp-option=option:router,<%= s['gateway'] %>
 <% end -%>
 <% end -%>
+<% if s['classless_static_routes'] -%>
+<%- @_routes = [] -%>
+<%- s['classless_static_routes'].each do |route| -%>
+<%- @_routes << route['destination'] + ',' + route['nexthop'] -%>
+<% end -%>
+<% if s['tag'] -%>
+dhcp-option=tag:<%= s['tag'] -%>,option:classless-static-route,<%= @_routes.join(',') -%>
+<% else -%>
+dhcp-option=option:classless-static-route,<%= @_routes.join(',') -%>
+<% end -%>
+<% end -%>
 <% end -%>
 dhcp-sequential-ip
 dhcp-match=ipxe,175
