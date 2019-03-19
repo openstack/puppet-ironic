@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Allow configuring the ``default_python_interpreter`` parameter for the
+    ansible deploy interface in the ``ironic::drivers::ansible`` manifest.

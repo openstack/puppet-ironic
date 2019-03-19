@@ -62,6 +62,9 @@
 #   cleaning.
 #   Defaults to $::os_service_default
 #
+# [*default_python_interpreter*]
+#   (optional) Absolute path to the python interpreter on the managed machines.
+#   Defaults to $::os_service_default
 
 class ironic::drivers::ansible (
   $package_ensure             = 'present',
@@ -75,6 +78,7 @@ class ironic::drivers::ansible (
   $default_shutdown_playbook  = $::os_service_default,
   $default_clean_playbook     = $::os_service_default,
   $default_clean_steps_config = $::os_service_default,
+  $default_python_interpreter = $::os_service_default,
 ) {
 
   include ::ironic::deps
@@ -92,6 +96,7 @@ class ironic::drivers::ansible (
     'ansible/default_shutdown_playbook':  value => $default_shutdown_playbook;
     'ansible/default_clean_playbook':     value => $default_clean_playbook;
     'ansible/default_clean_steps_config': value => $default_clean_steps_config;
+    'ansible/default_python_interpreter': value => $default_python_interpreter;
   }
 
   ensure_packages('ansible',

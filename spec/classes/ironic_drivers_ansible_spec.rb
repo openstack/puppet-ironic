@@ -37,6 +37,7 @@ describe 'ironic::drivers::ansible' do
       is_expected.to contain_ironic_config('ansible/default_shutdown_playbook').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('ansible/default_clean_playbook').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('ansible/default_clean_steps_config').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('ansible/default_python_interpreter').with_value('<SERVICE DEFAULT>')
     end
 
     it 'installs ansible package' do
@@ -63,7 +64,8 @@ describe 'ironic::drivers::ansible' do
                       :default_deploy_playbook => 'deploy-extra.yaml',
                       :default_shutdown_playbook => 'shutdown-extra.yaml',
                       :default_clean_playbook => 'clean-extra.yaml',
-                      :default_clean_steps_config => 'custom-clean-steps.yaml')
+                      :default_clean_steps_config => 'custom-clean-steps.yaml',
+                      :default_python_interpreter => '/usr/bin/python3')
       end
       it 'should replace default parameter with new value' do
         is_expected.to contain_ironic_config('ansible/ansible_extra_args').with_value(p[:ansible_extra_args])
@@ -76,6 +78,7 @@ describe 'ironic::drivers::ansible' do
         is_expected.to contain_ironic_config('ansible/default_shutdown_playbook').with_value(p[:default_shutdown_playbook])
         is_expected.to contain_ironic_config('ansible/default_clean_playbook').with_value(p[:default_clean_playbook])
         is_expected.to contain_ironic_config('ansible/default_clean_steps_config').with_value(p[:default_clean_steps_config])
+        is_expected.to contain_ironic_config('ansible/default_python_interpreter').with_value(p[:default_python_interpreter])
       end
     end
 
