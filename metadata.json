@@ -26,8 +26,8 @@
             "version_requirement": ">=14.4.0 <15.0.0"
         },
         {
-            "name": "puppetlabs/vcsrepo",
-            "version_requirement": ">=2.4.0 <3.0.0"
+            "name": "voxpupuli/git_resource",
+            "version_requirement": ">=1.0.2 <2.0.0"
         },
         {
             "name": "openstack/oslo",
