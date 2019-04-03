@@ -65,7 +65,11 @@ class ironic::params {
       $ipxe_package              = 'ipxe-bootimgs'
       $syslinux_package          = 'syslinux-tftpboot'
       $syslinux_path             = $syslinux_path_custom
-      $syslinux_files            = ['pxelinux.0', 'chain.c32']
+      if (Integer.new($::os['release']['major']) > 7) {
+          $syslinux_files            = ['pxelinux.0', 'chain.c32', 'ldlinux.c32']
+      } else {
+          $syslinux_files            = ['pxelinux.0', 'chain.c32']
+      }
     }
     'Debian': {
       $common_package_name       = 'ironic-common'
