@@ -7,7 +7,7 @@
         },
         {
             "name": "openstack/keystone",
-            "version_requirement": ">=11.4.0 <12.0.0"
+            "version_requirement": ">=11.6.0 <12.0.0"
         },
         {
             "name": "puppetlabs/stdlib",
@@ -15,7 +15,7 @@
         },
         {
             "name": "openstack/openstacklib",
-            "version_requirement": ">=11.4.0 <12.0.0"
+            "version_requirement": ">=11.6.0 <12.0.0"
         },
         {
             "name": "puppetlabs/vcsrepo",
@@ -23,7 +23,7 @@
         },
         {
             "name": "openstack/oslo",
-            "version_requirement": ">=11.4.0 <12.0.0"
+            "version_requirement": ">=11.6.0 <12.0.0"
         },
         {
             "name": "puppetlabs/apache",
@@ -77,5 +77,5 @@
     ],
     "source": "git://github.com/openstack/puppet-ironic.git",
     "summary": "Puppet module for OpenStack Ironic",
-    "version": "11.5.0"
+    "version": "11.6.0"
 }
