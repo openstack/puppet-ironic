@@ -152,4 +152,4 @@ Release Notes
 Repository
 ----------
 
-* https://git.openstack.org/cgit/openstack/puppet-ironic
+* https://opendev.org/openstack/puppet-ironic
