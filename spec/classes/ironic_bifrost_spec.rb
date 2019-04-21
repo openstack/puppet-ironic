@@ -20,7 +20,7 @@ require 'spec_helper'
 describe 'ironic::bifrost' do
   let :default_params do
     {
-      :git_source_repo                => 'https://git.openstack.org/openstack/bifrost',
+      :git_source_repo                => 'https://opendev.org/openstack/bifrost',
       :revision                       => master,
       :git_dest_repo_folder           => '/opt/stack/bifrost',
       :bifrost_config_folder          => '/etc/bifrost',
@@ -62,7 +62,7 @@ describe 'ironic::bifrost' do
     it { should contain_git('/opt/stack/bifrost').with(
       :ensure => 'present',
       :branch => 'master',
-      :origin => 'https://git.openstack.org/openstack/bifrost',
+      :origin => 'https://opendev.org/openstack/bifrost',
     )}
 
     it { should contain_file('/etc/bifrost').with(

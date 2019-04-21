@@ -33,7 +33,7 @@
 #
 # [*git_source_repo*]
 #   (optional) Git repository location for pulling Bifrost
-#   Defaults to 'https://git.openstack.org/openstack/bifrost'
+#   Defaults to 'https://opendev.org/openstack/bifrost'
 #
 # [*revision*]
 #   (optional) The branch or commit to checkout on Bifrost repository
@@ -160,7 +160,7 @@ class ironic::bifrost (
   $ironic_db_password,
   $mysql_password,
   $baremetal_json_hosts,
-  $git_source_repo                = 'https://git.openstack.org/openstack/bifrost',
+  $git_source_repo                = 'https://opendev.org/openstack/bifrost',
   $ensure                         = present,
   $revision                       = 'master',
   $git_dest_repo_folder           = '/opt/stack/bifrost',
