@@ -2,6 +2,6 @@
 features:
   - |
     Add transport_url config param for ironic-inspector. It's added
-    in ironic-inspector in https://review.openstack.org/#/c/584758/,
+    in ironic-inspector in https://review.opendev.org/#/c/584758/,
     and is suggested to set it to 'fake://' when rpc backend not available
     or not desired, so need to add support for it in puppet-ironic.
