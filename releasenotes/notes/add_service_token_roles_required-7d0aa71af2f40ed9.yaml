@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    Expose the ``service_token_roles_required` and
+    ``service_token_roles`` parameters in both
+    ``::ironic::api::authtoken`` and ``ironic::inspector::authtoken``
