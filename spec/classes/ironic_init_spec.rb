@@ -96,7 +96,7 @@ describe 'ironic' do
     it 'should perform default database configuration' do
       is_expected.to contain_ironic_config('database/connection').with_value(params[:database_connection])
       is_expected.to contain_ironic_config('database/max_retries').with_value(params[:database_max_retries])
-      is_expected.to contain_ironic_config('database/idle_timeout').with_value(params[:database_idle_timeout])
+      is_expected.to contain_ironic_config('database/connection_recycle_time').with_value(params[:database_idle_timeout])
       is_expected.to contain_ironic_config('database/retry_interval').with_value(params[:database_retry_interval])
     end
 
