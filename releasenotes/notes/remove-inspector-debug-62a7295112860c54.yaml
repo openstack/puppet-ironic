@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The deprecated ironic::inspector::debug is removed, please use the dhcp_debug parameter.

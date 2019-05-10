@@ -235,12 +235,6 @@
 #      transport://user:pass@host1:port[,hostN:portN]/virtual_host
 #    Defaults to 'fake://'
 #
-## DEPRECATED PARAMS
-#
-# [*debug*]
-#   (optional) Enable debug logging
-#   Defaults to undef
-#
 class ironic::inspector (
   $package_ensure                  = 'present',
   $enabled                         = true,
@@ -290,8 +284,6 @@ class ironic::inspector (
   $discovery_default_driver        = $::os_service_default,
   $enable_ppc64le                  = false,
   $default_transport_url           = 'fake://',
-  ## DEPRECATED PARAMS
-  $debug                           = undef,
 ) {
 
   include ::ironic::deps
@@ -306,10 +298,6 @@ class ironic::inspector (
   if !is_array($dnsmasq_ip_subnets) {
     fail('Invalid data type, parameter dnsmasq_ip_subnets must be Array type')
   }
-
-  # TODO(tobias-urdin): When debug is removed make sure this is removed
-  # and change dhcp_debug_real to dhcp_debug in the erb templates.
-  $dhcp_debug_real = pick($debug, $dhcp_debug)
 
   $tftp_root_real    = pick($::ironic::pxe::common::tftp_root, $tftp_root)
   $http_root_real    = pick($::ironic::pxe::common::http_root, $http_root)
