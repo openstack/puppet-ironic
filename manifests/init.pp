@@ -52,6 +52,11 @@
 #   (optional) Seconds to wait for a response from a call. (integer value)
 #   Defaults to $::os_service_default.
 #
+# [*rpc_transport*]
+#   (optional) Defines a remote procedure call transport between conductor and
+#   API processes, such as using a messaging broker or JSON RPC.
+#   Defaults to $::os_service_default
+#
 # [*control_exchange*]
 #   (optional) What RPC queue/exchange to use (string value)
 #   Defaults to $::os_service_default
@@ -266,6 +271,7 @@ class ironic (
   $control_exchange                   = $::os_service_default,
   $executor_thread_pool_size          = $::os_service_default,
   $rpc_response_timeout               = $::os_service_default,
+  $rpc_transport                      = $::os_service_default,
   $default_transport_url              = $::os_service_default,
   $rabbit_use_ssl                     = $::os_service_default,
   $rabbit_heartbeat_timeout_threshold = $::os_service_default,
@@ -341,6 +347,7 @@ class ironic (
     'DEFAULT/default_resource_class':          value => $default_resource_class;
     'DEFAULT/notification_level':              value => $notification_level;
     'DEFAULT/versioned_notifications_topics':  value => $versioned_notifications_topics;
+    'DEFAULT/rpc_transport':                   value => $rpc_transport;
   }
 
   if $sync_db {
