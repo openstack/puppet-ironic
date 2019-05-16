@@ -105,6 +105,7 @@ describe 'ironic' do
       is_expected.to contain_ironic_config('DEFAULT/my_ip').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('DEFAULT/executor_thread_pool_size').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('DEFAULT/rpc_response_timeout').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('DEFAULT/rpc_transport').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('DEFAULT/control_exchange').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>').with_secret(true)
       is_expected.to contain_ironic_config('DEFAULT/default_resource_class').with_value('<SERVICE DEFAULT>')
@@ -247,6 +248,18 @@ describe 'ironic' do
       it { is_expected.to contain_ironic_config('oslo_messaging_amqp/sasl_config_name').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_ironic_config('oslo_messaging_amqp/username').with_value('amqp_user') }
       it { is_expected.to contain_ironic_config('oslo_messaging_amqp/password').with_value('password') }
+    end
+  end
+
+  shared_examples_for 'oslo messaging remote procedure call' do
+    context 'with overridden rpc parameters' do
+      before { params.merge!(
+        :rpc_transport        => 'pigeons',
+        :rpc_response_timeout => '3628800',
+      ) }
+
+      it { is_expected.to contain_ironic_config('DEFAULT/rpc_transport').with_value('pigeons') }
+      it { is_expected.to contain_ironic_config('DEFAULT/rpc_response_timeout').with_value('3628800') }
     end
   end
 

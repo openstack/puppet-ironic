@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Adds ``ironic::rpc_transport`` parameter to define remote
+    procedure call transport between conductor and API processes.
