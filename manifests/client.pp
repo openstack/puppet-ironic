@@ -39,4 +39,6 @@ class ironic::client (
     tag    => ['openstack', 'ironic-support-package'],
   }
 
+  include '::openstacklib::openstackclient'
+
 }
