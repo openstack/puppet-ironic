@@ -1,0 +1,6 @@
+---
+fixes:
+  - |
+    dnsmasq.conf require netmask for IPv6 to be a prefix. If IPv6 netmask is
+    used it will be converted to a prefix. See bug: `1828367
+    <https://bugs.launchpad.net/neutron/+bug/1828367>`_

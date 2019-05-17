@@ -58,7 +58,11 @@ describe 'ironic::inspector' do
                                    'classless_static_routes' => [{'destination' => '1.2.3.0/24',
                                                                   'nexthop'     => '192.168.2.1'},
                                                                  {'destination' => '4.5.6.0/24',
-                                                                  'nexthop'     => '192.168.2.1'}]}],
+                                                                  'nexthop'     => '192.168.2.1'}]},
+                                 { 'tag'      => 'subnet3',
+                                   'ip_range' => '2001:4888:a03:313a:c0:fe0:0:c200,2001:4888:a03:313a:c0:fe0:0:c2ff',
+                                   'netmask'  => 'ffff:ffff:ffff:ffff::',
+                                   'gateway'  => '2001:4888:a03:313a:c0:fe0:0:c000' }],
       :dnsmasq_local_ip      => '192.168.0.1',
       :ipxe_timeout          => 0,
       :http_port             => 8088,
@@ -163,6 +167,12 @@ describe 'ironic::inspector' do
       )
       is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
         /dhcp-option=tag:subnet2,option:classless-static-route,1.2.3.0\/24,192.168.2.1,4.5.6.0\/24,192.168.2.1/
+      )
+      is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
+        /dhcp-range=set:subnet3,2001:4888:a03:313a:c0:fe0:0:c200,2001:4888:a03:313a:c0:fe0:0:c2ff,64,10m/
+      )
+      is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
+        /dhcp-option=tag:subnet3,option:router,2001:4888:a03:313a:c0:fe0:0:c000/
       )
     end
     it 'should contain file /tftpboot/pxelinux.cfg/default' do
