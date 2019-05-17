@@ -34,6 +34,8 @@ describe 'ironic::client' do
         :tag    => ['openstack', 'ironic-support-package']
       )
     end
+
+    it { is_expected.to contain_class('openstacklib::openstackclient') }
   end
 
   on_supported_os({
