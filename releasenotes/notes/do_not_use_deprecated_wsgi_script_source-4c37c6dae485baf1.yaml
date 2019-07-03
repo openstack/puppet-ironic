@@ -1,0 +1,7 @@
+---
+other:
+  - |
+    app.wsgi script in ironic is deprecated from long in
+    favor of ironic-api-wsgi script, wsgi_script_source
+    default is changed to use ironic-api-wsgi instead of
+    app.wsgi.

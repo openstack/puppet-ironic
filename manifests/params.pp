@@ -60,7 +60,7 @@ class ironic::params {
       $systemd_python_package    = 'systemd-python'
       $ipxe_rom_dir              = '/usr/share/ipxe'
       $ironic_wsgi_script_path   = '/var/www/cgi-bin/ironic'
-      $ironic_wsgi_script_source = "/usr/lib/python${$pyver3}/site-packages/ironic/api/app.wsgi"
+      $ironic_wsgi_script_source = '/usr/bin/ironic-api-wsgi'
       $tftpd_package             = 'tftp-server'
       $ipxe_package              = 'ipxe-bootimgs'
       $syslinux_package          = 'syslinux-tftpboot'
@@ -88,7 +88,7 @@ class ironic::params {
       $systemd_python_package    = 'python-systemd'
       $ipxe_rom_dir              = '/usr/lib/ipxe'
       $ironic_wsgi_script_path   = '/usr/lib/cgi-bin/ironic'
-      $ironic_wsgi_script_source = "/usr/lib/python${$pyver3}/dist-packages/ironic/api/app.wsgi"
+      $ironic_wsgi_script_source = '/usr/bin/ironic-api-wsgi'
       $tftpd_package             = 'tftpd'
       $ipxe_package              = 'ipxe'
       $syslinux_package          = 'syslinux-common'
