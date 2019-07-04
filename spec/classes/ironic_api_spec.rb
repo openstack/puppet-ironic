@@ -71,6 +71,7 @@ describe 'ironic::api' do
       is_expected.to contain_ironic_config('api/public_endpoint').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_oslo__middleware('ironic_config').with(
         :enable_proxy_headers_parsing => '<SERVICE DEFAULT>',
+        :max_request_body_size        => '<SERVICE DEFAULT>',
       )
     end
 
@@ -100,6 +101,16 @@ describe 'ironic::api' do
 
       it { is_expected.to contain_oslo__middleware('ironic_config').with(
         :enable_proxy_headers_parsing => true,
+      )}
+    end
+
+    context 'with max_request_body_size' do
+      before do
+        params.merge!({:max_request_body_size => '102400' })
+      end
+
+      it { is_expected.to contain_oslo__middleware('ironic_config').with(
+        :max_request_body_size => '102400',
       )}
     end
 

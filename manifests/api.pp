@@ -65,6 +65,10 @@
 #   HTTPProxyToWSGI middleware.
 #   Defaults to $::os_service_default.
 #
+# [*max_request_body_size*]
+#   (Optional) Set max request body size
+#   Defaults to $::os_service_default.
+#
 class ironic::api (
   $package_ensure               = 'present',
   $enabled                      = true,
@@ -75,6 +79,7 @@ class ironic::api (
   $workers                      = $::os_service_default,
   $public_endpoint              = $::os_service_default,
   $enable_proxy_headers_parsing = $::os_service_default,
+  $max_request_body_size        = $::os_service_default,
 ) inherits ironic::params {
 
   include ::ironic::deps
@@ -135,6 +140,7 @@ standalone service, or httpd for being run by a httpd server")
 
   oslo::middleware { 'ironic_config':
     enable_proxy_headers_parsing => $enable_proxy_headers_parsing,
+    max_request_body_size        => $max_request_body_size,
   }
 
 }
