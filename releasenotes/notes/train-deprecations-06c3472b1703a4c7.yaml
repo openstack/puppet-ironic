@@ -1,0 +1,21 @@
+---
+upgrade:
+  - |
+    The deprecated parameter ``ironic::conductor::enabled_drivers`` has been
+    removed. Use new-style hardware types and the
+    ``ironic::conductor::enabled_hardware_types`` parameter instead.
+  - |
+    The deprecated parameter ``ironic::drivers::inspector::enabled`` has been
+    removed. Use
+    ``ironic::drivers::hardware_interfaces::enabled_inspect_interfaces`` to
+    enable ironic-inspector support.
+deprecations:
+  - |
+    The parameter ``ironic::drivers::inspector::service_url`` is deprecated and
+    has no effect. Use ``ironic::drivers::inspector::endpoint_override``.
+  - |
+    The parameter ``ironic::glance::api_servers`` is deprecated and
+    has no effect. Use ``ironic::glance::endpoint_override``.
+  - |
+    The parameter ``ironic::neutron::api_endpoint`` is deprecated and
+    has no effect. Use ``ironic::neutron::endpoint_override``.

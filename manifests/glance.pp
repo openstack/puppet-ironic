@@ -40,11 +40,6 @@
 #   The name of project's domain (required for Identity V3).
 #   Defaults to 'Default'
 #
-# [*api_servers*]
-#   (optional) A list of the glance api servers available to ironic.
-#   Should be an array with [hostname|ip]:port
-#   Defaults to $::os_service_default
-#
 # [*num_retries*]
 #   (optional) Number retries when downloading an image from glance.
 #   Defaults to $::os_service_default
@@ -89,6 +84,12 @@
 #   The endpoint URL for requests for this client
 #   Defaults to $::os_service_default
 #
+# DEPRECATED PARAMETERS
+#
+# [*api_servers*]
+#   Has no effect, use endpoint_override.
+#   Defaults to undef
+#
 class ironic::glance (
   $auth_type                  = 'password',
   $auth_url                   = $::os_service_default,
@@ -97,7 +98,6 @@ class ironic::glance (
   $password                   = $::os_service_default,
   $user_domain_name           = 'Default',
   $project_domain_name        = 'Default',
-  $api_servers                = $::os_service_default,
   $num_retries                = $::os_service_default,
   $api_insecure               = $::os_service_default,
   $swift_account              = $::os_service_default,
@@ -107,12 +107,13 @@ class ironic::glance (
   $swift_temp_url_duration    = $::os_service_default,
   $swift_account_project_name = undef,
   $endpoint_override          = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $api_servers                = undef,
 ) {
 
-  if is_array($api_servers) {
-    $api_servers_converted = join($api_servers, ',')
-  } else {
-    $api_servers_converted = $api_servers
+  if $api_servers {
+    warning("The ironic::glance::api_servers parameter is deprecated and \
+has no effect. Please use ironic::glance::endpoint_override instead.")
   }
 
   if ($swift_account_project_name and !is_service_default($swift_account)) {
@@ -127,9 +128,8 @@ class ironic::glance (
     'glance/project_name':            value => $project_name;
     'glance/user_domain_name':        value => $user_domain_name;
     'glance/project_domain_name':     value => $project_domain_name;
-    'glance/glance_api_servers':      value => $api_servers_converted;
-    'glance/glance_num_retries':      value => $num_retries;
-    'glance/glance_api_insecure':     value => $api_insecure;
+    'glance/num_retries':             value => $num_retries;
+    'glance/insecure':                value => $api_insecure;
     'glance/swift_container':         value => $swift_container;
     'glance/swift_endpoint_url':      value => $swift_endpoint_url;
     'glance/swift_temp_url_key':      value => $swift_temp_url_key, secret => true;

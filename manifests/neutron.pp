@@ -12,10 +12,6 @@
 #
 # == Class: ironic::neutron
 #
-# [*api_endpoint*]
-#   (optional) The Neutron URL to be used for requests from ironic
-#   Defaults to $::os_service_default
-#
 # [*auth_type*]
 #   The authentication plugin to use when connecting to neutron.
 #   Defaults to 'password'
@@ -48,8 +44,13 @@
 #   The endpoint URL for requests for this client
 #   Defaults to $::os_service_default
 #
+# DEPRECATED PARAMETERS
+#
+# [*api_endpoint*]
+#   Has no effect, use endpoint_override.
+#   Defaults to undef
+#
 class ironic::neutron (
-  $api_endpoint        = $::os_service_default,
   $auth_type           = 'password',
   $auth_url            = $::os_service_default,
   $project_name        = 'services',
@@ -58,10 +59,16 @@ class ironic::neutron (
   $user_domain_name    = 'Default',
   $project_domain_name = 'Default',
   $endpoint_override   = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $api_endpoint        = undef,
 ) {
 
+  if $api_endpoint {
+    warning("The ironic::neutron::api_endpoint parameter is deprecated and \
+has no effect. Please use ironic::neutron::endpoint_override instead.")
+  }
+
   ironic_config {
-    'neutron/url':                 value => $api_endpoint;
     'neutron/auth_type':           value => $auth_type;
     'neutron/username':            value => $username;
     'neutron/password':            value => $password, secret => true;

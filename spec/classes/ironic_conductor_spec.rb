@@ -62,7 +62,6 @@ describe 'ironic::conductor' do
     end
 
     it 'configures ironic.conf' do
-      is_expected.to contain_ironic_config('DEFAULT/enabled_drivers').with_ensure('absent')
       is_expected.to contain_ironic_config('DEFAULT/enabled_hardware_types').with_value('ipmi')
       is_expected.to contain_ironic_config('conductor/max_time_interval').with_value(p[:max_time_interval])
       is_expected.to contain_ironic_config('conductor/force_power_state_during_sync').with_value(p[:force_power_state_during_sync])

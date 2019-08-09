@@ -34,7 +34,6 @@ describe 'ironic::neutron' do
     end
 
     it 'configures ironic.conf' do
-      is_expected.to contain_ironic_config('neutron/url').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('neutron/auth_type').with_value(p[:auth_type])
       is_expected.to contain_ironic_config('neutron/auth_url').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('neutron/project_name').with_value(p[:project_name])
@@ -48,7 +47,6 @@ describe 'ironic::neutron' do
     context 'when overriding parameters' do
       before :each do
         params.merge!(
-            :api_endpoint        => 'http://neutron.example.com',
             :auth_type           => 'noauth',
             :auth_url            => 'http://example.com',
             :project_name        => 'project1',
@@ -61,7 +59,6 @@ describe 'ironic::neutron' do
       end
 
       it 'should replace default parameter with new value' do
-        is_expected.to contain_ironic_config('neutron/url').with_value(p[:api_endpoint])
         is_expected.to contain_ironic_config('neutron/auth_type').with_value(p[:auth_type])
         is_expected.to contain_ironic_config('neutron/auth_url').with_value(p[:auth_url])
         is_expected.to contain_ironic_config('neutron/project_name').with_value(p[:project_name])

@@ -183,13 +183,6 @@
 #   (optional) Glance UUID or URL of a rescue ramdisk to use by default.
 #   Defaults to $::os_service_default
 #
-# DEPRECATED PARAMETERS
-#
-# [*enabled_drivers*]
-#  (optional) Array of drivers to load during service initialization.
-#  Deprecated and does nothing since the classic drivers have been removed.
-#  Defaults to undef
-#
 class ironic::conductor (
   $package_ensure                      = 'present',
   $enabled                             = true,
@@ -224,7 +217,6 @@ class ironic::conductor (
   $deploy_ramdisk                      = $::os_service_default,
   $rescue_kernel                       = $::os_service_default,
   $rescue_ramdisk                      = $::os_service_default,
-  $enabled_drivers                     = undef,
 ) {
 
   include ::ironic::deps
@@ -288,8 +280,6 @@ class ironic::conductor (
 
   # Configure ironic.conf
   ironic_config {
-    # Force removal of the deprecated options to avoid failures. Remove in Stein.
-    'DEFAULT/enabled_drivers':                    ensure => absent;
     'DEFAULT/enabled_hardware_types':             value => join($enabled_hardware_types, ',');
     'conductor/max_time_interval':                value => $max_time_interval;
     'conductor/force_power_state_during_sync':    value => $force_power_state_during_sync;
