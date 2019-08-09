@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    Allows configuring the default deploy and rescue kernel/ramdisk via the
+    new parameters ``deploy_kernel``, ``deploy_ramdisk``, ``rescue_kernel`` and
+    ``rescue_ramdisk`` in the ``ironic::conductor`` manifest.

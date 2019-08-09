@@ -114,6 +114,10 @@ describe 'ironic::conductor' do
           :power_state_sync_max_retries    => 5,
           :power_failure_recovery_interval => 120,
           :conductor_group                 => 'in-the-closet-to-the-left',
+          :deploy_kernel                   => 'http://host/deploy.kernel',
+          :deploy_ramdisk                  => 'http://host/deploy.ramdisk',
+          :rescue_kernel                   => 'http://host/rescue.kernel',
+          :rescue_ramdisk                  => 'http://host/rescue.ramdisk',
         )
       end
       it 'should replace default parameter with new value' do
@@ -141,6 +145,10 @@ describe 'ironic::conductor' do
         is_expected.to contain_ironic_config('conductor/power_state_sync_max_retries').with_value(p[:power_state_sync_max_retries])
         is_expected.to contain_ironic_config('conductor/power_failure_recovery_interval').with_value(p[:power_failure_recovery_interval])
         is_expected.to contain_ironic_config('conductor/conductor_group').with_value(p[:conductor_group])
+        is_expected.to contain_ironic_config('conductor/deploy_kernel').with_value(p[:deploy_kernel])
+        is_expected.to contain_ironic_config('conductor/deploy_ramdisk').with_value(p[:deploy_ramdisk])
+        is_expected.to contain_ironic_config('conductor/rescue_kernel').with_value(p[:rescue_kernel])
+        is_expected.to contain_ironic_config('conductor/rescue_ramdisk').with_value(p[:rescue_ramdisk])
       end
     end
 
