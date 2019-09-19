@@ -311,7 +311,8 @@ class ironic::inspector (
     require => Anchor['ironic-inspector::config::begin'],
   }
 
-  $dnsmasq_ip_subnets_real = ipv6_netmask_to_prefix($dnsmasq_ip_subnets)
+  $dnsmasq_local_ip_real = normalize_ip_for_uri($dnsmasq_local_ip)
+  $dnsmasq_ip_subnets_real = ipv6_normalize_dnsmasq_ip_subnets($dnsmasq_ip_subnets)
 
   if $pxe_transfer_protocol == 'tftp' {
     file { '/etc/ironic-inspector/dnsmasq.conf':

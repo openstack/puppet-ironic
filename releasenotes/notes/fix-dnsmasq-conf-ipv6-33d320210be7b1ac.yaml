@@ -1,0 +1,8 @@
+---
+fixes:
+  - |
+    The dnsmasq configuration written for ironic-inspector did not work with
+    IPv6 addressing. Router addresses should be provided by router
+    advertisements, DHCPv6 does not support a router option.
+    `1844573 <https://bugs.launchpad.net/puppet-ironic/+bug/1844573>`_.
+

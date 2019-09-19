@@ -179,7 +179,7 @@ describe 'ironic::inspector' do
       is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
         /dhcp-range=set:subnet3,2001:4888:a03:313a:c0:fe0:0:c200,2001:4888:a03:313a:c0:fe0:0:c2ff,64,10m/
       )
-      is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
+      is_expected.not_to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
         /dhcp-option=tag:subnet3,option:router,2001:4888:a03:313a:c0:fe0:0:c000/
       )
     end
@@ -259,6 +259,12 @@ describe 'ironic::inspector' do
         )
         is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
             /log-queries/
+        )
+        is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
+            /dhcp-userclass=set:ipxe6,iPXE/
+        )
+        is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
+            /dhcp-option=tag:ipxe6,option6:bootfile-url,http:\/\/.*:3816\/inspector.ipxe/
         )
       end
       it 'should contain file /var/www/httpboot/inspector.ipxe' do
