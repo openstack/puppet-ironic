@@ -1,0 +1,3 @@
+features:
+  - |
+    Supports configuring ``ironic::conductor::allow_provisioning_in_maintenance``.

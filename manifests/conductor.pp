@@ -183,6 +183,13 @@
 #   (optional) Glance UUID or URL of a rescue ramdisk to use by default.
 #   Defaults to $::os_service_default
 #
+# [*allow_provisioning_in_maintenance*]
+#   (optional) Whether to allow nodes to enter or undergo deploy or cleaning
+#   when in maintenance mode. If this option is set to False, and a node enters
+#   maintenance during deploy or cleaning, the process will be aborted
+#   after the next heartbeat.
+#   Defaults to $::os_service_default
+#
 class ironic::conductor (
   $package_ensure                      = 'present',
   $enabled                             = true,
@@ -217,6 +224,7 @@ class ironic::conductor (
   $deploy_ramdisk                      = $::os_service_default,
   $rescue_kernel                       = $::os_service_default,
   $rescue_ramdisk                      = $::os_service_default,
+  $allow_provisioning_in_maintenance   = $::os_service_default,
 ) {
 
   include ::ironic::deps
@@ -280,32 +288,33 @@ class ironic::conductor (
 
   # Configure ironic.conf
   ironic_config {
-    'DEFAULT/enabled_hardware_types':             value => join($enabled_hardware_types, ',');
-    'conductor/max_time_interval':                value => $max_time_interval;
-    'conductor/force_power_state_during_sync':    value => $force_power_state_during_sync;
-    'conductor/automated_clean':                  value => $automated_clean;
-    'conductor/api_url':                          value => $api_url;
-    'deploy/http_url':                            value => $http_url;
-    'deploy/http_root':                           value => $http_root;
-    'DEFAULT/force_raw_images':                   value => $force_raw_images;
-    'deploy/erase_devices_priority':              value => $erase_devices_priority;
-    'deploy/erase_devices_metadata_priority':     value => $erase_devices_metadata_priority;
-    'deploy/continue_if_disk_secure_erase_fails': value => $continue_if_disk_secure_erase_fails;
-    'conductor/configdrive_use_swift':            value => $configdrive_use_swift;
-    'conductor/configdrive_swift_container':      value => $configdrive_swift_container;
-    'conductor/inspect_wait_timeout':             value => $inspect_timeout;
-    'deploy/default_boot_option':                 value => $default_boot_option;
-    'deploy/default_boot_mode':                   value => $default_boot_mode;
-    'neutron/port_setup_delay':                   value => $port_setup_delay;
-    'conductor/power_state_change_timeout':       value => $power_state_change_timeout;
-    'conductor/sync_power_state_interval':        value => $sync_power_state_interval;
-    'conductor/power_state_sync_max_retries':     value => $power_state_sync_max_retries;
-    'conductor/power_failure_recovery_interval':  value => $power_failure_recovery_interval;
-    'conductor/conductor_group':                  value => $conductor_group;
-    'conductor/deploy_kernel':                    value => $deploy_kernel;
-    'conductor/deploy_ramdisk':                   value => $deploy_ramdisk;
-    'conductor/rescue_kernel':                    value => $rescue_kernel;
-    'conductor/rescue_ramdisk':                   value => $rescue_ramdisk;
+    'DEFAULT/enabled_hardware_types':              value => join($enabled_hardware_types, ',');
+    'conductor/max_time_interval':                 value => $max_time_interval;
+    'conductor/force_power_state_during_sync':     value => $force_power_state_during_sync;
+    'conductor/automated_clean':                   value => $automated_clean;
+    'conductor/api_url':                           value => $api_url;
+    'deploy/http_url':                             value => $http_url;
+    'deploy/http_root':                            value => $http_root;
+    'DEFAULT/force_raw_images':                    value => $force_raw_images;
+    'deploy/erase_devices_priority':               value => $erase_devices_priority;
+    'deploy/erase_devices_metadata_priority':      value => $erase_devices_metadata_priority;
+    'deploy/continue_if_disk_secure_erase_fails':  value => $continue_if_disk_secure_erase_fails;
+    'conductor/configdrive_use_swift':             value => $configdrive_use_swift;
+    'conductor/configdrive_swift_container':       value => $configdrive_swift_container;
+    'conductor/inspect_wait_timeout':              value => $inspect_timeout;
+    'deploy/default_boot_option':                  value => $default_boot_option;
+    'deploy/default_boot_mode':                    value => $default_boot_mode;
+    'neutron/port_setup_delay':                    value => $port_setup_delay;
+    'conductor/power_state_change_timeout':        value => $power_state_change_timeout;
+    'conductor/sync_power_state_interval':         value => $sync_power_state_interval;
+    'conductor/power_state_sync_max_retries':      value => $power_state_sync_max_retries;
+    'conductor/power_failure_recovery_interval':   value => $power_failure_recovery_interval;
+    'conductor/conductor_group':                   value => $conductor_group;
+    'conductor/deploy_kernel':                     value => $deploy_kernel;
+    'conductor/deploy_ramdisk':                    value => $deploy_ramdisk;
+    'conductor/rescue_kernel':                     value => $rescue_kernel;
+    'conductor/rescue_ramdisk':                    value => $rescue_ramdisk;
+    'conductor/allow_provisioning_in_maintenance': value => $allow_provisioning_in_maintenance;
   }
 
   if $cleaning_network_name {

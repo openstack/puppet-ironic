@@ -90,33 +90,34 @@ describe 'ironic::conductor' do
     context 'when overriding parameters' do
       before :each do
         params.merge!(
-          :enabled_hardware_types          => ['ipmi', 'irmc'],
-          :max_time_interval               => '50',
-          :force_power_state_during_sync   => false,
-          :automated_clean                 => false,
-          :cleaning_network                => '00000000-0000-0000-0000-000000000000',
-          :api_url                         => 'https://127.0.0.1:6385',
-          :provisioning_network            => '00000000-0000-0000-0000-000000000000',
-          :rescuing_network                => '00000000-0000-0000-0000-000000000000',
-          :cleaning_disk_erase             => 'metadata',
-          :http_url                        => 'http://host:port',
-          :http_root                       => '/src/www',
-          :force_raw_images                => false,
-          :configdrive_use_swift           => true,
-          :configdrive_swift_container     => 'cont',
-          :inspect_timeout                 => 600,
-          :default_boot_option             => 'local',
-          :default_boot_mode               => 'uefi',
-          :port_setup_delay                => '15',
-          :power_state_change_timeout      => '300',
-          :sync_power_state_interval       => 120,
-          :power_state_sync_max_retries    => 5,
-          :power_failure_recovery_interval => 120,
-          :conductor_group                 => 'in-the-closet-to-the-left',
-          :deploy_kernel                   => 'http://host/deploy.kernel',
-          :deploy_ramdisk                  => 'http://host/deploy.ramdisk',
-          :rescue_kernel                   => 'http://host/rescue.kernel',
-          :rescue_ramdisk                  => 'http://host/rescue.ramdisk',
+          :enabled_hardware_types            => ['ipmi', 'irmc'],
+          :max_time_interval                 => '50',
+          :force_power_state_during_sync     => false,
+          :automated_clean                   => false,
+          :cleaning_network                  => '00000000-0000-0000-0000-000000000000',
+          :api_url                           => 'https://127.0.0.1:6385',
+          :provisioning_network              => '00000000-0000-0000-0000-000000000000',
+          :rescuing_network                  => '00000000-0000-0000-0000-000000000000',
+          :cleaning_disk_erase               => 'metadata',
+          :http_url                          => 'http://host:port',
+          :http_root                         => '/src/www',
+          :force_raw_images                  => false,
+          :configdrive_use_swift             => true,
+          :configdrive_swift_container       => 'cont',
+          :inspect_timeout                   => 600,
+          :default_boot_option               => 'local',
+          :default_boot_mode                 => 'uefi',
+          :port_setup_delay                  => '15',
+          :power_state_change_timeout        => '300',
+          :sync_power_state_interval         => 120,
+          :power_state_sync_max_retries      => 5,
+          :power_failure_recovery_interval   => 120,
+          :conductor_group                   => 'in-the-closet-to-the-left',
+          :deploy_kernel                     => 'http://host/deploy.kernel',
+          :deploy_ramdisk                    => 'http://host/deploy.ramdisk',
+          :rescue_kernel                     => 'http://host/rescue.kernel',
+          :rescue_ramdisk                    => 'http://host/rescue.ramdisk',
+          :allow_provisioning_in_maintenance => false,
         )
       end
       it 'should replace default parameter with new value' do
@@ -148,6 +149,7 @@ describe 'ironic::conductor' do
         is_expected.to contain_ironic_config('conductor/deploy_ramdisk').with_value(p[:deploy_ramdisk])
         is_expected.to contain_ironic_config('conductor/rescue_kernel').with_value(p[:rescue_kernel])
         is_expected.to contain_ironic_config('conductor/rescue_ramdisk').with_value(p[:rescue_ramdisk])
+        is_expected.to contain_ironic_config('conductor/allow_provisioning_in_maintenance').with_value(p[:allow_provisioning_in_maintenance])
       end
     end
 
