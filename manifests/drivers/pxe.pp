@@ -81,20 +81,30 @@
 #   (optional) Boolean value to dtermine if ppc64le support should be enabled
 #   Defaults to false (no ppc64le support)
 #
+# [*boot_retry_timeout*]
+#   (optional) Timeout (in seconds) after which PXE boot should be retried.
+#   Defaults to $::os_service_default.
+#
+# [*boot_retry_check_interval*]
+#   (optional) How often (in seconds) to check for PXE boot status.
+#   Defaults to $::os_service_default.
+#
 class ironic::drivers::pxe (
-  $ipxe_enabled             = false,
-  $pxe_append_params        = $::os_service_default,
-  $pxe_bootfile_name        = undef,
-  $pxe_config_template      = undef,
-  $tftp_server              = $::os_service_default,
-  $tftp_root                = '/tftpboot',
-  $images_path              = $::os_service_default,
-  $tftp_master_path         = '/tftpboot/master_images',
-  $instance_master_path     = $::os_service_default,
-  $uefi_pxe_bootfile_name   = $::os_service_default,
-  $uefi_pxe_config_template = $::os_service_default,
-  $ipxe_timeout             = $::os_service_default,
-  $enable_ppc64le           = false,
+  $ipxe_enabled              = false,
+  $pxe_append_params         = $::os_service_default,
+  $pxe_bootfile_name         = undef,
+  $pxe_config_template       = undef,
+  $tftp_server               = $::os_service_default,
+  $tftp_root                 = '/tftpboot',
+  $images_path               = $::os_service_default,
+  $tftp_master_path          = '/tftpboot/master_images',
+  $instance_master_path      = $::os_service_default,
+  $uefi_pxe_bootfile_name    = $::os_service_default,
+  $uefi_pxe_config_template  = $::os_service_default,
+  $ipxe_timeout              = $::os_service_default,
+  $enable_ppc64le            = false,
+  $boot_retry_timeout        = $::os_service_default,
+  $boot_retry_check_interval = $::os_service_default,
 ) {
 
   include ::ironic::deps
@@ -112,18 +122,20 @@ class ironic::drivers::pxe (
 
   # Configure ironic.conf
   ironic_config {
-    'pxe/ipxe_enabled': value             => $ipxe_enabled;
-    'pxe/pxe_append_params': value        => $pxe_append_params;
-    'pxe/pxe_bootfile_name': value        => $pxe_bootfile_name_real;
-    'pxe/pxe_config_template': value      => $pxe_config_template_real;
-    'pxe/tftp_server': value              => $tftp_server;
-    'pxe/tftp_root': value                => $tftp_root_real;
-    'pxe/images_path': value              => $images_path;
-    'pxe/tftp_master_path': value         => $tftp_master_path;
-    'pxe/instance_master_path': value     => $instance_master_path;
-    'pxe/uefi_pxe_bootfile_name': value   => $uefi_pxe_bootfile_name;
-    'pxe/uefi_pxe_config_template': value => $uefi_pxe_config_template;
-    'pxe/ipxe_timeout': value             => $ipxe_timeout_real;
+    'pxe/ipxe_enabled': value              => $ipxe_enabled;
+    'pxe/pxe_append_params': value         => $pxe_append_params;
+    'pxe/pxe_bootfile_name': value         => $pxe_bootfile_name_real;
+    'pxe/pxe_config_template': value       => $pxe_config_template_real;
+    'pxe/tftp_server': value               => $tftp_server;
+    'pxe/tftp_root': value                 => $tftp_root_real;
+    'pxe/images_path': value               => $images_path;
+    'pxe/tftp_master_path': value          => $tftp_master_path;
+    'pxe/instance_master_path': value      => $instance_master_path;
+    'pxe/uefi_pxe_bootfile_name': value    => $uefi_pxe_bootfile_name;
+    'pxe/uefi_pxe_config_template': value  => $uefi_pxe_config_template;
+    'pxe/ipxe_timeout': value              => $ipxe_timeout_real;
+    'pxe/boot_retry_timeout': value        => $boot_retry_timeout;
+    'pxe/boot_retry_check_interval': value => $boot_retry_check_interval;
   }
 
   if $enable_ppc64le {
