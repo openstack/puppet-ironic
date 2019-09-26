@@ -147,7 +147,7 @@
 #    key. Assigning multiple tagged subnets allow dnsmasq to serve dhcp request
 #    that came in via dhcp relay/helper.
 #    Example:
-#    [{'ip_range' => '192.168.0.100,192.168.0.120'},
+#    [{'ip_range' => '192.168.0.100,192.168.0.120', 'mtu' => '1500'},
 #     {'tag'      => 'subnet1',
 #      'ip_range' => '192.168.1.100,192.168.1.200',
 #      'netmask'  => '255.255.255.0',
