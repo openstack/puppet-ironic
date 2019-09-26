@@ -19,6 +19,13 @@ dhcp-option=tag:<%= s['tag'] -%>,option:router,<%= s['gateway'] %>
 dhcp-option=option:router,<%= s['gateway'] %>
 <% end -%>
 <% end -%>
+<% if s['mtu'] -%>
+<% if s['tag'] -%>
+dhcp-option-force=tag:<%= s['tag'] -%>,option:mtu,<%= s['mtu'] %>
+<% else -%>
+dhcp-option-force=option:mtu,<%= s['mtu'] %>
+<% end -%>
+<% end -%>
 <% end -%>
 dhcp-sequential-ip
 dhcp-match=ipxe,175

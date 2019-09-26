@@ -46,11 +46,13 @@ describe 'ironic::inspector' do
       :swift_tenant_name     => 'services',
       :swift_auth_url        => 'http://127.0.0.1:5000/v2.0',
       :dnsmasq_ip_subnets    => [{ 'ip_range' =>
-                                      '192.168.0.100,192.168.0.120' },
+                                      '192.168.0.100,192.168.0.120',
+                                   'mtu' => '1350'},
                                  { 'tag'      => 'subnet1',
                                    'ip_range' => '192.168.1.100,192.168.1.200',
                                    'netmask'  => '255.255.255.0',
-                                   'gateway'  => '192.168.1.254' },
+                                   'gateway'  => '192.168.1.254',
+                                   'mtu'      => '1350'},
                                  { 'tag'      => 'subnet2',
                                    'ip_range' => '192.168.2.100,192.168.2.200',
                                    'netmask'  => '255.255.255.0',
@@ -146,10 +148,16 @@ describe 'ironic::inspector' do
         /dhcp-range=192.168.0.100,192.168.0.120,10m/
       )
       is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
+        /dhcp-option-force=option:mtu,1350/
+      )
+      is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
         /dhcp-range=set:subnet1,192.168.1.100,192.168.1.200,255.255.255.0,10m/
       )
       is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
         /dhcp-option=tag:subnet1,option:router,192.168.1.254/
+      )
+      is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
+        /dhcp-option-force=tag:subnet1,option:mtu,1350/
       )
       is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
         /dhcp-range=set:subnet2,192.168.2.100,192.168.2.200,255.255.255.0,10m/
