@@ -1,0 +1,8 @@
+---
+fixes:
+  - |
+    It was not possible to configre Ironic Inspector DHCP (dnsmasq) service to
+    provide the MTU option. This caused inspection to fail when operating on
+    a network with <1500 bytes MTU. See bug: `1845487
+    <https://bugs.launchpad.net/puppet-ironic/+bug/1845487>`_.
+
