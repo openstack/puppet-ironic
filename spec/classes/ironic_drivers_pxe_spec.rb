@@ -105,6 +105,7 @@ describe 'ironic::drivers::pxe' do
           :pxe_bootfile_name         => 'bootx64',
           :boot_retry_timeout        => 600,
           :boot_retry_check_interval => 120,
+          :ip_version                => 6,
         )
       end
 
@@ -123,6 +124,7 @@ describe 'ironic::drivers::pxe' do
         is_expected.to contain_ironic_config('pxe/pxe_bootfile_name').with_value(p[:pxe_bootfile_name])
         is_expected.to contain_ironic_config('pxe/boot_retry_timeout').with_value(p[:boot_retry_timeout])
         is_expected.to contain_ironic_config('pxe/boot_retry_check_interval').with_value(p[:boot_retry_check_interval])
+        is_expected.to contain_ironic_config('pxe/ip_version').with_value(p[:ip_version])
       end
     end
 

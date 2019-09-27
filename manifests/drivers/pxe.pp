@@ -89,6 +89,10 @@
 #   (optional) How often (in seconds) to check for PXE boot status.
 #   Defaults to $::os_service_default.
 #
+# [*ip_version*]
+#   (optional) The IP version that will be used for PXE booting.
+#   Defaults to $::os_service_default.
+#
 class ironic::drivers::pxe (
   $ipxe_enabled              = false,
   $pxe_append_params         = $::os_service_default,
@@ -105,6 +109,7 @@ class ironic::drivers::pxe (
   $enable_ppc64le            = false,
   $boot_retry_timeout        = $::os_service_default,
   $boot_retry_check_interval = $::os_service_default,
+  $ip_version                = $::os_service_default,
 ) {
 
   include ::ironic::deps
@@ -136,6 +141,7 @@ class ironic::drivers::pxe (
     'pxe/ipxe_timeout': value              => $ipxe_timeout_real;
     'pxe/boot_retry_timeout': value        => $boot_retry_timeout;
     'pxe/boot_retry_check_interval': value => $boot_retry_check_interval;
+    'pxe/ip_version': value                => $ip_version;
   }
 
   if $enable_ppc64le {

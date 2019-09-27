@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    New parameter added for ``[pxe]/ip_version`` in ``ironic::drivers::pxe``.
+    It is used to set the IP version that will be used for PXE booting.
+    Bug: `1845746 <https://bugs.launchpad.net/puppet-ironic/+bug/1845746>`_.
+
