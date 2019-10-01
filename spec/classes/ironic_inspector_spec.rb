@@ -293,6 +293,20 @@ describe 'ironic::inspector' do
               /kernel --timeout 30000/)
         end
       end
+
+      context 'when using ipv6' do
+        before :each do
+          params.merge!(
+            :listen_address     => 'fd00::1',
+          )
+        end
+
+        it 'should contain file /var/www/httpboot/inspector.ipxe' do
+          is_expected.to contain_file('/var/www/httpboot/inspector.ipxe').with_content(
+            /kernel http:\/\/\[fd00::1\]:3816\/agent.kernel ipa-inspection-callback-url=http:\/\/\[fd00::1\]:5050\/v1\/continue ipa-inspection-collectors=default.* foo=bar || goto retry_boot/
+          )
+        end
+      end
     end
 
     context 'when enabling ppc64le support' do
