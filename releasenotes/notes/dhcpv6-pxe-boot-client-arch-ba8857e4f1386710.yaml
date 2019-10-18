@@ -1,0 +1,8 @@
+---
+fixes:
+  - |
+    For DHCPv6 PXE boot, the Client Architecture option code (61)
+    as defined in https://tools.ietf.org/html/rfc5970#section-3.3 is
+    different than the one for DHCP.  This is used to determine
+    if booting over EFI.  This change sets the DHCPv6 bootfile-url
+    when booting PXE over EFI.
