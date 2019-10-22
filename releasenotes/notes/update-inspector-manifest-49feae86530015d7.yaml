@@ -1,0 +1,3 @@
+---
+features:
+  - Added 'ironic/ironic_url','swift/container' parameters to manifests/inspector.pp
