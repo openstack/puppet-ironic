@@ -257,6 +257,7 @@ class ironic::inspector (
   $ironic_project_domain_name      = 'Default',
   $ironic_user_domain_name         = 'Default',
   $ironic_auth_url                 = 'http://127.0.0.1:5000/v3',
+  $ironic_url                      = undef,
   $ironic_max_retries              = 30,
   $ironic_retry_interval           = 2,
   $swift_auth_type                 = 'password',
@@ -266,6 +267,7 @@ class ironic::inspector (
   $swift_project_domain_name       = 'Default',
   $swift_user_domain_name          = 'Default',
   $swift_auth_url                  = 'http://127.0.0.1:5000/v3',
+  $swift_container                 = 'ironic-inspector',
   $dnsmasq_ip_subnets              = [],
   $dnsmasq_local_ip                = '192.168.0.1',
   $dnsmasq_dhcp_hostsdir           = undef,
@@ -382,6 +384,7 @@ class ironic::inspector (
     'ironic/project_domain_name':                 value => $ironic_project_domain_name;
     'ironic/user_domain_name':                    value => $ironic_user_domain_name;
     'ironic/auth_url':                            value => $ironic_auth_url;
+    'ironic/ironic_url':                          value => $ironic_url;
     'ironic/max_retries':                         value => $ironic_max_retries;
     'ironic/retry_interval':                      value => $ironic_retry_interval;
     'swift/auth_type':                            value => $swift_auth_type;
@@ -391,6 +394,7 @@ class ironic::inspector (
     'swift/project_domain_name':                  value => $swift_project_domain_name;
     'swift/user_domain_name':                     value => $swift_user_domain_name;
     'swift/auth_url':                             value => $swift_auth_url;
+    'swift/container':                            value => $swift_container;
     # Here we use oslo.config interpolation with another option default_processing_hooks,
     # which we don't change as it might break introspection completely.
     'processing/processing_hooks':                value => $p_hooks;
