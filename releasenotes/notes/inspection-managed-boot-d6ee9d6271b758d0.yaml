@@ -1,0 +1,8 @@
+---
+features:
+  - |
+    Allows configuring ``callback_endpoint_override``, ``power_off`` and
+    ``extra_kernel_params`` in ``ironic::drivers::inspector``.
+  - |
+    Allows setting ``inspection_network`` (or ``inspection_network_name``)
+    in ``ironic::conductor``.

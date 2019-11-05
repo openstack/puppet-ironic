@@ -92,6 +92,12 @@
 #   for rescue. Can not be specified together with rescuing_network_name.
 #   Defaults to $::os_service_default
 #
+# [*inspection_network*]
+#   (optional) Neutron network UUID or name for the ramdisk to be booted into
+#   for in-band inspection. Can not be specified together with
+#   inspection_network_name.
+#   Defaults to $::os_service_default
+#
 # [*configdrive_use_swift*]
 #   (optional) Whether to use Swift for storing config drives instead of
 #   the database. Recommended for bigger config drives.
@@ -134,6 +140,12 @@
 #   (optional) If provided the name will be converted to UUID and set
 #   as value of neutron/rescuing option in ironic.conf
 #   Can not be specified together with rescuing_network.
+#   Defaults to undef, which leaves the configuration intact
+#
+# [*inspection_network_name*]
+#   (optional) If provided the name will be converted to UUID and set
+#   as value of neutron/inspection_network option in ironic.conf
+#   Can not be specified together with inspection_network.
 #   Defaults to undef, which leaves the configuration intact
 #
 # [*port_setup_delay*]
@@ -206,6 +218,7 @@ class ironic::conductor (
   $api_url                             = $::os_service_default,
   $provisioning_network                = $::os_service_default,
   $rescuing_network                    = $::os_service_default,
+  $inspection_network                  = $::os_service_default,
   $configdrive_use_swift               = $::os_service_default,
   $configdrive_swift_container         = $::os_service_default,
   $inspect_timeout                     = $::os_service_default,
@@ -215,6 +228,7 @@ class ironic::conductor (
   $cleaning_network_name               = undef,
   $provisioning_network_name           = undef,
   $rescuing_network_name               = undef,
+  $inspection_network_name             = undef,
   $power_state_change_timeout          = $::os_service_default,
   $sync_power_state_interval           = $::os_service_default,
   $power_state_sync_max_retries        = $::os_service_default,
@@ -243,6 +257,10 @@ class ironic::conductor (
 
   if ($rescuing_network_name and !is_service_default($rescuing_network)) {
     fail('rescuing_network_name and rescuing_network can not be specified in the same time.')
+  }
+
+  if ($inspection_network_name and !is_service_default($inspection_network)) {
+    fail('inspection_network_name and inspection_network can not be specified in the same time.')
   }
 
   validate_legacy(Array, 'validate_array', $enabled_hardware_types)
@@ -344,6 +362,16 @@ class ironic::conductor (
   } else {
     ironic_config {
       'neutron/rescuing_network': value => $rescuing_network;
+    }
+  }
+
+  if $inspection_network_name {
+    ironic_config {
+      'neutron/inspection_network': value => $inspection_network_name, transform_to => 'net_uuid';
+    }
+  } else {
+    ironic_config {
+      'neutron/inspection_network': value => $inspection_network;
     }
   }
 

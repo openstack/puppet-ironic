@@ -46,6 +46,18 @@
 #   The endpoint URL for requests for this client
 #   Defaults to $::os_service_default
 #
+# [*callback_endpoint_override*]
+#   The endpoint URL to use for ramdisk callback in case of managed boot.
+#   Defaults to $::os_service_default
+#
+# [*power_off*]
+#   Whether to power off a node after inspection in case of managed boot.
+#   Defaults to $::os_service_default
+#
+# [*extra_kernel_params*]
+#   Extra kernel parameters to pass in case of managed boot.
+#   Defaults to $::os_service_default
+#
 # DEPRECATED PARAMETERS
 #
 # [*service_url*]
@@ -53,16 +65,19 @@
 #   Defaults to undef
 #
 class ironic::drivers::inspector (
-  $auth_type           = 'password',
-  $auth_url            = $::os_service_default,
-  $project_name        = 'services',
-  $username            = 'ironic',
-  $password            = $::os_service_default,
-  $user_domain_name    = 'Default',
-  $project_domain_name = 'Default',
-  $endpoint_override   = $::os_service_default,
+  $auth_type                  = 'password',
+  $auth_url                   = $::os_service_default,
+  $project_name               = 'services',
+  $username                   = 'ironic',
+  $password                   = $::os_service_default,
+  $user_domain_name           = 'Default',
+  $project_domain_name        = 'Default',
+  $endpoint_override          = $::os_service_default,
+  $callback_endpoint_override = $::os_service_default,
+  $power_off                  = $::os_service_default,
+  $extra_kernel_params        = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $service_url         = undef,
+  $service_url                = undef,
 ) {
 
   include ::ironic::deps
@@ -73,13 +88,16 @@ has no effect. Please use ironic::drivers::inspector::endpoint_override instead.
   }
 
   ironic_config {
-    'inspector/auth_type':           value => $auth_type;
-    'inspector/username':            value => $username;
-    'inspector/password':            value => $password, secret => true;
-    'inspector/auth_url':            value => $auth_url;
-    'inspector/project_name':        value => $project_name;
-    'inspector/user_domain_name':    value => $user_domain_name;
-    'inspector/project_domain_name': value => $project_domain_name;
-    'inspector/endpoint_override':   value => $endpoint_override;
+    'inspector/auth_type':                  value => $auth_type;
+    'inspector/username':                   value => $username;
+    'inspector/password':                   value => $password, secret => true;
+    'inspector/auth_url':                   value => $auth_url;
+    'inspector/project_name':               value => $project_name;
+    'inspector/user_domain_name':           value => $user_domain_name;
+    'inspector/project_domain_name':        value => $project_domain_name;
+    'inspector/endpoint_override':          value => $endpoint_override;
+    'inspector/callback_endpoint_override': value => $callback_endpoint_override;
+    'inspector/power_off':                  value => $power_off;
+    'inspector/extra_kernel_params':        value => $extra_kernel_params;
   }
 }

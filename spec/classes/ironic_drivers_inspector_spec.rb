@@ -47,14 +47,17 @@ describe 'ironic::drivers::inspector' do
     context 'when overriding parameters' do
       before :each do
         params.merge!(
-            :auth_type           => 'noauth',
-            :auth_url            => 'http://example.com',
-            :project_name        => 'project1',
-            :username            => 'admin',
-            :password            => 'pa$$w0rd',
-            :user_domain_name    => 'NonDefault',
-            :project_domain_name => 'NonDefault',
-            :endpoint_override   => 'http://example2.com',
+            :auth_type                  => 'noauth',
+            :auth_url                   => 'http://example.com',
+            :project_name               => 'project1',
+            :username                   => 'admin',
+            :password                   => 'pa$$w0rd',
+            :user_domain_name           => 'NonDefault',
+            :project_domain_name        => 'NonDefault',
+            :endpoint_override          => 'http://example2.com',
+            :callback_endpoint_override => 'http://10.0.0.1/v1/continue',
+            :power_off                  => false,
+            :extra_kernel_params        => 'ipa-inspection-collectors=a,b,c',
         )
       end
 
@@ -67,6 +70,9 @@ describe 'ironic::drivers::inspector' do
         is_expected.to contain_ironic_config('inspector/user_domain_name').with_value(p[:user_domain_name])
         is_expected.to contain_ironic_config('inspector/project_domain_name').with_value(p[:project_domain_name])
         is_expected.to contain_ironic_config('inspector/endpoint_override').with_value(p[:endpoint_override])
+        is_expected.to contain_ironic_config('inspector/callback_endpoint_override').with_value(p[:callback_endpoint_override])
+        is_expected.to contain_ironic_config('inspector/power_off').with_value(p[:power_off])
+        is_expected.to contain_ironic_config('inspector/extra_kernel_params').with_value(p[:extra_kernel_params])
       end
     end
 
