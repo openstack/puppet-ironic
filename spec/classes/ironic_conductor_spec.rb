@@ -70,6 +70,7 @@ describe 'ironic::conductor' do
       is_expected.to contain_ironic_config('neutron/cleaning_network').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('neutron/provisioning_network').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('neutron/rescuing_network').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('neutron/inspection_network').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('deploy/continue_if_disk_secure_erase_fails').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('deploy/http_url').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('deploy/http_root').with(:value => '<SERVICE DEFAULT>')
@@ -98,6 +99,7 @@ describe 'ironic::conductor' do
           :api_url                           => 'https://127.0.0.1:6385',
           :provisioning_network              => '00000000-0000-0000-0000-000000000000',
           :rescuing_network                  => '00000000-0000-0000-0000-000000000000',
+          :inspection_network                => '00000000-0000-0000-0000-000000000000',
           :cleaning_disk_erase               => 'metadata',
           :http_url                          => 'http://host:port',
           :http_root                         => '/src/www',
@@ -129,6 +131,7 @@ describe 'ironic::conductor' do
         is_expected.to contain_ironic_config('neutron/cleaning_network').with_value('00000000-0000-0000-0000-000000000000')
         is_expected.to contain_ironic_config('neutron/provisioning_network').with_value('00000000-0000-0000-0000-000000000000')
         is_expected.to contain_ironic_config('neutron/rescuing_network').with_value('00000000-0000-0000-0000-000000000000')
+        is_expected.to contain_ironic_config('neutron/inspection_network').with_value('00000000-0000-0000-0000-000000000000')
         is_expected.to contain_ironic_config('deploy/erase_devices_priority').with_value(0)
         is_expected.to contain_ironic_config('deploy/erase_devices_metadata_priority').with_value(10)
         is_expected.to contain_ironic_config('deploy/http_url').with_value(p[:http_url])
@@ -159,12 +162,14 @@ describe 'ironic::conductor' do
           :provisioning_network_name => 'abc',
           :cleaning_network_name => 'abc',
           :rescuing_network_name => 'abc',
+          :inspection_network_name => 'abc',
         )
       end
       it 'should set provisioning/cleaning/rescuing with new value' do
           is_expected.to contain_ironic_config('neutron/cleaning_network').with_value('abc').with_transform_to('net_uuid')
           is_expected.to contain_ironic_config('neutron/provisioning_network').with_value('abc').with_transform_to('net_uuid')
           is_expected.to contain_ironic_config('neutron/rescuing_network').with_value('abc').with_transform_to('net_uuid')
+          is_expected.to contain_ironic_config('neutron/inspection_network').with_value('abc').with_transform_to('net_uuid')
       end
     end
 
