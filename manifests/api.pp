@@ -82,10 +82,10 @@ class ironic::api (
   $max_request_body_size        = $::os_service_default,
 ) inherits ironic::params {
 
-  include ::ironic::deps
-  include ::ironic::params
-  include ::ironic::policy
-  include ::ironic::api::authtoken
+  include ironic::deps
+  include ironic::params
+  include ironic::policy
+  include ironic::api::authtoken
 
   # Configure ironic.conf
   ironic_config {
@@ -122,7 +122,7 @@ class ironic::api (
     }
     Keystone_endpoint<||> -> Service['ironic-api']
   } elsif $service_name == 'httpd' {
-    include ::apache::params
+    include apache::params
     service { 'ironic-api':
       ensure => 'stopped',
       name   => $::ironic::params::api_service,

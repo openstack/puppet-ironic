@@ -12,8 +12,8 @@ class ironic::inspector::client (
   $package_ensure = present
 ) {
 
-  include ::ironic::deps
-  include ::ironic::params
+  include ironic::deps
+  include ironic::params
 
   package { 'python-ironic-inspector-client':
     ensure => $package_ensure,

@@ -46,28 +46,28 @@ To utilize the ironic module's functionality you will need to declare multiple r
 
 ```puppet
 # enable Ironic resources
-class { '::ironic':
+class { 'ironic':
   default_transport_url => 'rabbit://ironic:an_even_bigger_secret@127.0.0.1:5672/ironic',
   database_connection   => 'mysql://ironic:a_big_secret@127.0.0.1/ironic?charset=utf8',
 }
 
-class { '::ironic::db::mysql':
+class { 'ironic::db::mysql':
   password => 'a_big_secret',
 }
 
-class { '::ironic::keystone::auth':
+class { 'ironic::keystone::auth':
   password => 'a_big_secret',
 }
 
-class { '::ironic::client': }
+class { 'ironic::client': }
 
-class { '::ironic::conductor': }
+class { 'ironic::conductor': }
 
-class { '::ironic::api':
+class { 'ironic::api':
   admin_password => 'a_big_secret',
 }
 
-class { '::ironic::drivers::ipmi': }
+class { 'ironic::drivers::ipmi': }
 
 # alternatively, you can deploy Ironic with Bifrost. It's a collection of Ansible playbooks to configure
 # and install Ironic in a stand-alone fashion (for more information visit https://docs.openstack.org/bifrost/latest/)

@@ -54,7 +54,7 @@ class ironic::db::mysql (
   $collate       = 'utf8_general_ci',
 ) {
 
-  include ::ironic::deps
+  include ironic::deps
 
   ::openstacklib::db::mysql { 'ironic':
     user          => $user,

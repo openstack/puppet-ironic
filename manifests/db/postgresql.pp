@@ -32,7 +32,7 @@ class ironic::db::postgresql(
   $privileges = 'ALL',
 ) {
 
-  include ::ironic::deps
+  include ironic::deps
 
   ::openstacklib::db::postgresql { 'ironic':
     password_hash => postgresql_password($user, $password),

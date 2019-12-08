@@ -73,7 +73,7 @@ class ironic::drivers::agent (
   $deploy_logs_swift_days_to_expire             = $::os_service_default,
 ) {
 
-  include ::ironic::deps
+  include ironic::deps
 
   # Configure ironic.conf
   ironic_config {

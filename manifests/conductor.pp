@@ -241,11 +241,11 @@ class ironic::conductor (
   $allow_provisioning_in_maintenance   = $::os_service_default,
 ) {
 
-  include ::ironic::deps
-  include ::ironic::params
+  include ironic::deps
+  include ironic::params
 
   # For backward compatibility
-  include ::ironic::glance
+  include ironic::glance
 
   if ($cleaning_network_name and !is_service_default($cleaning_network)) {
     fail('cleaning_network_name and cleaning_network can not be specified at the same time.')
@@ -267,7 +267,7 @@ class ironic::conductor (
 
   # NOTE(dtantsur): all in-tree drivers are IPA-based, so it won't hurt
   # including its manifest (which only contains configuration options)
-  include ::ironic::drivers::agent
+  include ironic::drivers::agent
 
   # On Ubuntu, ipmitool dependency is missing and ironic-conductor fails to start.
   # https://bugs.launchpad.net/cloud-archive/+bug/1572800

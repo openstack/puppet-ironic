@@ -55,7 +55,7 @@ class ironic::service_catalog (
   $endpoint_override   = $::os_service_default,
 ) {
 
-  include ::ironic::deps
+  include ironic::deps
 
   ironic_config {
     'service_catalog/auth_type':           value => $auth_type;

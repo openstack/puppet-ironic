@@ -214,7 +214,7 @@ class ironic::inspector::authtoken(
   $service_token_roles_required   = $::os_service_default,
 ) {
 
-  include ::ironic::deps
+  include ironic::deps
 
   if is_service_default($password) {
     fail('Please set password for Ironic Inspector service user')

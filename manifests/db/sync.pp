@@ -12,8 +12,8 @@ class ironic::db::sync(
   $extra_params = undef,
 ) {
 
-  include ::ironic::deps
-  include ::ironic::params
+  include ironic::deps
+  include ironic::params
 
   # NOTE(dtantsur): previous ironic-dbsync was run as root. it will fail to run
   # as "ironic" user, if there is an old log file owned by root. Let's fix it.

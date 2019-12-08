@@ -120,12 +120,12 @@ class ironic::wsgi::apache (
   $custom_wsgi_process_options = {},
 ) {
 
-  include ::ironic::deps
-  include ::ironic::params
-  include ::apache
-  include ::apache::mod::wsgi
+  include ironic::deps
+  include ironic::params
+  include apache
+  include apache::mod::wsgi
   if $ssl {
-    include ::apache::mod::ssl
+    include apache::mod::ssl
   }
 
   ::openstacklib::wsgi::apache { 'ironic_wsgi':

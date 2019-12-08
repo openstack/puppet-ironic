@@ -81,8 +81,8 @@ class ironic::drivers::ansible (
   $default_python_interpreter = $::os_service_default,
 ) {
 
-  include ::ironic::deps
-  include ::ironic::params
+  include ironic::deps
+  include ironic::params
 
   # Configure ironic.conf
   ironic_config {

@@ -80,7 +80,7 @@ class ironic::drivers::inspector (
   $service_url                = undef,
 ) {
 
-  include ::ironic::deps
+  include ironic::deps
 
   if $service_url {
     warning("The ironic::drivers::inspector::service_url parameter is deprecated and \

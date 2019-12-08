@@ -35,7 +35,7 @@ define ironic::drivers::hardware_interface (
   $default        = $::os_service_default,
 ) {
 
-  include ::ironic::deps
+  include ironic::deps
 
   if !is_service_default($enabled_list) and !empty($enabled_list){
     validate_legacy(Array, 'validate_array', $enabled_list)

@@ -28,8 +28,8 @@ class ironic::policy (
   $policy_path = '/etc/ironic/policy.json',
 ) {
 
-  include ::ironic::deps
-  include ::ironic::params
+  include ironic::deps
+  include ironic::params
 
   validate_legacy(Hash, 'validate_hash', $policies)
 

@@ -28,7 +28,7 @@ class ironic::config (
   $ironic_api_paste_ini = {},
 ) {
 
-  include ::ironic::deps
+  include ironic::deps
 
   validate_legacy(Hash, 'validate_hash', $ironic_config)
   validate_legacy(Hash, 'validate_hash', $ironic_api_paste_ini)

@@ -3,8 +3,8 @@
 #
 class ironic::inspector::db::sync {
 
-  include ::ironic::deps
-  include ::ironic::params
+  include ironic::deps
+  include ironic::params
 
   exec { 'ironic-inspector-dbsync':
     command     => $::ironic::params::inspector_dbsync_command,

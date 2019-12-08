@@ -299,13 +299,13 @@ class ironic::inspector (
   $default_transport_url           = 'fake://',
 ) {
 
-  include ::ironic::deps
-  include ::ironic::params
-  include ::ironic::pxe::common
-  include ::ironic::inspector::db
+  include ironic::deps
+  include ironic::params
+  include ironic::pxe::common
+  include ironic::inspector::db
 
   if $auth_strategy == 'keystone' {
-    include ::ironic::inspector::authtoken
+    include ironic::inspector::authtoken
   }
 
   if !is_array($dnsmasq_ip_subnets) {
@@ -423,7 +423,7 @@ class ironic::inspector (
   }
 
   if $sync_db {
-    include ::ironic::inspector::db::sync
+    include ironic::inspector::db::sync
   }
 
   if $enabled {

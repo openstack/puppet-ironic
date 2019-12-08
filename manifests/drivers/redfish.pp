@@ -34,8 +34,8 @@ class ironic::drivers::redfish (
   $connection_retry_interval = $::os_service_default,
 ) {
 
-  include ::ironic::deps
-  include ::ironic::params
+  include ironic::deps
+  include ironic::params
 
   ironic_config {
     'redfish/connection_attempts':       value => $connection_attempts;

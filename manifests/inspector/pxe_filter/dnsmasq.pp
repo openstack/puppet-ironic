@@ -36,8 +36,8 @@ class ironic::inspector::pxe_filter::dnsmasq (
   $purge_dhcp_hostsdir   = $::os_service_default,
 ) {
 
-  include ::ironic::deps
-  include ::ironic::inspector
+  include ironic::deps
+  include ironic::inspector
 
   $hostsdir = pick($::ironic::inspector::dnsmasq_dhcp_hostsdir, $::os_service_default)
 

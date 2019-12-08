@@ -19,8 +19,8 @@ class ironic::db::online_data_migrations(
   $migration_params = undef,
 ) {
 
-  include ::ironic::deps
-  include ::ironic::params
+  include ironic::deps
+  include ironic::params
 
   exec { 'ironic-db-online-data-migrations':
     command     => "${::ironic::params::dbsync_command} ${extra_params} online_data_migrations ${migration_params}",

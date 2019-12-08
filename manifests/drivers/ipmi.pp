@@ -34,7 +34,7 @@ class ironic::drivers::ipmi (
   $min_command_interval  = $::os_service_default,
 ) {
 
-  include ::ironic::deps
+  include ironic::deps
 
   # Configure ironic.conf
   ironic_config {

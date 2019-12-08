@@ -330,12 +330,12 @@ class ironic (
   $versioned_notifications_topics     = $::os_service_default,
 ) {
 
-  include ::ironic::deps
-  include ::ironic::db
-  include ::ironic::params
+  include ironic::deps
+  include ironic::db
+  include ironic::params
 
-  include ::ironic::glance
-  include ::ironic::neutron
+  include ironic::glance
+  include ironic::neutron
 
   ensure_resource( 'package', 'ironic-common', {
       ensure => $package_ensure,
@@ -362,11 +362,11 @@ class ironic (
   }
 
   if $sync_db {
-    include ::ironic::db::sync
+    include ironic::db::sync
   }
 
   if $db_online_data_migrations {
-    include ::ironic::db::online_data_migrations
+    include ironic::db::online_data_migrations
   }
 
   oslo::messaging::default {'ironic_config':

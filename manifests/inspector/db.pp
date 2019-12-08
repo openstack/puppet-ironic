@@ -62,7 +62,7 @@ class ironic::inspector::db (
   $database_idle_timeout            = undef,
 ) {
 
-  include ::ironic::params
+  include ironic::params
 
   if $database_idle_timeout {
     warning('The database_idle_timeout parameter is deprecated. Please use \

@@ -12,8 +12,8 @@ class ironic::drivers::staging (
   $package_ensure = present
 ) {
 
-  include ::ironic::deps
-  include ::ironic::params
+  include ironic::deps
+  include ironic::params
 
   package { 'ironic-staging-drivers':
     ensure => $package_ensure,

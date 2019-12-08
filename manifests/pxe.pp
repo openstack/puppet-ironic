@@ -62,8 +62,8 @@ class ironic::pxe (
   $enable_ppc64le = false,
 ) inherits ::ironic::params {
 
-  include ::ironic::deps
-  include ::ironic::pxe::common
+  include ironic::deps
+  include ironic::pxe::common
 
   $tftp_root_real = pick($::ironic::pxe::common::tftp_root, $tftp_root)
   $http_root_real = pick($::ironic::pxe::common::http_root, $http_root)
@@ -124,7 +124,7 @@ class ironic::pxe (
   })
 
   $options = "--map-file ${tftp_root_real}/map-file"
-  include ::xinetd
+  include xinetd
 
   xinetd::service { 'tftp':
     port        => '69',
@@ -186,7 +186,7 @@ class ironic::pxe (
     require => Anchor['ironic-inspector::install::end'],
   }
 
-  include ::apache
+  include apache
 
   apache::vhost { 'ipxe_vhost':
     priority   => '10',

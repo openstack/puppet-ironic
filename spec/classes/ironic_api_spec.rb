@@ -22,7 +22,7 @@ require 'spec_helper'
 
 describe 'ironic::api' do
   let :pre_condition do
-    "class { '::ironic::api::authtoken':
+    "class { 'ironic::api::authtoken':
        password => 'password',
      }"
   end
@@ -120,10 +120,10 @@ describe 'ironic::api' do
       end
 
       let :pre_condition do
-        "class { '::ironic::api::authtoken':
+        "class { 'ironic::api::authtoken':
            password => 'password',
          }
-         include ::apache"
+         include apache"
       end
 
       it 'configures ironic-api service with Apache' do
@@ -142,10 +142,10 @@ describe 'ironic::api' do
       end
 
       let :pre_condition do
-        "class { '::ironic::api::authtoken':
+        "class { 'ironic::api::authtoken':
            password => 'password',
          }
-         include ::apache"
+         include apache"
       end
 
       it_raises 'a Puppet::Error', /Invalid service_name/

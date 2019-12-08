@@ -112,8 +112,8 @@ class ironic::drivers::pxe (
   $ip_version                = $::os_service_default,
 ) {
 
-  include ::ironic::deps
-  include ::ironic::pxe::common
+  include ironic::deps
+  include ironic::pxe::common
   $tftp_root_real    = pick($::ironic::pxe::common::tftp_root, $tftp_root)
   $ipxe_timeout_real = pick($::ironic::pxe::common::ipxe_timeout, $ipxe_timeout)
 

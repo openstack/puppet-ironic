@@ -190,7 +190,7 @@ class ironic::bifrost (
   $ipmi_bridging                  = 'no',
 ) {
 
-  include ::ironic::deps
+  include ironic::deps
 
   git { $git_dest_repo_folder:
     ensure => $ensure,

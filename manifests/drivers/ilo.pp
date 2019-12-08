@@ -46,8 +46,8 @@ class ironic::drivers::ilo (
   $package_ensure            = 'present',
 ) {
 
-  include ::ironic::deps
-  include ::ironic::params
+  include ironic::deps
+  include ironic::params
 
   # Configure ironic.conf
   ironic_config {
