@@ -66,6 +66,18 @@ describe 'ironic::keystone::auth' do
       #FIXME it { should contain_keystone_endpoint('RegionOne/ironic').with_notify('Service[ironic-server]') }
     end
 
+    describe 'with overrided roles' do
+      let :params do
+        { :password => 'ironic_password',
+          :roles    => ['admin', 'service']}
+      end
+
+      it { is_expected.to contain_keystone_user_role('ironic@services').with(
+        :ensure  => 'present',
+        :roles   => ['admin', 'service']
+      )}
+    end
+
     describe 'with endpoint parameters' do
       let :params do
         { :password     => 'ironic_password',

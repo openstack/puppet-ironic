@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    New parameter, ironic::keystone::auth::roles is introduced to configure
+    customized role for ironic user in keystone identity.

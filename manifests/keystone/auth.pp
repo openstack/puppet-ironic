@@ -36,6 +36,10 @@
 #   (Optional) Tenant for Ironic user.
 #   Defaults to 'services'.
 #
+# [*roles*]
+#   (Optional) List of roles assigned to the ironic service user
+#   Defaults to ['admin']
+#
 # [*configure_endpoint*]
 #   (Optional) Should Ironic endpoint be configured?
 #   Defaults to true.
@@ -92,6 +96,7 @@ class ironic::keystone::auth (
   $auth_name           = 'ironic',
   $email               = 'ironic@localhost',
   $tenant              = 'services',
+  $roles               = ['admin'],
   $configure_endpoint  = true,
   $configure_user      = true,
   $configure_user_role = true,
@@ -124,6 +129,7 @@ class ironic::keystone::auth (
     password            => $password,
     email               => $email,
     tenant              => $tenant,
+    roles               => $roles,
     public_url          => $public_url,
     internal_url        => $internal_url,
     admin_url           => $admin_url,
