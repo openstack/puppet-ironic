@@ -224,10 +224,6 @@
 #   (optional) Database reconnection interval in seconds.
 #   Defaults to: undef
 #
-# [*database_min_pool_size*]
-#   (optional) Minimum number of SQL connections to keep open in a pool.
-#   Defaults to: undef
-#
 # [*database_max_pool_size*]
 #   (optional) Maximum number of SQL connections to keep open in a pool.
 #   Defaults to: undef
@@ -271,6 +267,12 @@
 # [*versioned_notifications_topics*]
 #   (optional) Topics for the versioned notifications issued by Ironic
 #   Defaults to $::os_service_default
+#
+# DEPRECATED PARAMETERS
+#
+# [*database_min_pool_size*]
+#   (optional) Minimum number of SQL connections to keep open in a pool.
+#   Defaults to: undef
 #
 class ironic (
   $enabled                            = true,
@@ -317,7 +319,6 @@ class ironic (
   $database_idle_timeout              = undef,
   $database_reconnect_interval        = undef,
   $database_retry_interval            = undef,
-  $database_min_pool_size             = undef,
   $database_max_pool_size             = undef,
   $database_max_overflow              = undef,
   $sync_db                            = true,
@@ -328,6 +329,8 @@ class ironic (
   $notification_topics                = $::os_service_default,
   $notification_level                 = $::os_service_default,
   $versioned_notifications_topics     = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $database_min_pool_size             = undef,
 ) {
 
   include ironic::deps

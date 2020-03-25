@@ -8,7 +8,6 @@ describe 'ironic::inspector::db' do
       it { should contain_oslo__db('ironic_inspector_config').with(
         :connection              => 'sqlite:////var/lib/ironic-inspector/inspector.sqlite',
         :connection_recycle_time => '<SERVICE DEFAULT>',
-        :min_pool_size           => '<SERVICE DEFAULT>',
         :max_pool_size           => '<SERVICE DEFAULT>',
         :max_retries             => '<SERVICE DEFAULT>',
         :db_max_retries          => '<SERVICE DEFAULT>',
@@ -23,7 +22,6 @@ describe 'ironic::inspector::db' do
       let :params do
         { :database_connection              => 'mysql+pymysql://ironic:ironic@localhost/ironic',
           :database_connection_recycle_time => '3601',
-          :database_min_pool_size           => '2',
           :database_max_pool_size           => '21',
           :database_max_retries             => '11',
           :database_db_max_retries          => '11',
@@ -35,7 +33,6 @@ describe 'ironic::inspector::db' do
       it { should contain_oslo__db('ironic_inspector_config').with(
         :connection              => 'mysql+pymysql://ironic:ironic@localhost/ironic',
         :connection_recycle_time => '3601',
-        :min_pool_size           => '2',
         :max_pool_size           => '21',
         :max_retries             => '11',
         :db_max_retries          => '11',

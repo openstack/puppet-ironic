@@ -26,10 +26,6 @@
 #   Interval between retries of opening a sql connection.
 #   (Optional) Defaults to $::os_service_default
 #
-# [*database_min_pool_size*]
-#   Minimum number of SQL connections to keep open in a pool.
-#   (Optional) Defaults to $::os_service_default
-#
 # [*database_max_pool_size*]
 #   Maximum number of SQL connections to keep open in a pool.
 #   (Optional) Defaults to $::os_service_default
@@ -42,19 +38,30 @@
 #   (Optional) If set, use this value for pool_timeout with SQLAlchemy.
 #   Defaults to $::os_service_default
 #
+# DEPRECATED PARAMETERS
+#
+# [*database_min_pool_size*]
+#   Minimum number of SQL connections to keep open in a pool.
+#   (Optional) Defaults to undef
+#
 class ironic::inspector::db (
   $database_connection              = 'sqlite:////var/lib/ironic-inspector/inspector.sqlite',
   $database_connection_recycle_time = $::os_service_default,
   $database_max_retries             = $::os_service_default,
   $database_db_max_retries          = $::os_service_default,
   $database_retry_interval          = $::os_service_default,
-  $database_min_pool_size           = $::os_service_default,
   $database_max_pool_size           = $::os_service_default,
   $database_max_overflow            = $::os_service_default,
   $database_pool_timeout            = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $database_min_pool_size           = undef,
 ) {
 
   include ironic::params
+
+  if $database_min_pool_size {
+    warning('The database_min_pool_size parameter is deprecated, and will be removed in a future release.')
+  }
 
   $database_connection_real              = pick($::ironic::inspector::db_connection, $database_connection)
 
@@ -64,7 +71,6 @@ class ironic::inspector::db (
   oslo::db { 'ironic_inspector_config':
     connection              => $database_connection_real,
     connection_recycle_time => $database_connection_recycle_time,
-    min_pool_size           => $database_min_pool_size,
     max_pool_size           => $database_max_pool_size,
     max_retries             => $database_max_retries,
     db_max_retries          => $database_max_retries,

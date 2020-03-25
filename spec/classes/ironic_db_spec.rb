@@ -9,7 +9,6 @@ describe 'ironic::db' do
         :db_max_retries          => '<SERVICE DEFAULT>',
         :connection              => 'sqlite:////var/lib/ironic/ovs.sqlite',
         :connection_recycle_time => '<SERVICE DEFAULT>',
-        :min_pool_size           => '<SERVICE DEFAULT>',
         :max_pool_size           => '<SERVICE DEFAULT>',
         :max_retries             => '<SERVICE DEFAULT>',
         :pool_timeout            => '<SERVICE DEFAULT>',
@@ -23,7 +22,6 @@ describe 'ironic::db' do
         {
           :database_connection              => 'mysql+pymysql://ironic:ironic@localhost/ironic',
           :database_connection_recycle_time => '3601',
-          :database_min_pool_size           => '2',
           :database_max_pool_size           => '21',
           :database_max_retries             => '11',
           :database_pool_timeout            => '21',
@@ -39,7 +37,6 @@ describe 'ironic::db' do
         :db_max_retries          => '-1',
         :connection              => 'mysql+pymysql://ironic:ironic@localhost/ironic',
         :connection_recycle_time => '3601',
-        :min_pool_size           => '2',
         :max_pool_size           => '21',
         :max_retries             => '11',
         :retry_interval          => '11',
