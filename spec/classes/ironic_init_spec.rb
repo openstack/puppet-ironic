@@ -281,8 +281,19 @@ describe 'ironic' do
           { :common_package_name => 'ironic-common',
             :lib_package_name    => 'python3-ironic-lib' }
         when 'RedHat'
-          { :common_package_name => 'openstack-ironic-common',
-            :lib_package_name    => 'python-ironic-lib' }
+          if facts[:operatingsystem] == 'Fedora'
+            { :common_package_name => 'openstack-ironic-common',
+              :lib_package_name    => 'python3-ironic-lib' }
+          else
+            if facts[:operatingsystemmajrelease] > '7'
+              { :common_package_name => 'openstack-ironic-common',
+                :lib_package_name    => 'python3-ironic-lib' }
+            else
+              { :common_package_name => 'openstack-ironic-common',
+                :lib_package_name    => 'python-ironic-lib' }
+            end
+          end
+
         end
       end
 

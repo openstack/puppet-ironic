@@ -46,7 +46,15 @@ describe 'ironic::drivers::drac' do
         when 'Debian'
           { :dracclient_package_name => 'python3-dracclient' }
         when 'RedHat'
-          { :dracclient_package_name => 'python-dracclient' }
+          if facts[:operatingsystem] == 'Fedora'
+            { :dracclient_package_name => 'python3-dracclient' }
+          else
+            if facts[:operatingsystemmajrelease] > '7'
+              { :dracclient_package_name => 'python3-dracclient' }
+            else
+              { :dracclient_package_name => 'python-dracclient' }
+            end
+          end
         end
       end
 
