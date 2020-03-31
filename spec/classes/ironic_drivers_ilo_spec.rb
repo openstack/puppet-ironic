@@ -71,7 +71,15 @@ describe 'ironic::drivers::ilo' do
         when 'Debian'
           { :proliantutils_package_name => 'python3-proliantutils' }
         when 'RedHat'
-          { :proliantutils_package_name => 'python-proliantutils' }
+          if facts[:operatingsystem] == 'Fedora'
+            { :proliantutils_package_name => 'python3-proliantutils' }
+          else
+            if facts[:operatingsystemmajrelease] > '7'
+              { :proliantutils_package_name => 'python3-proliantutils' }
+            else
+              { :proliantutils_package_name => 'python-proliantutils' }
+            end
+          end
         end
       end
 

@@ -30,7 +30,7 @@ describe 'ironic::client' do
     it 'installs ironic client package' do
       is_expected.to contain_package('python-ironicclient').with(
         :ensure => 'present',
-        :name   => platform_params[:client_package_name],
+        :name   => platform_params[:client_package],
         :tag    => ['openstack', 'ironic-support-package']
       )
     end
@@ -49,9 +49,17 @@ describe 'ironic::client' do
       let(:platform_params) do
         case facts[:osfamily]
         when 'Debian'
-          { :client_package_name => 'python3-ironicclient' }
+          { :client_package => 'python3-ironicclient' }
         when 'RedHat'
-          { :client_package_name => 'python-ironicclient' }
+          if facts[:operatingsystem] == 'Fedora'
+            { :client_package => 'python3-ironicclient' }
+          else
+            if facts[:operatingsystemmajrelease] > '7'
+              { :client_package => 'python3-ironicclient' }
+            else
+              { :client_package => 'python-ironicclient' }
+            end
+          end
         end
       end
 
