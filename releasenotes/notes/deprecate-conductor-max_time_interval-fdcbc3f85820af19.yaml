@@ -1,0 +1,6 @@
+---
+deprecations:
+  - |
+    The ironic::conductor::max_time_interval was deprecated and has no effect.
+    The parameter will be removed in a future release.
+

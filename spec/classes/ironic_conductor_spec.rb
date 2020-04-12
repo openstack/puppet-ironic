@@ -26,7 +26,6 @@ describe 'ironic::conductor' do
     { :package_ensure                => 'present',
       :enabled                       => true,
       :enabled_hardware_types        => ['ipmi'],
-      :max_time_interval             => '120',
       :force_power_state_during_sync => true }
   end
 
@@ -63,7 +62,6 @@ describe 'ironic::conductor' do
 
     it 'configures ironic.conf' do
       is_expected.to contain_ironic_config('DEFAULT/enabled_hardware_types').with_value('ipmi')
-      is_expected.to contain_ironic_config('conductor/max_time_interval').with_value(p[:max_time_interval])
       is_expected.to contain_ironic_config('conductor/force_power_state_during_sync').with_value(p[:force_power_state_during_sync])
       is_expected.to contain_ironic_config('conductor/automated_clean').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/api_url').with(:value => '<SERVICE DEFAULT>')
@@ -92,7 +90,6 @@ describe 'ironic::conductor' do
       before :each do
         params.merge!(
           :enabled_hardware_types            => ['ipmi', 'irmc'],
-          :max_time_interval                 => '50',
           :force_power_state_during_sync     => false,
           :automated_clean                   => false,
           :cleaning_network                  => '00000000-0000-0000-0000-000000000000',
@@ -124,7 +121,6 @@ describe 'ironic::conductor' do
       end
       it 'should replace default parameter with new value' do
         is_expected.to contain_ironic_config('DEFAULT/enabled_hardware_types').with_value('ipmi,irmc')
-        is_expected.to contain_ironic_config('conductor/max_time_interval').with_value(p[:max_time_interval])
         is_expected.to contain_ironic_config('conductor/force_power_state_during_sync').with_value(p[:force_power_state_during_sync])
         is_expected.to contain_ironic_config('conductor/automated_clean').with_value(p[:automated_clean])
         is_expected.to contain_ironic_config('conductor/api_url').with_value(p[:api_url])
