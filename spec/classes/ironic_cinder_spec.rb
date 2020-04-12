@@ -41,6 +41,7 @@ describe 'ironic::cinder' do
       is_expected.to contain_ironic_config('cinder/password').with_value('<SERVICE DEFAULT>').with_secret(true)
       is_expected.to contain_ironic_config('cinder/user_domain_name').with_value('Default')
       is_expected.to contain_ironic_config('cinder/project_domain_name').with_value('Default')
+      is_expected.to contain_ironic_config('cinder/region_name').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('cinder/endpoint_override').with_value('<SERVICE DEFAULT>')
     end
 
@@ -54,6 +55,7 @@ describe 'ironic::cinder' do
             :password            => 'pa$$w0rd',
             :user_domain_name    => 'NonDefault',
             :project_domain_name => 'NonDefault',
+            :region_name         => 'regionTwo',
             :endpoint_override   => 'http://example2.com',
         )
       end
@@ -66,6 +68,7 @@ describe 'ironic::cinder' do
         is_expected.to contain_ironic_config('cinder/password').with_value(p[:password]).with_secret(true)
         is_expected.to contain_ironic_config('cinder/user_domain_name').with_value(p[:user_domain_name])
         is_expected.to contain_ironic_config('cinder/project_domain_name').with_value(p[:project_domain_name])
+        is_expected.to contain_ironic_config('cinder/region_name').with_value(p[:region_name])
         is_expected.to contain_ironic_config('cinder/endpoint_override').with_value(p[:endpoint_override])
       end
     end

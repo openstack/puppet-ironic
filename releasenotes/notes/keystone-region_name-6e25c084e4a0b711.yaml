@@ -1,0 +1,10 @@
+---
+features:
+  - |
+    The following parameters were added so that operatos can specify
+    the keystone region where identity resources are created.
+
+    - ``ironic::cinder::region_name``
+    - ``ironic::glance::region_name``
+    - ``ironic::neutron::region_name``
+    - ``ironic::swift::region_name``

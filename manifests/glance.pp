@@ -40,6 +40,11 @@
 #   The name of project's domain (required for Identity V3).
 #   Defaults to 'Default'
 #
+# [*region_name*]
+#   (optional) Region name for connecting to glance in admin context
+#   through the OpenStack Identity service.
+#   Defaults to $::os_service_default
+#
 # [*num_retries*]
 #   (optional) Number retries when downloading an image from glance.
 #   Defaults to $::os_service_default
@@ -98,6 +103,7 @@ class ironic::glance (
   $password                   = $::os_service_default,
   $user_domain_name           = 'Default',
   $project_domain_name        = 'Default',
+  $region_name                = $::os_service_default,
   $num_retries                = $::os_service_default,
   $api_insecure               = $::os_service_default,
   $swift_account              = $::os_service_default,
@@ -128,6 +134,7 @@ has no effect. Please use ironic::glance::endpoint_override instead.")
     'glance/project_name':            value => $project_name;
     'glance/user_domain_name':        value => $user_domain_name;
     'glance/project_domain_name':     value => $project_domain_name;
+    'glance/region_name':             value => $region_name;
     'glance/num_retries':             value => $num_retries;
     'glance/insecure':                value => $api_insecure;
     'glance/swift_container':         value => $swift_container;

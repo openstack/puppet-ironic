@@ -41,6 +41,7 @@ describe 'ironic::swift' do
       is_expected.to contain_ironic_config('swift/password').with_value('<SERVICE DEFAULT>').with_secret(true)
       is_expected.to contain_ironic_config('swift/user_domain_name').with_value('Default')
       is_expected.to contain_ironic_config('swift/project_domain_name').with_value('Default')
+      is_expected.to contain_ironic_config('swift/region_name').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('swift/endpoint_override').with_value('<SERVICE DEFAULT>')
     end
 
@@ -54,6 +55,7 @@ describe 'ironic::swift' do
             :password            => 'pa$$w0rd',
             :user_domain_name    => 'NonDefault',
             :project_domain_name => 'NonDefault',
+            :region_name         => 'regionTwo',
             :endpoint_override   => 'http://example2.com',
         )
       end
@@ -66,6 +68,7 @@ describe 'ironic::swift' do
         is_expected.to contain_ironic_config('swift/password').with_value(p[:password]).with_secret(true)
         is_expected.to contain_ironic_config('swift/user_domain_name').with_value(p[:user_domain_name])
         is_expected.to contain_ironic_config('swift/project_domain_name').with_value(p[:project_domain_name])
+        is_expected.to contain_ironic_config('swift/region_name').with_value(p[:region_name])
         is_expected.to contain_ironic_config('swift/endpoint_override').with_value(p[:endpoint_override])
       end
     end

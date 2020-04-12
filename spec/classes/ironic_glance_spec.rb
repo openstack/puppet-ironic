@@ -41,6 +41,7 @@ describe 'ironic::glance' do
       is_expected.to contain_ironic_config('glance/password').with_value('<SERVICE DEFAULT>').with_secret(true)
       is_expected.to contain_ironic_config('glance/user_domain_name').with_value('Default')
       is_expected.to contain_ironic_config('glance/project_domain_name').with_value('Default')
+      is_expected.to contain_ironic_config('glance/region_name').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('glance/insecure').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('glance/num_retries').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('glance/swift_account').with(:value => '<SERVICE DEFAULT>')
@@ -61,6 +62,7 @@ describe 'ironic::glance' do
             :password                => 'pa$$w0rd',
             :user_domain_name        => 'NonDefault',
             :project_domain_name     => 'NonDefault',
+            :region_name             => 'regionTwo',
             :api_servers             => '10.0.0.1:9292',
             :api_insecure            => true,
             :num_retries             => 42,
@@ -81,6 +83,7 @@ describe 'ironic::glance' do
         is_expected.to contain_ironic_config('glance/password').with_value(p[:password]).with_secret(true)
         is_expected.to contain_ironic_config('glance/user_domain_name').with_value(p[:user_domain_name])
         is_expected.to contain_ironic_config('glance/project_domain_name').with_value(p[:project_domain_name])
+        is_expected.to contain_ironic_config('glance/region_name').with_value(p[:region_name])
         is_expected.to contain_ironic_config('glance/insecure').with_value(p[:api_insecure])
         is_expected.to contain_ironic_config('glance/num_retries').with_value(p[:num_retries])
         is_expected.to contain_ironic_config('glance/swift_account').with_value(p[:swift_account])

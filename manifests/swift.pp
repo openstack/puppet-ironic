@@ -40,6 +40,11 @@
 #   The name of project's domain (required for Identity V3).
 #   Defaults to 'Default'
 #
+# [*region_name*]
+#   (optional) Region name for connecting to swift in admin context
+#   through the OpenStack Identity service.
+#   Defaults to $::os_service_default
+#
 # [*endpoint_override*]
 #   The endpoint URL for requests for this client
 #   Defaults to $::os_service_default
@@ -52,6 +57,7 @@ class ironic::swift (
   $password            = $::os_service_default,
   $user_domain_name    = 'Default',
   $project_domain_name = 'Default',
+  $region_name         = $::os_service_default,
   $endpoint_override   = $::os_service_default,
 ) {
 
@@ -63,6 +69,7 @@ class ironic::swift (
     'swift/project_name':        value => $project_name;
     'swift/user_domain_name':    value => $user_domain_name;
     'swift/project_domain_name': value => $project_domain_name;
+    'swift/region_name':         value => $region_name;
     'swift/endpoint_override':   value => $endpoint_override;
   }
 }
