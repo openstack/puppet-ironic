@@ -31,11 +31,6 @@
 #  (optional) Array of hardware types to load during service initialization.
 #  Defaults to ['ipmi'].
 #
-# [*max_time_interval*]
-#   (optional) Maximum time, in seconds, since the last check-in of a conductor.
-#   Should be an interger value
-#   Defaults to '120'.
-#
 # [*force_power_state_during_sync*]
 #   (optional) Should the hardware power state be set to the state recorded in
 #   the database (True) or should the database be updated based on the hardware
@@ -202,11 +197,17 @@
 #   after the next heartbeat.
 #   Defaults to $::os_service_default
 #
+# DEPRECATED PARAMETERS
+#
+# [*max_time_interval*]
+#   (optional) Maximum time, in seconds, since the last check-in of a conductor.
+#   Should be an interger value
+#   Defaults to undef.
+#
 class ironic::conductor (
   $package_ensure                      = 'present',
   $enabled                             = true,
   $enabled_hardware_types              = ['ipmi'],
-  $max_time_interval                   = '120',
   $force_power_state_during_sync       = true,
   $http_url                            = $::os_service_default,
   $http_root                           = $::os_service_default,
@@ -239,6 +240,8 @@ class ironic::conductor (
   $rescue_kernel                       = $::os_service_default,
   $rescue_ramdisk                      = $::os_service_default,
   $allow_provisioning_in_maintenance   = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $max_time_interval                   = undef,
 ) {
 
   include ironic::deps
@@ -246,6 +249,10 @@ class ironic::conductor (
 
   # For backward compatibility
   include ironic::glance
+
+  if $max_time_interval != undef {
+    warning('ironic::conductor::max_time_interval is deprecated and has no effect')
+  }
 
   if ($cleaning_network_name and !is_service_default($cleaning_network)) {
     fail('cleaning_network_name and cleaning_network can not be specified at the same time.')
@@ -307,7 +314,6 @@ class ironic::conductor (
   # Configure ironic.conf
   ironic_config {
     'DEFAULT/enabled_hardware_types':              value => join($enabled_hardware_types, ',');
-    'conductor/max_time_interval':                 value => $max_time_interval;
     'conductor/force_power_state_during_sync':     value => $force_power_state_during_sync;
     'conductor/automated_clean':                   value => $automated_clean;
     'conductor/api_url':                           value => $api_url;
