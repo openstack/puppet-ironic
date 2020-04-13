@@ -1,0 +1,6 @@
+---
+deprecations:
+  - |
+    The ``ironic::conductor::api_url`` parameter was deprecated because its
+    actual parameter was deprecated in ironic.
+    Use ``ironic::service_catalog::endpoint_override`` instead.
