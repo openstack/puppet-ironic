@@ -77,70 +77,6 @@
 #   (optional) Method for storing introspection data
 #   Defaults to 'none'
 #
-# [*ironic_auth_type*]
-#   (optional) Authentication plugin for accessing Ironic
-#   Defaults to 'password'
-#
-# [*ironic_username*]
-#   (optional) User name for accessing Ironic API
-#   Defaults to 'ironic'
-#
-# [*ironic_password*]
-#   (optional) Password for accessing Ironic API
-#   Defaults to undef. Set a value unless using noauth.
-#
-# [*ironic_tenant_name*]
-#   (optional) Tenant name for accessing Ironic API
-#   Defaults to 'services'
-#
-# [*ironic_project_domain_name*]
-#   (Optional) Name of domain for $ironic_tenant_name
-#   Defaults to 'Default'
-#
-# [*ironic_user_domain_name*]
-#   (Optional) Name of domain for $ironic_username
-#   Defaults to 'Default'
-#
-# [*ironic_auth_url*]
-#   (optional) Keystone authentication URL for Ironic
-#   Defautls to 'http://127.0.0.1:5000/v3'
-#
-# [*ironic_max_retries*]
-#   (optional) Maximum number of retries in case of conflict error
-#   Defaults to 30
-#
-# [*ironic_retry_interval*]
-#   (optional) Interval between retries in case of conflict error
-#   Defaults to 2
-#
-# [*swift_auth_type*]
-#   (optional) Authentication plugin for accessing Swift
-#   Defaults to 'password'
-#
-# [*swift_username*]
-#   (optional) User name for accessing Swift API
-#   Defaults to 'ironic'
-#
-# [*swift_password*]
-#   (optional) Password for accessing Swift API
-#   Defaults to undef. Set a value if using Swift.
-#
-# [*swift_tenant_name*]
-#   (optional) Tenant name for accessing Swift API
-#   Defaults to 'services'
-#
-# [*swift_project_domain_name*]
-#   (Optional) Name of domain for $swift_tenant_name
-#   Defaults to 'Default'
-#
-# [*swift_user_domain_name*]
-#   (Optional) Name of domain for $swift_username
-#   Defaults to 'Default'
-#
-# [*swift_auth_url*]
-#   (optional) Keystone authentication URL for Swift
-#   Defautls to 'http://127.0.0.1:5000/v3'
-#
 # [*dnsmasq_ip_subnets*]
 #    (optional) List of hashes with keys: 'tag', 'ip_range', 'netmask',
 #    'gateway' and 'classless_static_routes'. 'ip_range' is the only required
@@ -235,17 +171,83 @@
 #      transport://user:pass@host1:port[,hostN:portN]/virtual_host
 #    Defaults to 'fake://'
 #
+# DEPRECATED PARAMETERS
+#
+# [*swift_auth_type*]
+#   (optional) Authentication plugin for accessing Swift
+#   Defaults to undef.
+#
+# [*swift_username*]
+#   (optional) User name for accessing Swift API
+#   Defaults to undef.
+#
+# [*swift_password*]
+#   (optional) Password for accessing Swift API
+#   Defaults to undef.
+#
+# [*swift_tenant_name*]
+#   (optional) Tenant name for accessing Swift API
+#   Defaults to undef.
+#
+# [*swift_project_domain_name*]
+#   (Optional) Name of domain for $swift_tenant_name
+#   Defaults to undef.
+#
+# [*swift_user_domain_name*]
+#   (Optional) Name of domain for $swift_username
+#   Defaults to undef.
+#
+# [*swift_auth_url*]
+#   (optional) Keystone authentication URL for Swift
+#   Defautls to undef.
+#
+# [*swift_container*]
+#    (optional) Default Swift container name to use when creating objects.
+#    String value
+#    Defaults to undef.
+#
+# [*ironic_auth_type*]
+#   (optional) Authentication plugin for accessing Ironic
+#   Defaults to undef
+#
+# [*ironic_username*]
+#   (optional) User name for accessing Ironic API
+#   Defaults to undef
+#
+# [*ironic_password*]
+#   (optional) Password for accessing Ironic API
+#   Defaults to undef.
+#
+# [*ironic_tenant_name*]
+#   (optional) Tenant name for accessing Ironic API
+#   Defaults to undef.
+#
+# [*ironic_project_domain_name*]
+#   (Optional) Name of domain for $ironic_tenant_name
+#   Defaults to undef.
+#
+# [*ironic_user_domain_name*]
+#   (Optional) Name of domain for $ironic_username
+#   Defaults to undef.
+#
+# [*ironic_auth_url*]
+#   (optional) Keystone authentication URL for Ironic
+#   Defautls to undef.
+#
 # [*ironic_url*]
 #    (optional) Ironic API URL, used to set Ironic API URL when auth_strategy
 #    option is noauth or auth_type is "none" to work with standalone Ironic
 #    without keystone. String value
 #    Defaults to 'undef'
 #
-# [*swift_container*]
-#    (optional) Default Swift container name to use when creating objects.
-#    String value
-#    Defaults to $::os_service_default
-
+# [*ironic_max_retries*]
+#   (optional) Maximum number of retries in case of conflict error
+#   Defaults to undef.
+#
+# [*ironic_retry_interval*]
+#   (optional) Interval between retries in case of conflict error
+#   Defaults to undef.
+#
 class ironic::inspector (
   $package_ensure                  = 'present',
   $enabled                         = true,
@@ -261,24 +263,6 @@ class ironic::inspector (
   $add_ports                       = $::os_service_default,
   $keep_ports                      = 'all',
   $store_data                      = 'none',
-  $ironic_auth_type                = 'password',
-  $ironic_username                 = 'ironic',
-  $ironic_password                 = undef,
-  $ironic_tenant_name              = 'services',
-  $ironic_project_domain_name      = 'Default',
-  $ironic_user_domain_name         = 'Default',
-  $ironic_auth_url                 = 'http://127.0.0.1:5000/v3',
-  $ironic_url                      = undef,
-  $ironic_max_retries              = 30,
-  $ironic_retry_interval           = 2,
-  $swift_auth_type                 = 'password',
-  $swift_username                  = 'ironic',
-  $swift_password                  = undef,
-  $swift_tenant_name               = 'services',
-  $swift_project_domain_name       = 'Default',
-  $swift_user_domain_name          = 'Default',
-  $swift_auth_url                  = 'http://127.0.0.1:5000/v3',
-  $swift_container                 = $::os_service_default,
   $dnsmasq_ip_subnets              = [],
   $dnsmasq_local_ip                = '192.168.0.1',
   $dnsmasq_dhcp_hostsdir           = undef,
@@ -297,12 +281,38 @@ class ironic::inspector (
   $discovery_default_driver        = $::os_service_default,
   $enable_ppc64le                  = false,
   $default_transport_url           = 'fake://',
+  # DEPRECATED PARAMETERS
+  $swift_auth_type                 = undef,
+  $swift_username                  = undef,
+  $swift_password                  = undef,
+  $swift_tenant_name               = undef,
+  $swift_project_domain_name       = undef,
+  $swift_user_domain_name          = undef,
+  $swift_auth_url                  = undef,
+  $swift_container                 = undef,
+  $ironic_auth_type                = undef,
+  $ironic_username                 = undef,
+  $ironic_password                 = undef,
+  $ironic_tenant_name              = undef,
+  $ironic_project_domain_name      = undef,
+  $ironic_user_domain_name         = undef,
+  $ironic_auth_url                 = undef,
+  $ironic_url                      = undef,
+  $ironic_max_retries              = undef,
+  $ironic_retry_interval           = undef,
 ) {
 
   include ironic::deps
   include ironic::params
   include ironic::pxe::common
   include ironic::inspector::db
+  include ironic::inspector::swift
+  include ironic::inspector::ironic
+
+  if $ironic_url != undef {
+    warn('ironic::inspector::ironic_url is now deprecated and has no effect. \
+Use ironic::inspector::ironic::endpoint_override instead.')
+  }
 
   if $auth_strategy == 'keystone' {
     include ironic::inspector::authtoken
@@ -388,24 +398,6 @@ class ironic::inspector (
     'processing/add_ports':                       value => $add_ports;
     'processing/keep_ports':                      value => $keep_ports;
     'processing/store_data':                      value => $store_data;
-    'ironic/auth_type':                           value => $ironic_auth_type;
-    'ironic/username':                            value => $ironic_username;
-    'ironic/password':                            value => $ironic_password, secret => true;
-    'ironic/project_name':                        value => $ironic_tenant_name;
-    'ironic/project_domain_name':                 value => $ironic_project_domain_name;
-    'ironic/user_domain_name':                    value => $ironic_user_domain_name;
-    'ironic/auth_url':                            value => $ironic_auth_url;
-    'ironic/ironic_url':                          value => $ironic_url;
-    'ironic/max_retries':                         value => $ironic_max_retries;
-    'ironic/retry_interval':                      value => $ironic_retry_interval;
-    'swift/auth_type':                            value => $swift_auth_type;
-    'swift/username':                             value => $swift_username;
-    'swift/password':                             value => $swift_password, secret => true;
-    'swift/project_name':                         value => $swift_tenant_name;
-    'swift/project_domain_name':                  value => $swift_project_domain_name;
-    'swift/user_domain_name':                     value => $swift_user_domain_name;
-    'swift/auth_url':                             value => $swift_auth_url;
-    'swift/container':                            value => $swift_container;
     # Here we use oslo.config interpolation with another option default_processing_hooks,
     # which we don't change as it might break introspection completely.
     'processing/processing_hooks':                value => $p_hooks;

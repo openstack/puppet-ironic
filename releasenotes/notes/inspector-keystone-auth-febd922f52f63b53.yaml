@@ -1,0 +1,21 @@
+---
+features:
+  - |
+    The following classes were added to configure keystone credentials used in
+    ironic-inspector.
+
+    - ``ironic::inspector::ironic``
+    - ``ironic::inspector::service_catalog``
+    - ``ironic::inspector::swift``
+deprecations:
+  - |
+    The ``swift_*`` parameters and ``ironic_*`` parameters in
+    the ``ironic::inspector`` class are deprecated and will be removed in
+    a future release. Use parameters in the following new classes instead.
+
+    - ``ironic::inspector::ironic``
+    - ``ironic::inspector::service_catalog``
+    - ``ironic::inspector::swift``
+  - |
+    The ``ironic::inspector::ironic_url`` parameter is deprecated and now has
+    no effect. Use ``ironic::inspector::ironic::endpoint_override`` instead.
