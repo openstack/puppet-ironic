@@ -72,10 +72,6 @@
 #   erasure fails. Only makes sense if full hard disk erasing is enabled.
 #   Defaults to $::os_service_default
 #
-# [*api_url*]
-#   (optional) Ironic API URL.
-#   Defaults to $::os_service_default
-#
 # [*provisioning_network*]
 #   (optional) Neutron network UUID or name for the ramdisk to be booted into
 #   for provisioning nodes. Required for neutron network interface.
@@ -204,6 +200,10 @@
 #   Should be an interger value
 #   Defaults to undef.
 #
+# [*api_url*]
+#   (optional) Ironic API URL.
+#   Defaults to undef.
+#
 class ironic::conductor (
   $package_ensure                      = 'present',
   $enabled                             = true,
@@ -216,7 +216,6 @@ class ironic::conductor (
   $cleaning_network                    = $::os_service_default,
   $cleaning_disk_erase                 = undef,
   $continue_if_disk_secure_erase_fails = $::os_service_default,
-  $api_url                             = $::os_service_default,
   $provisioning_network                = $::os_service_default,
   $rescuing_network                    = $::os_service_default,
   $inspection_network                  = $::os_service_default,
@@ -242,6 +241,7 @@ class ironic::conductor (
   $allow_provisioning_in_maintenance   = $::os_service_default,
   # DEPRECATED PARAMETERS
   $max_time_interval                   = undef,
+  $api_url                             = undef,
 ) {
 
   include ironic::deps
@@ -252,6 +252,14 @@ class ironic::conductor (
 
   if $max_time_interval != undef {
     warning('ironic::conductor::max_time_interval is deprecated and has no effect')
+  }
+
+  if $api_url != undef {
+    warning('ironic::conductor::api_url is deprecated. \
+Use ironic::service_catalog::endpoint_override instead')
+    ironic_config {
+      'conductor/api_url': value => $api_url;
+    }
   }
 
   if ($cleaning_network_name and !is_service_default($cleaning_network)) {
@@ -316,7 +324,6 @@ class ironic::conductor (
     'DEFAULT/enabled_hardware_types':              value => join($enabled_hardware_types, ',');
     'conductor/force_power_state_during_sync':     value => $force_power_state_during_sync;
     'conductor/automated_clean':                   value => $automated_clean;
-    'conductor/api_url':                           value => $api_url;
     'deploy/http_url':                             value => $http_url;
     'deploy/http_root':                            value => $http_root;
     'DEFAULT/force_raw_images':                    value => $force_raw_images;
