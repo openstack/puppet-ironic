@@ -42,19 +42,21 @@ describe 'ironic::neutron' do
       is_expected.to contain_ironic_config('neutron/user_domain_name').with_value('Default')
       is_expected.to contain_ironic_config('neutron/project_domain_name').with_value('Default')
       is_expected.to contain_ironic_config('neutron/endpoint_override').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('neutron/dhcpv6_stateful_address_count').with_value('<SERVICE DEFAULT>')
     end
 
     context 'when overriding parameters' do
       before :each do
         params.merge!(
-            :auth_type           => 'noauth',
-            :auth_url            => 'http://example.com',
-            :project_name        => 'project1',
-            :username            => 'admin',
-            :password            => 'pa$$w0rd',
-            :user_domain_name    => 'NonDefault',
-            :project_domain_name => 'NonDefault',
-            :endpoint_override   => 'http://example2.com',
+            :auth_type                     => 'noauth',
+            :auth_url                      => 'http://example.com',
+            :project_name                  => 'project1',
+            :username                      => 'admin',
+            :password                      => 'pa$$w0rd',
+            :user_domain_name              => 'NonDefault',
+            :project_domain_name           => 'NonDefault',
+            :endpoint_override             => 'http://example2.com',
+            :dhcpv6_stateful_address_count => 8,
         )
       end
 
@@ -67,6 +69,7 @@ describe 'ironic::neutron' do
         is_expected.to contain_ironic_config('neutron/user_domain_name').with_value(p[:user_domain_name])
         is_expected.to contain_ironic_config('neutron/project_domain_name').with_value(p[:project_domain_name])
         is_expected.to contain_ironic_config('neutron/endpoint_override').with_value(p[:endpoint_override])
+        is_expected.to contain_ironic_config('neutron/dhcpv6_stateful_address_count').with_value(p[:dhcpv6_stateful_address_count])
       end
     end
 
