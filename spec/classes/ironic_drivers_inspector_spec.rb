@@ -41,6 +41,7 @@ describe 'ironic::drivers::inspector' do
       is_expected.to contain_ironic_config('inspector/password').with_value('<SERVICE DEFAULT>').with_secret(true)
       is_expected.to contain_ironic_config('inspector/user_domain_name').with_value('Default')
       is_expected.to contain_ironic_config('inspector/project_domain_name').with_value('Default')
+      is_expected.to contain_ironic_config('inspector/region_name').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('inspector/endpoint_override').with_value('<SERVICE DEFAULT>')
     end
 
@@ -54,6 +55,7 @@ describe 'ironic::drivers::inspector' do
             :password                   => 'pa$$w0rd',
             :user_domain_name           => 'NonDefault',
             :project_domain_name        => 'NonDefault',
+            :region_name                => 'regionTwo',
             :endpoint_override          => 'http://example2.com',
             :callback_endpoint_override => 'http://10.0.0.1/v1/continue',
             :power_off                  => false,
@@ -69,6 +71,7 @@ describe 'ironic::drivers::inspector' do
         is_expected.to contain_ironic_config('inspector/password').with_value(p[:password]).with_secret(true)
         is_expected.to contain_ironic_config('inspector/user_domain_name').with_value(p[:user_domain_name])
         is_expected.to contain_ironic_config('inspector/project_domain_name').with_value(p[:project_domain_name])
+        is_expected.to contain_ironic_config('inspector/region_name').with_value(p[:region_name])
         is_expected.to contain_ironic_config('inspector/endpoint_override').with_value(p[:endpoint_override])
         is_expected.to contain_ironic_config('inspector/callback_endpoint_override').with_value(p[:callback_endpoint_override])
         is_expected.to contain_ironic_config('inspector/power_off').with_value(p[:power_off])

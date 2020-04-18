@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The ``ironic::drivers::inspector::region_name`` was added so that operatos
+    can specify the keystone region where identity resources are created.

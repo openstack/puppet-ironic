@@ -42,6 +42,11 @@
 #   The name of project's domain (required for Identity V3).
 #   Defaults to 'Default'
 #
+# [*region_name*]
+#   (optional) Region name for connecting to ironic-inspector in admin context
+#   through the OpenStack Identity service.
+#   Defaults to $::os_service_default
+#
 # [*endpoint_override*]
 #   The endpoint URL for requests for this client
 #   Defaults to $::os_service_default
@@ -72,6 +77,7 @@ class ironic::drivers::inspector (
   $password                   = $::os_service_default,
   $user_domain_name           = 'Default',
   $project_domain_name        = 'Default',
+  $region_name                = $::os_service_default,
   $endpoint_override          = $::os_service_default,
   $callback_endpoint_override = $::os_service_default,
   $power_off                  = $::os_service_default,
@@ -95,6 +101,7 @@ has no effect. Please use ironic::drivers::inspector::endpoint_override instead.
     'inspector/project_name':               value => $project_name;
     'inspector/user_domain_name':           value => $user_domain_name;
     'inspector/project_domain_name':        value => $project_domain_name;
+    'inspector/region_name':                value => $region_name;
     'inspector/endpoint_override':          value => $endpoint_override;
     'inspector/callback_endpoint_override': value => $callback_endpoint_override;
     'inspector/power_off':                  value => $power_off;
