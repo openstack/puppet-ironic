@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    The parameter ironic::pxe::ipxe_name_base has been added, which allows
+    alternative ipxe files to be copied to /tftpboot/ipxe.efi. For example,
+    setting this to 'ipxe-snponly' on CentOS8 would result in the source file
+    being /usr/share/ipxe/ipxe-snponly-x86_64.efi.
