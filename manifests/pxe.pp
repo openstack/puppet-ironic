@@ -51,6 +51,12 @@
 #   (optional) Boolean value to dtermine if ppc64le support should be enabled
 #   Defaults to false (no ppc64le support)
 #
+# [*ipxe_name_base*]
+#   (optional) Beginning of the source file name which is copied to
+#   $tftproot/ipxe.efi. Setting this to 'ipxe-snponly' on CentOS7 would result
+#   in the source file being /usr/share/ipxe/ipxe-snponly.efi
+#   Defaults to 'ipxe'
+#
 class ironic::pxe (
   $package_ensure = 'present',
   $tftp_root      = '/tftpboot',
@@ -60,6 +66,7 @@ class ironic::pxe (
   $syslinux_files = $::ironic::params::syslinux_files,
   $tftp_bind_host = undef,
   $enable_ppc64le = false,
+  $ipxe_name_base = 'ipxe',
 ) inherits ::ironic::params {
 
   include ::ironic::deps
@@ -158,7 +165,7 @@ class ironic::pxe (
   })
 
   file { "${tftp_root_real}/undionly.kpxe":
-    ensure  => 'present',
+    ensure  => 'file',
     seltype => 'tftpdir_t',
     owner   => 'ironic',
     group   => 'ironic',
@@ -169,12 +176,12 @@ class ironic::pxe (
   }
 
   file { "${tftp_root_real}/ipxe.efi":
-    ensure  => 'present',
+    ensure  => 'file',
     seltype => 'tftpdir_t',
     owner   => 'ironic',
     group   => 'ironic',
     mode    => '0744',
-    source  => "${::ironic::params::ipxe_rom_dir}/ipxe.efi",
+    source  => "${::ironic::params::ipxe_rom_dir}/${ipxe_name_base}.efi",
     backup  => false,
     require => Anchor['ironic-inspector::install::end'],
   }
