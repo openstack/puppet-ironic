@@ -106,7 +106,7 @@ describe 'ironic::pxe' do
           'group'   => 'ironic',
           'require' => 'Anchor[ironic-inspector::install::end]',
           'seltype' => 'tftpdir_t',
-          'ensure'  => 'present',
+          'ensure'  => 'file',
           'backup'  => false,
         )
       end
@@ -116,7 +116,7 @@ describe 'ironic::pxe' do
           'group'   => 'ironic',
           'require' => 'Anchor[ironic-inspector::install::end]',
           'seltype' => 'tftpdir_t',
-          'ensure'  => 'present',
+          'ensure'  => 'file',
           'backup'  => false,
         )
       end
