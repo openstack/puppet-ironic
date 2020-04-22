@@ -171,6 +171,14 @@
 #      transport://user:pass@host1:port[,hostN:portN]/virtual_host
 #    Defaults to 'fake://'
 #
+# [*port_physnet_cidr_map*]
+#   (optional) Hash where key's are CIDR and values are physical network.
+#   Mapping of IP subnet CIDR to physical network. When the
+#   physnet_cidr_map processing hook is enabled the physical_network property
+#   of baremetal ports is populated based on this mapping.
+#   Example: {'10.10.10.0/24' => 'physnet_a', '2001:db8::/64' => 'physnet_b'}
+#   Defaults to {}
+#
 # DEPRECATED PARAMETERS
 #
 # [*swift_auth_type*]
@@ -281,6 +289,7 @@ class ironic::inspector (
   $discovery_default_driver        = $::os_service_default,
   $enable_ppc64le                  = false,
   $default_transport_url           = 'fake://',
+  $port_physnet_cidr_map           = {},
   # DEPRECATED PARAMETERS
   $swift_auth_type                 = undef,
   $swift_username                  = undef,
@@ -320,6 +329,10 @@ Use ironic::inspector::ironic::endpoint_override instead.')
 
   if !is_array($dnsmasq_ip_subnets) {
     fail('Invalid data type, parameter dnsmasq_ip_subnets must be Array type')
+  }
+
+  if !is_hash($port_physnet_cidr_map) {
+    fail('Invalid data type, parameter port_physnet_cidr_map mush be Hash type')
   }
 
   $tftp_root_real    = pick($::ironic::pxe::common::tftp_root, $tftp_root)
@@ -386,6 +399,9 @@ Use ironic::inspector::ironic::endpoint_override instead.')
   #140 chars exeeded error in puppet-lint
   $p_hooks = join(delete_undef_values(['$default_processing_hooks', $additional_processing_hooks]), ',')
 
+  # Convert the hash to comma separated string of <key>:<value> pairs.
+  $port_physnet_cidr_map_real = join($port_physnet_cidr_map.map | $i | { join($i, ':') }, ',')
+
   ironic_inspector_config {
     'DEFAULT/listen_address':                     value => $listen_address;
     'DEFAULT/auth_strategy':                      value => $auth_strategy;
@@ -403,6 +419,7 @@ Use ironic::inspector::ironic::endpoint_override instead.')
     'processing/processing_hooks':                value => $p_hooks;
     'processing/node_not_found_hook':             value => $node_not_found_hook;
     'discovery/enroll_node_driver':               value => $discovery_default_driver;
+    'port_physnet/cidr_map':                      value => $port_physnet_cidr_map_real;
   }
 
   # Install package

@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    Added the parameter ``port_physnet_cidr_map`` which takes a hash mapping IP
+    subnet CIDR to physical network. When the physnet_cidr_map processing hook
+    is enabled the physical_network property of baremetal ports is populated
+    based on this mapping.
