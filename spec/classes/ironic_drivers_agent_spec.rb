@@ -36,6 +36,8 @@ describe 'ironic::drivers::agent' do
       is_expected.to contain_ironic_config('agent/deploy_logs_local_path').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('agent/deploy_logs_swift_container').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('agent/deploy_logs_swift_days_to_expire').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('agent/command_timeout').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('agent/max_command_attempts').with_value('<SERVICE DEFAULT>')
     end
 
     context 'when overriding parameters' do
@@ -48,7 +50,9 @@ describe 'ironic::drivers::agent' do
                       :deploy_logs_storage_backend => 'swift',
                       :deploy_logs_local_path => '/tmp',
                       :deploy_logs_swift_container => 'cont',
-                      :deploy_logs_swift_days_to_expire => 5)
+                      :deploy_logs_swift_days_to_expire => 5,
+                      :command_timeout => 90,
+                      :max_command_attempts => 5)
       end
       it 'should replace default parameter with new value' do
         is_expected.to contain_ironic_config('agent/stream_raw_images').with_value(p[:stream_raw_images])
@@ -60,6 +64,8 @@ describe 'ironic::drivers::agent' do
         is_expected.to contain_ironic_config('agent/deploy_logs_local_path').with_value(p[:deploy_logs_local_path])
         is_expected.to contain_ironic_config('agent/deploy_logs_swift_container').with_value(p[:deploy_logs_swift_container])
         is_expected.to contain_ironic_config('agent/deploy_logs_swift_days_to_expire').with_value(p[:deploy_logs_swift_days_to_expire])
+        is_expected.to contain_ironic_config('agent/command_timeout').with_value(p[:command_timeout])
+        is_expected.to contain_ironic_config('agent/max_command_attempts').with_value(p[:max_command_attempts])
       end
     end
 

@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Supports configuring ``max_command_attempts`` and ``command_timeout``
+    in ``ironic::drivers::agent``.
