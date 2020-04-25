@@ -60,6 +60,14 @@
 #   (optional) Number of days before IPA logs expire in Swift.
 #   Defaults to $::os_service_default
 #
+# [*command_timeout*]
+#   (optional) Timeout in seconds to wait for a response from the agent.
+#   Defaults to $::os_service_default
+#
+# [*max_command_attempts*]
+#   (optional) Number of times to try connecting to the agent for a command.
+#   Defaults to $::os_service_default
+#
 
 class ironic::drivers::agent (
   $stream_raw_images                            = $::os_service_default,
@@ -71,6 +79,8 @@ class ironic::drivers::agent (
   $deploy_logs_local_path                       = $::os_service_default,
   $deploy_logs_swift_container                  = $::os_service_default,
   $deploy_logs_swift_days_to_expire             = $::os_service_default,
+  $command_timeout                              = $::os_service_default,
+  $max_command_attempts                         = $::os_service_default,
 ) {
 
   include ironic::deps
@@ -86,6 +96,8 @@ class ironic::drivers::agent (
     'agent/deploy_logs_local_path':                     value => $deploy_logs_local_path;
     'agent/deploy_logs_swift_container':                value => $deploy_logs_swift_container;
     'agent/deploy_logs_swift_days_to_expire':           value => $deploy_logs_swift_days_to_expire;
+    'agent/command_timeout':                            value => $command_timeout;
+    'agent/max_command_attempts':                       value => $max_command_attempts;
   }
 
 }
