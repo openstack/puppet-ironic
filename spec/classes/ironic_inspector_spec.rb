@@ -84,7 +84,6 @@ describe 'ironic::inspector' do
     it 'installs ironic inspector package' do
       if platform_params.has_key?(:inspector_package)
         is_expected.to contain_package('ironic-inspector').with(
-          :name   => platform_params[:inspector_package],
           :ensure => p[:package_ensure],
           :tag    => ['openstack', 'ironic-inspector-package'],
         )
