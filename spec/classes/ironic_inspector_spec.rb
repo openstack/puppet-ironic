@@ -85,10 +85,21 @@ describe 'ironic::inspector' do
       if platform_params.has_key?(:inspector_package)
         is_expected.to contain_package('ironic-inspector').with(
           :ensure => p[:package_ensure],
+          :name   => platform_params[:inspector_package],
           :tag    => ['openstack', 'ironic-inspector-package'],
         )
         is_expected.to contain_package('ironic-inspector').that_requires('Anchor[ironic-inspector::install::begin]')
         is_expected.to contain_package('ironic-inspector').that_notifies('Anchor[ironic-inspector::install::end]')
+      end
+
+      if platform_params.has_key?(:inspector_dnsmasq_package)
+        is_expected.to contain_package('ironic-inspector-dnsmasq').with(
+          :ensure => p[:package_ensure],
+          :name   => platform_params[:inspector_dnsmasq_package],
+          :tag    => ['openstack', 'ironic-inspector-package'],
+        )
+        is_expected.to contain_package('ironic-inspector-dnsmasq').that_requires('Anchor[ironic-inspector::install::begin]')
+        is_expected.to contain_package('ironic-inspector-dnsmasq').that_notifies('Anchor[ironic-inspector::install::end]')
       end
     end
 
@@ -361,7 +372,9 @@ describe 'ironic::inspector' do
           { :inspector_package => 'ironic-inspector',
             :inspector_service => 'ironic-inspector' }
         when 'RedHat'
-          { :inspector_service => 'ironic-inspector' }
+          { :inspector_package         => 'openstack-ironic-inspector',
+            :inspector_dnsmasq_package => 'openstack-ironic-inspector-dnsmasq',
+            :inspector_service         => 'ironic-inspector' }
         end
       end
 

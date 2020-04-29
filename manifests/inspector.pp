@@ -424,8 +424,17 @@ Use ironic::inspector::ironic::endpoint_override instead.')
 
   # Install package
   if $::ironic::params::inspector_package {
-    package { $::ironic::params::inspector_package:
+    package { 'ironic-inspector':
       ensure => $package_ensure,
+      name   => $::ironic::params::inspector_package,
+      tag    => ['openstack', 'ironic-inspector-package'],
+    }
+  }
+
+  if $::ironic::params::inspector_dnsmasq_package {
+    package { 'ironic-inspector-dnsmasq':
+      ensure => $package_ensure,
+      name   => $::ironic::params::inspector_dnsmasq_package,
       tag    => ['openstack', 'ironic-inspector-package'],
     }
   }
