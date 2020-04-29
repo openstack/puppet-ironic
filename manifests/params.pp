@@ -53,7 +53,7 @@ class ironic::params {
       $api_service               = 'openstack-ironic-api'
       $conductor_package         = 'openstack-ironic-conductor'
       $conductor_service         = 'openstack-ironic-conductor'
-      $inspector_package         = 'openstack-ironic-inspector'
+      $inspector_package         = ['openstack-ironic-inspector', 'openstack-ironic-inspector-dnsmasq']
       $inspector_service         = 'openstack-ironic-inspector'
       $inspector_dnsmasq_service = 'openstack-ironic-inspector-dnsmasq'
       $staging_drivers_package   = 'openstack-ironic-staging-drivers'

@@ -424,9 +424,8 @@ Use ironic::inspector::ironic::endpoint_override instead.')
 
   # Install package
   if $::ironic::params::inspector_package {
-    package { 'ironic-inspector':
+    package { $::ironic::params::inspector_package:
       ensure => $package_ensure,
-      name   => $::ironic::params::inspector_package,
       tag    => ['openstack', 'ironic-inspector-package'],
     }
   }
