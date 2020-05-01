@@ -102,7 +102,7 @@ describe 'ironic::conductor' do
           :force_raw_images                  => false,
           :configdrive_use_object_store      => true,
           :configdrive_swift_container       => 'cont',
-          :inspect_timeout                   => 600,
+          :inspect_wait_timeout              => 600,
           :default_boot_option               => 'local',
           :default_boot_mode                 => 'uefi',
           :port_setup_delay                  => '15',
@@ -134,7 +134,7 @@ describe 'ironic::conductor' do
         is_expected.to contain_ironic_config('DEFAULT/force_raw_images').with_value(p[:force_raw_images])
         is_expected.to contain_ironic_config('deploy/configdrive_use_object_store').with_value(p[:configdrive_use_object_store])
         is_expected.to contain_ironic_config('conductor/configdrive_swift_container').with_value(p[:configdrive_swift_container])
-        is_expected.to contain_ironic_config('conductor/inspect_wait_timeout').with_value(p[:inspect_timeout])
+        is_expected.to contain_ironic_config('conductor/inspect_wait_timeout').with_value(p[:inspect_wait_timeout])
         is_expected.to contain_ironic_config('deploy/default_boot_option').with_value(p[:default_boot_option])
         is_expected.to contain_ironic_config('deploy/default_boot_mode').with_value(p[:default_boot_mode])
         is_expected.to contain_ironic_config('neutron/port_setup_delay').with_value(p[:port_setup_delay])
