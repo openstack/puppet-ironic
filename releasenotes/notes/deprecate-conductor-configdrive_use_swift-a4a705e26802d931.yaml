@@ -1,0 +1,6 @@
+---
+deprecations:
+  - |
+    The ``ironic::conductor:configdrive_use_swift`` parameter has been
+    deprecated and will be removed in a future release. Use
+    ``configdrive_use_object_store`` instead.
