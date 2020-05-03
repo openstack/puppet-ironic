@@ -48,8 +48,8 @@ Puppet::Type.newtype(:ironic_config) do
 
   newparam(:transform_to)
 
-  autorequire(:package) do
-    'ironic-common'
+  autorequire(:anchor) do
+    ['ironic::install::end']
   end
 
 end
