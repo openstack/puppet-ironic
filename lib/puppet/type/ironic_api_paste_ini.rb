@@ -45,8 +45,8 @@ Puppet::Type.newtype(:ironic_api_paste_ini) do
     defaultto('<SERVICE DEFAULT>')
   end
 
-  autorequire(:package) do
-    'ironic'
+  autorequire(:anchor) do
+    ['ironic::install::end']
   end
 
 end

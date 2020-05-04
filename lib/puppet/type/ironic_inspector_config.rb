@@ -46,8 +46,8 @@ Puppet::Type.newtype(:ironic_inspector_config) do
     defaultto('<SERVICE DEFAULT>')
   end
 
-  autorequire(:package) do
-    'ironic-inspector'
+  autorequire(:anchor) do
+    ['ironic::install::end']
   end
 
 end
