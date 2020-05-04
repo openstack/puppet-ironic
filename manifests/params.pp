@@ -53,7 +53,8 @@ class ironic::params {
       $api_service               = 'openstack-ironic-api'
       $conductor_package         = 'openstack-ironic-conductor'
       $conductor_service         = 'openstack-ironic-conductor'
-      $inspector_package         = ['openstack-ironic-inspector', 'openstack-ironic-inspector-dnsmasq']
+      $inspector_package         = 'openstack-ironic-inspector'
+      $inspector_dnsmasq_package = 'openstack-ironic-inspector-dnsmasq'
       $inspector_service         = 'openstack-ironic-inspector'
       $inspector_dnsmasq_service = 'openstack-ironic-inspector-dnsmasq'
       $staging_drivers_package   = 'openstack-ironic-staging-drivers'
@@ -78,6 +79,7 @@ class ironic::params {
       $conductor_service         = 'ironic-conductor'
       $conductor_package         = 'ironic-conductor'
       $inspector_package         = 'ironic-inspector'
+      $inspector_dnsmasq_package = false
       $inspector_service         = 'ironic-inspector'
       # it seems like there is not currently a builtin dnsmasq in the debian packaging
       # https://packages.debian.org/source/experimental/ironic-inspector
