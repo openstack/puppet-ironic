@@ -99,7 +99,7 @@
 #   configdrive_use_object_store is true.
 #   Defaults to $::os_service_default
 #
-# [*inspect_timeout*]
+# [*inspect_wait_timeout*]
 #   (optional) Timeout (seconds) for waiting for node inspection.
 #   0 for unlimited.
 #   Defaults to $::os_service_default
@@ -209,6 +209,11 @@
 #   the database. Recommended for bigger config drives.
 #   Defaults to undef
 #
+# [*inspect_timeout*]
+#   (optional) Timeout (seconds) for waiting for node inspection.
+#   0 for unlimited.
+#   Defaults to undef
+#
 class ironic::conductor (
   $package_ensure                      = 'present',
   $enabled                             = true,
@@ -226,7 +231,7 @@ class ironic::conductor (
   $inspection_network                  = $::os_service_default,
   $configdrive_use_object_store        = $::os_service_default,
   $configdrive_swift_container         = $::os_service_default,
-  $inspect_timeout                     = $::os_service_default,
+  $inspect_wait_timeout                = $::os_service_default,
   $default_boot_option                 = $::os_service_default,
   $default_boot_mode                   = $::os_service_default,
   $port_setup_delay                    = $::os_service_default,
@@ -248,6 +253,7 @@ class ironic::conductor (
   $max_time_interval                   = undef,
   $api_url                             = undef,
   $configdrive_use_swift               = undef,
+  $inspect_timeout                     = undef,
 ) {
 
   include ironic::deps
@@ -274,6 +280,14 @@ in a future release. Use configdrive_use_object_store instead')
     $configdrive_use_object_store_real = $configdrive_use_swift
   } else {
     $configdrive_use_object_store_real = $configdrive_use_object_store
+  }
+
+  if $inspect_timeout != undef {
+    warning('inspect_timeout is deprecated and will be removed in a future release. \
+Use inspect_wait_timeout instead')
+    $inspect_wait_timeout_real = $inspect_timeout
+  } else {
+    $inspect_wait_timeout_real = $inspect_wait_timeout
   }
 
   if ($cleaning_network_name and !is_service_default($cleaning_network)) {
@@ -346,7 +360,7 @@ in a future release. Use configdrive_use_object_store instead')
     'deploy/continue_if_disk_secure_erase_fails':  value => $continue_if_disk_secure_erase_fails;
     'deploy/configdrive_use_object_store':         value => $configdrive_use_object_store_real;
     'conductor/configdrive_swift_container':       value => $configdrive_swift_container;
-    'conductor/inspect_wait_timeout':              value => $inspect_timeout;
+    'conductor/inspect_wait_timeout':              value => $inspect_wait_timeout_real;
     'deploy/default_boot_option':                  value => $default_boot_option;
     'deploy/default_boot_mode':                    value => $default_boot_mode;
     'neutron/port_setup_delay':                    value => $port_setup_delay;

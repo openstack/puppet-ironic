@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``ironic::conductor::inspect_timeout`` has been deprecated and will be
+    removed in a future release. Use ``inspect_wait_timeout`` instead.
