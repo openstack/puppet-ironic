@@ -89,14 +89,14 @@
 #   inspection_network_name.
 #   Defaults to $::os_service_default
 #
-# [*configdrive_use_swift*]
-#   (optional) Whether to use Swift for storing config drives instead of
+# [*configdrive_use_object_store*]
+#   (optional) Whether to use object store for storing config drives instead of
 #   the database. Recommended for bigger config drives.
 #   Defaults to $::os_service_default
 #
 # [*configdrive_swift_container*]
 #   (optinal) Swift container to use for storing config drives if
-#   configdrive_use_swift is true.
+#   configdrive_use_object_store is true.
 #   Defaults to $::os_service_default
 #
 # [*inspect_timeout*]
@@ -204,6 +204,11 @@
 #   (optional) Ironic API URL.
 #   Defaults to undef.
 #
+# [*configdrive_use_swift*]
+#   (optional) Whether to use Swift for storing config drives instead of
+#   the database. Recommended for bigger config drives.
+#   Defaults to undef
+#
 class ironic::conductor (
   $package_ensure                      = 'present',
   $enabled                             = true,
@@ -219,7 +224,7 @@ class ironic::conductor (
   $provisioning_network                = $::os_service_default,
   $rescuing_network                    = $::os_service_default,
   $inspection_network                  = $::os_service_default,
-  $configdrive_use_swift               = $::os_service_default,
+  $configdrive_use_object_store        = $::os_service_default,
   $configdrive_swift_container         = $::os_service_default,
   $inspect_timeout                     = $::os_service_default,
   $default_boot_option                 = $::os_service_default,
@@ -242,6 +247,7 @@ class ironic::conductor (
   # DEPRECATED PARAMETERS
   $max_time_interval                   = undef,
   $api_url                             = undef,
+  $configdrive_use_swift               = undef,
 ) {
 
   include ironic::deps
@@ -260,6 +266,14 @@ Use ironic::service_catalog::endpoint_override instead')
     ironic_config {
       'conductor/api_url': value => $api_url;
     }
+  }
+
+  if $configdrive_use_swift != undef {
+    warning('configdrive_use_swift is deprecated and will be removed \
+in a future release. Use configdrive_use_object_store instead')
+    $configdrive_use_object_store_real = $configdrive_use_swift
+  } else {
+    $configdrive_use_object_store_real = $configdrive_use_object_store
   }
 
   if ($cleaning_network_name and !is_service_default($cleaning_network)) {
@@ -330,7 +344,7 @@ Use ironic::service_catalog::endpoint_override instead')
     'deploy/erase_devices_priority':               value => $erase_devices_priority;
     'deploy/erase_devices_metadata_priority':      value => $erase_devices_metadata_priority;
     'deploy/continue_if_disk_secure_erase_fails':  value => $continue_if_disk_secure_erase_fails;
-    'conductor/configdrive_use_swift':             value => $configdrive_use_swift;
+    'deploy/configdrive_use_object_store':         value => $configdrive_use_object_store_real;
     'conductor/configdrive_swift_container':       value => $configdrive_swift_container;
     'conductor/inspect_wait_timeout':              value => $inspect_timeout;
     'deploy/default_boot_option':                  value => $default_boot_option;
