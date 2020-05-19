@@ -24,7 +24,7 @@ describe 'ironic::inspector::db::mysql' do
 
   shared_examples_for 'ironic::inspector::db::mysql' do
     let :req_params do
-      { :password => 'passw0rd' }
+      { :password => 'ironicpass' }
     end
 
     let :pre_condition do
@@ -37,10 +37,10 @@ describe 'ironic::inspector::db::mysql' do
       end
 
       it { is_expected.to contain_openstacklib__db__mysql('ironic-inspector').with(
-        :user          => 'ironic-inspector',
-        :password_hash => '*74B1C21ACE0C2D6B0678A5E503D2A60E8F9651A3',
-        :charset       => 'utf8',
-        :collate       => 'utf8_general_ci',
+        :user     => 'ironic-inspector',
+        :password => 'ironicpass',
+        :charset  => 'utf8',
+        :collate  => 'utf8_general_ci',
       )}
     end
 

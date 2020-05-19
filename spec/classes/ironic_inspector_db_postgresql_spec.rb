@@ -4,7 +4,7 @@ describe 'ironic::inspector::db::postgresql' do
 
   shared_examples_for 'ironic::inspector::db::postgresql' do
     let :req_params do
-      { :password => 'pw' }
+      { :password => 'ironicpass' }
     end
 
     let :pre_condition do
@@ -16,12 +16,14 @@ describe 'ironic::inspector::db::postgresql' do
         req_params
       end
 
-      it { is_expected.to contain_postgresql__server__db('ironic-inspector').with(
-        :user     => 'ironic-inspector',
-        :password => 'md5f4da35e834f32b2deceef0dcd269e195'
+      it { is_expected.to contain_openstacklib__db__postgresql('ironic-inspector').with(
+        :user       => 'ironic-inspector',
+        :password   => 'ironicpass',
+        :dbname     => 'ironic-inspector',
+        :encoding   => nil,
+        :privileges => 'ALL',
       )}
     end
-
   end
 
   on_supported_os({

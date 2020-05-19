@@ -27,7 +27,43 @@ describe 'ironic::db::mysql' do
   end
 
   let :params do
-    { :password => 'passw0rd' }
+    { :password => 'ironicpass' }
+  end
+
+  shared_examples_for 'ironic::db::mysql' do
+
+    context 'with only required params' do
+      it { is_expected.to contain_openstacklib__db__mysql('ironic').with(
+        :user     => 'ironic',
+        :password => 'ironicpass',
+        :charset  => 'utf8',
+        :collate  => 'utf8_general_ci',
+      )}
+    end
+
+    context "overriding allowed_hosts param to array" do
+      let :params do
+        {
+          :allowed_hosts => ['127.0.0.1','%']
+        }
+      end
+    end
+
+    context "overriding allowed_hosts param to string" do
+      let :params do
+        {
+          :allowed_hosts  => '192.168.1.1'
+        }
+      end
+    end
+
+    context "overriding allowed_hosts param equals to host param " do
+      let :params do
+        {
+          :allowed_hosts  => '127.0.0.1'
+        }
+      end
+    end
   end
 
   on_supported_os({
@@ -38,40 +74,8 @@ describe 'ironic::db::mysql' do
         facts.merge!(OSDefaults.get_facts())
       end
 
-      it { is_expected.to contain_openstacklib__db__mysql('ironic').with(
-        :user          => 'ironic',
-        :password_hash => '*74B1C21ACE0C2D6B0678A5E503D2A60E8F9651A3',
-        :charset       => 'utf8',
-        :collate       => 'utf8_general_ci',
-      )}
-
+      it_behaves_like 'ironic::db::mysql'
     end
-  end
-
-  describe "overriding allowed_hosts param to array" do
-    let :params do
-      {
-        :allowed_hosts => ['127.0.0.1','%']
-      }
-    end
-
-  end
-
-  describe "overriding allowed_hosts param to string" do
-    let :params do
-      {
-        :allowed_hosts  => '192.168.1.1'
-      }
-    end
-
-  end
-
-  describe "overriding allowed_hosts param equals to host param " do
-    let :params do
-      {
-        :allowed_hosts  => '127.0.0.1'
-      }
-    end
-
   end
 end
+
