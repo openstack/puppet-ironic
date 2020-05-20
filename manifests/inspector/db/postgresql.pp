@@ -35,11 +35,11 @@ class ironic::inspector::db::postgresql(
   Class['ironic::inspector::db::postgresql'] -> Service<| title == 'ironic-inspector' |>
 
   ::openstacklib::db::postgresql { 'ironic-inspector':
-    password_hash => postgresql_password($user, $password),
-    dbname        => $dbname,
-    user          => $user,
-    encoding      => $encoding,
-    privileges    => $privileges,
+    password   => $password,
+    dbname     => $dbname,
+    user       => $user,
+    encoding   => $encoding,
+    privileges => $privileges,
   }
 
   ::Openstacklib::Db::Postgresql['ironic-inspector'] ~> Exec<| title == 'ironic-inspector-dbsync' |>
