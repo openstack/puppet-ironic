@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``ironic::drivers::ipmi::debug`` parameter has been added to enable
+    debug outputs of IPMI commands.

@@ -29,9 +29,14 @@
 #   Should be an interger value
 #   Defaults to $::os_service_default
 #
+# [*debug*]
+#   (optional) Enables debug outputs of IPMI commands
+#   Defaults to $::os_service_default
+#
 class ironic::drivers::ipmi (
   $command_retry_timeout = $::os_service_default,
   $min_command_interval  = $::os_service_default,
+  $debug                 = $::os_service_default,
 ) {
 
   include ironic::deps
@@ -40,6 +45,7 @@ class ironic::drivers::ipmi (
   ironic_config {
     'ipmi/command_retry_timeout': value => $command_retry_timeout;
     'ipmi/min_command_interval':  value => $min_command_interval;
+    'ipmi/debug':                 value => $debug;
   }
 
 }
