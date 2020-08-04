@@ -29,6 +29,13 @@ describe 'ironic::drivers::redfish' do
     it 'configures ironic.conf' do
       is_expected.to contain_ironic_config('redfish/connection_attempts').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('redfish/connection_retry_interval').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('redfish/connection_cache_size').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('redfish/auth_type').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('redfish/use_swift').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('redfish/swift_container').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('redfish/swift_object_expiry_timeout').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('redfish/kernel_append_params').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('redfish/file_permission').with_value('<SERVICE DEFAULT>')
     end
 
     it 'installs sushy package' do
@@ -41,12 +48,29 @@ describe 'ironic::drivers::redfish' do
 
     context 'when overriding parameters' do
       before do
-        params.merge!(:connection_attempts       => 10,
-                      :connection_retry_interval => 1)
+        params.merge!(
+          :connection_attempts         => 10,
+          :connection_retry_interval   => 1,
+          :connection_cache_size       => 100,
+          :auth_type                   => 'auto',
+          :use_swift                   => true,
+          :swift_container             => 'ironic_redfish_container',
+          :swift_object_expiry_timeout => 900,
+          :kernel_append_params        => 'nofb nomodeset vga=normal',
+          :file_permission             => '0o644'
+          )
       end
+
       it 'should replace default parameter with new value' do
         is_expected.to contain_ironic_config('redfish/connection_attempts').with_value(10)
         is_expected.to contain_ironic_config('redfish/connection_retry_interval').with_value(1)
+        is_expected.to contain_ironic_config('redfish/connection_cache_size').with_value(100)
+        is_expected.to contain_ironic_config('redfish/auth_type').with_value('auto')
+        is_expected.to contain_ironic_config('redfish/use_swift').with_value(true)
+        is_expected.to contain_ironic_config('redfish/swift_container').with_value('ironic_redfish_container')
+        is_expected.to contain_ironic_config('redfish/swift_object_expiry_timeout').with_value(900)
+        is_expected.to contain_ironic_config('redfish/kernel_append_params').with_value('nofb nomodeset vga=normal')
+        is_expected.to contain_ironic_config('redfish/file_permission').with_value('0o644')
       end
     end
 

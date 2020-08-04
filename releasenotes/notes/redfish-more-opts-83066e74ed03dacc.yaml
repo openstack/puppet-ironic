@@ -1,0 +1,13 @@
+---
+features:
+  - |
+    Now the ``ironic::drivers::redfish`` class supports the following parameters
+    to provide capabilities to set more parameters of Redfish driver.
+
+    - ``connection_cache_size``
+    - ``auth_type``
+    - ``use_swift``
+    - ``swift_container``
+    - ``swift_object_expiry_timeout``
+    - ``kernel_append_params``
+    - ``file_permission``
