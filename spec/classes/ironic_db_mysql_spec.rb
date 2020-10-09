@@ -31,8 +31,9 @@ describe 'ironic::db::mysql' do
   end
 
   shared_examples_for 'ironic::db::mysql' do
-
     context 'with only required params' do
+      it { is_expected.to contain_class('ironic::deps') }
+
       it { is_expected.to contain_openstacklib__db__mysql('ironic').with(
         :user     => 'ironic',
         :password => 'ironicpass',
