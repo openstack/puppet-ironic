@@ -27,8 +27,7 @@ class ironic::params {
 
   if ($::os_package_type == 'debian') {
     $syslinux_path_custom = '/usr/lib/syslinux'
-  } elsif ($::os['name'] == 'Fedora') or
-          ($::os['family'] == 'RedHat' and Integer.new($::os['release']['major']) > 7) {
+  } elsif ($::os['family'] == 'RedHat'){
     $syslinux_path_custom = '/tftpboot'
   } else {
     $syslinux_path_custom = '/var/lib/tftpboot'
@@ -66,11 +65,7 @@ class ironic::params {
       $ipxe_package              = 'ipxe-bootimgs'
       $syslinux_package          = 'syslinux-tftpboot'
       $syslinux_path             = $syslinux_path_custom
-      if (Integer.new($::os['release']['major']) > 7) {
-          $syslinux_files            = ['pxelinux.0', 'chain.c32', 'ldlinux.c32']
-      } else {
-          $syslinux_files            = ['pxelinux.0', 'chain.c32']
-      }
+      $syslinux_files            = ['pxelinux.0', 'chain.c32', 'ldlinux.c32']
     }
     'Debian': {
       $common_package_name       = 'ironic-common'
