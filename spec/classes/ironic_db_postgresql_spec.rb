@@ -16,6 +16,8 @@ describe 'ironic::db::postgresql' do
         req_params
       end
 
+      it { is_expected.to contain_class('ironic::deps') }
+
       it { is_expected.to contain_postgresql__server__db('ironic').with(
         :user     => 'ironic',
         :password => 'md554bdb85e136b50c40104fd9f73e1294d'
