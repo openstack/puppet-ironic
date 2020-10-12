@@ -4,6 +4,8 @@ describe 'ironic::inspector::db::sync' do
 
   shared_examples_for 'inspector-dbsync' do
 
+    it { is_expected.to contain_class('ironic::deps') }
+
     it 'runs ironic-inspectror-db_sync' do
       is_expected.to contain_exec('ironic-inspector-dbsync').with(
         :command     => 'ironic-inspector-dbsync --config-file /etc/ironic-inspector/inspector.conf upgrade',

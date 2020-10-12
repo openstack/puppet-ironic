@@ -4,6 +4,8 @@ describe 'ironic::db::sync' do
 
   shared_examples_for 'ironic-dbsync' do
 
+    it { is_expected.to contain_class('ironic::deps') }
+
     it 'runs ironic-manage db_sync' do
       is_expected.to contain_exec('ironic-dbsync').with(
         :command     => 'ironic-dbsync --config-file /etc/ironic/ironic.conf ',
