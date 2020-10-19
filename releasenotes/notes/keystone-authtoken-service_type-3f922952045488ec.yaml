@@ -1,0 +1,8 @@
+---
+features:
+  - |
+    The following two parameters have been added to configure the service_type
+    parameter in authtoken middlewae.
+
+    - ``ironic::api::authtoken::service_type``
+    - ``ironic::inspector::authtoken::service_type``
