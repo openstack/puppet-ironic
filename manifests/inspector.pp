@@ -52,10 +52,6 @@
 #   to listen on
 #   Defaults to 'br-ctlplane'
 #
-# [*db_connection*]
-#   (optional) Location of the ironic-inspector node cache database
-#   Defaults to undef
-#
 # [*ramdisk_logs_dir*]
 #   (optional) Location to store logs retrieved from the ramdisk
 #   Defaults to '/var/log/ironic-inspector/ramdisk/'
@@ -256,6 +252,10 @@
 #   (optional) Interval between retries in case of conflict error
 #   Defaults to undef.
 #
+# [*db_connection*]
+#   (optional) Location of the ironic-inspector node cache database
+#   Defaults to undef
+#
 class ironic::inspector (
   $package_ensure                  = 'present',
   $enabled                         = true,
@@ -265,7 +265,6 @@ class ironic::inspector (
   $auth_strategy                   = 'keystone',
   $timeout                         = $::os_service_default,
   $dnsmasq_interface               = 'br-ctlplane',
-  $db_connection                   = undef,
   $ramdisk_logs_dir                = '/var/log/ironic-inspector/ramdisk/',
   $always_store_ramdisk_logs       = $::os_service_default,
   $add_ports                       = $::os_service_default,
@@ -309,6 +308,7 @@ class ironic::inspector (
   $ironic_url                      = undef,
   $ironic_max_retries              = undef,
   $ironic_retry_interval           = undef,
+  $db_connection                   = undef,
 ) {
 
   include ironic::deps
@@ -317,6 +317,11 @@ class ironic::inspector (
   include ironic::inspector::db
   include ironic::inspector::swift
   include ironic::inspector::ironic
+
+  if $db_connection != undef {
+    warning('The db_connection parameter is deprecated and will be removed \
+in a future realse. Use ironic::inspector::db::database_connection instead')
+  }
 
   if $ironic_url != undef {
     warn('ironic::inspector::ironic_url is now deprecated and has no effect. \
