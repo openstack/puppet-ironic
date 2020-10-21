@@ -1,0 +1,20 @@
+---
+deprecations:
+  - |
+    The following options have been deprecated, as those options have been
+    moved to ironic::db class.
+
+    - ``ironic::database_connection``
+    - ``ironic::database_idle_timeout``
+    - ``ironic::database_max_overflow``
+    - ``ironic::database_max_pool_size``
+    - ``ironic::database_max_retries``
+    - ``ironic::database_retry_interval``
+
+  - |
+    The ``ironic::database_reconnect_interval`` parameter has been deprecated
+    and now has no effect.
+
+  - |
+    The ``ironic::inspector::db_connection`` parameter has been deprecated. Use
+    the ``ironic::inspector::db::database_connection`` parameter instead.

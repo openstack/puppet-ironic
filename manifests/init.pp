@@ -204,34 +204,6 @@
 #   (Optional) Password for message broker authentication
 #   Defaults to $::os_service_default.
 #
-# [*database_connection*]
-#   (optional) Connection url for the ironic database.
-#   Defaults to: undef
-#
-# [*database_max_retries*]
-#   (optional) Database reconnection retry times.
-#   Defaults to: undef
-#
-# [*database_idle_timeout*]
-#   (optional) Timeout before idle db connections are reaped.
-#   Defaults to: undef
-#
-# [*database_reconnect_interval*]
-#   (optional) Database reconnection interval in seconds.
-#   Defaults to: undef
-#
-# [*database_retry_interval*]
-#   (optional) Database reconnection interval in seconds.
-#   Defaults to: undef
-#
-# [*database_max_pool_size*]
-#   (optional) Maximum number of SQL connections to keep open in a pool.
-#   Defaults to: undef
-#
-# [*database_max_overflow*]
-#   (optional) If set, use this value for max_overflow with sqlalchemy.
-#   Defaults to: undef
-#
 # [*sync_db*]
 #   Enable dbsync
 #   Defaults to true
@@ -274,6 +246,34 @@
 #   (optional) Minimum number of SQL connections to keep open in a pool.
 #   Defaults to: undef
 #
+# [*database_connection*]
+#   (optional) Connection url for the ironic database.
+#   Defaults to: undef
+#
+# [*database_max_retries*]
+#   (optional) Database reconnection retry times.
+#   Defaults to: undef
+#
+# [*database_idle_timeout*]
+#   (optional) Timeout before idle db connections are reaped.
+#   Defaults to: undef
+#
+# [*database_reconnect_interval*]
+#   (optional) Database reconnection interval in seconds.
+#   Defaults to: undef
+#
+# [*database_retry_interval*]
+#   (optional) Database reconnection interval in seconds.
+#   Defaults to: undef
+#
+# [*database_max_pool_size*]
+#   (optional) Maximum number of SQL connections to keep open in a pool.
+#   Defaults to: undef
+#
+# [*database_max_overflow*]
+#   (optional) If set, use this value for max_overflow with sqlalchemy.
+#   Defaults to: undef
+#
 class ironic (
   $enabled                            = true,
   $package_ensure                     = 'present',
@@ -314,13 +314,6 @@ class ironic (
   $amqp_sasl_config_name              = $::os_service_default,
   $amqp_username                      = $::os_service_default,
   $amqp_password                      = $::os_service_default,
-  $database_connection                = undef,
-  $database_max_retries               = undef,
-  $database_idle_timeout              = undef,
-  $database_reconnect_interval        = undef,
-  $database_retry_interval            = undef,
-  $database_max_pool_size             = undef,
-  $database_max_overflow              = undef,
   $sync_db                            = true,
   $db_online_data_migrations          = false,
   $purge_config                       = false,
@@ -331,11 +324,54 @@ class ironic (
   $versioned_notifications_topics     = $::os_service_default,
   # DEPRECATED PARAMETERS
   $database_min_pool_size             = undef,
+  $database_connection                = undef,
+  $database_max_retries               = undef,
+  $database_idle_timeout              = undef,
+  $database_reconnect_interval        = undef,
+  $database_retry_interval            = undef,
+  $database_max_pool_size             = undef,
+  $database_max_overflow              = undef,
 ) {
 
   include ironic::deps
   include ironic::db
   include ironic::params
+
+  if $database_connection != undef {
+    warning('The database_connection parameter is deprecated and will be \
+removed in a future realse. Use ironic::db::database_connection instead')
+  }
+
+  if $database_max_retries!= undef {
+    warning('The database_max_retries parameter is deprecated and will be \
+removed in a future realse. Use ironic::db::database_max_retries instead')
+  }
+
+  if $database_idle_timeout != undef {
+    warning('The database_idle_timeout parameter is deprecated and will be \
+removed in a future realse. Use ironic::db::database_connection_recycle_time \
+instead')
+  }
+
+  if $database_reconnect_interval != undef {
+    warning('The database_reconnect_interval parameter is deprecated \
+has no effect now.')
+  }
+
+  if $database_retry_interval != undef {
+    warning('The database_retry_interval parameter is deprecated and will be \
+removed in a future realse. Use ironic::db::database_retry_interval instead')
+  }
+
+  if $database_max_pool_size != undef {
+    warning('The database_max_pool_size parameter is deprecated and will be \
+removed in a future realse. Use ironic::db::database_max_pool_size instead')
+  }
+
+  if $database_max_overflow != undef {
+    warning('The database_max_overflow parameter is deprecated and will be \
+removed in a future realse. Use ironic::db::database_max_overflow instead')
+  }
 
   include ironic::glance
   include ironic::neutron
