@@ -1,4 +1,0 @@
----
-features:
-  - |
-    Added CORS support to the ironic::inspector class
