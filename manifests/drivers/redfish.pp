@@ -57,32 +57,46 @@
 #   permission representation of file access permissions.
 #   Defaults to $::os_service_default.
 #
+# [*firmware_update_status_interval*]
+#   (optional) Number of seconds to wait between checking for completed
+#   firmware update tasks.
+#   Defaults to $::os_service_default
+#
+# [*firmware_update_fail_interval*]
+#   (optional) Number of seconds to wait between checking for failed firmware
+#   update tasks.
+#   Defaults to $::os_service_default
+#
 class ironic::drivers::redfish (
-  $package_ensure              = 'present',
-  $connection_attempts         = $::os_service_default,
-  $connection_retry_interval   = $::os_service_default,
-  $connection_cache_size       = $::os_service_default,
-  $auth_type                   = $::os_service_default,
-  $use_swift                   = $::os_service_default,
-  $swift_container             = $::os_service_default,
-  $swift_object_expiry_timeout = $::os_service_default,
-  $kernel_append_params        = $::os_service_default,
-  $file_permission             = $::os_service_default,
+  $package_ensure                  = 'present',
+  $connection_attempts             = $::os_service_default,
+  $connection_retry_interval       = $::os_service_default,
+  $connection_cache_size           = $::os_service_default,
+  $auth_type                       = $::os_service_default,
+  $use_swift                       = $::os_service_default,
+  $swift_container                 = $::os_service_default,
+  $swift_object_expiry_timeout     = $::os_service_default,
+  $kernel_append_params            = $::os_service_default,
+  $file_permission                 = $::os_service_default,
+  $firmware_update_status_interval = $::os_service_default,
+  $firmware_update_fail_interval   = $::os_service_default,
 ) {
 
   include ironic::deps
   include ironic::params
 
   ironic_config {
-    'redfish/connection_attempts':         value => $connection_attempts;
-    'redfish/connection_retry_interval':   value => $connection_retry_interval;
-    'redfish/connection_cache_size':       value => $connection_cache_size;
-    'redfish/auth_type':                   value => $auth_type;
-    'redfish/use_swift':                   value => $use_swift;
-    'redfish/swift_container':             value => $swift_container;
-    'redfish/swift_object_expiry_timeout': value => $swift_object_expiry_timeout;
-    'redfish/kernel_append_params':        value => $kernel_append_params;
-    'redfish/file_permission':             value => $file_permission;
+    'redfish/connection_attempts':             value => $connection_attempts;
+    'redfish/connection_retry_interval':       value => $connection_retry_interval;
+    'redfish/connection_cache_size':           value => $connection_cache_size;
+    'redfish/auth_type':                       value => $auth_type;
+    'redfish/use_swift':                       value => $use_swift;
+    'redfish/swift_container':                 value => $swift_container;
+    'redfish/swift_object_expiry_timeout':     value => $swift_object_expiry_timeout;
+    'redfish/kernel_append_params':            value => $kernel_append_params;
+    'redfish/file_permission':                 value => $file_permission;
+    'redfish/firmware_update_status_interval': value => $firmware_update_status_interval;
+    'redfish/firmware_update_fail_interval':   value => $firmware_update_fail_interval;
   }
 
   ensure_packages('python-sushy',

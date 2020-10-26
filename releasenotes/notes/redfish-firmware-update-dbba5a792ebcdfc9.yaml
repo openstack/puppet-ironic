@@ -1,0 +1,9 @@
+---
+features:
+  - |
+    The ``ironic::driver::redfish`` class now supports the following two
+    parameters to set the polling intervals for the firmware update feature in
+    redfish driver.
+
+    - ``firmware_update_status_interval``
+    - ``firmware_update_fail_interval``
