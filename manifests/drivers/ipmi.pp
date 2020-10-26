@@ -29,6 +29,19 @@
 #   Should be an interger value
 #   Defaults to $::os_service_default
 #
+# [*use_ipmitool_retries*]
+#   (optional) Whether the retry feature in ipmitool is used.
+#   Defaults to $::os_service_default
+#
+# [*kill_on_timeout*]
+#   (optional) Kill ipmitool process when the timeout expires.
+#   Defaults to $::os_service_default
+#
+# [*disable_boot_timeout*]
+#   (optional) Whether ironic sends a raw IPMI command to dsiable the 60 second
+#   timeout for booting.
+#   Defaults to $::os_service_default
+#
 # [*debug*]
 #   (optional) Enables debug outputs of IPMI commands
 #   Defaults to $::os_service_default
@@ -36,6 +49,9 @@
 class ironic::drivers::ipmi (
   $command_retry_timeout = $::os_service_default,
   $min_command_interval  = $::os_service_default,
+  $use_ipmitool_retries  = $::os_service_default,
+  $kill_on_timeout       = $::os_service_default,
+  $disable_boot_timeout  = $::os_service_default,
   $debug                 = $::os_service_default,
 ) {
 
@@ -45,6 +61,9 @@ class ironic::drivers::ipmi (
   ironic_config {
     'ipmi/command_retry_timeout': value => $command_retry_timeout;
     'ipmi/min_command_interval':  value => $min_command_interval;
+    'ipmi/use_ipmitool_retries':  value => $use_ipmitool_retries;
+    'ipmi/kill_on_timeout':       value => $kill_on_timeout;
+    'ipmi/disable_boot_timeout':  value => $disable_boot_timeout;
     'ipmi/debug':                 value => $debug;
   }
 
