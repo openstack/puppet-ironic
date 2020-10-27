@@ -1,0 +1,9 @@
+---
+features:
+  - |
+    The following parameters have been added to the ``ironic::driver::ipmi``
+    class.
+
+    - ``use_ipmitool_retries``
+    - ``kill_on_timeout``
+    - ``disable_boot_timeout``
