@@ -77,7 +77,7 @@
             "version_requirement": ">= 6.0.0 < 7.0.0"
         }
     ],
-    "source": "git://github.com/openstack/puppet-ironic.git",
+    "source": "https://opendev.org/openstack/puppet-ironic.git",
     "summary": "Puppet module for OpenStack Ironic",
     "version": "18.0.0"
 }
