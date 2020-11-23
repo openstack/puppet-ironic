@@ -1,7 +1,15 @@
 #
 # Class to execute ironic-inspector dbsync
 #
-class ironic::inspector::db::sync {
+# == Parameters
+#
+# [*db_sync_timeout*]
+#   (Optional) Timeout for the execution of the db_sync
+#   Defaults to 300
+#
+class ironic::inspector::db::sync(
+  $db_sync_timeout = 300,
+) {
 
   include ironic::deps
   include ironic::params
@@ -11,6 +19,7 @@ class ironic::inspector::db::sync {
     path        => '/usr/bin',
     user        => 'ironic-inspector',
     refreshonly => true,
+    timeout     => $db_sync_timeout,
     logoutput   => on_failure,
     subscribe   => [
       Anchor['ironic-inspector::install::end'],

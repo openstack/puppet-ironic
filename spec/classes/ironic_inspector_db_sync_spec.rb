@@ -11,6 +11,7 @@ describe 'ironic::inspector::db::sync' do
         :command     => 'ironic-inspector-dbsync --config-file /etc/ironic-inspector/inspector.conf upgrade',
         :path        => '/usr/bin',
         :user        => 'ironic-inspector',
+        :timeout     => 300,
         :refreshonly => 'true',
         :logoutput   => 'on_failure',
         :tag         => 'openstack-db',
