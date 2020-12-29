@@ -5,7 +5,7 @@ describe 'ironic::policy' do
   shared_examples_for 'ironic policies' do
     let :params do
       {
-        :policy_path => '/etc/ironic/policy.json',
+        :policy_path => '/etc/ironic/policy.yaml',
         :policies    => {
           'context_is_admin' => {
             'key'   => 'context_is_admin',
@@ -17,13 +17,14 @@ describe 'ironic::policy' do
 
     it 'set up the policies' do
       is_expected.to contain_openstacklib__policy__base('context_is_admin').with({
-        :key        => 'context_is_admin',
-        :value      => 'foo:bar',
-        :file_user  => 'root',
-        :file_group => 'ironic',
+        :key         => 'context_is_admin',
+        :value       => 'foo:bar',
+        :file_user   => 'root',
+        :file_group  => 'ironic',
+        :file_format => 'yaml',
       })
       is_expected.to contain_oslo__policy('ironic_config').with(
-        :policy_file => '/etc/ironic/policy.json',
+        :policy_file => '/etc/ironic/policy.yaml',
       )
     end
   end
