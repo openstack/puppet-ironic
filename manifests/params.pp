@@ -25,14 +25,6 @@ class ironic::params {
   $pyvers = $::openstacklib::defaults::pyvers
   $pyver3 = $::openstacklib::defaults::pyver3
 
-  if ($::os_package_type == 'debian') {
-    $syslinux_path_custom = '/usr/lib/syslinux'
-  } elsif ($::os['family'] == 'RedHat'){
-    $syslinux_path_custom = '/tftpboot'
-  } else {
-    $syslinux_path_custom = '/var/lib/tftpboot'
-  }
-
   $dbsync_command             =
     'ironic-dbsync --config-file /etc/ironic/ironic.conf'
   $inspector_dbsync_command   =
@@ -64,7 +56,7 @@ class ironic::params {
       $tftpd_package             = 'tftp-server'
       $ipxe_package              = 'ipxe-bootimgs'
       $syslinux_package          = 'syslinux-tftpboot'
-      $syslinux_path             = $syslinux_path_custom
+      $syslinux_path             = '/tftpboot'
       $syslinux_files            = ['pxelinux.0', 'chain.c32', 'ldlinux.c32']
     }
     'Debian': {
@@ -89,7 +81,11 @@ class ironic::params {
       $tftpd_package             = 'tftpd'
       $ipxe_package              = 'ipxe'
       $syslinux_package          = 'syslinux-common'
-      $syslinux_path             = $syslinux_path_custom
+      if ($::os_package_type == 'debian') {
+        $syslinux_path = '/usr/lib/syslinux'
+      } else {
+        $syslinux_path = '/var/lib/tftpboot'
+      }
       $syslinux_files            = ['pxelinux.0', 'chain.c32', 'libcom32.c32', 'libutil.c32']
     }
     default: {
