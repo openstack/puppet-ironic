@@ -20,12 +20,12 @@
 #   Defaults to empty hash.
 #
 # [*policy_path*]
-#   (Optional) Path to the ironic policy.json file
-#   Defaults to /etc/ironic/policy.json
+#   (Optional) Path to the ironic policy.yaml file
+#   Defaults to /etc/ironic/policy.yaml
 #
 class ironic::policy (
   $policies    = {},
-  $policy_path = '/etc/ironic/policy.json',
+  $policy_path = '/etc/ironic/policy.yaml',
 ) {
 
   include ironic::deps
@@ -34,9 +34,10 @@ class ironic::policy (
   validate_legacy(Hash, 'validate_hash', $policies)
 
   Openstacklib::Policy::Base {
-    file_path  => $policy_path,
-    file_user  => 'root',
-    file_group => $::ironic::params::group,
+    file_path   => $policy_path,
+    file_user   => 'root',
+    file_group  => $::ironic::params::group,
+    file_format => 'yaml',
   }
 
   create_resources('openstacklib::policy::base', $policies)
