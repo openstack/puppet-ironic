@@ -4,6 +4,10 @@
 #
 # === Parameters
 #
+# [*enforce_scope*]
+#  (Optional) Whether or not to enforce scope when evaluating policies.
+#  Defaults to $::os_service_default.
+#
 # [*policies*]
 #   (Optional) Set of policies to configure for ironic
 #   Example :
@@ -24,8 +28,9 @@
 #   Defaults to /etc/ironic/policy.yaml
 #
 class ironic::policy (
-  $policies    = {},
-  $policy_path = '/etc/ironic/policy.yaml',
+  $enforce_scope = $::os_service_default,
+  $policies      = {},
+  $policy_path   = '/etc/ironic/policy.yaml',
 ) {
 
   include ironic::deps
@@ -42,6 +47,9 @@ class ironic::policy (
 
   create_resources('openstacklib::policy::base', $policies)
 
-  oslo::policy { 'ironic_config': policy_file => $policy_path }
+  oslo::policy { 'ironic_config':
+    enforce_scope => $enforce_scope,
+    policy_file   => $policy_path
+  }
 
 }
