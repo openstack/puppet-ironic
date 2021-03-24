@@ -4,9 +4,10 @@ describe 'ironic::policy' do
   shared_examples 'ironic::policy' do
     let :params do
       {
-        :enforce_scope => false,
-        :policy_path   => '/etc/ironic/policy.yaml',
-        :policies      => {
+        :enforce_scope        => false,
+        :enforce_new_defaults => false,
+        :policy_path          => '/etc/ironic/policy.yaml',
+        :policies             => {
           'context_is_admin' => {
             'key'   => 'context_is_admin',
             'value' => 'foo:bar'
@@ -24,8 +25,9 @@ describe 'ironic::policy' do
         :file_format => 'yaml',
       })
       is_expected.to contain_oslo__policy('ironic_config').with(
-        :enforce_scope => false,
-        :policy_file   => '/etc/ironic/policy.yaml',
+        :enforce_scope        => false,
+        :enforce_new_defaults => false,
+        :policy_file          => '/etc/ironic/policy.yaml',
       )
     end
   end
