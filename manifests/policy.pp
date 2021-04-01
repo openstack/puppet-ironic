@@ -32,11 +32,16 @@
 #   (Optional) Path to the ironic policy.yaml file
 #   Defaults to /etc/ironic/policy.yaml
 #
+# [*policy_dirs*]
+#   (Optional) Path to the ironic policy folder
+#   Defaults to $::os_service_default
+#
 class ironic::policy (
   $enforce_scope        = $::os_service_default,
   $enforce_new_defaults = $::os_service_default,
   $policies             = {},
   $policy_path          = '/etc/ironic/policy.yaml',
+  $policy_dirs          = $::os_service_default,
 ) {
 
   include ironic::deps
@@ -56,7 +61,8 @@ class ironic::policy (
   oslo::policy { 'ironic_config':
     enforce_scope        => $enforce_scope,
     enforce_new_defaults => $enforce_new_defaults,
-    policy_file          => $policy_path
+    policy_file          => $policy_path,
+    policy_dirs          => $policy_dirs,
   }
 
 }
