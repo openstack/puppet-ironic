@@ -7,6 +7,7 @@ describe 'ironic::policy' do
         :enforce_scope        => false,
         :enforce_new_defaults => false,
         :policy_path          => '/etc/ironic/policy.yaml',
+        :policy_dirs          => '/etc/ironic/policy.d',
         :policies             => {
           'context_is_admin' => {
             'key'   => 'context_is_admin',
@@ -28,6 +29,7 @@ describe 'ironic::policy' do
         :enforce_scope        => false,
         :enforce_new_defaults => false,
         :policy_file          => '/etc/ironic/policy.yaml',
+        :policy_dirs          => '/etc/ironic/policy.d',
       )
     end
   end
