@@ -1,4 +1,4 @@
-# == Define: ironic::healthcheck
+# == Class: ironic::healthcheck
 #
 # Configure oslo_middleware options in healthcheck section
 #
