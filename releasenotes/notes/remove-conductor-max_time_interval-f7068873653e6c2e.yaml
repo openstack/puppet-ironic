@@ -1,0 +1,5 @@
+---
+fixes:
+  - |
+    Removing max_time_interval because it's been deprecated for a year now
+    and it's not used in any projects since 2013.
