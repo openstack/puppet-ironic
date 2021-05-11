@@ -35,10 +35,6 @@
 #   (optional) Git repository location for pulling Bifrost
 #   Defaults to 'https://opendev.org/openstack/bifrost'
 #
-# [*revision*]
-#   (optional) The branch or commit to checkout on Bifrost repository
-#   Defaults to 'master'
-#
 # [*ensure*]
 #   (optional) Ensure value for cloning the Bifrost repository.
 #   This is a pass-thru variable for vcsrepo, acceptable values are

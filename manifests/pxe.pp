@@ -67,7 +67,7 @@ class ironic::pxe (
   $tftp_bind_host = undef,
   $enable_ppc64le = false,
   $ipxe_name_base = 'ipxe',
-) inherits ::ironic::params {
+) inherits ironic::params {
 
   include ironic::deps
   include ironic::pxe::common
