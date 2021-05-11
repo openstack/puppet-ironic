@@ -195,11 +195,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*max_time_interval*]
-#   (optional) Maximum time, in seconds, since the last check-in of a conductor.
-#   Should be an interger value
-#   Defaults to undef.
-#
 # [*api_url*]
 #   (optional) Ironic API URL.
 #   Defaults to undef.
@@ -250,7 +245,6 @@ class ironic::conductor (
   $rescue_ramdisk                      = $::os_service_default,
   $allow_provisioning_in_maintenance   = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $max_time_interval                   = undef,
   $api_url                             = undef,
   $configdrive_use_swift               = undef,
   $inspect_timeout                     = undef,
@@ -261,10 +255,6 @@ class ironic::conductor (
 
   # For backward compatibility
   include ironic::glance
-
-  if $max_time_interval != undef {
-    warning('ironic::conductor::max_time_interval is deprecated and has no effect')
-  }
 
   if $api_url != undef {
     warning('ironic::conductor::api_url is deprecated. \
