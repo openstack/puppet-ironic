@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    Support for the audit middleware options has been added.
