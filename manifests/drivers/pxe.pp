@@ -127,7 +127,6 @@ class ironic::drivers::pxe (
 
   # Configure ironic.conf
   ironic_config {
-    'pxe/ipxe_enabled': value              => $ipxe_enabled;
     'pxe/pxe_append_params': value         => $pxe_append_params;
     'pxe/pxe_bootfile_name': value         => $pxe_bootfile_name_real;
     'pxe/pxe_config_template': value       => $pxe_config_template_real;
@@ -142,6 +141,7 @@ class ironic::drivers::pxe (
     'pxe/boot_retry_timeout': value        => $boot_retry_timeout;
     'pxe/boot_retry_check_interval': value => $boot_retry_check_interval;
     'pxe/ip_version': value                => $ip_version;
+    'pxe/ipxe_enabled': ensure             => absent;
   }
 
   if $enable_ppc64le {
