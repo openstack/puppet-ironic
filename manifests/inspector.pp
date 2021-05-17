@@ -311,6 +311,9 @@ class ironic::inspector (
   $db_connection                   = undef,
 ) {
 
+  validate_legacy(Array, 'validate_array', $dnsmasq_ip_subnets)
+  validate_legacy(Hash, 'validate_hash', $port_physnet_cidr_map)
+
   include ironic::deps
   include ironic::params
   include ironic::pxe::common
@@ -330,14 +333,6 @@ Use ironic::inspector::ironic::endpoint_override instead.')
 
   if $auth_strategy == 'keystone' {
     include ironic::inspector::authtoken
-  }
-
-  if !is_array($dnsmasq_ip_subnets) {
-    fail('Invalid data type, parameter dnsmasq_ip_subnets must be Array type')
-  }
-
-  if !is_hash($port_physnet_cidr_map) {
-    fail('Invalid data type, parameter port_physnet_cidr_map mush be Hash type')
   }
 
   $tftp_root_real    = pick($::ironic::pxe::common::tftp_root, $tftp_root)
