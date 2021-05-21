@@ -51,15 +51,7 @@ describe 'ironic::client' do
         when 'Debian'
           { :client_package => 'python3-ironicclient' }
         when 'RedHat'
-          if facts[:operatingsystem] == 'Fedora'
-            { :client_package => 'python3-ironicclient' }
-          else
-            if facts[:operatingsystemmajrelease] > '7'
-              { :client_package => 'python3-ironicclient' }
-            else
-              { :client_package => 'python-ironicclient' }
-            end
-          end
+          { :client_package => 'python3-ironicclient' }
         end
       end
 

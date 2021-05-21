@@ -56,15 +56,7 @@ describe 'ironic::inspector::client' do
         when 'Debian'
           { :inspector_client_package => 'python3-ironic-inspector-client' }
         when 'RedHat'
-          if facts[:operatingsystem] == 'Fedora'
-            { :inspector_client_package => 'python3-ironic-inspector-client' }
-          else
-            if facts[:operatingsystemmajrelease] > '7'
-              { :inspector_client_package => 'python3-ironic-inspector-client' }
-            else
-              { :inspector_client_package => 'python-ironic-inspector-client' }
-            end
-          end
+          { :inspector_client_package => 'python3-ironic-inspector-client' }
         end
       end
 

@@ -95,15 +95,7 @@ describe 'ironic::drivers::redfish' do
         when 'Debian'
           { :sushy_package_name => 'python3-sushy' }
         when 'RedHat'
-          if facts[:operatingsystem] == 'Fedora'
-            { :sushy_package_name => 'python3-sushy' }
-          else
-            if facts[:operatingsystemmajrelease] > '7'
-              { :sushy_package_name => 'python3-sushy' }
-            else
-              { :sushy_package_name => 'python-sushy' }
-            end
-          end
+          { :sushy_package_name => 'python3-sushy' }
         end
       end
 

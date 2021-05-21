@@ -22,20 +22,17 @@
 class ironic::params {
   include openstacklib::defaults
 
-  $pyvers = $::openstacklib::defaults::pyvers
-  $pyver3 = $::openstacklib::defaults::pyver3
-
   $dbsync_command             =
     'ironic-dbsync --config-file /etc/ironic/ironic.conf'
   $inspector_dbsync_command   =
     'ironic-inspector-dbsync --config-file /etc/ironic-inspector/inspector.conf upgrade'
-  $client_package             = "python${pyvers}-ironicclient"
-  $inspector_client_package   = "python${pyvers}-ironic-inspector-client"
-  $lib_package_name           = "python${pyvers}-ironic-lib"
+  $client_package             = 'python3-ironicclient'
+  $inspector_client_package   = 'python3-ironic-inspector-client'
+  $lib_package_name           = 'python3-ironic-lib'
   $group                      = 'ironic'
-  $sushy_package_name         = "python${pyvers}-sushy"
-  $proliantutils_package_name = "python${pyvers}-proliantutils"
-  $dracclient_package_name    = "python${pyvers}-dracclient"
+  $sushy_package_name         = 'python3-sushy'
+  $proliantutils_package_name = 'python3-proliantutils'
+  $dracclient_package_name    = 'python3-dracclient'
 
   case $::osfamily {
     'RedHat': {
