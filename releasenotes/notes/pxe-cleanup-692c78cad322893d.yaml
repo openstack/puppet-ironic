@@ -1,0 +1,44 @@
+---
+features:
+  - Adds support for the ``ironic.conf`` parameters ``[pxe]ipxe_bootfile_name``
+    and ``[pxe]ipxe_config_template`` which are utilized by the ``ipxe`` boot
+    interface in Ironic. These settings use the manifest parameters
+    ``ironic::drivers::pxe::ipxe_bootfile_name`` and
+    ``ironic::drivers::pxe::ipxe_config_template`` respectively.
+  - Adds support for the ``ironic.conf`` parameter
+    ``[pxe]uefi_ipxe_bootfile_name`` to be explicitly set using the
+    ``ironic::drivers::pxe::uefi_ipxe_bootfile_name`` manifest parameter,
+    however this value is defaulted to ``snponly.efi`` which is anticipated
+    to become the default in Ironic sometime in the Xena development cycle.
+upgrade:
+  - |
+    The Ironic project has in elevated support for ``ipxe`` to a top level
+    node boot_interface, and removed support for it's ``[pxe]ipxe_enabled``
+    option as this is settable per node. Removal of this option has allowed
+    for the manifest to be cleaned up.
+  - The manifest now no longer applies override defaults for a number of
+    ``ironic.conf`` settings, as they match the default settings the project
+    utilizes. These manifest parameters are
+    ``ironic::drivers::pxe::pxe_bootfile_name``,
+    ``ironic::drivers::pxe::pxe_config_template``,
+    ``ironic::drivers::pxe::tftp_root``,
+    ``ironic::drivers::pxe::tftp_master_path``.
+deprecations:
+  - |
+    The ``ironic::drivers::pxe::ipxe_enabled`` parameter has been deprecated
+    and has no effect moving forward. This is a result of the underlying
+    Ironic project deprecating and removing. Use of this option will raise
+    a warning.
+  - The ``ironic::drivers::pxe::ip_version`` parameter has been deprecated
+    for removal. Please anticipate this option to be removed in a future
+    release. This option has been redundant since the Ussuri release of
+    Ironic. Use of this option raises a warning.
+fixes:
+  - |
+    Fixes a potential issue where use of the
+    ``ironic::drivers::pxe::ipxe_enabled`` parameter would
+    cause settings specific to ``ipxe`` to be set overriding the ``pxe`` boot
+    interface's defaults in Ironic. This resulted in operators being unable to
+    choose to boot a node from ``pxe`` and not ``ipxe``. Now the settings are
+    not overriden as the ``ironic::drivers::pxe::ipxe_enabled`` parameter for
+    the manifest has no effect, and raises a warning if used.
