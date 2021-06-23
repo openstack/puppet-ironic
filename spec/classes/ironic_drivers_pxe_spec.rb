@@ -23,10 +23,9 @@ require 'spec_helper'
 describe 'ironic::drivers::pxe' do
 
   let :default_params do
-    { :pxe_bootfile_name        => 'pxelinux.0',
-      :pxe_config_template      => '$pybasedir/drivers/modules/pxe_config.template',
-      :tftp_root                => '/tftpboot',
+    { :tftp_root                => '/tftpboot',
       :tftp_master_path         => '/tftpboot/master_images',
+      :uefi_ipxe_bootfile_name  => 'ipxe.efi',
     }
   end
 
@@ -41,8 +40,10 @@ describe 'ironic::drivers::pxe' do
 
     it 'configures ironic.conf' do
       is_expected.to contain_ironic_config('pxe/pxe_append_params').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('pxe/pxe_bootfile_name').with_value(p[:pxe_bootfile_name])
-      is_expected.to contain_ironic_config('pxe/pxe_config_template').with_value(p[:pxe_config_template])
+      is_expected.to contain_ironic_config('pxe/pxe_bootfile_name').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('pxe/pxe_config_template').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('pxe/ipxe_bootfile_name').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('pxe/ipxe_config_template').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/tftp_server').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/tftp_root').with_value(p[:tftp_root])
       is_expected.to contain_ironic_config('pxe/images_path').with_value('<SERVICE DEFAULT>')
@@ -50,6 +51,7 @@ describe 'ironic::drivers::pxe' do
       is_expected.to contain_ironic_config('pxe/instance_master_path').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/uefi_pxe_bootfile_name').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/uefi_pxe_config_template').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('pxe/uefi_ipxe_bootfile_name').with_value('ipxe.efi')
       is_expected.to contain_ironic_config('pxe/ipxe_enabled').with_value(false)
     end
 
@@ -62,8 +64,10 @@ describe 'ironic::drivers::pxe' do
 
       it 'detects correct boot parameters' do
         is_expected.to contain_ironic_config('pxe/pxe_append_params').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_ironic_config('pxe/pxe_bootfile_name').with_value('undionly.kpxe')
-        is_expected.to contain_ironic_config('pxe/pxe_config_template').with_value('$pybasedir/drivers/modules/ipxe_config.template')
+        is_expected.to contain_ironic_config('pxe/pxe_bootfile_name').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('pxe/pxe_config_template').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('pxe/ipxe_bootfile_name').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('pxe/ipxe_config_template').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ironic_config('pxe/tftp_server').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ironic_config('pxe/tftp_root').with_value(p[:tftp_root])
         is_expected.to contain_ironic_config('pxe/images_path').with_value('<SERVICE DEFAULT>')
@@ -71,6 +75,7 @@ describe 'ironic::drivers::pxe' do
         is_expected.to contain_ironic_config('pxe/instance_master_path').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ironic_config('pxe/uefi_pxe_bootfile_name').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ironic_config('pxe/uefi_pxe_config_template').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('pxe/uefi_ipxe_bootfile_name').with_value('ipxe.efi')
         is_expected.to contain_ironic_config('pxe/ipxe_enabled').with_value(true)
       end
     end
@@ -99,6 +104,7 @@ describe 'ironic::drivers::pxe' do
           :tftp_master_path          => '/mnt/master_images',
           :instance_master_path      => '/mnt/ironic/master_images',
           :uefi_pxe_bootfile_name    => 'bootx64.efi',
+          :uefi_ipxe_bootfile_name   => 'snponly.efi',
           :uefi_pxe_config_template  => 'foo-uefi',
           :ipxe_timeout              => '60',
           :ipxe_enabled              => true,
@@ -119,6 +125,7 @@ describe 'ironic::drivers::pxe' do
         is_expected.to contain_ironic_config('pxe/instance_master_path').with_value(p[:instance_master_path])
         is_expected.to contain_ironic_config('pxe/uefi_pxe_bootfile_name').with_value(p[:uefi_pxe_bootfile_name])
         is_expected.to contain_ironic_config('pxe/uefi_pxe_config_template').with_value(p[:uefi_pxe_config_template])
+        is_expected.to contain_ironic_config('pxe/uefi_ipxe_bootfile_name').with_value(p[:uefi_ipxe_bootfile_name])
         is_expected.to contain_ironic_config('pxe/ipxe_timeout').with_value(p[:ipxe_timeout])
         is_expected.to contain_ironic_config('pxe/ipxe_enabled').with_value(p[:ipxe_enabled])
         is_expected.to contain_ironic_config('pxe/pxe_bootfile_name').with_value(p[:pxe_bootfile_name])
