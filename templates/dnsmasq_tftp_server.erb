@@ -1,0 +1,8 @@
+# Configuration for a dnsmasq based TFTP service
+port=0
+bind-interfaces
+enable-tftp
+tftp-root=<%= @tftp_root_real %>
+<% if @tftp_bind_host -%>
+listen-address=<%= @tftp_bind_host %>
+<% end -%>
