@@ -1,0 +1,8 @@
+---
+features:
+  - |
+    The new ``ironic::pxe::tftp_use_xinetd`` parameter has been added. When
+    this parameter is set to ``false``, the ironic-dnsmasq-tftp-server service,
+    which actually manages a dnsmasq process, is used instead of xinetd, to
+    implement TFTP server. Note that the dnsmasq service is currently available
+    only in RDO.

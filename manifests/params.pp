@@ -41,6 +41,8 @@ class ironic::params {
       $api_service               = 'openstack-ironic-api'
       $conductor_package         = 'openstack-ironic-conductor'
       $conductor_service         = 'openstack-ironic-conductor'
+      $dnsmasq_tftp_package      = 'openstack-ironic-dnsmasq-tftp-server'
+      $dnsmasq_tftp_service      = 'openstack-ironic-dnsmasq-tftp-server'
       $inspector_package         = 'openstack-ironic-inspector'
       $inspector_dnsmasq_package = 'openstack-ironic-inspector-dnsmasq'
       $inspector_service         = 'openstack-ironic-inspector'
@@ -50,7 +52,13 @@ class ironic::params {
       $ipxe_rom_dir              = '/usr/share/ipxe'
       $ironic_wsgi_script_path   = '/var/www/cgi-bin/ironic'
       $ironic_wsgi_script_source = '/usr/bin/ironic-api-wsgi'
-      $tftpd_package             = 'tftp-server'
+      if (Integer.new($::os['release']['major']) > 8) {
+        $xinetd_available        = false
+        $tftpd_package           = false
+      } else {
+        $xinetd_available        = true
+        $tftpd_package           = 'tftp-server'
+      }
       $ipxe_package              = 'ipxe-bootimgs'
       $syslinux_package          = 'syslinux-tftpboot'
       $syslinux_path             = '/tftpboot'
@@ -62,6 +70,8 @@ class ironic::params {
       $api_package               = 'ironic-api'
       $conductor_service         = 'ironic-conductor'
       $conductor_package         = 'ironic-conductor'
+      $dnsmasq_tftp_package      = false
+      $dnsmasq_tftp_service      = false
       $inspector_package         = 'ironic-inspector'
       $inspector_dnsmasq_package = false
       $inspector_service         = 'ironic-inspector'
@@ -75,6 +85,7 @@ class ironic::params {
       $ipxe_rom_dir              = '/usr/lib/ipxe'
       $ironic_wsgi_script_path   = '/usr/lib/cgi-bin/ironic'
       $ironic_wsgi_script_source = '/usr/bin/ironic-api-wsgi'
+      $xinetd_available          = true
       $tftpd_package             = 'tftpd'
       $ipxe_package              = 'ipxe'
       $syslinux_package          = 'syslinux-common'
