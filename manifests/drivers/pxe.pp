@@ -19,25 +19,31 @@
 #
 # === Parameters
 #
-# [*ipxe_enabled*]
-#   (optional) Enable ipxe support
-#   Defaults to false.
-#
 # [*pxe_append_params*]
 #   (optional) Additional append parameters for baremetal PXE boot.
 #   Should be valid pxe parameters
-#   Defaults to $::os_service_default
+#   Defaults to $::os_service_default.
 #
 # [*pxe_bootfile_name*]
 #   (optional) Bootfile DHCP parameter.
-#   If not set, its value is detected based on ipxe_enabled.
-#   Defaults to undef.
+#   If not set, its value is detected.
+#   Defaults to $::os_service_default.
 #
 # [*pxe_config_template*]
 #   (optional) Template file for PXE configuration.
-#   If set, should be an valid template file. Otherwise, its value is detected
-#   based on ipxe_enabled.
-#   Defaults to undef.
+#   If set, should be an valid template file. Otherwise, its value is detected.
+#   Defaults to $::os_service_default.
+#
+# [*ipxe_bootfile_name*]
+#   (optional) Bootfile DHCP parameter when the ipxe boot interface is set
+#   for a baremetal node. If not set, its value is detected.
+#   Defaults to $::os_service_default.
+#
+# [*ipxe_config_template*]
+#   (optional) Template file for PXE configuration with the iPXE boot
+#   interface. If set, should be an valid template file. Otherwise,
+#   its value is detected.
+#   Defaults to $::os_service_default.
 #
 # [*tftp_server*]
 #   (optional) IP address of Ironic compute node's tftp server.
@@ -72,6 +78,12 @@
 #   (optional) Template file for PXE configuration for UEFI boot loader.
 #   Defaults to $::os_service_default.
 #
+# [*uefi_ipxe_bootfile_name*]
+#   (optional) Bootfile DHCP parameter for UEFI boot mode for the
+#   ipxe boot interface. No separate configuration template is required
+#   when using ipxe.
+#   Defaults to ipxe.efi
+#
 # [*ipxe_timeout*]
 #   (optional) ipxe timeout in second.
 #   Should be an valid integer
@@ -93,11 +105,20 @@
 #   (optional) The IP version that will be used for PXE booting.
 #   Defaults to $::os_service_default.
 #
+# DEPRECATED PARAMETERS
+#
+# [*ipxe_enabled*]
+#   DEPRECATED: This option is no longer used as support for the option was
+#   deprecated during Ironic's Stein development cycle and removed during
+#   Ironic's Train development cycle.
+#   If this setting is populated, a warning will be indicated.
+#
 class ironic::drivers::pxe (
-  $ipxe_enabled              = false,
   $pxe_append_params         = $::os_service_default,
-  $pxe_bootfile_name         = undef,
-  $pxe_config_template       = undef,
+  $pxe_bootfile_name         = $::os_service_default,
+  $pxe_config_template       = $::os_service_default,
+  $ipxe_bootfile_name        = $::os_service_default,
+  $ipxe_config_template      = $::os_service_default,
   $tftp_server               = $::os_service_default,
   $tftp_root                 = '/tftpboot',
   $images_path               = $::os_service_default,
@@ -105,11 +126,14 @@ class ironic::drivers::pxe (
   $instance_master_path      = $::os_service_default,
   $uefi_pxe_bootfile_name    = $::os_service_default,
   $uefi_pxe_config_template  = $::os_service_default,
+  $uefi_ipxe_bootfile_name   = 'ipxe.efi',
   $ipxe_timeout              = $::os_service_default,
   $enable_ppc64le            = false,
   $boot_retry_timeout        = $::os_service_default,
   $boot_retry_check_interval = $::os_service_default,
   $ip_version                = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $ipxe_enabled              = undef,
 ) {
 
   include ironic::deps
@@ -117,19 +141,17 @@ class ironic::drivers::pxe (
   $tftp_root_real    = pick($::ironic::pxe::common::tftp_root, $tftp_root)
   $ipxe_timeout_real = pick($::ironic::pxe::common::ipxe_timeout, $ipxe_timeout)
 
-  if $ipxe_enabled {
-    $pxe_bootfile_name_real = pick($pxe_bootfile_name, 'undionly.kpxe')
-    $pxe_config_template_real = pick($pxe_config_template, '$pybasedir/drivers/modules/ipxe_config.template')
-  } else {
-    $pxe_bootfile_name_real = pick($pxe_bootfile_name, 'pxelinux.0')
-    $pxe_config_template_real = pick($pxe_config_template, '$pybasedir/drivers/modules/pxe_config.template')
+  if $ipxe_enabled != undef {
+    warning('The ironic::drivers::pxe::ipxe_enabled parameter is deprecated and has no effect.')
   }
 
   # Configure ironic.conf
   ironic_config {
     'pxe/pxe_append_params': value         => $pxe_append_params;
-    'pxe/pxe_bootfile_name': value         => $pxe_bootfile_name_real;
-    'pxe/pxe_config_template': value       => $pxe_config_template_real;
+    'pxe/pxe_bootfile_name': value         => $pxe_bootfile_name;
+    'pxe/pxe_config_template': value       => $pxe_config_template;
+    'pxe/ipxe_bootfile_name': value        => $ipxe_bootfile_name;
+    'pxe/ipxe_config_template': value      => $ipxe_config_template;
     'pxe/tftp_server': value               => $tftp_server;
     'pxe/tftp_root': value                 => $tftp_root_real;
     'pxe/images_path': value               => $images_path;
@@ -137,6 +159,7 @@ class ironic::drivers::pxe (
     'pxe/instance_master_path': value      => $instance_master_path;
     'pxe/uefi_pxe_bootfile_name': value    => $uefi_pxe_bootfile_name;
     'pxe/uefi_pxe_config_template': value  => $uefi_pxe_config_template;
+    'pxe/uefi_ipxe_bootfile_name': value   => $uefi_ipxe_bootfile_name;
     'pxe/ipxe_timeout': value              => $ipxe_timeout_real;
     'pxe/boot_retry_timeout': value        => $boot_retry_timeout;
     'pxe/boot_retry_check_interval': value => $boot_retry_check_interval;
@@ -150,7 +173,12 @@ class ironic::drivers::pxe (
     # architecture
     ironic_config {
       # NOTE(tonyb): This first value shouldn't be needed but seems to be?
-      'pxe/pxe_config_template_by_arch': value => "ppc64le:${pxe_config_template_real}";
+      # NOTE(TheJulia): Likely not needed as this just points to the default,
+      # and when the explicit pxe driver is used everything should fall to
+      # it but in the interest of minimizing impact, the output result
+      # is preserved as we now just allow the default for normal template
+      # operation to be used.
+      'pxe/pxe_config_template_by_arch': value => 'ppc64le:$pybasedir/drivers/modules/pxe_config.template';
       'pxe/pxe_bootfile_name_by_arch': value   => 'ppc64le:config';
     }
   }
