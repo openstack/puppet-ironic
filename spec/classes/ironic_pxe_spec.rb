@@ -120,12 +120,28 @@ describe 'ironic::pxe' do
           'backup'  => false,
         )
       end
+
+      it 'should setup tftp xinetd service' do
+        is_expected.to contain_class('xinetd')
+        is_expected.to contain_xinetd__service('tftp').with(
+         'port'        => '69',
+         'protocol'    => 'udp',
+         'server_args' => '--map-file /var/lib/tftpboot/map-file /var/lib/tftpboot',
+         'server'      => '/usr/sbin/in.tftpd',
+         'socket_type' => 'dgram',
+         'cps'         => '100 2',
+         'per_source'  => '11',
+         'wait'        => 'yes',
+         'subscribe'   => 'Anchor[ironic::install::end]',
+        )
+      end
       it 'should setup tftp xinetd service' do
         is_expected.to contain_xinetd__service('tftp').with(
          'bind' => '1.2.3.4',
         )
       end
     end
+
     context 'when excluding syslinux' do
       before :each do
         params.merge!(
@@ -158,6 +174,47 @@ describe 'ironic::pxe' do
     end
   end
 
+  shared_examples_for 'ironic pxe in RedHat' do
+    let :p do
+      default_params.merge(params)
+    end
+
+    context 'when xinetd is disabled' do
+      before :each do
+        params.merge!(
+          :tftp_use_xinetd => false,
+        )
+      end
+
+      it 'should configure dnsmasq-tftp-server' do
+        is_expected.to contain_file('/etc/ironic/dnsmasq-tftp-server.conf').with(
+          'ensure' => 'present',
+          'mode'   => '0644',
+          'owner'  => 'root',
+          'group'  => 'root',
+        )
+        is_expected.to contain_package('dnsmasq-tftp-server').with(
+          'ensure' => 'present',
+          'name'   => platform_params[:dnsmasq_tftp_package],
+          'tag'    => ['openstack', 'ironic-ipxe', 'ironic-support-package'],
+        )
+        is_expected.to contain_service('dnsmasq-tftp-server').with(
+          'ensure'    => 'running',
+          'name'      => platform_params[:dnsmasq_tftp_service],
+          'enable'    => true,
+          'hasstatus' => true,
+        )
+      end
+
+      it 'should not enable xinetd' do
+        is_expected.to_not contain_package('tftp-server')
+        is_expected.to_not contain_class('xinetd')
+        is_expected.to_not contain_xinetd__service('tftp')
+        is_expected.to contain_file('/tftpboot/map-file').with_ensure('absent')
+      end
+    end
+  end
+
   on_supported_os({
     :supported_os => OSDefaults.get_supported_os
   }).each do |os,facts|
@@ -166,8 +223,23 @@ describe 'ironic::pxe' do
         facts.merge!(OSDefaults.get_facts())
       end
 
+      let(:platform_params) do
+        case facts[:osfamily]
+        when 'Debian'
+          {}
+        when 'RedHat'
+          { :dnsmasq_tftp_package => 'openstack-ironic-dnsmasq-tftp-server',
+            :dnsmasq_tftp_service => 'openstack-ironic-dnsmasq-tftp-server' }
+        end
+      end
+
+      # TODO(tkajinam): This should be refactored before we add support for
+      #                 CentOS9, because xinetd is not available in CentOS9
       it_behaves_like 'ironic pxe'
 
+      if facts[:osfamily] == 'RedHat'
+        it_behaves_like 'ironic pxe in RedHat'
+      end
     end
   end
 

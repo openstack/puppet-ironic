@@ -44,7 +44,7 @@
 #   Defaults to '$::ironic::params::syslinux_files'
 #
 # [*tftp_bind_host*]
-#   (optional) The IP address xinetd will listen on for TFTP.
+#   (optional) The IP address TFTP server will listen on for TFTP.
 #   Defaults to undef (listen on all ip addresses).
 #
 # [*enable_ppc64le*]
@@ -63,6 +63,11 @@
 #   driver.
 #   Defaults to 'snponly.efi'
 #
+# [*tftp_use_xinetd*]
+#   (optional) Override wheter to use xinetd instead of dnsmasq as the tftp
+#   service facilitator.
+#   Defaults to ironic::params::xinetd_available
+#
 class ironic::pxe (
   $package_ensure          = 'present',
   $tftp_root               = '/tftpboot',
@@ -73,7 +78,8 @@ class ironic::pxe (
   $tftp_bind_host          = undef,
   $enable_ppc64le          = false,
   $ipxe_name_base          = 'ipxe-snponly',
-  $uefi_ipxe_bootfile_name = 'snponly.efi'
+  $uefi_ipxe_bootfile_name = 'snponly.efi',
+  $tftp_use_xinetd         = $::ironic::params::xinetd_available
 ) inherits ironic::params {
 
   include ironic::deps
@@ -99,9 +105,10 @@ class ironic::pxe (
   }
 
   ensure_resource( 'package', 'ironic-common', {
-      ensure => $package_ensure,
-      name   => $::ironic::params::common_package_name,
-      tag    => ['openstack', 'ironic-package'],})
+    ensure => $package_ensure,
+    name   => $::ironic::params::common_package_name,
+    tag    => ['openstack', 'ironic-package'],
+  })
 
   file { "${tftp_root_real}/pxelinux.cfg":
     ensure  => 'directory',
@@ -132,32 +139,74 @@ class ironic::pxe (
     before  => Anchor['ironic::config::end'],
   }
 
-  ensure_resource( 'package', 'tftp-server', {
-    'ensure' => $package_ensure,
-    'name'   => $::ironic::params::tftpd_package,
-    'tag'    => ['openstack', 'ironic-ipxe', 'ironic-support-package'],
-  })
+  if $tftp_use_xinetd {
+    if ! $::ironic::params::xinetd_available {
+      fail('xinetd is not available in this distro. Please use tftp_use_xinetd=false')
+    }
 
-  $options = "--map-file ${tftp_root_real}/map-file"
-  include xinetd
+    ensure_resource( 'package', 'tftp-server', {
+      'ensure' => $package_ensure,
+      'name'   => $::ironic::params::tftpd_package,
+      'tag'    => ['openstack', 'ironic-ipxe', 'ironic-support-package'],
+    })
 
-  xinetd::service { 'tftp':
-    port        => '69',
-    bind        => $tftp_bind_host,
-    protocol    => 'udp',
-    server_args => "${options} ${tftp_root_real}",
-    server      => '/usr/sbin/in.tftpd',
-    socket_type => 'dgram',
-    cps         => '100 2',
-    per_source  => '11',
-    wait        => 'yes',
-    subscribe   => Anchor['ironic::install::end'],
-  }
+    $options = "--map-file ${tftp_root_real}/map-file"
 
-  file { "${tftp_root_real}/map-file":
-    ensure  => 'present',
-    content => "r ^([^/]) ${tftp_root_real}/\\1",
-    tag     => 'ironic-tftp-file',
+    include xinetd
+
+    xinetd::service { 'tftp':
+      port        => '69',
+      bind        => $tftp_bind_host,
+      protocol    => 'udp',
+      server_args => "${options} ${tftp_root_real}",
+      server      => '/usr/sbin/in.tftpd',
+      socket_type => 'dgram',
+      cps         => '100 2',
+      per_source  => '11',
+      wait        => 'yes',
+      subscribe   => Anchor['ironic::install::end'],
+    }
+
+    file { "${tftp_root_real}/map-file":
+      ensure  => 'present',
+      content => "r ^([^/]) ${tftp_root_real}/\\1",
+    }
+  } else {
+    if ! $::ironic::params::dnsmasq_tftp_package {
+      fail('ironic-dnsmasq-tftp-server is not available in this distro. Please use tftp_use_xnetd=true')
+    }
+
+    # NOTE(tkajinam): We can't use puppet-xinetd for cleanup because the xinetd
+    #                 class forcefully installs the xinetd package.
+    warning('Any prior xinetd based tftp server should be disabled and removed from the system.')
+
+    file { "${tftp_root_real}/map-file":
+      ensure  => 'absent',
+    }
+
+    package { 'dnsmasq-tftp-server':
+      ensure => $package_ensure,
+      name   => $::ironic::params::dnsmasq_tftp_package,
+      tag    => ['openstack', 'ironic-ipxe', 'ironic-support-package'],
+    }
+
+    file { '/etc/ironic/dnsmasq-tftp-server.conf':
+      ensure  => 'present',
+      mode    => '0644',
+      owner   => 'root',
+      group   => 'root',
+      content => template('ironic/dnsmasq_tftp_server.erb'),
+    }
+
+    service { 'dnsmasq-tftp-server':
+      ensure    => 'running',
+      name      => $::ironic::params::dnsmasq_tftp_service,
+      enable    => true,
+      hasstatus => true,
+      subscribe => File['/etc/ironic/dnsmasq-tftp-server.conf'],
+    }
+
+    Package['dnsmasq-tftp-server'] ~> Service['dnsmasq-tftp-server']
   }
 
   if $syslinux_path {
