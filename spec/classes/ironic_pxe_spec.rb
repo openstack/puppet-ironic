@@ -111,7 +111,7 @@ describe 'ironic::pxe' do
         )
       end
       it 'should contain iPXE UEFI chainload image' do
-        is_expected.to contain_file('/var/lib/tftpboot/ipxe.efi').with(
+        is_expected.to contain_file('/var/lib/tftpboot/snponly.efi').with(
           'owner'   => 'ironic',
           'group'   => 'ironic',
           'require' => 'Anchor[ironic-inspector::install::end]',

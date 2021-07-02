@@ -66,7 +66,7 @@ class ironic::pxe (
   $syslinux_files = $::ironic::params::syslinux_files,
   $tftp_bind_host = undef,
   $enable_ppc64le = false,
-  $ipxe_name_base = 'ipxe',
+  $ipxe_name_base = 'ipxe-snponly',
 ) inherits ironic::params {
 
   include ironic::deps
@@ -181,7 +181,7 @@ class ironic::pxe (
     require => Anchor['ironic-inspector::install::end'],
   }
 
-  file { "${tftp_root_real}/ipxe.efi":
+  file { "${tftp_root_real}/snponly.efi":
     ensure  => 'file',
     seltype => 'tftpdir_t',
     owner   => 'ironic',
