@@ -6,7 +6,7 @@ describe 'Puppet::Type.type(:ironic_config)' do
     @ironic_config = Puppet::Type.type(:ironic_config).new(:name => 'DEFAULT/foo', :value => 'bar')
   end
 
- it 'should require a name' do
+  it 'should require a name' do
     expect {
       Puppet::Type.type(:ironic_config).new({})
     }.to raise_error(Puppet::Error, 'Title or name must be provided')
@@ -30,12 +30,12 @@ describe 'Puppet::Type.type(:ironic_config)' do
 
   it 'should accept a valid value' do
     @ironic_config[:value] = 'bar'
-    expect(@ironic_config[:value]).to eq('bar')
+    expect(@ironic_config[:value]).to eq(['bar'])
   end
 
   it 'should not accept a value with whitespace' do
     @ironic_config[:value] = 'b ar'
-    expect(@ironic_config[:value]).to eq('b ar')
+    expect(@ironic_config[:value]).to eq(['b ar'])
   end
 
   it 'should accept valid ensure values' do
