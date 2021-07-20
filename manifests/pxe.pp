@@ -55,18 +55,25 @@
 #   (optional) Beginning of the source file name which is copied to
 #   $tftproot/ipxe.efi. Setting this to 'ipxe-snponly' on CentOS8 would result
 #   in the source file being /usr/share/ipxe/ipxe-snponly-x86_64.efi
-#   Defaults to 'ipxe'
+#   Defaults to 'ipxe-snponly'
+#
+# [*uefi_ipxe_bootfile_name*]
+#   (optional) Name of efi file used to boot servers with iPXE + UEFI. This
+#   should be consistent with the uefi_ipxe_bootfile_name parameter in pxe
+#   driver.
+#   Defaults to 'snponly.efi'
 #
 class ironic::pxe (
-  $package_ensure = 'present',
-  $tftp_root      = '/tftpboot',
-  $http_root      = '/httpboot',
-  $http_port      = '8088',
-  $syslinux_path  = $::ironic::params::syslinux_path,
-  $syslinux_files = $::ironic::params::syslinux_files,
-  $tftp_bind_host = undef,
-  $enable_ppc64le = false,
-  $ipxe_name_base = 'ipxe-snponly',
+  $package_ensure          = 'present',
+  $tftp_root               = '/tftpboot',
+  $http_root               = '/httpboot',
+  $http_port               = '8088',
+  $syslinux_path           = $::ironic::params::syslinux_path,
+  $syslinux_files          = $::ironic::params::syslinux_files,
+  $tftp_bind_host          = undef,
+  $enable_ppc64le          = false,
+  $ipxe_name_base          = 'ipxe-snponly',
+  $uefi_ipxe_bootfile_name = 'snponly.efi'
 ) inherits ironic::params {
 
   include ironic::deps
@@ -181,7 +188,7 @@ class ironic::pxe (
     require => Anchor['ironic-inspector::install::end'],
   }
 
-  file { "${tftp_root_real}/snponly.efi":
+  file { "${tftp_root_real}/${uefi_ipxe_bootfile_name}":
     ensure  => 'file',
     seltype => 'tftpdir_t',
     owner   => 'ironic',
