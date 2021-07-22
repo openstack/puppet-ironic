@@ -118,7 +118,6 @@
 #   Defaults to $::os_service_default.
 #
 class ironic::drivers::pxe (
-  $ipxe_enabled              = undef,
   $pxe_append_params         = $::os_service_default,
   $pxe_bootfile_name         = $::os_service_default,
   $pxe_config_template       = $::os_service_default,
@@ -136,6 +135,8 @@ class ironic::drivers::pxe (
   $enable_ppc64le            = false,
   $boot_retry_timeout        = $::os_service_default,
   $boot_retry_check_interval = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $ipxe_enabled              = undef,
   $ip_version                = undef,
 ) {
 
@@ -149,6 +150,7 @@ class ironic::drivers::pxe (
   if $ip_version != undef {
     warning('The ironic::drivers::pxe:ip_version parameter is deprecated and will be removed in the future.')
   }
+  $ip_version_real = pick($ip_version, $::os_service_default)
 
   # Configure ironic.conf
   ironic_config {
@@ -168,7 +170,8 @@ class ironic::drivers::pxe (
     'pxe/ipxe_timeout': value              => $ipxe_timeout;
     'pxe/boot_retry_timeout': value        => $boot_retry_timeout;
     'pxe/boot_retry_check_interval': value => $boot_retry_check_interval;
-    'pxe/ip_version': value                => $ip_version;
+    'pxe/ipxe_enabled': ensure             => absent;
+    'pxe/ip_version': value                => $ip_version_real;
   }
 
   if $enable_ppc64le {

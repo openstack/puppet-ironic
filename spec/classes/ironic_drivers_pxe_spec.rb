@@ -50,6 +50,7 @@ describe 'ironic::drivers::pxe' do
       is_expected.to contain_ironic_config('pxe/uefi_pxe_bootfile_name').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/uefi_pxe_config_template').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/uefi_ipxe_bootfile_name').with_value('snponly.efi')
+      is_expected.to contain_ironic_config('pxe/ipxe_enabled').with_ensure('absent')
     end
 
     context 'when overriding only enable_ppc64le' do
