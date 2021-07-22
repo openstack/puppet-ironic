@@ -142,6 +142,8 @@ class ironic::drivers::pxe (
 
   include ironic::deps
   include ironic::pxe::common
+  $tftp_root_real    = pick($::ironic::pxe::common::tftp_root, $tftp_root)
+  $ipxe_timeout_real = pick($::ironic::pxe::common::ipxe_timeout, $ipxe_timeout)
 
   if $ipxe_enabled != undef {
     warning('The ironic::drivers::pxe::ipxe_enabled parameter is deprecated and has no effect.')
@@ -160,14 +162,14 @@ class ironic::drivers::pxe (
     'pxe/ipxe_bootfile_name': value        => $ipxe_bootfile_name;
     'pxe/ipxe_config_template': value      => $ipxe_config_template;
     'pxe/tftp_server': value               => $tftp_server;
-    'pxe/tftp_root': value                 => $tftp_root;
+    'pxe/tftp_root': value                 => $tftp_root_real;
     'pxe/images_path': value               => $images_path;
     'pxe/tftp_master_path': value          => $tftp_master_path;
     'pxe/instance_master_path': value      => $instance_master_path;
     'pxe/uefi_pxe_bootfile_name': value    => $uefi_pxe_bootfile_name;
     'pxe/uefi_pxe_config_template': value  => $uefi_pxe_config_template;
     'pxe/uefi_ipxe_bootfile_name': value   => $uefi_ipxe_bootfile_name;
-    'pxe/ipxe_timeout': value              => $ipxe_timeout;
+    'pxe/ipxe_timeout': value              => $ipxe_timeout_real;
     'pxe/boot_retry_timeout': value        => $boot_retry_timeout;
     'pxe/boot_retry_check_interval': value => $boot_retry_check_interval;
     'pxe/ipxe_enabled': ensure             => absent;
