@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    The new ``ironic::pxe::uefi_ipxe_bootfile_name`` parameter has been added.
+    This parameter is used to determine name of the efi file used to boot nodes
+    with UEFI + iPXE.
