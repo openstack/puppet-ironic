@@ -339,6 +339,38 @@ describe 'ironic::inspector' do
         )
       end
     end
+
+    context 'when enabling ppc64le support with http default transport' do
+      let :pre_condition do
+         "class { 'ironic::inspector::authtoken': password       => 'password', }
+          class { 'ironic::pxe':                  enable_ppc64le => true, }"
+      end
+
+      before do
+        params.merge!(
+          :enable_ppc64le        => true,
+          :pxe_transfer_protocol => 'http',
+        )
+      end
+
+      it 'should contain file /etc/ironic-inspector/dnsmasq.conf' do
+          is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
+            /dhcp-match=set:ppc64le,option:client-arch,14/)
+      end
+      it 'should contain file /tftpboot/ppc64le/default' do
+        is_expected.to contain_file('/tftpboot/ppc64le/default').with(
+          'owner'   => 'ironic-inspector',
+          'group'   => 'ironic-inspector',
+          'seltype' => 'tftpdir_t',
+          'ensure'  => 'present',
+          'require' => 'Anchor[ironic-inspector::config::begin]',
+          'content' => /default/,
+        )
+        is_expected.to contain_file('/tftpboot/ppc64le/default').with_content(
+            /initrd=agent.ramdisk ipa-inspection-callback-url=http:\/\/192.168.0.1:5050\/v1\/continue ipa-inspection-collectors=default/
+        )
+      end
+    end
   end
 
   on_supported_os({
