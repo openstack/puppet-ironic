@@ -31,7 +31,8 @@
 #   Defaults to $::os_service_default.
 #
 # [*pxe_transfer_protocol*]
-#  (optional) Protocol to be used for transferring the ramdisk
+#  (optional) Protocol preferred for transferring the ramdisk.
+#  Some archtecture require tftp is used exclusively.
 #  Defaults to 'tftp'. Valid values are 'tftp' or 'http'.
 #
 # [*dhcp_debug*]
@@ -369,16 +370,6 @@ Use ironic::inspector::ironic::endpoint_override instead.')
       content => template('ironic/inspector_pxelinux_cfg.erb'),
       require => Anchor['ironic-inspector::config::begin'],
     }
-    if $enable_ppc64le {
-      file { "${tftp_root_real}/ppc64le/default":
-        ensure  => 'present',
-        seltype => 'tftpdir_t',
-        owner   => 'ironic-inspector',
-        group   => 'ironic-inspector',
-        content => template('ironic/inspector_pxelinux_cfg.erb'),
-        require => Anchor['ironic-inspector::config::begin'],
-      }
-    }
   }
 
   if $pxe_transfer_protocol == 'http' {
@@ -393,6 +384,18 @@ Use ironic::inspector::ironic::endpoint_override instead.')
       owner   => 'ironic-inspector',
       group   => 'ironic-inspector',
       content => template('ironic/inspector_ipxe.erb'),
+      require => Anchor['ironic-inspector::config::begin'],
+    }
+  }
+
+  # NOTE: ppc64le hardware supports only tftp
+  if $enable_ppc64le {
+    file { "${tftp_root_real}/ppc64le/default":
+      ensure  => 'present',
+      seltype => 'tftpdir_t',
+      owner   => 'ironic-inspector',
+      group   => 'ironic-inspector',
+      content => template('ironic/inspector_pxelinux_cfg.erb'),
       require => Anchor['ironic-inspector::config::begin'],
     }
   }
