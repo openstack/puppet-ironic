@@ -315,6 +315,7 @@ class ironic::inspector (
   include ironic::params
   include ironic::pxe::common
   include ironic::inspector::db
+  include ironic::inspector::policy
   include ironic::inspector::swift
   include ironic::inspector::ironic
 

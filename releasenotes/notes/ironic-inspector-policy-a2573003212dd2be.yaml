@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``ironic::inspector::policy`` class has been added to support
+    policy settings for ironic-inspector.
