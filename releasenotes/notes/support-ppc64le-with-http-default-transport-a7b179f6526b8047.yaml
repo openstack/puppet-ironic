@@ -1,0 +1,7 @@
+---
+fixes:
+  - |
+    Fixes support for ppc64le to allow its operation to co-exist with
+    ``pxe_transfer_protocol`` being set to ``http``. This is because the
+    ppc64le archtecture does not use an intermediate boot loader to perform
+    PXE operations, and only supports use of TFTP based transfers.
