@@ -1,0 +1,9 @@
+---
+deprecations:
+  - |
+    The ``ironic_api_paste_ini`` resource type has been deprecated and will be
+    removed in a future release.
+
+  - |
+    The ``ironic::config::ironic_api_paste_ini`` parameter has been deprecated
+    and has no effect now. This parameter will be removed in a future release.

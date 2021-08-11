@@ -7,11 +7,6 @@ describe 'ironic::config' do
         'DEFAULT/foo' => { 'value'  => 'fooValue' },
         'DEFAULT/bar' => { 'value'  => 'barValue' },
         'DEFAULT/baz' => { 'ensure' => 'absent' }
-      },
-      :ironic_api_paste_ini => {
-        'DEFAULT/foo2' => { 'value'  => 'fooValue' },
-        'DEFAULT/bar2' => { 'value'  => 'barValue' },
-        'DEFAULT/baz2' => { 'ensure' => 'absent' }
       }
     }
   end
@@ -23,12 +18,6 @@ describe 'ironic::config' do
       should contain_ironic_config('DEFAULT/foo').with_value('fooValue')
       should contain_ironic_config('DEFAULT/bar').with_value('barValue')
       should contain_ironic_config('DEFAULT/baz').with_ensure('absent')
-    }
-
-    it {
-      should contain_ironic_api_paste_ini('DEFAULT/foo2').with_value('fooValue')
-      should contain_ironic_api_paste_ini('DEFAULT/bar2').with_value('barValue')
-      should contain_ironic_api_paste_ini('DEFAULT/baz2').with_ensure('absent')
     }
   end
 

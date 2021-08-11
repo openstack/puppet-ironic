@@ -17,6 +17,8 @@
 #     DEFAULT/bar:
 #       value: barValue
 #
+# DEPRECATED PARAMETERS
+#
 # [*ironic_api_paste_ini*]
 #   (optional) Allow configuration of /etc/ironic/api-paste.ini options.
 #
@@ -25,14 +27,17 @@
 #
 class ironic::config (
   $ironic_config        = {},
-  $ironic_api_paste_ini = {},
+  # DEPRECATED PARAMETERS
+  $ironic_api_paste_ini = undef,
 ) {
 
   include ironic::deps
 
+  if $ironic_api_paste_ini != undef {
+    warning('The ironic_api_paste_ini parameter is deprecated and has no effect')
+  }
+
   validate_legacy(Hash, 'validate_hash', $ironic_config)
-  validate_legacy(Hash, 'validate_hash', $ironic_api_paste_ini)
 
   create_resources('ironic_config', $ironic_config)
-  create_resources('ironic_api_paste_ini', $ironic_api_paste_ini)
 }

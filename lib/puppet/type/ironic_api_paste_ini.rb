@@ -3,7 +3,7 @@ Puppet::Type.newtype(:ironic_api_paste_ini) do
   ensurable
 
   newparam(:name, :namevar => true) do
-    desc 'Section/setting name to manage from /etc/ironic/api-paste.ini'
+    desc 'Section/setting name to manage from /etc/ironic/api-paste.ini (DEPRECATED!)'
     newvalues(/\S+\/\S+/)
   end
 
