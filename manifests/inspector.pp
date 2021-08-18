@@ -329,7 +329,7 @@ in a future realse. Use ironic::inspector::db::database_connection instead')
   }
 
   if $ironic_url != undef {
-    warn('ironic::inspector::ironic_url is now deprecated and has no effect. \
+    warning('ironic::inspector::ironic_url is now deprecated and has no effect. \
 Use ironic::inspector::ironic::endpoint_override instead.')
   }
 
