@@ -80,6 +80,7 @@ describe 'ironic::conductor' do
       is_expected.to contain_ironic_config('neutron/port_setup_delay').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/power_state_change_timeout').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/sync_power_state_interval').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('conductor/sync_power_state_workers').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/power_state_sync_max_retries').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/power_failure_recovery_interval').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/conductor_group').with(:value => '<SERVICE DEFAULT>')
@@ -108,6 +109,7 @@ describe 'ironic::conductor' do
           :port_setup_delay                  => '15',
           :power_state_change_timeout        => '300',
           :sync_power_state_interval         => 120,
+          :sync_power_state_workers          => 2,
           :power_state_sync_max_retries      => 5,
           :power_failure_recovery_interval   => 120,
           :conductor_group                   => 'in-the-closet-to-the-left',
@@ -140,6 +142,7 @@ describe 'ironic::conductor' do
         is_expected.to contain_ironic_config('neutron/port_setup_delay').with_value(p[:port_setup_delay])
         is_expected.to contain_ironic_config('conductor/power_state_change_timeout').with_value(p[:power_state_change_timeout])
         is_expected.to contain_ironic_config('conductor/sync_power_state_interval').with_value(p[:sync_power_state_interval])
+        is_expected.to contain_ironic_config('conductor/sync_power_state_workers').with_value(p[:sync_power_state_workers])
         is_expected.to contain_ironic_config('conductor/power_state_sync_max_retries').with_value(p[:power_state_sync_max_retries])
         is_expected.to contain_ironic_config('conductor/power_failure_recovery_interval').with_value(p[:power_failure_recovery_interval])
         is_expected.to contain_ironic_config('conductor/conductor_group').with_value(p[:conductor_group])

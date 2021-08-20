@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    Expose the ``sync_power_state_workers`` in ``ironic::conductor``.

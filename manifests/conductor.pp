@@ -154,6 +154,11 @@
 #   in seconds.
 #   Defaults to $::os_service_default
 #
+# [*sync_power_state_workers*]
+#   (optional) Number of worker threads syncing the node power state to the
+#   database.
+#   Defaults to $::os_service_default
+#
 # [*power_state_sync_max_retries*]
 #   (optional) The number of times Ironic should try syncing the hardware node
 #   power state with the node power state in the database.
@@ -236,6 +241,7 @@ class ironic::conductor (
   $inspection_network_name             = undef,
   $power_state_change_timeout          = $::os_service_default,
   $sync_power_state_interval           = $::os_service_default,
+  $sync_power_state_workers            = $::os_service_default,
   $power_state_sync_max_retries        = $::os_service_default,
   $power_failure_recovery_interval     = $::os_service_default,
   $conductor_group                     = $::os_service_default,
@@ -356,6 +362,7 @@ Use inspect_wait_timeout instead')
     'neutron/port_setup_delay':                    value => $port_setup_delay;
     'conductor/power_state_change_timeout':        value => $power_state_change_timeout;
     'conductor/sync_power_state_interval':         value => $sync_power_state_interval;
+    'conductor/sync_power_state_workers':          value => $sync_power_state_workers;
     'conductor/power_state_sync_max_retries':      value => $power_state_sync_max_retries;
     'conductor/power_failure_recovery_interval':   value => $power_failure_recovery_interval;
     'conductor/conductor_group':                   value => $conductor_group;
