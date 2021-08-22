@@ -109,15 +109,17 @@ class ironic::pxe (
     owner   => 'ironic',
     group   => 'ironic',
     require => Anchor['ironic::install::end'],
+    tag     => 'ironic-tftp-file',
   }
 
   if $enable_ppc64le {
     file { "${tftp_root_real}/ppc64le":
-        ensure  => 'directory',
-        seltype => 'tftpdir_t',
-        owner   => 'ironic',
-        group   => 'ironic',
-        require => Anchor['ironic::install::end'],
+      ensure  => 'directory',
+      seltype => 'tftpdir_t',
+      owner   => 'ironic',
+      group   => 'ironic',
+      require => Anchor['ironic::install::end'],
+      tag     => 'ironic-tftp-file',
     }
   }
 
@@ -155,6 +157,7 @@ class ironic::pxe (
   file { "${tftp_root_real}/map-file":
     ensure  => 'present',
     content => "r ^([^/]) ${tftp_root_real}/\\1",
+    tag     => 'ironic-tftp-file',
   }
 
   if $syslinux_path {
@@ -186,6 +189,7 @@ class ironic::pxe (
     source  => "${::ironic::params::ipxe_rom_dir}/undionly.kpxe",
     backup  => false,
     require => Anchor['ironic-inspector::install::end'],
+    tag     => 'ironic-tftp-file',
   }
 
   file { "${tftp_root_real}/${uefi_ipxe_bootfile_name}":
@@ -197,7 +201,10 @@ class ironic::pxe (
     source  => "${::ironic::params::ipxe_rom_dir}/${ipxe_name_base}${arch}.efi",
     backup  => false,
     require => Anchor['ironic-inspector::install::end'],
+    tag     => 'ironic-tftp-file',
   }
+
+  File["${tftp_root_real}"] -> File<| tag == 'ironic-tftp-file' |>
 
   include apache
 
