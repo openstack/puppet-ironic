@@ -1,0 +1,10 @@
+---
+deprecations:
+  - |
+    Deprecates integration for Ironic's Bifrost sub-project.
+    
+    Bifrost serves a similar purpose as puppet-ironic, in so much as the
+    embedded configuration lags behind and ultimately is no longer appropriate
+    for a bifrost deployment. If you wish to deploy bifrost, please make use of
+    the bifrost-cli tool or Ansible playbooks noted in
+    `Bifrost's documentation <https://docs.openstack.org/bifrost/latest/>`_.

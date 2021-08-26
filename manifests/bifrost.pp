@@ -14,13 +14,15 @@
 
 # == Class: ironic::bifrost
 #
-# Installs and configures Bifrost
+# DEPRECATED - Installs and configures Bifrost
 # Bifrost is a set of Ansible playbooks that automates the task of deploying a
 # base image onto a set of known hardware using Ironic. It provides modular
 # utility for one-off operating system deployment with as few operational requirements
 # as reasonably possible.
 # Bifrost also allows to install Ironic in a stand-alone fashion. In this kind of setup,
 # neither Keystone nor Neutron is installed, and dnsmasq is used to provide PXE booting.
+#
+# DEPRECATED PARAMETERS
 #
 # [*ironic_db_password*]
 #   (required) The Ironic DB password
@@ -187,6 +189,8 @@ class ironic::bifrost (
 ) {
 
   include ironic::deps
+
+  warning('ironic::bifrost is deprecated and will be removed during the OpenStack Yoga development cycle.')
 
   git { $git_dest_repo_folder:
     ensure => $ensure,
