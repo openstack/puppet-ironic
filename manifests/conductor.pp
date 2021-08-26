@@ -29,7 +29,7 @@
 #
 # [*enabled_hardware_types*]
 #  (optional) Array of hardware types to load during service initialization.
-#  Defaults to ['ipmi'].
+#  Defaults to $::os_service_default
 #
 # [*force_power_state_during_sync*]
 #   (optional) Should the hardware power state be set to the state recorded in
@@ -217,7 +217,7 @@
 class ironic::conductor (
   $package_ensure                      = 'present',
   $enabled                             = true,
-  $enabled_hardware_types              = ['ipmi'],
+  $enabled_hardware_types              = $::os_service_default,
   $force_power_state_during_sync       = true,
   $http_url                            = $::os_service_default,
   $http_root                           = $::os_service_default,

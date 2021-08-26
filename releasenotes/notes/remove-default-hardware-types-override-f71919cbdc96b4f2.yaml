@@ -1,0 +1,7 @@
+---
+upgrade:
+  - |
+    An explict ironic ``enabled_hardware_types`` setting has been removed
+    from ``puppet-ironic`` as it matches the Ironic default and the default
+    override prohibits inclusion of additional default enabled hardware types
+    the OpenStack Ironic project may choose to ship in the future.
