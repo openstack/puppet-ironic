@@ -38,7 +38,9 @@ dhcp-option=option:classless-static-route,<%= @_routes.join(',') -%>
 <% end -%>
 <% end -%>
 <% end -%>
+<% if @dnsmasq_dhcp_sequential_ip -%>
 dhcp-sequential-ip
+<% end -%>
 dhcp-match=ipxe,175
 dhcp-match=set:efi,option:client-arch,7
 dhcp-match=set:efi,option:client-arch,9

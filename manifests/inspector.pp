@@ -167,6 +167,10 @@
 #   (optional) IP interface for the dnsmasq process
 #   Defaults to '192.168.0.1'
 #
+# [*dnsmasq_dhcp_sequential_ip*]
+#   (optional) When true enable the 'dhcp-sequential-ip' option for dnsmasq.
+#   Defaults to true
+#
 # [*dnsmasq_dhcp_hostsdir*]
 #   (optional) directory with DHCP hosts, only used with the "dnsmasq" PXE
 #   filter.
@@ -269,6 +273,7 @@ class ironic::inspector (
   $swift_auth_url                  = 'http://127.0.0.1:5000/v3',
   $dnsmasq_ip_subnets              = [],
   $dnsmasq_local_ip                = '192.168.0.1',
+  $dnsmasq_dhcp_sequential_ip      = true,
   $dnsmasq_dhcp_hostsdir           = undef,
   $sync_db                         = true,
   $ramdisk_collectors              = 'default',
