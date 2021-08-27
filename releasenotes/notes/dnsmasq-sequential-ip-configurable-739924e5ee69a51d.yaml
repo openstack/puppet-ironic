@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    It is now possible to disable sequential ip addressing in the ironic
+    inspector dnsmasq service. The ``ironic::inspector`` class has the new
+    parameter ``dnsmasq_dhcp_sequential_ip`` *(defaults to: true)*. Set it
+    to ``false`` to disable sequential ip addressing.
