@@ -308,17 +308,6 @@ Use inspect_wait_timeout instead')
   # including its manifest (which only contains configuration options)
   include ironic::drivers::agent
 
-  # On Ubuntu, ipmitool dependency is missing and ironic-conductor fails to start.
-  # https://bugs.launchpad.net/cloud-archive/+bug/1572800
-  if member($enabled_hardware_types, 'ipmi') and $::osfamily == 'Debian' {
-    ensure_packages('ipmitool',
-      {
-        ensure => $package_ensure,
-        tag    => ['openstack', 'ironic-package'],
-      }
-    )
-  }
-
   if $cleaning_disk_erase {
     validate_legacy(Enum['full', 'metadata', 'none'], 'validate_re', $cleaning_disk_erase,
       [['^full$', '^metadata$', '^none$']])

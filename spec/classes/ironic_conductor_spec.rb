@@ -188,14 +188,6 @@ describe 'ironic::conductor' do
             { :conductor_package => 'ironic-conductor',
               :conductor_service => 'ironic-conductor' }
           end
-          # https://bugs.launchpad.net/cloud-archive/+bug/1572800
-          it 'installs ipmitool package' do
-            is_expected.to contain_package('ipmitool').with(
-              :ensure => 'present',
-              :name   => 'ipmitool',
-              :tag    => ['openstack', 'ironic-package'],
-            )
-          end
         when 'RedHat'
           let :platform_params do
             { :conductor_service => 'ironic-conductor' }
