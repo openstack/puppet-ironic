@@ -20,7 +20,7 @@ describe 'ironic::json_rpc' do
   let :default_params do
     { :auth_strategy => 'keystone',
       :auth_type     => 'password',
-      :project_name  => 'service',
+      :project_name  => 'services',
       :use_ssl       => false,
       :username      => 'ironic',
     }

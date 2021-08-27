@@ -47,7 +47,7 @@
 #
 # [*project_name*]
 #   (optional) The Keystone project name.
-#   Defaults to 'service'
+#   Defaults to 'services'
 #
 # [*username*]
 #   (optional) The admin username for ironic to connect to json_rpc.
@@ -82,7 +82,7 @@ class ironic::json_rpc (
   $use_ssl                   = false,
   $auth_type                 = 'password',
   $auth_url                  = $::os_service_default,
-  $project_name              = 'service',
+  $project_name              = 'services',
   $username                  = 'ironic',
   $password                  = $::os_service_default,
   $user_domain_name          = 'Default',
