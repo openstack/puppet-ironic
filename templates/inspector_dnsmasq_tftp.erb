@@ -39,7 +39,9 @@ dhcp-option=option:classless-static-route,<%= @_routes.join(',') -%>
 <% end -%>
 <% end -%>
 dhcp-boot=pxelinux.0,localhost.localdomain,<%= @dnsmasq_local_ip %>
+<% if @dnsmasq_dhcp_sequential_ip -%>
 dhcp-sequential-ip
+<% end -%>
 <% if @dnsmasq_dhcp_hostsdir %>
 dhcp-hostsdir=<%= @dnsmasq_dhcp_hostsdir %>
 <% end %>
