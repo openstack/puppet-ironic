@@ -133,6 +133,19 @@ describe 'ironic::inspector::authtoken' do
         is_expected.to contain_package('python-memcache')
       end
     end
+
+    context 'when overriding parameters via params hash' do
+      before do
+        params.merge!({
+          :username => 'myuser',
+          :params   => { 'username' => 'myotheruser' },
+        })
+      end
+
+      it 'configure keystone_authtoken' do
+        is_expected.to contain_ironic_inspector_config('keystone_authtoken/username').with_value(params[:params]['username'])
+      end
+    end
   end
 
   on_supported_os({
