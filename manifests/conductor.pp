@@ -302,8 +302,6 @@ Use inspect_wait_timeout instead')
     fail('inspection_network_name and inspection_network can not be specified in the same time.')
   }
 
-  validate_legacy(Array, 'validate_array', $enabled_hardware_types)
-
   # NOTE(dtantsur): all in-tree drivers are IPA-based, so it won't hurt
   # including its manifest (which only contains configuration options)
   include ironic::drivers::agent
@@ -334,7 +332,7 @@ Use inspect_wait_timeout instead')
 
   # Configure ironic.conf
   ironic_config {
-    'DEFAULT/enabled_hardware_types':              value => join($enabled_hardware_types, ',');
+    'DEFAULT/enabled_hardware_types':              value => join(any2array($enabled_hardware_types), ',');
     'conductor/force_power_state_during_sync':     value => $force_power_state_during_sync;
     'conductor/automated_clean':                   value => $automated_clean;
     'deploy/http_url':                             value => $http_url;
