@@ -29,6 +29,7 @@ describe 'ironic::inspector::logging' do
      :log_facility                   => 'LOG_FOO',
      :log_dir                        => '/var/log',
      :log_file                       => '/var/log/ironic/ironic-inspector.log',
+     :watch_log_file                 => true,
      :debug                          => true,
     }
   end
@@ -64,6 +65,7 @@ describe 'ironic::inspector::logging' do
         :syslog_log_facility => '<SERVICE DEFAULT>',
         :log_dir             => '/var/log/ironic-inspector',
         :log_file            => '<SERVICE DEFAULT>',
+        :watch_log_file      => '<SERVICE DEFAULT>',
         :debug               => '<SERVICE DEFAULT>',
       )
     end
@@ -78,6 +80,7 @@ describe 'ironic::inspector::logging' do
         :syslog_log_facility => 'LOG_FOO',
         :log_dir             => '/var/log',
         :log_file            => '/var/log/ironic/ironic-inspector.log',
+        :watch_log_file      => true,
         :debug               => true,
       )
     end
