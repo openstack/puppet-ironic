@@ -42,12 +42,12 @@ describe 'ironic::drivers::ansible' do
 
     it 'installs ansible package' do
       is_expected.to contain_package('ansible').with(
-        :ensure => 'present',
+        :ensure => 'installed',
         :name   => 'ansible',
         :tag    => ['openstack', 'ironic-package'],
       )
       is_expected.to contain_package('systemd-python').with(
-        :ensure => 'present',
+        :ensure => 'installed',
         :name   => platform_params[:systemd_python_package],
         :tag    => ['openstack', 'ironic-package'],
       )

@@ -35,7 +35,7 @@ describe 'ironic::drivers::ilo' do
 
     it 'installs proliantutils package' do
       is_expected.to contain_package('python-proliantutils').with(
-        :ensure => 'present',
+        :ensure => 'installed',
         :name   => platform_params[:proliantutils_package_name],
         :tag    => ['openstack', 'ironic-package'],
       )
