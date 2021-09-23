@@ -42,7 +42,7 @@ describe 'ironic::drivers::redfish' do
 
     it 'installs sushy package' do
       is_expected.to contain_package('python-sushy').with(
-        :ensure => 'present',
+        :ensure => 'installed',
         :name   => platform_params[:sushy_package_name],
         :tag    => ['openstack', 'ironic-package'],
       )

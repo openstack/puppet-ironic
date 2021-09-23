@@ -25,7 +25,7 @@ describe 'ironic::drivers::drac' do
 
     it 'installs dracclient package' do
       is_expected.to contain_package('python-dracclient').with(
-        :ensure => 'present',
+        :ensure => 'installed',
         :name   => platform_params[:dracclient_package_name],
         :tag    => ['openstack', 'ironic-package'],
       )
