@@ -114,8 +114,9 @@ class ironic::keystone::auth (
   if $configure_user_role {
     Keystone_user_role["${auth_name}@${tenant}"] ~> Service <| name == 'ironic-server' |>
   }
-
-  Keystone_endpoint["${region}/${service_name}::${service_type}"]  ~> Service <| name == 'ironic-server' |>
+  if $configure_endpoint {
+    Keystone_endpoint["${region}/${service_name}::${service_type}"]  ~> Service <| name == 'ironic-server' |>
+  }
 
   keystone::resource::service_identity { 'ironic':
     configure_user      => $configure_user,
