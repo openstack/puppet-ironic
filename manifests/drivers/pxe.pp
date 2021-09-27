@@ -19,7 +19,7 @@
 #
 # === Parameters
 #
-# [*pxe_append_params*]
+# [*kernel_append_params*]
 #   (optional) Additional append parameters for baremetal PXE boot.
 #   Should be valid pxe parameters
 #   Defaults to $::os_service_default.
@@ -117,8 +117,13 @@
 #   release.
 #   Defaults to $::os_service_default.
 #
+# [*pxe_append_params*]
+#   (optional) Additional append parameters for baremetal PXE boot.
+#   Should be valid pxe parameters
+#   Defaults to undef.
+#
 class ironic::drivers::pxe (
-  $pxe_append_params         = $::os_service_default,
+  $kernel_append_params      = $::os_service_default,
   $pxe_bootfile_name         = $::os_service_default,
   $pxe_config_template       = $::os_service_default,
   $ipxe_bootfile_name        = $::os_service_default,
@@ -138,6 +143,7 @@ class ironic::drivers::pxe (
   # DEPRECATED PARAMETERS
   $ipxe_enabled              = undef,
   $ip_version                = undef,
+  $pxe_append_params         = undef,
 ) {
 
   include ironic::deps
@@ -154,9 +160,18 @@ class ironic::drivers::pxe (
   }
   $ip_version_real = pick($ip_version, $::os_service_default)
 
+  if $pxe_append_params != undef {
+    warning('The ironic::drivers::pxe::pxe_append_params parameter is deprecated. \
+Use the kernel_append_params parameter instead')
+  }
+  $kernel_append_params_real = pick($pxe_append_params, kernel_append_params)
+  ironic_config {
+    'pxe/pxe_append_params': ensure => absent
+  }
+
   # Configure ironic.conf
   ironic_config {
-    'pxe/pxe_append_params': value         => $pxe_append_params;
+    'pxe/kernel_append_params': value      => $kernel_append_params;
     'pxe/pxe_bootfile_name': value         => $pxe_bootfile_name;
     'pxe/pxe_config_template': value       => $pxe_config_template;
     'pxe/ipxe_bootfile_name': value        => $ipxe_bootfile_name;

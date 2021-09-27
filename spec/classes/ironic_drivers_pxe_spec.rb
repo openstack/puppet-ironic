@@ -37,7 +37,7 @@ describe 'ironic::drivers::pxe' do
     end
 
     it 'configures ironic.conf' do
-      is_expected.to contain_ironic_config('pxe/pxe_append_params').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('pxe/kernel_append_params').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/pxe_bootfile_name').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/pxe_config_template').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/ipxe_bootfile_name').with_value('<SERVICE DEFAULT>')
@@ -69,7 +69,7 @@ describe 'ironic::drivers::pxe' do
     context 'when overriding parameters' do
       before do
         params.merge!(
-          :pxe_append_params         => 'foo',
+          :kernel_append_params      => 'foo',
           :pxe_config_template       => 'bar',
           :tftp_server               => '192.168.0.1',
           :tftp_root                 => '/mnt/ftp',
@@ -88,7 +88,7 @@ describe 'ironic::drivers::pxe' do
       end
 
       it 'should replace default parameter with new value' do
-        is_expected.to contain_ironic_config('pxe/pxe_append_params').with_value(p[:pxe_append_params])
+        is_expected.to contain_ironic_config('pxe/kernel_append_params').with_value(p[:kernel_append_params])
         is_expected.to contain_ironic_config('pxe/pxe_config_template').with_value(p[:pxe_config_template])
         is_expected.to contain_ironic_config('pxe/tftp_server').with_value(p[:tftp_server])
         is_expected.to contain_ironic_config('pxe/tftp_root').with_value(p[:tftp_root])
