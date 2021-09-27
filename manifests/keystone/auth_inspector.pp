@@ -81,7 +81,7 @@
 class ironic::keystone::auth_inspector (
   $password,
   $auth_name           = 'ironic-inspector',
-  $email               = 'baremetal-introspection@localhost',
+  $email               = 'ironic-inspector@localhost',
   $tenant              = 'services',
   $configure_endpoint  = true,
   $configure_user      = true,
@@ -106,12 +106,13 @@ class ironic::keystone::auth_inspector (
     Keystone_endpoint["${region}/${real_service_name}::${service_type}"]  ~> Service <| name == 'ironic-inspector' |>
   }
 
-  keystone::resource::service_identity { $auth_name:
+  keystone::resource::service_identity { 'ironic-inspector':
     configure_user      => $configure_user,
     configure_user_role => $configure_user_role,
     configure_endpoint  => $configure_endpoint,
     service_name        => $real_service_name,
     service_type        => $service_type,
+    auth_name           => $auth_name,
     service_description => $service_description,
     region              => $region,
     password            => $password,
