@@ -34,10 +34,11 @@ describe 'ironic::keystone::auth_inspector' do
         :configure_endpoint  => true,
         :service_name        => 'ironic-inspector',
         :service_type        => 'baremetal-introspection',
+        :auth_name           => 'ironic-inspector',
         :service_description => 'Bare Metal Introspection Service',
         :region              => 'RegionOne',
         :password            => 'ironic-inspector_password',
-        :email               => 'baremetal-introspection@localhost',
+        :email               => 'ironic-inspector@localhost',
         :tenant              => 'services',
         :public_url          => 'http://127.0.0.1:5050',
         :internal_url        => 'http://127.0.0.1:5050',
@@ -63,12 +64,13 @@ describe 'ironic::keystone::auth_inspector' do
           :admin_url           => 'http://10.10.10.12:81' }
       end
 
-      it { is_expected.to contain_keystone__resource__service_identity('alt_ironic-inspector').with(
+      it { is_expected.to contain_keystone__resource__service_identity('ironic-inspector').with(
         :configure_user      => false,
         :configure_user_role => false,
         :configure_endpoint  => false,
         :service_name        => 'alt_service',
         :service_type        => 'alt_baremetal-introspection',
+        :auth_name           => 'alt_ironic-inspector',
         :service_description => 'Alternative Bare Metal Introspection Service',
         :region              => 'RegionTwo',
         :password            => 'ironic-inspector_password',
