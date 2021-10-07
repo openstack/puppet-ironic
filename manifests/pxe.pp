@@ -208,6 +208,7 @@ class ironic::pxe (
     }
 
     Package['dnsmasq-tftp-server'] ~> Service['dnsmasq-tftp-server']
+    File[$tftp_root_real] -> Service['dnsmasq-tftp-server']
   }
 
   if $syslinux_path {
