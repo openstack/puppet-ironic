@@ -1,0 +1,7 @@
+---
+upgrade:
+  - |
+    The ``ironic_api_paste_ini`` resource type has been deleted.
+
+  - |
+    The ``ironic::config::ironic_api_paste_ini`` parameter has bee removed.

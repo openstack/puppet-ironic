@@ -26,11 +26,6 @@ class ironic::deps {
   ~> Service<| tag == 'ironic-service' |>
   ~> anchor { 'ironic::service::end': }
 
-  # paste-api.ini config should occur in the config block also.
-  Anchor['ironic::config::begin']
-  -> Ironic_api_paste_ini<||>
-  ~> Anchor['ironic::config::end']
-
   # all db settings should be applied and all packages should be installed
   # before dbsync starts
   Oslo::Db<||> -> Anchor['ironic::dbsync::begin']
