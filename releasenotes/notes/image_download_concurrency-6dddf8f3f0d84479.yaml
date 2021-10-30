@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``image_download_concurrency`` parameter has been added
+    to the ``ironic::conductor`` class.

@@ -198,6 +198,11 @@
 #   after the next heartbeat.
 #   Defaults to $::os_service_default
 #
+# [*image_download_concurrency*]
+#   (optional) How many image downloads and raw format conversion to run in
+#   parallel.
+#   Defaults to $::os_service_default
+#
 # DEPRECATED PARAMETERS
 #
 # [*api_url*]
@@ -250,6 +255,7 @@ class ironic::conductor (
   $rescue_kernel                       = $::os_service_default,
   $rescue_ramdisk                      = $::os_service_default,
   $allow_provisioning_in_maintenance   = $::os_service_default,
+  $image_download_concurrency          = $::os_service_default,
   # DEPRECATED PARAMETERS
   $api_url                             = undef,
   $configdrive_use_swift               = undef,
@@ -358,6 +364,7 @@ Use inspect_wait_timeout instead')
     'conductor/rescue_kernel':                     value => $rescue_kernel;
     'conductor/rescue_ramdisk':                    value => $rescue_ramdisk;
     'conductor/allow_provisioning_in_maintenance': value => $allow_provisioning_in_maintenance;
+    'DEFAULT/image_download_concurrency':          value => $image_download_concurrency;
   }
 
   if $cleaning_network_name {
