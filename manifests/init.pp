@@ -35,6 +35,10 @@
 #   "127.0.0.1".
 #   Defaults to $::os_service_default.
 #
+# [*my_ipv6*]
+#   (optional) IP address of this host using IPv6.
+#   Defaults to $::os_service_default.
+#
 # [*auth_strategy*]
 #   (optional) Default protocol to use when connecting to glance
 #   Defaults to 'keystone'. 'https' is the only other valid option for SSL
@@ -278,6 +282,7 @@ class ironic (
   $enabled                            = true,
   $package_ensure                     = 'present',
   $my_ip                              = $::os_service_default,
+  $my_ipv6                            = $::os_service_default,
   $auth_strategy                      = 'keystone',
   $default_resource_class             = $::os_service_default,
   $control_exchange                   = $::os_service_default,
@@ -399,6 +404,7 @@ removed in a future realse. Use ironic::db::database_max_overflow instead')
   ironic_config {
     'DEFAULT/auth_strategy':                   value => $auth_strategy;
     'DEFAULT/my_ip':                           value => $my_ip;
+    'DEFAULT/my_ipv6':                         value => $my_ipv6;
     'DEFAULT/default_resource_class':          value => $default_resource_class;
     'DEFAULT/notification_level':              value => $notification_level;
     'DEFAULT/versioned_notifications_topics':  value => $versioned_notifications_topics;

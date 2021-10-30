@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The new ``ironic::my_ipv6`` parameter has been added.
