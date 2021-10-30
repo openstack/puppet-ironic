@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The new ``ironic::inspector::api_max_limit`` parameter has been added.
