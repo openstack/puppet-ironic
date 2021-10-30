@@ -102,6 +102,21 @@
 #   (optional) How often (in seconds) to check for PXE boot status.
 #   Defaults to $::os_service_default.
 #
+# [*dir_permission*]
+#   (optional) THe permission that will be applied to the TFTP folders upon
+#   creation.
+#   Defaults to $::os_service_default.
+#
+# [*file_permission*]
+#   (optional) The permission which is used on files created as part of
+#   configuration and setup of file assets for PXE based operations.
+#   Defaults to $::os_service_default.
+#
+# [*loader_file_paths*]
+#   (optional) Dictionary describing the bootloaders to load into conductor
+#   PXE/iXPE boot folders values from the host operating system.
+#   Defaults to $::os_service_default.
+#
 # DEPRECATED PARAMETERS
 #
 # [*ipxe_enabled*]
@@ -140,6 +155,9 @@ class ironic::drivers::pxe (
   $enable_ppc64le            = false,
   $boot_retry_timeout        = $::os_service_default,
   $boot_retry_check_interval = $::os_service_default,
+  $dir_permission            = $::os_service_default,
+  $file_permission           = $::os_service_default,
+  $loader_file_paths         = $::os_service_default,
   # DEPRECATED PARAMETERS
   $ipxe_enabled              = undef,
   $ip_version                = undef,
@@ -187,6 +205,9 @@ Use the kernel_append_params parameter instead')
     'pxe/ipxe_timeout': value              => $ipxe_timeout_real;
     'pxe/boot_retry_timeout': value        => $boot_retry_timeout;
     'pxe/boot_retry_check_interval': value => $boot_retry_check_interval;
+    'pxe/dir_permission': value            => $dir_permission;
+    'pxe/file_permission': value           => $file_permission;
+    'pxe/loader_file_paths': value         => join(any2array($loader_file_paths), ',');
     'pxe/ipxe_enabled': ensure             => absent;
     'pxe/ip_version': value                => $ip_version_real;
   }

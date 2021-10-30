@@ -1,0 +1,10 @@
+---
+features:
+  - |
+    The ``ironic::driver::pxe`` class supports the following two new
+    parameters, to manage the corresponding parameters in the ``[pxe]``
+    section.
+
+    - ``dir_permission``
+    - ``file_permission``
+    - ``loader_file_paths``
