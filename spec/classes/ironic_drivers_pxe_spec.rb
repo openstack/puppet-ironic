@@ -50,6 +50,9 @@ describe 'ironic::drivers::pxe' do
       is_expected.to contain_ironic_config('pxe/uefi_pxe_bootfile_name').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/uefi_pxe_config_template').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/uefi_ipxe_bootfile_name').with_value('snponly.efi')
+      is_expected.to contain_ironic_config('pxe/dir_permission').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('pxe/file_permission').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('pxe/loader_file_paths').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/ipxe_enabled').with_ensure('absent')
     end
 
@@ -83,6 +86,10 @@ describe 'ironic::drivers::pxe' do
           :pxe_bootfile_name         => 'bootx64',
           :boot_retry_timeout        => 600,
           :boot_retry_check_interval => 120,
+          :dir_permission            => '0o755',
+          :file_permission           => '0o644',
+          :loader_file_paths         => ['ipxe.efi:/usr/share/ipxe/ipxe-snponly-x86_64.efi',
+                                         'undionly.kpxe:/usr/share/ipxe/undionly.kpxe'],
           :ip_version                => 6,
         )
       end
@@ -102,6 +109,10 @@ describe 'ironic::drivers::pxe' do
         is_expected.to contain_ironic_config('pxe/pxe_bootfile_name').with_value(p[:pxe_bootfile_name])
         is_expected.to contain_ironic_config('pxe/boot_retry_timeout').with_value(p[:boot_retry_timeout])
         is_expected.to contain_ironic_config('pxe/boot_retry_check_interval').with_value(p[:boot_retry_check_interval])
+        is_expected.to contain_ironic_config('pxe/dir_permission').with_value('0o755')
+        is_expected.to contain_ironic_config('pxe/file_permission').with_value('0o644')
+        is_expected.to contain_ironic_config('pxe/loader_file_paths')
+          .with_value('ipxe.efi:/usr/share/ipxe/ipxe-snponly-x86_64.efi,undionly.kpxe:/usr/share/ipxe/undionly.kpxe')
         is_expected.to contain_ironic_config('pxe/ip_version').with_value(p[:ip_version])
       end
     end
