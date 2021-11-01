@@ -69,7 +69,8 @@ describe 'ironic::inspector' do
       :ipxe_timeout          => 0,
       :http_port             => 8088,
       :tftp_root             => '/tftpboot',
-      :http_root             => '/httpboot', }
+      :http_root             => '/httpboot',
+    }
   end
 
 
@@ -122,6 +123,7 @@ describe 'ironic::inspector' do
       is_expected.to contain_ironic_inspector_config('DEFAULT/auth_strategy').with_value(p[:auth_strategy])
       is_expected.to contain_ironic_inspector_config('DEFAULT/timeout').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('DEFAULT/transport_url').with_value('fake://')
+      is_expected.to contain_ironic_inspector_config('DEFAULT/api_max_limit').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('capabilities/boot_mode').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('iptables/dnsmasq_interface').with_value(p[:dnsmasq_interface])
       is_expected.to contain_ironic_inspector_config('processing/ramdisk_logs_dir').with_value(p[:ramdisk_logs_dir])
@@ -216,6 +218,7 @@ describe 'ironic::inspector' do
         params.merge!(
           :dhcp_debug                  => true,
           :listen_address              => '127.0.0.1',
+          :api_max_limit               => 100,
           :ironic_password             => 'password',
           :ironic_project_domain_name  => 'Default',
           :ironic_user_domain_name     => 'Default',
@@ -243,6 +246,7 @@ describe 'ironic::inspector' do
       end
       it 'should replace default parameter with new value' do
         is_expected.to contain_ironic_inspector_config('DEFAULT/listen_address').with_value(p[:listen_address])
+        is_expected.to contain_ironic_inspector_config('DEFAULT/api_max_limit').with_value(100)
         is_expected.to contain_ironic_inspector_config('capabilities/boot_mode').with_value(p[:detect_boot_mode])
         is_expected.to contain_ironic_inspector_config('ironic/password').with_value(p[:ironic_password]).with_secret(true)
         is_expected.to contain_ironic_inspector_config('ironic/project_domain_name').with_value(p[:ironic_project_domain_name])

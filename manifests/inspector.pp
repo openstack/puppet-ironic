@@ -48,6 +48,10 @@
 #   set to 0 to disable.
 #   Defaults to $::os_service_default
 #
+# [*api_max_limit*]
+#   (optional) Limit the numer of elements an API list-call returns
+#   Defaults to $::os_service_default
+#
 # [*dnsmasq_interface*]
 #   (optional) The interface for the ironic-inspector dnsmasq process
 #   to listen on
@@ -269,6 +273,7 @@ class ironic::inspector (
   $dhcp_debug                      = false,
   $auth_strategy                   = 'keystone',
   $timeout                         = $::os_service_default,
+  $api_max_limit                   = $::os_service_default,
   $dnsmasq_interface               = 'br-ctlplane',
   $ramdisk_logs_dir                = '/var/log/ironic-inspector/ramdisk/',
   $always_store_ramdisk_logs       = $::os_service_default,
@@ -416,6 +421,7 @@ Use ironic::inspector::ironic::endpoint_override instead.')
     'DEFAULT/auth_strategy':                      value => $auth_strategy;
     'DEFAULT/timeout':                            value => $timeout;
     'DEFAULT/transport_url':                      value => $default_transport_url;
+    'DEFAULT/api_max_limit':                      value => $api_max_limit;
     'capabilities/boot_mode':                     value => $detect_boot_mode;
     'iptables/dnsmasq_interface':                 value => $dnsmasq_interface;
     'processing/ramdisk_logs_dir':                value => $ramdisk_logs_dir;
