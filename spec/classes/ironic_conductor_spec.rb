@@ -83,6 +83,7 @@ describe 'ironic::conductor' do
       is_expected.to contain_ironic_config('conductor/power_state_sync_max_retries').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/power_failure_recovery_interval').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/conductor_group').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('DEFAULT/image_download_concurrency').with(:value => '<SERVICE DEFAULT>')
     end
 
     context 'when overriding parameters' do
@@ -117,6 +118,7 @@ describe 'ironic::conductor' do
           :rescue_kernel                     => 'http://host/rescue.kernel',
           :rescue_ramdisk                    => 'http://host/rescue.ramdisk',
           :allow_provisioning_in_maintenance => false,
+          :image_download_concurrency        => 20,
         )
       end
       it 'should replace default parameter with new value' do
@@ -150,6 +152,7 @@ describe 'ironic::conductor' do
         is_expected.to contain_ironic_config('conductor/rescue_kernel').with_value(p[:rescue_kernel])
         is_expected.to contain_ironic_config('conductor/rescue_ramdisk').with_value(p[:rescue_ramdisk])
         is_expected.to contain_ironic_config('conductor/allow_provisioning_in_maintenance').with_value(p[:allow_provisioning_in_maintenance])
+        is_expected.to contain_ironic_config('DEFAULT/image_download_concurrency').with_value(p[:image_download_concurrency])
       end
     end
 
