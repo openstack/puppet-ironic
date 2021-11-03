@@ -1,3 +1,8 @@
+#
+# these tests are a little concerning b/c they are hacking around the
+# modulepath, so these tests will not catch issues that may eventually arise
+# related to loading these plugins.
+# I could not, for the life of me, figure out how to programmatically set the modulepath
 $LOAD_PATH.push(
   File.join(
     File.dirname(__FILE__),
@@ -23,16 +28,13 @@ $LOAD_PATH.push(
 
 require 'spec_helper'
 
-provider_class = Puppet::Type.type(:ironic_inspector_config).provider(:ini_setting)
+provider_class = Puppet::Type.type(:ironic_inspector_config).provider(:openstackconfig)
 
 describe provider_class do
 
   it 'should default to the default setting when no other one is specified' do
     resource = Puppet::Type::Ironic_inspector_config.new(
-      {
-        :name => 'DEFAULT/foo',
-        :value => 'bar'
-      }
+      {:name => 'DEFAULT/foo', :value => 'bar'}
     )
     provider = provider_class.new(resource)
     expect(provider.section).to eq('DEFAULT')
@@ -41,10 +43,7 @@ describe provider_class do
 
   it 'should allow setting to be set explicitly' do
     resource = Puppet::Type::Ironic_inspector_config.new(
-      {
-        :name => 'dude/foo',
-        :value => 'bar'
-      }
+      {:name => 'dude/foo', :value => 'bar'}
     )
     provider = provider_class.new(resource)
     expect(provider.section).to eq('dude')
@@ -68,4 +67,5 @@ describe provider_class do
     provider.exists?
     expect(resource[:ensure]).to eq :absent
   end
+
 end
