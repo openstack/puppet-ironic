@@ -89,7 +89,7 @@ class ironic::params {
       $tftpd_package             = 'tftpd'
       $ipxe_package              = 'ipxe'
       $syslinux_package          = 'syslinux-common'
-      if ($::os_package_type == 'debian') {
+      if $::operatingsystem == 'Debian' {
         $syslinux_path = '/usr/lib/syslinux'
       } else {
         $syslinux_path = '/var/lib/tftpboot'
