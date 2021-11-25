@@ -37,8 +37,16 @@
 #   Defaults to 'services'.
 #
 # [*roles*]
-#   (Optional) List of roles assigned to the ironic service user
+#   (Optional) List of roles assigned to ironic user
 #   Defaults to ['admin']
+#
+# [*system_scope*]
+#   (Optional) Scope for system operations.
+#   Defaults to 'all'
+#
+# [*system_roles*]
+#   (Optional) List of system roles assigned to ironic user.
+#   Defaults to []
 #
 # [*configure_endpoint*]
 #   (Optional) Should Ironic endpoint be configured?
@@ -97,6 +105,8 @@ class ironic::keystone::auth (
   $email               = 'ironic@localhost',
   $tenant              = 'services',
   $roles               = ['admin'],
+  $system_scope        = 'all',
+  $system_roles        = [],
   $configure_endpoint  = true,
   $configure_user      = true,
   $configure_user_role = true,
@@ -111,9 +121,9 @@ class ironic::keystone::auth (
 
   include ironic::deps
 
-  if $configure_user_role {
-    Keystone_user_role["${auth_name}@${tenant}"] -> Anchor['ironic::service::end']
-  }
+  Keystone_user_role<| name == "${auth_name}@${tenant}" |> -> Anchor['ironic::service::end']
+  Keystone_user_role<| name == "${auth_name}@::::${system_scope}" |> -> Anchor['ironic::service::end']
+
   if $configure_endpoint {
     Keystone_endpoint["${region}/${service_name}::${service_type}"] -> Anchor['ironic::service::end']
   }
@@ -131,6 +141,8 @@ class ironic::keystone::auth (
     email               => $email,
     tenant              => $tenant,
     roles               => $roles,
+    system_scope        => $system_scope,
+    system_roles        => $system_roles,
     public_url          => $public_url,
     internal_url        => $internal_url,
     admin_url           => $admin_url,

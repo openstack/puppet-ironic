@@ -33,6 +33,18 @@
 # [*tenant*]
 #   Tenant for Baremetal Introspection user. Defaults to 'services'.
 #
+# [*roles*]
+#   (Optional) List of roles assigned to ironic user.
+#   Defaults to ['admin']
+#
+# [*system_scope*]
+#   (Optional) Scope for system operations.
+#   Defaults to 'all'
+#
+# [*system_roles*]
+#   (Optional) List of system roles assigned to ironic user.
+#   Defaults to []
+#
 # [*configure_endpoint*]
 #   Should Baremetal Introspection endpoint be configured? Defaults to 'true'.
 #
@@ -83,6 +95,9 @@ class ironic::keystone::auth_inspector (
   $auth_name           = 'ironic-inspector',
   $email               = 'ironic-inspector@localhost',
   $tenant              = 'services',
+  $roles               = ['admin'],
+  $system_scope        = 'all',
+  $system_roles        = [],
   $configure_endpoint  = true,
   $configure_user      = true,
   $configure_user_role = true,
@@ -99,11 +114,11 @@ class ironic::keystone::auth_inspector (
 
   $real_service_name = pick($service_name, $auth_name)
 
-  if $configure_user_role {
-    Keystone_user_role["${auth_name}@${tenant}"] ~> Service <| name == 'ironic-inspector' |>
-  }
+  Keystone_user_role<| name == "${auth_name}@${tenant}" |> ~> Service <| name == 'ironic-inspector' |>
+  Keystone_user_role<| name == "${auth_name}@::::${system_scope}" |> ~> Service <| name == 'ironic-inspector' |>
+
   if $configure_endpoint {
-    Keystone_endpoint["${region}/${real_service_name}::${service_type}"]  ~> Service <| name == 'ironic-inspector' |>
+    Keystone_endpoint["${region}/${real_service_name}::${service_type}"] ~> Service <| name == 'ironic-inspector' |>
   }
 
   keystone::resource::service_identity { 'ironic-inspector':
@@ -118,6 +133,9 @@ class ironic::keystone::auth_inspector (
     password            => $password,
     email               => $email,
     tenant              => $tenant,
+    roles               => $roles,
+    system_scope        => $system_scope,
+    system_roles        => $system_roles,
     public_url          => $public_url,
     internal_url        => $internal_url,
     admin_url           => $admin_url,
