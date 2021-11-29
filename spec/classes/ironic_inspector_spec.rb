@@ -242,6 +242,7 @@ describe 'ironic::inspector' do
           :always_store_ramdisk_logs   => true,
           :port_physnet_cidr_map       => {'192.168.20.0/24' => 'physnet_a',
                                            '2001:db8::/64' => 'physnet_b'},
+          :uefi_ipxe_bootfile_name     => 'otherpxe.efi',
         )
       end
       it 'should replace default parameter with new value' do
@@ -291,6 +292,13 @@ describe 'ironic::inspector' do
         is_expected.not_to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
             /dhcp-sequential-ip/
         )
+        is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
+            /dhcp-boot=tag:efi,tag:!ipxe,otherpxe.efi/
+        )
+        is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
+            /dhcp-option=tag:efi6,tag:!ipxe6,option6:bootfile-url,tftp:\/\/.*\/otherpxe.efi/
+        )
+
       end
       it 'should contain file /var/www/httpboot/inspector.ipxe' do
         is_expected.to contain_file('/var/www/httpboot/inspector.ipxe').with(
