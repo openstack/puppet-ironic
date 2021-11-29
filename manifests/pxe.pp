@@ -82,6 +82,7 @@ class ironic::pxe (
   $tftp_root_real = pick($::ironic::pxe::common::tftp_root, $tftp_root)
   $http_root_real = pick($::ironic::pxe::common::http_root, $http_root)
   $http_port_real = pick($::ironic::pxe::common::http_port, $http_port)
+  $uefi_ipxe_bootfile_name_real = pick($::ironic::pxe::common::uefi_ipxe_bootfile_name, $uefi_ipxe_bootfile_name)
 
   if $::os['family'] == 'RedHat' {
     $arch = "-${::os['architecture']}"
@@ -188,7 +189,7 @@ class ironic::pxe (
     require => Anchor['ironic-inspector::install::end'],
   }
 
-  file { "${tftp_root_real}/${uefi_ipxe_bootfile_name}":
+  file { "${tftp_root_real}/${uefi_ipxe_bootfile_name_real}":
     ensure  => 'file',
     seltype => 'tftpdir_t',
     owner   => 'ironic',

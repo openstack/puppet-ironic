@@ -180,6 +180,12 @@
 #   Example: {'10.10.10.0/24' => 'physnet_a', '2001:db8::/64' => 'physnet_b'}
 #   Defaults to {}
 #
+# [*uefi_ipxe_bootfile_name*]
+#   (optional) Name of efi file used to boot servers with iPXE + UEFI. This
+#   should be consistent with the uefi_ipxe_bootfile_name parameter in pxe
+#   driver.
+#   Defaults to 'ipxe.efi'
+#
 # DEPRECATED PARAMETERS
 #
 # [*swift_auth_type*]
@@ -295,6 +301,7 @@ class ironic::inspector (
   $enable_ppc64le                  = false,
   $default_transport_url           = 'fake://',
   $port_physnet_cidr_map           = {},
+  $uefi_ipxe_bootfile_name         = 'ipxe.efi',
   # DEPRECATED PARAMETERS
   $swift_auth_type                 = undef,
   $swift_username                  = undef,
@@ -347,10 +354,11 @@ Use ironic::inspector::ironic::endpoint_override instead.')
     fail('Invalid data type, parameter port_physnet_cidr_map mush be Hash type')
   }
 
-  $tftp_root_real    = pick($::ironic::pxe::common::tftp_root, $tftp_root)
-  $http_root_real    = pick($::ironic::pxe::common::http_root, $http_root)
-  $http_port_real    = pick($::ironic::pxe::common::http_port, $http_port)
-  $ipxe_timeout_real = pick($::ironic::pxe::common::ipxe_timeout, $ipxe_timeout)
+  $tftp_root_real               = pick($::ironic::pxe::common::tftp_root, $tftp_root)
+  $http_root_real               = pick($::ironic::pxe::common::http_root, $http_root)
+  $http_port_real               = pick($::ironic::pxe::common::http_port, $http_port)
+  $ipxe_timeout_real            = pick($::ironic::pxe::common::ipxe_timeout, $ipxe_timeout)
+  $uefi_ipxe_bootfile_name_real = pick($::ironic::pxe::common::uefi_ipxe_bootfile_name, $uefi_ipxe_bootfile_name)
 
   file { '/etc/ironic-inspector/inspector.conf':
     ensure  => 'present',
