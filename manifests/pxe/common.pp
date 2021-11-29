@@ -37,11 +37,16 @@
 #   (optional) ipxe timeout in second. Should be an integer.
 #   Defaults to undef.
 #
+# [*uefi_ipxe_bootfile_name*]
+#   (optional) Name of efi file used to boot servers with iPXE + UEFI.
+#   Defaults to undef.
+#
 class ironic::pxe::common (
-  $tftp_root        = undef,
-  $http_root        = undef,
-  $http_port        = undef,
-  $ipxe_timeout     = undef,
+  $tftp_root               = undef,
+  $http_root               = undef,
+  $http_port               = undef,
+  $ipxe_timeout            = undef,
+  $uefi_ipxe_bootfile_name = undef,
 ) {
   include ::ironic::deps
 }

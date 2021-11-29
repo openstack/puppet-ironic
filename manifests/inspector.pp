@@ -240,6 +240,12 @@
 #      transport://user:pass@host1:port[,hostN:portN]/virtual_host
 #    Defaults to 'fake://'
 #
+# [*uefi_ipxe_bootfile_name*]
+#   (optional) Name of efi file used to boot servers with iPXE + UEFI. This
+#   should be consistent with the uefi_ipxe_bootfile_name parameter in pxe
+#   driver.
+#   Defaults to 'ipxe.efi'
+#
 class ironic::inspector (
   $package_ensure                  = 'present',
   $enabled                         = true,
@@ -290,6 +296,7 @@ class ironic::inspector (
   $discovery_default_driver        = $::os_service_default,
   $enable_ppc64le                  = false,
   $default_transport_url           = 'fake://',
+  $uefi_ipxe_bootfile_name         = 'ipxe.efi',
 ) {
 
   include ::ironic::deps
@@ -305,10 +312,11 @@ class ironic::inspector (
     fail('Invalid data type, parameter dnsmasq_ip_subnets must be Array type')
   }
 
-  $tftp_root_real    = pick($::ironic::pxe::common::tftp_root, $tftp_root)
-  $http_root_real    = pick($::ironic::pxe::common::http_root, $http_root)
-  $http_port_real    = pick($::ironic::pxe::common::http_port, $http_port)
-  $ipxe_timeout_real = pick($::ironic::pxe::common::ipxe_timeout, $ipxe_timeout)
+  $tftp_root_real               = pick($::ironic::pxe::common::tftp_root, $tftp_root)
+  $http_root_real               = pick($::ironic::pxe::common::http_root, $http_root)
+  $http_port_real               = pick($::ironic::pxe::common::http_port, $http_port)
+  $ipxe_timeout_real            = pick($::ironic::pxe::common::ipxe_timeout, $ipxe_timeout)
+  $uefi_ipxe_bootfile_name_real = pick($::ironic::pxe::common::uefi_ipxe_bootfile_name, $uefi_ipxe_bootfile_name)
 
   file { '/etc/ironic-inspector/inspector.conf':
     ensure  => 'present',

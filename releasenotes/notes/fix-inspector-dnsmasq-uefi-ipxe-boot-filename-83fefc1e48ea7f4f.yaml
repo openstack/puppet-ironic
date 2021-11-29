@@ -1,0 +1,8 @@
+---
+fixes:
+  - |
+    Fixed an issue where dnsmasq DHCP configuration for ironic-
+    inspector would point to the wrong UEFI iPXE bootfile. See
+    bug: `1952652
+    <https://bugs.launchpad.net/puppet-ironic/+bug/1952652>`_.
+
