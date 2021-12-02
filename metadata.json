@@ -18,10 +18,6 @@
             "version_requirement": ">=20.0.0 <21.0.0"
         },
         {
-            "name": "puppet/git_resource",
-            "version_requirement": ">=1.0.2 <2.0.0"
-        },
-        {
             "name": "openstack/oslo",
             "version_requirement": ">=20.0.0 <21.0.0"
         },
