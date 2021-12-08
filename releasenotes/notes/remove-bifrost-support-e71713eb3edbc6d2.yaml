@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    Integration for Ironic's Bifrost sub-project has been removed.
