@@ -122,7 +122,6 @@ class ironic::api (
     }
     Keystone_endpoint<||> -> Service['ironic-api']
   } elsif $service_name == 'httpd' {
-    include apache::params
     service { 'ironic-api':
       ensure => 'stopped',
       name   => $::ironic::params::api_service,

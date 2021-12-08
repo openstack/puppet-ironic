@@ -133,11 +133,6 @@ class ironic::wsgi::apache (
 
   include ironic::deps
   include ironic::params
-  include apache
-  include apache::mod::wsgi
-  if $ssl_real {
-    include apache::mod::ssl
-  }
 
   ::openstacklib::wsgi::apache { 'ironic_wsgi':
     bind_host                   => $bind_host,
