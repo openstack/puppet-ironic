@@ -181,19 +181,28 @@
 #   Defaults to $::os_service_default
 #
 # [*deploy_kernel*]
-#   (optional) Glance UUID or URL of a deploy kernel to use by default.
+#   (optional) Glance UUID, http:// or file:// URL of the kernel of
+#   the default deploy image.
 #   Defaults to $::os_service_default
 #
 # [*deploy_ramdisk*]
-#   (optional) Glance UUID or URL of a deploy ramdisk to use by default.
+#   (optional) Glance UUID, http:// or file:// URL of the initramfs of
+#   the default deploy image.
 #   Defaults to $::os_service_default
 #
 # [*rescue_kernel*]
-#   (optional) Glance UUID or URL of a rescue kernel to use by default.
+#   (optional) Glance UUID, http:// or file:// URL of the kernel of
+#   the default rescue image.
 #   Defaults to $::os_service_default
 #
 # [*rescue_ramdisk*]
-#   (optional) Glance UUID or URL of a rescue ramdisk to use by default.
+#   (optional) Glance UUID, http:// or file:// URL of the initramfs of
+#   the default rescue image.
+#   Defaults to $::os_service_default
+#
+# [*bootloader*]
+#   (optional) Glance ID, http:// or file:// URL of the EFI system partition
+#   image containing EFI boot loader.
 #   Defaults to $::os_service_default
 #
 # [*allow_provisioning_in_maintenance*]
@@ -260,6 +269,7 @@ class ironic::conductor (
   $deploy_ramdisk                      = $::os_service_default,
   $rescue_kernel                       = $::os_service_default,
   $rescue_ramdisk                      = $::os_service_default,
+  $bootloader                          = $::os_service_default,
   $allow_provisioning_in_maintenance   = $::os_service_default,
   $image_download_concurrency          = $::os_service_default,
   # DEPRECATED PARAMETERS
@@ -370,6 +380,7 @@ Use inspect_wait_timeout instead')
     'conductor/deploy_ramdisk':                    value => $deploy_ramdisk;
     'conductor/rescue_kernel':                     value => $rescue_kernel;
     'conductor/rescue_ramdisk':                    value => $rescue_ramdisk;
+    'conductor/bootloader':                        value => $bootloader;
     'conductor/allow_provisioning_in_maintenance': value => $allow_provisioning_in_maintenance;
     'DEFAULT/image_download_concurrency':          value => $image_download_concurrency;
   }

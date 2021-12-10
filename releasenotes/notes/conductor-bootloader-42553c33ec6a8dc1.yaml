@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The ``ironic::conductor`` class now supports customizing
+    the ``[conductor] bootloader``, by the new ``bootloader`` parameter.
