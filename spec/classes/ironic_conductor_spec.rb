@@ -77,6 +77,7 @@ describe 'ironic::conductor' do
       is_expected.to contain_ironic_config('deploy/default_boot_option').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('deploy/default_boot_mode').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('neutron/port_setup_delay').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('conductor/soft_power_off_timeout').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/power_state_change_timeout').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/sync_power_state_interval').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/sync_power_state_workers').with(:value => '<SERVICE DEFAULT>')
@@ -107,6 +108,7 @@ describe 'ironic::conductor' do
           :default_boot_option               => 'local',
           :default_boot_mode                 => 'uefi',
           :port_setup_delay                  => '15',
+          :soft_power_off_timeout            => 600,
           :power_state_change_timeout        => '300',
           :sync_power_state_interval         => 120,
           :sync_power_state_workers          => 2,
@@ -141,6 +143,7 @@ describe 'ironic::conductor' do
         is_expected.to contain_ironic_config('deploy/default_boot_option').with_value(p[:default_boot_option])
         is_expected.to contain_ironic_config('deploy/default_boot_mode').with_value(p[:default_boot_mode])
         is_expected.to contain_ironic_config('neutron/port_setup_delay').with_value(p[:port_setup_delay])
+        is_expected.to contain_ironic_config('conductor/soft_power_off_timeout').with_value(p[:soft_power_off_timeout])
         is_expected.to contain_ironic_config('conductor/power_state_change_timeout').with_value(p[:power_state_change_timeout])
         is_expected.to contain_ironic_config('conductor/sync_power_state_interval').with_value(p[:sync_power_state_interval])
         is_expected.to contain_ironic_config('conductor/sync_power_state_workers').with_value(p[:sync_power_state_workers])

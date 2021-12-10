@@ -144,6 +144,11 @@
 #   sufficient DHCP configuration for port.
 #   Defaults to $::os_service_default
 #
+# [*soft_power_off_timeout*]
+#   (optional) Timeout (in seconds) of soft reboot and soft power off
+#   operation.
+#   Defaults to $::os_service_default
+#
 # [*power_state_change_timeout*]
 #   (optional) Timeout value to wait for a power operation to complete,
 #   so that the baremetal node is in the desired new power state.
@@ -244,6 +249,7 @@ class ironic::conductor (
   $provisioning_network_name           = undef,
   $rescuing_network_name               = undef,
   $inspection_network_name             = undef,
+  $soft_power_off_timeout              = $::os_service_default,
   $power_state_change_timeout          = $::os_service_default,
   $sync_power_state_interval           = $::os_service_default,
   $sync_power_state_workers            = $::os_service_default,
@@ -353,6 +359,7 @@ Use inspect_wait_timeout instead')
     'deploy/default_boot_option':                  value => $default_boot_option;
     'deploy/default_boot_mode':                    value => $default_boot_mode;
     'neutron/port_setup_delay':                    value => $port_setup_delay;
+    'conductor/soft_power_off_timeout':            value => $soft_power_off_timeout;
     'conductor/power_state_change_timeout':        value => $power_state_change_timeout;
     'conductor/sync_power_state_interval':         value => $sync_power_state_interval;
     'conductor/sync_power_state_workers':          value => $sync_power_state_workers;

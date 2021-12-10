@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The ``ironic::conductor`` class now supports customizing
+    the ``[conductor] soft_power_off_timeout`` parameter.
