@@ -344,8 +344,7 @@ describe 'ironic::inspector' do
 
     context 'when enabling ppc64le support' do
       let :pre_condition do
-         "class { 'ironic::inspector::authtoken': password       => 'password', }
-          class { 'ironic::pxe':                  enable_ppc64le => true, }"
+         "class { 'ironic::inspector::authtoken': password       => 'password', }"
       end
 
       before do
@@ -357,6 +356,15 @@ describe 'ironic::inspector' do
       it 'should contain file /etc/ironic-inspector/dnsmasq.conf' do
           is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
             /dhcp-match=set:ppc64le,option:client-arch,14/)
+      end
+      it 'should contain directory /tftpboot/ppc64le with selinux type tftpdir_t' do
+        is_expected.to contain_file('/tftpboot/ppc64le').with(
+          'owner'   => 'ironic-inspector',
+          'group'   => 'ironic-inspector',
+          'require' => 'Anchor[ironic-inspector::config::begin]',
+          'ensure'  => 'directory',
+          'seltype' => 'tftpdir_t',
+        )
       end
       it 'should contain file /tftpboot/ppc64le/default' do
         is_expected.to contain_file('/tftpboot/ppc64le/default').with(
@@ -375,8 +383,7 @@ describe 'ironic::inspector' do
 
     context 'when enabling ppc64le support with http default transport' do
       let :pre_condition do
-         "class { 'ironic::inspector::authtoken': password       => 'password', }
-          class { 'ironic::pxe':                  enable_ppc64le => true, }"
+         "class { 'ironic::inspector::authtoken': password       => 'password', }"
       end
 
       before do

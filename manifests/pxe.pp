@@ -47,10 +47,6 @@
 #   (optional) The IP address TFTP server will listen on for TFTP.
 #   Defaults to undef (listen on all ip addresses).
 #
-# [*enable_ppc64le*]
-#   (optional) Boolean value to dtermine if ppc64le support should be enabled
-#   Defaults to false (no ppc64le support)
-#
 # [*ipxe_name_base*]
 #   (optional) Beginning of the source file name which is copied to
 #   $tftproot/ipxe.efi. Setting this to 'ipxe-snponly' on CentOS8 would result
@@ -68,6 +64,12 @@
 #   service facilitator.
 #   Defaults to ironic::params::xinetd_available
 #
+# DEPRECATED PARAMETERS
+#
+# [*enable_ppc64le*]
+#   (optional) Boolean value to dtermine if ppc64le support should be enabled
+#   Defaults to undef
+#
 class ironic::pxe (
   $package_ensure          = 'present',
   $tftp_root               = '/tftpboot',
@@ -76,14 +78,19 @@ class ironic::pxe (
   $syslinux_path           = $::ironic::params::syslinux_path,
   $syslinux_files          = $::ironic::params::syslinux_files,
   $tftp_bind_host          = undef,
-  $enable_ppc64le          = false,
   $ipxe_name_base          = 'ipxe-snponly',
   $uefi_ipxe_bootfile_name = 'snponly.efi',
-  $tftp_use_xinetd         = $::ironic::params::xinetd_available
+  $tftp_use_xinetd         = $::ironic::params::xinetd_available,
+  # DEPRECATED PARAMETERS
+  $enable_ppc64le          = undef
 ) inherits ironic::params {
 
   include ironic::deps
   include ironic::pxe::common
+
+  if $enable_ppc64le != undef {
+    warning('The ironic::pxe::enable_ppc64le parameter is deprecated and has no effect.')
+  }
 
   $tftp_root_real = pick($::ironic::pxe::common::tftp_root, $tftp_root)
   $http_root_real = pick($::ironic::pxe::common::http_root, $http_root)
@@ -118,17 +125,6 @@ class ironic::pxe (
     group   => 'ironic',
     require => Anchor['ironic::install::end'],
     tag     => 'ironic-tftp-file',
-  }
-
-  if $enable_ppc64le {
-    file { "${tftp_root_real}/ppc64le":
-      ensure  => 'directory',
-      seltype => 'tftpdir_t',
-      owner   => 'ironic',
-      group   => 'ironic',
-      require => Anchor['ironic::install::end'],
-      tag     => 'ironic-tftp-file',
-    }
   }
 
   file { $http_root_real:

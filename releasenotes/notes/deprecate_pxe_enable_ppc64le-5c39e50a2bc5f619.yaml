@@ -1,0 +1,9 @@
+---
+deprecations:
+  - |
+    The boolean parameter ``ironic::pxe::enable_ppc64le`` is now undefined and
+    setting it has no effect. Previously, setting it to true resulted in the
+    creation of ``/tftpboot/ppc64le/``. This directory is only required for the
+    creation of inspector file ``/tftpboot/ppc64le/default``. For this reason
+    the directory creation is moved to ``inspector.pp`` and both are created
+    when ``ironic::inspector::enable_ppc64le`` is set to ``true``.

@@ -404,6 +404,13 @@ Use ironic::inspector::ironic::endpoint_override instead.')
 
   # NOTE: ppc64le hardware supports only tftp
   if $enable_ppc64le {
+    file { "${tftp_root_real}/ppc64le":
+      ensure  => 'directory',
+      seltype => 'tftpdir_t',
+      owner   => 'ironic-inspector',
+      group   => 'ironic-inspector',
+      require => Anchor['ironic-inspector::config::begin'],
+    }
     file { "${tftp_root_real}/ppc64le/default":
       ensure  => 'present',
       seltype => 'tftpdir_t',
