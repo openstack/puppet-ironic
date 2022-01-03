@@ -1,0 +1,19 @@
+---
+features:
+  - |
+    The ``system_scope`` parameter has been added to the following classes.
+
+    - ``ironic::api::authtoken``
+    - ``ironic::inspector::authtoken``
+
+  - |
+    The ``ironic::keystone::auth_inspector`` class now supports customizing
+    roles assigned to the ironic-inspector service user.
+
+  - |
+    The ``ironic::keystone::auth`` class now supports defining assignmet of
+    system-scoped roles to the ironic service user.
+
+  - |
+    The ``ironic::keystone::auth_inspector`` class now supports defining
+    assignmet of system-scoped roles to the ironic-inspector service user.
