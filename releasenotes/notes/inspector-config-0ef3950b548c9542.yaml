@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``ironic::inspector::config`` class has been added. This class
+    allows  arbitrary configurations of ``ironic-inspector.conf``.
