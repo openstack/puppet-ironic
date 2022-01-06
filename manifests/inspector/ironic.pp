@@ -51,11 +51,11 @@
 #
 # [*max_retries*]
 #   (optional) Maximum number of retries in case of conflict error
-#   Defaults to 30
+#   Defaults to $::os_service_default
 #
 # [*retry_interval*]
 #   (optional) Interval between retries in case of conflict error
-#   Defaults to 2
+#   Defaults to $::os_service_default
 #
 class ironic::inspector::ironic (
   $auth_type           = 'password',
@@ -67,8 +67,8 @@ class ironic::inspector::ironic (
   $project_domain_name = 'Default',
   $region_name         = $::os_service_default,
   $endpoint_override   = $::os_service_default,
-  $max_retries         = 30,
-  $retry_interval      = 2,
+  $max_retries         = $::os_service_default,
+  $retry_interval      = $::os_service_default,
 ) {
 
   $auth_type_real           = pick($::ironic::inspector::ironic_auth_type, $auth_type)

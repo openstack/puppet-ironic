@@ -22,8 +22,6 @@ describe 'ironic::inspector::ironic' do
       :auth_url       => 'http://127.0.0.1:5000/v3',
       :project_name   => 'services',
       :username       => 'ironic',
-      :max_retries    => 30,
-      :retry_interval => 2,
     }
   end
 
@@ -46,8 +44,8 @@ describe 'ironic::inspector::ironic' do
       is_expected.to contain_ironic_inspector_config('ironic/project_domain_name').with_value('Default')
       is_expected.to contain_ironic_inspector_config('ironic/region_name').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('ironic/endpoint_override').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_inspector_config('ironic/max_retries').with_value(p[:max_retries])
-      is_expected.to contain_ironic_inspector_config('ironic/retry_interval').with_value(p[:retry_interval])
+      is_expected.to contain_ironic_inspector_config('ironic/max_retries').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_inspector_config('ironic/retry_interval').with_value('<SERVICE DEFAULT>')
     end
 
     context 'when overriding parameters' do
@@ -62,8 +60,8 @@ describe 'ironic::inspector::ironic' do
             :project_domain_name => 'NonDefault',
             :region_name         => 'regionTwo',
             :endpoint_override   => 'http://example2.com',
-            :max_retries         => 60,
-            :retry_interval      => 10,
+            :max_retries         => 30,
+            :retry_interval      => 2,
         )
       end
 
