@@ -54,6 +54,11 @@
 #    String value
 #    Defaults to $::os_service_default
 #
+# [*delete_after*]
+#   (optional) Number of seconds that the Swift object will last before being
+#   deleted.
+#   Defaults to $::os_service_default
+#
 class ironic::inspector::swift (
   $auth_type           = 'password',
   $auth_url            = $::os_service_default,
@@ -65,6 +70,7 @@ class ironic::inspector::swift (
   $region_name         = $::os_service_default,
   $endpoint_override   = $::os_service_default,
   $container           = $::os_service_default,
+  $delete_after        = $::os_service_default,
 ) {
 
   $auth_type_real           = pick($::ironic::inspector::swift_auth_type, $auth_type)
@@ -88,5 +94,6 @@ class ironic::inspector::swift (
     'swift/region_name':         value => $region_name_real;
     'swift/endpoint_override':   value => $endpoint_override;
     'swift/container':           value => $container_real;
+    'swift/delete_after':        value => $delete_after;
   }
 }

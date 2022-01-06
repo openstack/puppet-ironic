@@ -44,6 +44,7 @@ describe 'ironic::inspector::swift' do
       is_expected.to contain_ironic_inspector_config('swift/region_name').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('swift/endpoint_override').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('swift/container').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_inspector_config('swift/delete_after').with_value('<SERVICE DEFAULT>')
     end
 
     context 'when overriding parameters' do
@@ -59,6 +60,7 @@ describe 'ironic::inspector::swift' do
             :region_name         => 'regionTwo',
             :endpoint_override   => 'http://example2.com',
             :container           => 'mycontainer',
+            :delete_after        => 0,
         )
       end
 
@@ -73,6 +75,7 @@ describe 'ironic::inspector::swift' do
         is_expected.to contain_ironic_inspector_config('swift/region_name').with_value(p[:region_name])
         is_expected.to contain_ironic_inspector_config('swift/endpoint_override').with_value(p[:endpoint_override])
         is_expected.to contain_ironic_inspector_config('swift/container').with_value(p[:container])
+        is_expected.to contain_ironic_inspector_config('swift/delete_after').with_value(0)
       end
     end
 

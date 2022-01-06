@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``ironic::inspector::swift::delete_after`` parameter has been
+    added.
