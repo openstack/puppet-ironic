@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The network name parameters of the `ironic::conductor`` class has been
+    deprecated. Use the network parameters instead.
