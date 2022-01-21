@@ -94,10 +94,14 @@ describe 'ironic' do
     end
 
     it 'should perform default database configuration' do
-      is_expected.to contain_ironic_config('database/connection').with_value(params[:database_connection])
-      is_expected.to contain_ironic_config('database/max_retries').with_value(params[:database_max_retries])
-      is_expected.to contain_ironic_config('database/connection_recycle_time').with_value(params[:database_idle_timeout])
-      is_expected.to contain_ironic_config('database/retry_interval').with_value(params[:database_retry_interval])
+      # NOTE(tkajinam): This is actually implemented in ironic::db. Remove this
+      #                 when removing the deprecated database_* parameters.
+      is_expected.to contain_oslo__db('ironic_config').with(
+        :connection              => params[:database_connection],
+        :max_retries             => params[:database_max_retries],
+        :connection_recycle_time => params[:database_idle_timeout],
+        :retry_interval          => params[:database_retry_interval]
+      )
     end
 
     it 'configures ironic.conf' do
