@@ -35,16 +35,6 @@ describe 'ironic::inspector' do
       :add_ports             => 'pxe',
       :keep_ports            => 'all',
       :store_data            => 'none',
-      :ironic_auth_type      => 'password',
-      :ironic_username       => 'ironic',
-      :ironic_tenant_name    => 'services',
-      :ironic_auth_url       => 'http://127.0.0.1:5000/v3',
-      :ironic_max_retries    => 30,
-      :ironic_retry_interval => 2,
-      :swift_auth_type       => 'password',
-      :swift_username        => 'ironic',
-      :swift_tenant_name     => 'services',
-      :swift_auth_url        => 'http://127.0.0.1:5000/v3',
       :dnsmasq_ip_subnets    => [{ 'ip_range' =>
                                       '192.168.0.100,192.168.0.120',
                                    'mtu' => '1350'},
@@ -131,20 +121,6 @@ describe 'ironic::inspector' do
       is_expected.to contain_ironic_inspector_config('processing/add_ports').with_value(p[:add_ports])
       is_expected.to contain_ironic_inspector_config('processing/keep_ports').with_value(p[:keep_ports])
       is_expected.to contain_ironic_inspector_config('processing/store_data').with_value(p[:store_data])
-      is_expected.to contain_ironic_inspector_config('ironic/auth_type').with_value(p[:ironic_auth_type])
-      is_expected.to contain_ironic_inspector_config('ironic/username').with_value(p[:ironic_username])
-      is_expected.to contain_ironic_inspector_config('ironic/project_name').with_value(p[:ironic_tenant_name])
-      is_expected.to contain_ironic_inspector_config('ironic/project_domain_name').with_value('Default')
-      is_expected.to contain_ironic_inspector_config('ironic/user_domain_name').with_value('Default')
-      is_expected.to contain_ironic_inspector_config('ironic/auth_url').with_value(p[:ironic_auth_url])
-      is_expected.to contain_ironic_inspector_config('ironic/max_retries').with_value(p[:ironic_max_retries])
-      is_expected.to contain_ironic_inspector_config('ironic/retry_interval').with_value(p[:ironic_retry_interval])
-      is_expected.to contain_ironic_inspector_config('swift/auth_type').with_value(p[:swift_auth_type])
-      is_expected.to contain_ironic_inspector_config('swift/username').with_value(p[:swift_username])
-      is_expected.to contain_ironic_inspector_config('swift/project_name').with_value(p[:swift_tenant_name])
-      is_expected.to contain_ironic_inspector_config('swift/project_domain_name').with_value('Default')
-      is_expected.to contain_ironic_inspector_config('swift/user_domain_name').with_value('Default')
-      is_expected.to contain_ironic_inspector_config('swift/auth_url').with_value(p[:swift_auth_url])
       is_expected.to contain_ironic_inspector_config('processing/processing_hooks').with_value('$default_processing_hooks')
       is_expected.to contain_ironic_inspector_config('processing/node_not_found_hook').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('discovery/enroll_node_driver').with_value('<SERVICE DEFAULT>')
@@ -219,14 +195,6 @@ describe 'ironic::inspector' do
           :dhcp_debug                  => true,
           :listen_address              => '127.0.0.1',
           :api_max_limit               => 100,
-          :ironic_password             => 'password',
-          :ironic_project_domain_name  => 'Default',
-          :ironic_user_domain_name     => 'Default',
-          :ironic_auth_url             => 'http://192.168.0.1:5000/v3',
-          :swift_password              => 'password',
-          :swift_project_domain_name   => 'Default',
-          :swift_user_domain_name      => 'Default',
-          :swift_auth_url              => 'http://192.168.0.1:5000/v3',
           :pxe_transfer_protocol       => 'http',
           :additional_processing_hooks => 'hook1,hook2',
           :ramdisk_kernel_args         => 'foo=bar',
@@ -249,14 +217,6 @@ describe 'ironic::inspector' do
         is_expected.to contain_ironic_inspector_config('DEFAULT/listen_address').with_value(p[:listen_address])
         is_expected.to contain_ironic_inspector_config('DEFAULT/api_max_limit').with_value(100)
         is_expected.to contain_ironic_inspector_config('capabilities/boot_mode').with_value(p[:detect_boot_mode])
-        is_expected.to contain_ironic_inspector_config('ironic/password').with_value(p[:ironic_password]).with_secret(true)
-        is_expected.to contain_ironic_inspector_config('ironic/project_domain_name').with_value(p[:ironic_project_domain_name])
-        is_expected.to contain_ironic_inspector_config('ironic/user_domain_name').with_value(p[:ironic_user_domain_name])
-        is_expected.to contain_ironic_inspector_config('ironic/auth_url').with_value(p[:ironic_auth_url])
-        is_expected.to contain_ironic_inspector_config('swift/password').with_value(p[:swift_password]).with_secret(true)
-        is_expected.to contain_ironic_inspector_config('swift/project_domain_name').with_value(p[:swift_project_domain_name])
-        is_expected.to contain_ironic_inspector_config('swift/user_domain_name').with_value(p[:swift_user_domain_name])
-        is_expected.to contain_ironic_inspector_config('swift/auth_url').with_value(p[:swift_auth_url])
         is_expected.to contain_ironic_inspector_config('processing/processing_hooks').with_value('$default_processing_hooks,hook1,hook2')
         is_expected.to contain_ironic_inspector_config('processing/node_not_found_hook').with_value('enroll')
         is_expected.to contain_ironic_inspector_config('processing/add_ports').with_value('all')

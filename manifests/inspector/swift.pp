@@ -73,27 +73,17 @@ class ironic::inspector::swift (
   $delete_after        = $::os_service_default,
 ) {
 
-  $auth_type_real           = pick($::ironic::inspector::swift_auth_type, $auth_type)
-  $auth_url_real            = pick($::ironic::inspector::swift_auth_url, $auth_url)
-  $username_real            = pick($::ironic::inspector::swift_username, $username)
-  $password_real            = pick($::ironic::inspector::swift_password, $password)
-  $project_name_real        = pick($::ironic::inspector::swift_tenant_name, $project_name)
-  $user_domain_name_real    = pick($::ironic::inspector::swift_user_domain_name, $user_domain_name)
-  $project_domain_name_real = pick($::ironic::inspector::swift_project_domain_name, $project_domain_name)
-  $region_name_real         = pick($::ironic::inspector::swift_region_name, $region_name)
-  $container_real           = pick($::ironic::inspector::swift_container, $container)
-
   ironic_inspector_config {
-    'swift/auth_type':           value => $auth_type_real;
-    'swift/username':            value => $username_real;
-    'swift/password':            value => $password_real, secret => true;
-    'swift/auth_url':            value => $auth_url_real;
-    'swift/project_name':        value => $project_name_real;
-    'swift/user_domain_name':    value => $user_domain_name_real;
-    'swift/project_domain_name': value => $project_domain_name_real;
-    'swift/region_name':         value => $region_name_real;
+    'swift/auth_type':           value => $auth_type;
+    'swift/username':            value => $username;
+    'swift/password':            value => $password, secret => true;
+    'swift/auth_url':            value => $auth_url;
+    'swift/project_name':        value => $project_name;
+    'swift/user_domain_name':    value => $user_domain_name;
+    'swift/project_domain_name': value => $project_domain_name;
+    'swift/region_name':         value => $region_name;
     'swift/endpoint_override':   value => $endpoint_override;
-    'swift/container':           value => $container_real;
+    'swift/container':           value => $container;
     'swift/delete_after':        value => $delete_after;
   }
 }

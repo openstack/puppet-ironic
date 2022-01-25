@@ -1,0 +1,29 @@
+---
+upgrade:
+  - |
+    The following parameters of the ``ironic::inspector`` class have been
+    removed. Use the ``ironic::inspector::swift`` class instead.
+
+    - ``swift_auth_type``
+    - ``swift_username``
+    - ``swift_password``
+    - ``swift_tenant_name``
+    - ``swift_project_domain_name``
+    - ``swift_user_domain_name``
+    - ``swift_auth_url``
+    - ``swift_container``
+
+  - |
+    The following parameters of the ``ironic::inspector`` class have been
+    removed. Use the ``ironic::inspector::ironic`` class instead.
+
+    - ``ironic_auth_type``
+    - ``ironic_username``
+    - ``ironic_password``
+    - ``ironic_tenant_name``
+    - ``ironic_project_domain_name``
+    - ``ironic_user_domain_name``
+    - ``ironic_auth_url``
+    - ``ironic_url``
+    - ``ironic_max_retries``
+    - ``ironic_retry_interval``

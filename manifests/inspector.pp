@@ -192,81 +192,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*swift_auth_type*]
-#   (optional) Authentication plugin for accessing Swift
-#   Defaults to undef.
-#
-# [*swift_username*]
-#   (optional) User name for accessing Swift API
-#   Defaults to undef.
-#
-# [*swift_password*]
-#   (optional) Password for accessing Swift API
-#   Defaults to undef.
-#
-# [*swift_tenant_name*]
-#   (optional) Tenant name for accessing Swift API
-#   Defaults to undef.
-#
-# [*swift_project_domain_name*]
-#   (Optional) Name of domain for $swift_tenant_name
-#   Defaults to undef.
-#
-# [*swift_user_domain_name*]
-#   (Optional) Name of domain for $swift_username
-#   Defaults to undef.
-#
-# [*swift_auth_url*]
-#   (optional) Keystone authentication URL for Swift
-#   Defautls to undef.
-#
-# [*swift_container*]
-#    (optional) Default Swift container name to use when creating objects.
-#    String value
-#    Defaults to undef.
-#
-# [*ironic_auth_type*]
-#   (optional) Authentication plugin for accessing Ironic
-#   Defaults to undef
-#
-# [*ironic_username*]
-#   (optional) User name for accessing Ironic API
-#   Defaults to undef
-#
-# [*ironic_password*]
-#   (optional) Password for accessing Ironic API
-#   Defaults to undef.
-#
-# [*ironic_tenant_name*]
-#   (optional) Tenant name for accessing Ironic API
-#   Defaults to undef.
-#
-# [*ironic_project_domain_name*]
-#   (Optional) Name of domain for $ironic_tenant_name
-#   Defaults to undef.
-#
-# [*ironic_user_domain_name*]
-#   (Optional) Name of domain for $ironic_username
-#   Defaults to undef.
-#
-# [*ironic_auth_url*]
-#   (optional) Keystone authentication URL for Ironic
-#   Defautls to undef.
-#
-# [*ironic_url*]
-#    (optional) Ironic API URL, used to set Ironic API URL when auth_strategy
-#    option is noauth or auth_type is "none" to work with standalone Ironic
-#    without keystone. String value
-#    Defaults to 'undef'
-#
-# [*ironic_max_retries*]
-#   (optional) Maximum number of retries in case of conflict error
-#   Defaults to undef.
-#
-# [*ironic_retry_interval*]
-#   (optional) Interval between retries in case of conflict error
-#   Defaults to undef.
-#
 # [*db_connection*]
 #   (optional) Location of the ironic-inspector node cache database
 #   Defaults to undef
@@ -308,24 +233,6 @@ class ironic::inspector (
   $port_physnet_cidr_map           = {},
   $uefi_ipxe_bootfile_name         = 'snponly.efi',
   # DEPRECATED PARAMETERS
-  $swift_auth_type                 = undef,
-  $swift_username                  = undef,
-  $swift_password                  = undef,
-  $swift_tenant_name               = undef,
-  $swift_project_domain_name       = undef,
-  $swift_user_domain_name          = undef,
-  $swift_auth_url                  = undef,
-  $swift_container                 = undef,
-  $ironic_auth_type                = undef,
-  $ironic_username                 = undef,
-  $ironic_password                 = undef,
-  $ironic_tenant_name              = undef,
-  $ironic_project_domain_name      = undef,
-  $ironic_user_domain_name         = undef,
-  $ironic_auth_url                 = undef,
-  $ironic_url                      = undef,
-  $ironic_max_retries              = undef,
-  $ironic_retry_interval           = undef,
   $db_connection                   = undef,
 ) {
 
@@ -337,17 +244,10 @@ class ironic::inspector (
   include ironic::pxe::common
   include ironic::inspector::db
   include ironic::inspector::policy
-  include ironic::inspector::swift
-  include ironic::inspector::ironic
 
   if $db_connection != undef {
     warning('The db_connection parameter is deprecated and will be removed \
 in a future realse. Use ironic::inspector::db::database_connection instead')
-  }
-
-  if $ironic_url != undef {
-    warning('ironic::inspector::ironic_url is now deprecated and has no effect. \
-Use ironic::inspector::ironic::endpoint_override instead.')
   }
 
   if $auth_strategy == 'keystone' {
