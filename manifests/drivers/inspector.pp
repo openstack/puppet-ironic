@@ -42,6 +42,10 @@
 #   The name of project's domain (required for Identity V3).
 #   Defaults to 'Default'
 #
+# [*system_scope*]
+#   (Optional) Scope for system operations
+#   Defaults to $::os_service_default
+#
 # [*region_name*]
 #   (optional) Region name for connecting to ironic-inspector in admin context
 #   through the OpenStack Identity service.
@@ -77,6 +81,7 @@ class ironic::drivers::inspector (
   $password                   = $::os_service_default,
   $user_domain_name           = 'Default',
   $project_domain_name        = 'Default',
+  $system_scope               = $::os_service_default,
   $region_name                = $::os_service_default,
   $endpoint_override          = $::os_service_default,
   $callback_endpoint_override = $::os_service_default,
@@ -93,14 +98,23 @@ class ironic::drivers::inspector (
 has no effect. Please use ironic::drivers::inspector::endpoint_override instead.")
   }
 
+  if is_service_default($system_scope) {
+    $project_name_real = $project_name
+    $project_domain_name_real = $project_domain_name
+  } else {
+    $project_name_real = $::os_service_default
+    $project_domain_name_real = $::os_service_default
+  }
+
   ironic_config {
     'inspector/auth_type':                  value => $auth_type;
     'inspector/username':                   value => $username;
     'inspector/password':                   value => $password, secret => true;
     'inspector/auth_url':                   value => $auth_url;
-    'inspector/project_name':               value => $project_name;
+    'inspector/project_name':               value => $project_name_real;
     'inspector/user_domain_name':           value => $user_domain_name;
-    'inspector/project_domain_name':        value => $project_domain_name;
+    'inspector/project_domain_name':        value => $project_domain_name_real;
+    'inspector/system_scope':               value => $system_scope;
     'inspector/region_name':                value => $region_name;
     'inspector/endpoint_override':          value => $endpoint_override;
     'inspector/callback_endpoint_override': value => $callback_endpoint_override;
