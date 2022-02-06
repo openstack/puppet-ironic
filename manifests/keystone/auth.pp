@@ -121,12 +121,7 @@ class ironic::keystone::auth (
 
   include ironic::deps
 
-  Keystone_user_role<| name == "${auth_name}@${tenant}" |> -> Anchor['ironic::service::end']
-  Keystone_user_role<| name == "${auth_name}@::::${system_scope}" |> -> Anchor['ironic::service::end']
-
-  if $configure_endpoint {
-    Keystone_endpoint["${region}/${service_name}::${service_type}"] -> Anchor['ironic::service::end']
-  }
+  Keystone::Resource::Service_identity['ironic'] -> Anchor['ironic::service::end']
 
   keystone::resource::service_identity { 'ironic':
     configure_user      => $configure_user,

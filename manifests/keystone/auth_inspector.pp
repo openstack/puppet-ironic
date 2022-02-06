@@ -114,12 +114,7 @@ class ironic::keystone::auth_inspector (
 
   $real_service_name = pick($service_name, $auth_name)
 
-  Keystone_user_role<| name == "${auth_name}@${tenant}" |> ~> Service <| name == 'ironic-inspector' |>
-  Keystone_user_role<| name == "${auth_name}@::::${system_scope}" |> ~> Service <| name == 'ironic-inspector' |>
-
-  if $configure_endpoint {
-    Keystone_endpoint["${region}/${real_service_name}::${service_type}"] ~> Service <| name == 'ironic-inspector' |>
-  }
+  Keystone::Resource::Service_identity['ironic-inspector'] -> Service <| name == 'ironic-inspector' |>
 
   keystone::resource::service_identity { 'ironic-inspector':
     configure_user      => $configure_user,
