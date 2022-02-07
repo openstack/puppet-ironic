@@ -1,0 +1,17 @@
+---
+upgrade:
+  - |
+    The following parameters of the ``ironic`` class has been removed.
+
+    - ``database_min_pool_size``
+    - ``database_connection``
+    - ``database_max_retries``
+    - ``database_idle_timeout``
+    - ``database_reconnect_interval``
+    - ``database_retry_interval``
+    - ``database_max_pool_size``
+    - ``database_max_overflow``
+
+  - |
+    The ``database_min_pool_size`` parameter of the ``ironic::db`` class has
+    been removed.

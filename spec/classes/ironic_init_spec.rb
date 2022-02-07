@@ -24,11 +24,6 @@ describe 'ironic' do
 
   let :params do
     { :package_ensure              => 'present',
-      :database_connection         => 'sqlite:////var/lib/ironic/ironic.sqlite',
-      :database_max_retries        => 10,
-      :database_idle_timeout       => 3600,
-      :database_reconnect_interval => 10,
-      :database_retry_interval     => 10,
       :purge_config                => false,
     }
   end
@@ -92,17 +87,6 @@ describe 'ironic' do
     it 'configures credentials for rabbit' do
       is_expected.to contain_oslo__messaging__rabbit('ironic_config').with(
         :kombu_failover_strategy => '<SERVICE DEFAULT>'
-      )
-    end
-
-    it 'should perform default database configuration' do
-      # NOTE(tkajinam): This is actually implemented in ironic::db. Remove this
-      #                 when removing the deprecated database_* parameters.
-      is_expected.to contain_oslo__db('ironic_config').with(
-        :connection              => params[:database_connection],
-        :max_retries             => params[:database_max_retries],
-        :connection_recycle_time => params[:database_idle_timeout],
-        :retry_interval          => params[:database_retry_interval]
       )
     end
 
