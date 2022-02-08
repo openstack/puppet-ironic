@@ -240,12 +240,6 @@
 #   (optional) Topics for the versioned notifications issued by Ironic
 #   Defaults to $::os_service_default
 #
-# DEPRECATED PARAMETERS
-#
-# [*amqp_allow_insecure_clients*]
-#   (Optional) Accept clients using either SSL or plain TCP
-#   Defaults to undef.
-#
 class ironic (
   $enabled                            = true,
   $package_ensure                     = 'present',
@@ -294,18 +288,11 @@ class ironic (
   $notification_topics                = $::os_service_default,
   $notification_level                 = $::os_service_default,
   $versioned_notifications_topics     = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $amqp_allow_insecure_clients        = undef,
 ) {
 
   include ironic::deps
   include ironic::db
   include ironic::params
-
-  if $amqp_allow_insecure_clients != undef {
-    warning('The amqp_allow_insecure_clients parameter is deprecated and \
-will be removed in a future relese.')
-  }
 
   include ironic::glance
   include ironic::neutron
