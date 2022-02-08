@@ -43,12 +43,6 @@
 #   Cluster (NDB).
 #   Defaults to $::os_service_default
 #
-# DEPRECATED PARAMETERS
-#
-# [*database_min_pool_size*]
-#   Minimum number of SQL connections to keep open in a pool.
-#   (Optional) Defaults to undef
-#
 class ironic::inspector::db (
   $database_connection              = 'sqlite:////var/lib/ironic-inspector/inspector.sqlite',
   $database_connection_recycle_time = $::os_service_default,
@@ -59,20 +53,12 @@ class ironic::inspector::db (
   $database_max_overflow            = $::os_service_default,
   $database_pool_timeout            = $::os_service_default,
   $mysql_enable_ndb                 = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $database_min_pool_size           = undef,
 ) {
 
   include ironic::params
 
-  if $database_min_pool_size {
-    warning('The database_min_pool_size parameter is deprecated, and will be removed in a future release.')
-  }
-
-  $database_connection_real              = pick($::ironic::inspector::db_connection, $database_connection)
-
   oslo::db { 'ironic_inspector_config':
-    connection              => $database_connection_real,
+    connection              => $database_connection,
     connection_recycle_time => $database_connection_recycle_time,
     max_pool_size           => $database_max_pool_size,
     max_retries             => $database_max_retries,

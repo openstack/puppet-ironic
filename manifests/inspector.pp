@@ -190,12 +190,6 @@
 #   driver.
 #   Defaults to 'snponly.efi'
 #
-# DEPRECATED PARAMETERS
-#
-# [*db_connection*]
-#   (optional) Location of the ironic-inspector node cache database
-#   Defaults to undef
-#
 class ironic::inspector (
   $package_ensure                  = 'present',
   $enabled                         = true,
@@ -232,8 +226,6 @@ class ironic::inspector (
   $default_transport_url           = 'fake://',
   $port_physnet_cidr_map           = {},
   $uefi_ipxe_bootfile_name         = 'snponly.efi',
-  # DEPRECATED PARAMETERS
-  $db_connection                   = undef,
 ) {
 
   validate_legacy(Array, 'validate_array', $dnsmasq_ip_subnets)
@@ -244,11 +236,6 @@ class ironic::inspector (
   include ironic::pxe::common
   include ironic::inspector::db
   include ironic::inspector::policy
-
-  if $db_connection != undef {
-    warning('The db_connection parameter is deprecated and will be removed \
-in a future realse. Use ironic::inspector::db::database_connection instead')
-  }
 
   if $auth_strategy == 'keystone' {
     include ironic::inspector::authtoken
