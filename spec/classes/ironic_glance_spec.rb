@@ -46,6 +46,7 @@ describe 'ironic::glance' do
       is_expected.to contain_ironic_config('glance/insecure').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('glance/num_retries').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('glance/swift_account').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('glance/swift_account_prefix').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('glance/swift_container').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('glance/swift_endpoint_url').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('glance/swift_temp_url_key').with_value('<SERVICE DEFAULT>').with_secret(true)
@@ -68,6 +69,7 @@ describe 'ironic::glance' do
           :api_insecure            => true,
           :num_retries             => 42,
           :swift_account           => '00000000-0000-0000-0000-000000000000',
+          :swift_account_prefix    => 'AUTH',
           :swift_container         => 'glance',
           :swift_endpoint_url      => 'http://example2.com',
           :swift_temp_url_key      => 'the-key',
@@ -89,6 +91,7 @@ describe 'ironic::glance' do
         is_expected.to contain_ironic_config('glance/insecure').with_value(p[:api_insecure])
         is_expected.to contain_ironic_config('glance/num_retries').with_value(p[:num_retries])
         is_expected.to contain_ironic_config('glance/swift_account').with_value(p[:swift_account])
+        is_expected.to contain_ironic_config('glance/swift_account_prefix').with_value(p[:swift_account_prefix])
         is_expected.to contain_ironic_config('glance/swift_container').with_value(p[:swift_container])
         is_expected.to contain_ironic_config('glance/swift_endpoint_url').with_value(p[:swift_endpoint_url])
         is_expected.to contain_ironic_config('glance/swift_temp_url_key').with_value(p[:swift_temp_url_key]).with_secret(true)

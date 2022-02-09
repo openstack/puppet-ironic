@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Now puppet-ironic supports managing the ``[glance] swift_account_prefix``
+    parameter, using the ``ironic::glance::swift_account_prefix`` parameter.
