@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``ironic::glance::swift_account_project_name`` parameter is deprecated
+    and will be removed in a future release.

@@ -59,13 +59,6 @@
 #   Can not be set together with swift_account_project_name.
 #   Defaults to $::os_service_default
 #
-# [*swift_account_project_name*]
-#   (optional) The project of account that Glance uses to communicate with Swift.
-#   Will be converted to UUID, and option glance/swift_account will be set in
-#   the "AUTH_uuid" format.
-#   Can not be set together with swift_account.
-#   Defaults to undef, which leaves the configuration intact
-#
 # [*swift_container*]
 #   (optional) Swift container where Glance images are stored. Used for
 #   generating temporary URLs.
@@ -95,6 +88,13 @@
 #   Has no effect, use endpoint_override.
 #   Defaults to undef
 #
+# [*swift_account_project_name*]
+#   (optional) The project of account that Glance uses to communicate with Swift.
+#   Will be converted to UUID, and option glance/swift_account will be set in
+#   the "AUTH_uuid" format.
+#   Can not be set together with swift_account.
+#   Defaults to undef, which leaves the configuration intact
+#
 class ironic::glance (
   $auth_type                  = 'password',
   $auth_url                   = $::os_service_default,
@@ -111,15 +111,19 @@ class ironic::glance (
   $swift_endpoint_url         = $::os_service_default,
   $swift_temp_url_key         = $::os_service_default,
   $swift_temp_url_duration    = $::os_service_default,
-  $swift_account_project_name = undef,
   $endpoint_override          = $::os_service_default,
   # DEPRECATED PARAMETERS
   $api_servers                = undef,
+  $swift_account_project_name = undef,
 ) {
 
   if $api_servers {
     warning("The ironic::glance::api_servers parameter is deprecated and \
 has no effect. Please use ironic::glance::endpoint_override instead.")
+  }
+
+  if $swift_account_project_name != undef {
+    warning('The swift_account_project_name parameter is deprecated and will be removed in a future release.')
   }
 
   if ($swift_account_project_name and !is_service_default($swift_account)) {
