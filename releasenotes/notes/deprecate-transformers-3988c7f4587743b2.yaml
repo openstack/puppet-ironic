@@ -1,0 +1,6 @@
+---
+deprecations:
+  - |
+    Usage of ``ironic_config`` with ``transform_to => 'net_uuid'`` or
+    ``transform_to => 'project_uuid'`` has been deprecated will be removed
+    in a future release.

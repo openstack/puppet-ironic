@@ -10,13 +10,15 @@ Puppet::Type.type(:ironic_config).provide(
   end
 
   def to_net_uuid(name)
-     properties = [name, '--column', 'id']
-     openstack = Puppet::Provider::Ironic::OpenstackRequest.new
-     res = openstack.openstack_request('network', 'show', properties)
-     return res[:id]
+    warning('to_net_uuid is deprecated and will be removed in a future release.')
+    properties = [name, '--column', 'id']
+    openstack = Puppet::Provider::Ironic::OpenstackRequest.new
+    res = openstack.openstack_request('network', 'show', properties)
+    return res[:id]
   end
 
   def from_net_uuid(uuid)
+    warning('from_net_uuid is deprecated and will be removed in a future release.')
     properties = [uuid, '--column', 'name']
     openstack = Puppet::Provider::Ironic::OpenstackRequest.new
     res = openstack.openstack_request('network', 'show', properties)
@@ -24,13 +26,15 @@ Puppet::Type.type(:ironic_config).provide(
   end
 
   def to_project_uuid(name)
-     properties = [name, '--column', 'id']
-     openstack = Puppet::Provider::Ironic::OpenstackRequest.new
-     res = openstack.openstack_request('project', 'show', properties)
-     return "AUTH_#{res[:id]}"
+    warning('to_project_uuid is deprecated and will be removed in a future release.')
+    properties = [name, '--column', 'id']
+    openstack = Puppet::Provider::Ironic::OpenstackRequest.new
+    res = openstack.openstack_request('project', 'show', properties)
+    return "AUTH_#{res[:id]}"
   end
 
   def from_project_uuid(uuid)
+    warning('from_project_uuid is deprecated and will be removed in a future release.')
     uuid = uuid.sub('AUTH_','')
     properties = [uuid, '--column', 'name']
     openstack = Puppet::Provider::Ironic::OpenstackRequest.new
