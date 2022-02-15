@@ -1,0 +1,8 @@
+---
+upgrade:
+  - |
+    The ``ironic::inspector::db_connection`` parameter has been removed.
+
+  - |
+    The ``ironic::inspector::db::database_min_pool_size`` parameter has been
+    removed.
