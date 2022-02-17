@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The new ``ironic::json_rpc::allowed_roles`` parameter have been added.

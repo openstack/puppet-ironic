@@ -65,13 +65,17 @@
 #   (optional) The name of project's domain (required for Identity V3).
 #   Defaults to 'Default'
 #
-# [*region_name*]
-#   (optional) Region name for connecting to swift in admin context
-#   through the OpenStack Identity service.
+# [*allowed_roles*]
+#   (optional) List of roles allowed to use JSON RPC.
 #   Defaults to $::os_service_default
 #
 # [*endpoint_override*]
 #   (optional) The endpoint URL for requests for this client
+#   Defaults to $::os_service_default
+#
+# [*region_name*]
+#   (optional) Region name for connecting to swift in admin context
+#   through the OpenStack Identity service.
 #   Defaults to $::os_service_default
 #
 class ironic::json_rpc (
@@ -87,6 +91,7 @@ class ironic::json_rpc (
   $password                  = $::os_service_default,
   $user_domain_name          = 'Default',
   $project_domain_name       = 'Default',
+  $allowed_roles             = $::os_service_default,
   $endpoint_override         = $::os_service_default,
   $region_name               = $::os_service_default,
 ) {
@@ -104,6 +109,7 @@ class ironic::json_rpc (
     'json_rpc/project_name':              value => $project_name;
     'json_rpc/user_domain_name':          value => $user_domain_name;
     'json_rpc/project_domain_name':       value => $project_domain_name;
+    'json_rpc/allowed_roles':             value => join(any2array($allowed_roles), ',');
     'json_rpc/endpoint_override':         value => $endpoint_override;
     'json_rpc/region_name':               value => $region_name;
   }

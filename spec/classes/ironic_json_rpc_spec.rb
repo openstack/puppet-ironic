@@ -48,7 +48,9 @@ describe 'ironic::json_rpc' do
       is_expected.to contain_ironic_config('json_rpc/password').with_value('<SERVICE DEFAULT>').with_secret(true)
       is_expected.to contain_ironic_config('json_rpc/user_domain_name').with_value('Default')
       is_expected.to contain_ironic_config('json_rpc/project_domain_name').with_value('Default')
+      is_expected.to contain_ironic_config('json_rpc/allowed_roles').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('json_rpc/endpoint_override').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('json_rpc/region_name').with_value('<SERVICE DEFAULT>')
     end
 
     context 'when overriding parameters' do
@@ -59,6 +61,8 @@ describe 'ironic::json_rpc' do
           :endpoint_override => 'http://example.com',
           :username          => 'admin',
           :password          => 'pa$$w0rd',
+          :allowed_roles     => ['admin', 'service'],
+          :region_name       => 'regionOne',
         )
       end
 
@@ -67,7 +71,9 @@ describe 'ironic::json_rpc' do
         is_expected.to contain_ironic_config('json_rpc/auth_type').with_value(p[:auth_type])
         is_expected.to contain_ironic_config('json_rpc/username').with_value(p[:username])
         is_expected.to contain_ironic_config('json_rpc/password').with_value(p[:password]).with_secret(true)
+        is_expected.to contain_ironic_config('json_rpc/allowed_roles').with_value('admin,service')
         is_expected.to contain_ironic_config('json_rpc/endpoint_override').with_value(p[:endpoint_override])
+        is_expected.to contain_ironic_config('json_rpc/region_name').with_value(p[:region_name])
       end
     end
 
