@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The new ``ironic::json_rpc::system_scope`` parameter has been added.

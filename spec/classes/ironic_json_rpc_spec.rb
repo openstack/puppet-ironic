@@ -48,6 +48,7 @@ describe 'ironic::json_rpc' do
       is_expected.to contain_ironic_config('json_rpc/password').with_value('<SERVICE DEFAULT>').with_secret(true)
       is_expected.to contain_ironic_config('json_rpc/user_domain_name').with_value('Default')
       is_expected.to contain_ironic_config('json_rpc/project_domain_name').with_value('Default')
+      is_expected.to contain_ironic_config('json_rpc/system_scope').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('json_rpc/allowed_roles').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('json_rpc/endpoint_override').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('json_rpc/region_name').with_value('<SERVICE DEFAULT>')
@@ -71,12 +72,26 @@ describe 'ironic::json_rpc' do
         is_expected.to contain_ironic_config('json_rpc/auth_type').with_value(p[:auth_type])
         is_expected.to contain_ironic_config('json_rpc/username').with_value(p[:username])
         is_expected.to contain_ironic_config('json_rpc/password').with_value(p[:password]).with_secret(true)
+        is_expected.to contain_ironic_config('json_rpc/system_scope').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ironic_config('json_rpc/allowed_roles').with_value('admin,service')
         is_expected.to contain_ironic_config('json_rpc/endpoint_override').with_value(p[:endpoint_override])
         is_expected.to contain_ironic_config('json_rpc/region_name').with_value(p[:region_name])
       end
     end
 
+    context 'when system_scope is set' do
+      before :each do
+        params.merge!(
+          :system_scope => 'all',
+        )
+      end
+
+      it 'should configure system-scoped credential' do
+        is_expected.to contain_ironic_config('json_rpc/project_name').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('json_rpc/project_domain_name').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('json_rpc/system_scope').with_value('all')
+      end
+    end
   end
 
   on_supported_os({
