@@ -33,12 +33,13 @@ define ironic::pxe::tftpboot_file (
   $file = $title,
 ) {
   include ironic::deps
+  include ironic::params
 
   file {"${destination_directory}/${file}":
     ensure  => 'present',
     seltype => 'tftpdir_t',
-    owner   => 'ironic',
-    group   => 'ironic',
+    owner   => $::ironic::params::user,
+    group   => $::ironic::params::group,
     mode    => '0744',
     source  => "${source_directory}/${file}",
     backup  => false,

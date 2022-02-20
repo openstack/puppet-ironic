@@ -249,8 +249,8 @@ class ironic::inspector (
 
   file { '/etc/ironic-inspector/inspector.conf':
     ensure  => 'present',
-    owner   => 'ironic-inspector',
-    group   => 'ironic-inspector',
+    owner   => $::ironic::params::inspector_user,
+    group   => $::ironic::params::inspector_group,
     require => Anchor['ironic-inspector::config::begin'],
   }
 
@@ -266,8 +266,8 @@ class ironic::inspector (
     file { "${tftp_root_real}/pxelinux.cfg/default":
       ensure  => 'present',
       seltype => 'tftpdir_t',
-      owner   => 'ironic-inspector',
-      group   => 'ironic-inspector',
+      owner   => $::ironic::params::inspector_user,
+      group   => $::ironic::params::inspector_group,
       content => template('ironic/inspector_pxelinux_cfg.erb'),
       require => Anchor['ironic-inspector::config::begin'],
     }
@@ -282,8 +282,8 @@ class ironic::inspector (
     file { "${http_root_real}/inspector.ipxe":
       ensure  => 'present',
       seltype => 'httpd_sys_content_t',
-      owner   => 'ironic-inspector',
-      group   => 'ironic-inspector',
+      owner   => $::ironic::params::inspector_user,
+      group   => $::ironic::params::inspector_group,
       content => template('ironic/inspector_ipxe.erb'),
       require => Anchor['ironic-inspector::config::begin'],
     }
@@ -294,15 +294,15 @@ class ironic::inspector (
     file { "${tftp_root_real}/ppc64le":
       ensure  => 'directory',
       seltype => 'tftpdir_t',
-      owner   => 'ironic-inspector',
-      group   => 'ironic-inspector',
+      owner   => $::ironic::params::inspector_user,
+      group   => $::ironic::params::inspector_group,
       require => Anchor['ironic-inspector::config::begin'],
     }
     file { "${tftp_root_real}/ppc64le/default":
       ensure  => 'present',
       seltype => 'tftpdir_t',
-      owner   => 'ironic-inspector',
-      group   => 'ironic-inspector',
+      owner   => $::ironic::params::inspector_user,
+      group   => $::ironic::params::inspector_group,
       content => template('ironic/inspector_pxelinux_cfg.erb'),
       require => Anchor['ironic-inspector::config::begin'],
     }

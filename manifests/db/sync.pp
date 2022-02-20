@@ -25,8 +25,8 @@ class ironic::db::sync(
   # To be removed in Rocky.
   file { '/var/log/ironic/ironic-dbsync.log':
     ensure  => 'present',
-    owner   => 'ironic',
-    group   => 'ironic',
+    owner   => $::ironic::params::user,
+    group   => $::ironic::params::group,
     # /var/log/ironic comes from ironic-common
     require => Anchor['ironic::install::end']
   }
@@ -34,7 +34,7 @@ class ironic::db::sync(
   exec { 'ironic-dbsync':
     command     => "${::ironic::params::dbsync_command} ${extra_params}",
     path        => '/usr/bin',
-    user        => 'ironic',
+    user        => $::ironic::params::user,
     refreshonly => true,
     try_sleep   => 5,
     tries       => 10,

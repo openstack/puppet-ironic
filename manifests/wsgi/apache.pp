@@ -139,7 +139,7 @@ class ironic::wsgi::apache (
   ::openstacklib::wsgi::apache { 'ironic_wsgi':
     bind_host                   => $bind_host,
     bind_port                   => $port,
-    group                       => 'ironic',
+    group                       => $::ironic::params::group,
     path                        => $path,
     priority                    => $priority,
     servername                  => $servername,
@@ -152,7 +152,7 @@ class ironic::wsgi::apache (
     ssl_crl_path                => $ssl_crl_path,
     ssl_key                     => $ssl_key,
     threads                     => $threads,
-    user                        => 'ironic',
+    user                        => $::ironic::params::user,
     vhost_custom_fragment       => $vhost_custom_fragment,
     workers                     => $workers,
     wsgi_daemon_process         => 'ironic',
