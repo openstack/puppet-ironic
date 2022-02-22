@@ -17,7 +17,7 @@ class ironic::inspector::db::sync(
   exec { 'ironic-inspector-dbsync':
     command     => $::ironic::params::inspector_dbsync_command,
     path        => '/usr/bin',
-    user        => 'ironic-inspector',
+    user        => $::ironic::params::inspector_user,
     refreshonly => true,
     timeout     => $db_sync_timeout,
     logoutput   => on_failure,

@@ -25,7 +25,7 @@ class ironic::db::online_data_migrations(
   exec { 'ironic-db-online-data-migrations':
     command     => "${::ironic::params::dbsync_command} ${extra_params} online_data_migrations ${migration_params}",
     path        => '/usr/bin',
-    user        => 'ironic',
+    user        => $::ironic::params::user,
     refreshonly => true,
     try_sleep   => 5,
     tries       => 10,
