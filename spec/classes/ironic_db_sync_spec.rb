@@ -22,12 +22,6 @@ describe 'ironic::db::sync' do
         :notify      => 'Anchor[ironic::dbsync::end]',
         :tag         => 'openstack-db',
       )
-
-      is_expected.to contain_file('/var/log/ironic/ironic-dbsync.log').with(
-        :ensure  => 'present',
-        :owner   => 'ironic',
-        :group   => 'ironic',
-      )
     end
 
     describe "overriding params" do

@@ -20,17 +20,6 @@ class ironic::db::sync(
   include ironic::deps
   include ironic::params
 
-  # NOTE(dtantsur): previous ironic-dbsync was run as root. it will fail to run
-  # as "ironic" user, if there is an old log file owned by root. Let's fix it.
-  # To be removed in Rocky.
-  file { '/var/log/ironic/ironic-dbsync.log':
-    ensure  => 'present',
-    owner   => $::ironic::params::user,
-    group   => $::ironic::params::group,
-    # /var/log/ironic comes from ironic-common
-    require => Anchor['ironic::install::end']
-  }
-
   exec { 'ironic-dbsync':
     command     => "${::ironic::params::dbsync_command} ${extra_params}",
     path        => '/usr/bin',
@@ -46,7 +35,6 @@ class ironic::db::sync(
       Anchor['ironic::dbsync::begin']
     ],
     notify      => Anchor['ironic::dbsync::end'],
-    require     => File['/var/log/ironic/ironic-dbsync.log'],
     tag         => 'openstack-db',
   }
 }
