@@ -40,6 +40,10 @@
 #   The name of project's domain (required for Identity V3).
 #   Defaults to 'Default'
 #
+# [*system_scope*]
+#   (Optional) Scope for system operations
+#   Defaults to $::os_service_default
+#
 # [*region_name*]
 #   (optional) Region name for connecting to neutron in admin context
 #   through the OpenStack Identity service.
@@ -72,6 +76,7 @@ class ironic::neutron (
   $password                      = $::os_service_default,
   $user_domain_name              = 'Default',
   $project_domain_name           = 'Default',
+  $system_scope                  = $::os_service_default,
   $region_name                   = $::os_service_default,
   $endpoint_override             = $::os_service_default,
   $dhcpv6_stateful_address_count = $::os_service_default,
@@ -84,14 +89,23 @@ class ironic::neutron (
 has no effect. Please use ironic::neutron::endpoint_override instead.")
   }
 
+  if is_service_default($system_scope) {
+    $project_name_real = $project_name
+    $project_domain_name_real = $project_domain_name
+  } else {
+    $project_name_real = $::os_service_default
+    $project_domain_name_real = $::os_service_default
+  }
+
   ironic_config {
     'neutron/auth_type':                     value => $auth_type;
     'neutron/username':                      value => $username;
     'neutron/password':                      value => $password, secret => true;
     'neutron/auth_url':                      value => $auth_url;
-    'neutron/project_name':                  value => $project_name;
+    'neutron/project_name':                  value => $project_name_real;
     'neutron/user_domain_name':              value => $user_domain_name;
-    'neutron/project_domain_name':           value => $project_domain_name;
+    'neutron/project_domain_name':           value => $project_domain_name_real;
+    'neutron/system_scope':                  value => $system_scope;
     'neutron/region_name':                   value => $region_name;
     'neutron/endpoint_override':             value => $endpoint_override;
     'neutron/dhcpv6_stateful_address_count': value => $dhcpv6_stateful_address_count;

@@ -40,6 +40,10 @@
 #   The name of project's domain (required for Identity V3).
 #   Defaults to 'Default'
 #
+# [*system_scope*]
+#   (Optional) Scope for system operations
+#   Defaults to $::os_service_default
+#
 # [*region_name*]
 #   (optional) Region name for accessing Keystone catalog
 #   through the OpenStack Identity service.
@@ -57,20 +61,30 @@ class ironic::inspector::service_catalog (
   $password            = $::os_service_default,
   $user_domain_name    = 'Default',
   $project_domain_name = 'Default',
+  $system_scope        = $::os_service_default,
   $region_name         = $::os_service_default,
   $endpoint_override   = $::os_service_default,
 ) {
 
   include ironic::deps
 
+  if is_service_default($system_scope) {
+    $project_name_real = $project_name
+    $project_domain_name_real = $project_domain_name
+  } else {
+    $project_name_real = $::os_service_default
+    $project_domain_name_real = $::os_service_default
+  }
+
   ironic_inspector_config {
     'service_catalog/auth_type':           value => $auth_type;
     'service_catalog/username':            value => $username;
     'service_catalog/password':            value => $password, secret => true;
     'service_catalog/auth_url':            value => $auth_url;
-    'service_catalog/project_name':        value => $project_name;
+    'service_catalog/project_name':        value => $project_name_real;
     'service_catalog/user_domain_name':    value => $user_domain_name;
-    'service_catalog/project_domain_name': value => $project_domain_name;
+    'service_catalog/project_domain_name': value => $project_domain_name_real;
+    'service_catalog/system_scope':        value => $system_scope;
     'service_catalog/region_name':         value => $region_name;
     'service_catalog/endpoint_override':   value => $endpoint_override;
   }

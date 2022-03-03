@@ -1,0 +1,12 @@
+---
+features:
+  - |
+    The new ``system_scope`` parameter has been added to the following classes.
+
+    - ``ironic::cinder``
+    - ``ironic::glance``
+    - ``ironic::neutron``
+    - ``ironic::service_catalog``
+    - ``ironic::swift``
+    - ``ironic::inspector::ironic``
+    - ``ironic::inspector::swift``
