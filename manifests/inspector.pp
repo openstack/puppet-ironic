@@ -112,6 +112,10 @@
 #   filter.
 #   Defaults to undef
 #
+# [*dnsmasq_log_facility*]
+#   (optional) Log facility of the dnsmasq process.
+#   Defaults to undef
+#
 # [*sync_db*]
 #   Enable dbsync
 #   Defaults to true
@@ -209,6 +213,7 @@ class ironic::inspector (
   $dnsmasq_local_ip                = '192.168.0.1',
   $dnsmasq_dhcp_sequential_ip      = true,
   $dnsmasq_dhcp_hostsdir           = undef,
+  $dnsmasq_log_facility            = undef,
   $sync_db                         = true,
   $ramdisk_collectors              = 'default',
   $ramdisk_filename                = 'agent.ramdisk',

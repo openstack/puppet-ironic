@@ -64,6 +64,10 @@
 #   service facilitator.
 #   Defaults to ironic::params::xinetd_available
 #
+# [*dnsmasq_log_facility*]
+#   (optional) Log facility of the dnsmasq process to server tftp server.
+#   Defaults to undef
+#
 # DEPRECATED PARAMETERS
 #
 # [*enable_ppc64le*]
@@ -81,6 +85,7 @@ class ironic::pxe (
   $ipxe_name_base          = 'ipxe-snponly',
   $uefi_ipxe_bootfile_name = 'snponly.efi',
   $tftp_use_xinetd         = $::ironic::params::xinetd_available,
+  $dnsmasq_log_facility    = undef,
   # DEPRECATED PARAMETERS
   $enable_ppc64le          = undef
 ) inherits ironic::params {
