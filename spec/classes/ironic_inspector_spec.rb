@@ -174,6 +174,9 @@ describe 'ironic::inspector' do
       is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
         /dhcp-sequential-ip/
       )
+      is_expected.not_to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
+        /log-facility=.*/
+      )
     end
     it 'should contain file /tftpboot/pxelinux.cfg/default' do
       is_expected.to contain_file('/tftpboot/pxelinux.cfg/default').with(
@@ -206,6 +209,7 @@ describe 'ironic::inspector' do
           :discovery_default_driver    => 'pxe_ipmitool',
           :dnsmasq_ip_subnets          => [{'ip_range' => '192.168.0.100,192.168.0.120'}],
           :dnsmasq_dhcp_sequential_ip  => false,
+          :dnsmasq_log_facility        => '/var/log/ironic-inspector/dnsmasq.log',
           :add_ports                   => 'all',
           :always_store_ramdisk_logs   => true,
           :port_physnet_cidr_map       => {'192.168.20.0/24' => 'physnet_a',
@@ -251,6 +255,9 @@ describe 'ironic::inspector' do
         )
         is_expected.not_to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
             /dhcp-sequential-ip/
+        )
+        is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
+            /log-facility=\/var\/log\/ironic-inspector\/dnsmasq.log/
         )
         is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
             /dhcp-boot=tag:efi,tag:!ipxe,otherpxe.efi/

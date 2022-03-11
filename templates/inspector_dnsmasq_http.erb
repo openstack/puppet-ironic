@@ -4,6 +4,9 @@ interface=<%= @dnsmasq_interface %>
 log-dhcp
 log-queries
 <% end %>
+<% if ! @dnsmasq_log_facility.nil? %>
+log-facility=<%= @dnsmasq_log_facility %>
+<% end -%>
 <% @dnsmasq_ip_subnets_real.each do |s| -%>
 <% if s['tag'] and s['netmask'] -%>
 dhcp-range=set:<%= s['tag'] -%>,<%= s['ip_range'] -%>,<%= s['netmask'] -%>,10m

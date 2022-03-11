@@ -6,3 +6,6 @@ tftp-root=<%= @tftp_root_real %>
 <% if @tftp_bind_host -%>
 listen-address=<%= @tftp_bind_host %>
 <% end -%>
+<% if ! @dnsmasq_log_facility.nil? -%>
+log-facility=<%= @dnsmasq_log_facility %>
+<% end -%>
