@@ -40,6 +40,10 @@
 #   The name of project's domain (required for Identity V3).
 #   Defaults to 'Default'
 #
+# [*system_scope*]
+#   (Optional) Scope for system operations
+#   Defaults to $::os_service_default
+#
 # [*region_name*]
 #   (optional) Region name for connecting to ironic in admin context
 #   through the OpenStack Identity service.
@@ -65,20 +69,30 @@ class ironic::inspector::ironic (
   $password            = $::os_service_default,
   $user_domain_name    = 'Default',
   $project_domain_name = 'Default',
+  $system_scope        = $::os_service_default,
   $region_name         = $::os_service_default,
   $endpoint_override   = $::os_service_default,
   $max_retries         = $::os_service_default,
   $retry_interval      = $::os_service_default,
 ) {
 
+  if is_service_default($system_scope) {
+    $project_name_real = $project_name
+    $project_domain_name_real = $project_domain_name
+  } else {
+    $project_name_real = $::os_service_default
+    $project_domain_name_real = $::os_service_default
+  }
+
   ironic_inspector_config {
     'ironic/auth_type':           value => $auth_type;
     'ironic/username':            value => $username;
     'ironic/password':            value => $password, secret => true;
     'ironic/auth_url':            value => $auth_url;
-    'ironic/project_name':        value => $project_name;
+    'ironic/project_name':        value => $project_name_real;
     'ironic/user_domain_name':    value => $user_domain_name;
-    'ironic/project_domain_name': value => $project_domain_name;
+    'ironic/project_domain_name': value => $project_domain_name_real;
+    'ironic/system_scope':        value => $system_scope;
     'ironic/region_name':         value => $region_name;
     'ironic/endpoint_override':   value => $endpoint_override;
     'ironic/max_retries':         value => $max_retries;

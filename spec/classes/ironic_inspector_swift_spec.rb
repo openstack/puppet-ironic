@@ -42,6 +42,7 @@ describe 'ironic::inspector::swift' do
       is_expected.to contain_ironic_inspector_config('swift/user_domain_name').with_value('Default')
       is_expected.to contain_ironic_inspector_config('swift/project_domain_name').with_value('Default')
       is_expected.to contain_ironic_inspector_config('swift/region_name').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_inspector_config('swift/system_scope').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('swift/endpoint_override').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('swift/container').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('swift/delete_after').with_value('<SERVICE DEFAULT>')
@@ -50,17 +51,17 @@ describe 'ironic::inspector::swift' do
     context 'when overriding parameters' do
       before :each do
         params.merge!(
-            :auth_type           => 'noauth',
-            :auth_url            => 'http://example.com',
-            :project_name        => 'project1',
-            :username            => 'admin',
-            :password            => 'pa$$w0rd',
-            :user_domain_name    => 'NonDefault',
-            :project_domain_name => 'NonDefault',
-            :region_name         => 'regionTwo',
-            :endpoint_override   => 'http://example2.com',
-            :container           => 'mycontainer',
-            :delete_after        => 0,
+          :auth_type           => 'noauth',
+          :auth_url            => 'http://example.com',
+          :project_name        => 'project1',
+          :username            => 'admin',
+          :password            => 'pa$$w0rd',
+          :user_domain_name    => 'NonDefault',
+          :project_domain_name => 'NonDefault',
+          :region_name         => 'regionTwo',
+          :endpoint_override   => 'http://example2.com',
+          :container           => 'mycontainer',
+          :delete_after        => 0,
         )
       end
 
@@ -73,12 +74,25 @@ describe 'ironic::inspector::swift' do
         is_expected.to contain_ironic_inspector_config('swift/user_domain_name').with_value(p[:user_domain_name])
         is_expected.to contain_ironic_inspector_config('swift/project_domain_name').with_value(p[:project_domain_name])
         is_expected.to contain_ironic_inspector_config('swift/region_name').with_value(p[:region_name])
+        is_expected.to contain_ironic_inspector_config('swift/system_scope').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ironic_inspector_config('swift/endpoint_override').with_value(p[:endpoint_override])
         is_expected.to contain_ironic_inspector_config('swift/container').with_value(p[:container])
         is_expected.to contain_ironic_inspector_config('swift/delete_after').with_value(0)
       end
     end
 
+    context 'when system_scope is set' do
+      before do
+        params.merge!(
+          :system_scope => 'all'
+        )
+      end
+      it 'configures system-scoped credential' do
+        is_expected.to contain_ironic_inspector_config('swift/project_domain_name').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_inspector_config('swift/project_name').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_inspector_config('swift/system_scope').with_value('all')
+      end
+    end
   end
 
   on_supported_os({

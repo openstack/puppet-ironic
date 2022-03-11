@@ -40,6 +40,10 @@
 #   The name of project's domain (required for Identity V3).
 #   Defaults to 'Default'
 #
+# [*system_scope*]
+#   (Optional) Scope for system operations
+#   Defaults to $::os_service_default
+#
 # [*region_name*]
 #   (optional) Region name for connecting to glance in admin context
 #   through the OpenStack Identity service.
@@ -103,6 +107,7 @@ class ironic::glance (
   $password                   = $::os_service_default,
   $user_domain_name           = 'Default',
   $project_domain_name        = 'Default',
+  $system_scope               = $::os_service_default,
   $region_name                = $::os_service_default,
   $num_retries                = $::os_service_default,
   $api_insecure               = $::os_service_default,
@@ -117,6 +122,8 @@ class ironic::glance (
   $swift_account_project_name = undef,
 ) {
 
+  include ironic::deps
+
   if $api_servers {
     warning("The ironic::glance::api_servers parameter is deprecated and \
 has no effect. Please use ironic::glance::endpoint_override instead.")
@@ -130,14 +137,23 @@ has no effect. Please use ironic::glance::endpoint_override instead.")
     fail('swift_account_project_name and swift_account can not be specified in the same time.')
   }
 
+  if is_service_default($system_scope) {
+    $project_name_real = $project_name
+    $project_domain_name_real = $project_domain_name
+  } else {
+    $project_name_real = $::os_service_default
+    $project_domain_name_real = $::os_service_default
+  }
+
   ironic_config {
     'glance/auth_type':               value => $auth_type;
     'glance/username':                value => $username;
     'glance/password':                value => $password, secret => true;
     'glance/auth_url':                value => $auth_url;
-    'glance/project_name':            value => $project_name;
+    'glance/project_name':            value => $project_name_real;
     'glance/user_domain_name':        value => $user_domain_name;
-    'glance/project_domain_name':     value => $project_domain_name;
+    'glance/project_domain_name':     value => $project_domain_name_real;
+    'glance/system_scope':            value => $system_scope;
     'glance/region_name':             value => $region_name;
     'glance/num_retries':             value => $num_retries;
     'glance/insecure':                value => $api_insecure;
