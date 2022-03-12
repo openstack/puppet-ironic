@@ -63,6 +63,11 @@
 #   Can not be set together with swift_account_project_name.
 #   Defaults to $::os_service_default
 #
+# [*swift_account_prefix*]
+#   (optional) The prefix added to the project uuid to determine the swift
+#   account.
+#   Defaults to $::os_service_default
+#
 # [*swift_container*]
 #   (optional) Swift container where Glance images are stored. Used for
 #   generating temporary URLs.
@@ -112,6 +117,7 @@ class ironic::glance (
   $num_retries                = $::os_service_default,
   $api_insecure               = $::os_service_default,
   $swift_account              = $::os_service_default,
+  $swift_account_prefix       = $::os_service_default,
   $swift_container            = $::os_service_default,
   $swift_endpoint_url         = $::os_service_default,
   $swift_temp_url_key         = $::os_service_default,
@@ -157,6 +163,7 @@ has no effect. Please use ironic::glance::endpoint_override instead.")
     'glance/region_name':             value => $region_name;
     'glance/num_retries':             value => $num_retries;
     'glance/insecure':                value => $api_insecure;
+    'glance/swift_account_prefix':    value => $swift_account_prefix;
     'glance/swift_container':         value => $swift_container;
     'glance/swift_endpoint_url':      value => $swift_endpoint_url;
     'glance/swift_temp_url_key':      value => $swift_temp_url_key, secret => true;
