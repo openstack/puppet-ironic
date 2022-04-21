@@ -62,12 +62,6 @@
 #   successfully lease addresses.
 #   Defaults to $::os_service_default
 #
-# DEPRECATED PARAMETERS
-#
-# [*api_endpoint*]
-#   Has no effect, use endpoint_override.
-#   Defaults to undef
-#
 class ironic::neutron (
   $auth_type                     = 'password',
   $auth_url                      = $::os_service_default,
@@ -80,14 +74,7 @@ class ironic::neutron (
   $region_name                   = $::os_service_default,
   $endpoint_override             = $::os_service_default,
   $dhcpv6_stateful_address_count = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $api_endpoint                  = undef,
 ) {
-
-  if $api_endpoint {
-    warning("The ironic::neutron::api_endpoint parameter is deprecated and \
-has no effect. Please use ironic::neutron::endpoint_override instead.")
-  }
 
   if is_service_default($system_scope) {
     $project_name_real = $project_name

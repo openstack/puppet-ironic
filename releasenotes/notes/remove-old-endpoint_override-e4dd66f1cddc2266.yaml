@@ -1,0 +1,8 @@
+---
+upgrade:
+  - |
+    The ``ironic::glance::api_servers`` parameter and
+    the ``ironic::neutron::api_servers`` parameter have been removed.
+
+  - |
+    The ``ironic::drivers::inspector::service_url`` parameter has been removed.
