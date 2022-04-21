@@ -119,12 +119,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*ipxe_enabled*]
-#   DEPRECATED: This option is no longer used as support for the option was
-#   deprecated during Ironic's Stein development cycle and removed during
-#   Ironic's Train development cycle.
-#   If this setting is populated, a warning will be indicated.
-#
 # [*ip_version*]
 #   DEPRECATED: (optional) The IP version that will be used for PXE booting.
 #   Ironic presently attempts both IPv4 and IPv6, this option is effectively
@@ -159,7 +153,6 @@ class ironic::drivers::pxe (
   $file_permission           = $::os_service_default,
   $loader_file_paths         = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $ipxe_enabled              = undef,
   $ip_version                = undef,
   $pxe_append_params         = undef,
 ) {
@@ -169,10 +162,6 @@ class ironic::drivers::pxe (
   $tftp_root_real               = pick($::ironic::pxe::common::tftp_root, $tftp_root)
   $ipxe_timeout_real            = pick($::ironic::pxe::common::ipxe_timeout, $ipxe_timeout)
   $uefi_ipxe_bootfile_name_real = pick($::ironic::pxe::common::uefi_ipxe_bootfile_name, $uefi_ipxe_bootfile_name)
-
-  if $ipxe_enabled != undef {
-    warning('The ironic::drivers::pxe::ipxe_enabled parameter is deprecated and has no effect.')
-  }
 
   if $ip_version != undef {
     warning('The ironic::drivers::pxe:ip_version parameter is deprecated and will be removed in the future.')

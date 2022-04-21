@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The ``ironic::drivers::pxe::ipxe_enabled`` parameter has been removed.
