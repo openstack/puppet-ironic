@@ -67,12 +67,6 @@
 #   Extra kernel parameters to pass in case of managed boot.
 #   Defaults to $::os_service_default
 #
-# DEPRECATED PARAMETERS
-#
-# [*service_url*]
-#   Has no effect, use endpoint_override.
-#   Defaults to undef
-#
 class ironic::drivers::inspector (
   $auth_type                  = 'password',
   $auth_url                   = $::os_service_default,
@@ -87,16 +81,9 @@ class ironic::drivers::inspector (
   $callback_endpoint_override = $::os_service_default,
   $power_off                  = $::os_service_default,
   $extra_kernel_params        = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $service_url                = undef,
 ) {
 
   include ironic::deps
-
-  if $service_url {
-    warning("The ironic::drivers::inspector::service_url parameter is deprecated and \
-has no effect. Please use ironic::drivers::inspector::endpoint_override instead.")
-  }
 
   if is_service_default($system_scope) {
     $project_name_real = $project_name

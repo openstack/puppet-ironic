@@ -65,7 +65,6 @@ describe 'ironic::glance' do
           :user_domain_name        => 'NonDefault',
           :project_domain_name     => 'NonDefault',
           :region_name             => 'regionTwo',
-          :api_servers             => '10.0.0.1:9292',
           :api_insecure            => true,
           :num_retries             => 42,
           :swift_account           => '00000000-0000-0000-0000-000000000000',
@@ -74,7 +73,7 @@ describe 'ironic::glance' do
           :swift_endpoint_url      => 'http://example2.com',
           :swift_temp_url_key      => 'the-key',
           :swift_temp_url_duration => 3600,
-          :endpoint_override   => 'http://example2.com',
+          :endpoint_override       => 'http://example2.com',
         )
       end
 

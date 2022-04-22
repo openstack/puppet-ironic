@@ -93,10 +93,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*api_servers*]
-#   Has no effect, use endpoint_override.
-#   Defaults to undef
-#
 # [*swift_account_project_name*]
 #   (optional) The project of account that Glance uses to communicate with Swift.
 #   Will be converted to UUID, and option glance/swift_account will be set in
@@ -124,16 +120,10 @@ class ironic::glance (
   $swift_temp_url_duration    = $::os_service_default,
   $endpoint_override          = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $api_servers                = undef,
   $swift_account_project_name = undef,
 ) {
 
   include ironic::deps
-
-  if $api_servers {
-    warning("The ironic::glance::api_servers parameter is deprecated and \
-has no effect. Please use ironic::glance::endpoint_override instead.")
-  }
 
   if $swift_account_project_name != undef {
     warning('The swift_account_project_name parameter is deprecated and will be removed in a future release.')
