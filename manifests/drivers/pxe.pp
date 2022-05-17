@@ -71,8 +71,11 @@
 #   Defaults to $::os_service_default.
 #
 # [*uefi_pxe_bootfile_name*]
-#   (optional) Bootfile DHCP parameter for UEFI boot mode.
-#   Defaults to $::os_service_default.
+#   (optional) Bootfile DHCP parameter for UEFI boot mode for the
+#   pxe boot interface. No separate configuration template is required
+#   when using ipxe.
+#   Defaults to bootx64.efi, which will be the signed shim that loads
+#   grub for a network boot.
 #
 # [*uefi_pxe_config_template*]
 #   (optional) Template file for PXE configuration for UEFI boot loader.
@@ -147,7 +150,7 @@ class ironic::drivers::pxe (
   $images_path               = $::os_service_default,
   $tftp_master_path          = $::os_service_default,
   $instance_master_path      = $::os_service_default,
-  $uefi_pxe_bootfile_name    = $::os_service_default,
+  $uefi_pxe_bootfile_name    = 'bootx64.efi',
   $uefi_pxe_config_template  = $::os_service_default,
   $uefi_ipxe_bootfile_name   = $::ironic::params::uefi_ipxe_bootfile_name,
   $ipxe_timeout              = $::os_service_default,
@@ -168,6 +171,7 @@ class ironic::drivers::pxe (
   $tftp_root_real               = pick($::ironic::pxe::common::tftp_root, $tftp_root)
   $ipxe_timeout_real            = pick($::ironic::pxe::common::ipxe_timeout, $ipxe_timeout)
   $uefi_ipxe_bootfile_name_real = pick($::ironic::pxe::common::uefi_ipxe_bootfile_name, $uefi_ipxe_bootfile_name)
+  $uefi_pxe_bootfile_name_real = pick($::ironic::pxe::common::uefi_pxe_bootfile_name, $uefi_pxe_bootfile_name)
 
   if $ipxe_enabled != undef {
     warning('The ironic::drivers::pxe::ipxe_enabled parameter is deprecated and has no effect.')
@@ -199,7 +203,7 @@ Use the kernel_append_params parameter instead')
     'pxe/images_path': value               => $images_path;
     'pxe/tftp_master_path': value          => $tftp_master_path;
     'pxe/instance_master_path': value      => $instance_master_path;
-    'pxe/uefi_pxe_bootfile_name': value    => $uefi_pxe_bootfile_name;
+    'pxe/uefi_pxe_bootfile_name': value    => $uefi_pxe_bootfile_name_real;
     'pxe/uefi_pxe_config_template': value  => $uefi_pxe_config_template;
     'pxe/uefi_ipxe_bootfile_name': value   => $uefi_ipxe_bootfile_name_real;
     'pxe/ipxe_timeout': value              => $ipxe_timeout_real;

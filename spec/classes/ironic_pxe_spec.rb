@@ -76,6 +76,43 @@ describe 'ironic::pxe' do
       )
     end
 
+    it 'should contain grub-efi package' do
+      is_expected.to contain_package('grub-efi').with(
+        :ensure => 'present',
+        :name   => platform_params[:grub_efi_package],
+        :tag    => ['openstack', 'ironic-support-package'],
+      )
+    end
+    it 'should contain PXE UEFI shim image' do
+      is_expected.to contain_file('/tftpboot/bootx64.efi').with(
+        'owner'     => 'ironic',
+        'group'     => 'ironic',
+        'require'   => 'Anchor[ironic-inspector::install::end]',
+        'seltype'   => 'tftpdir_t',
+        'ensure'    => 'file',
+        'show_diff' => false,
+        'backup'    => false,
+      )
+    end
+    it 'should contain shim package' do
+      is_expected.to contain_package('shim').with(
+        :ensure => 'present',
+        :name   => platform_params[:shim_package],
+        :tag    => ['openstack', 'ironic-support-package'],
+      )
+    end
+    it 'should contain PXE UEFI grub image' do
+      is_expected.to contain_file('/tftpboot/grubx64.efi').with(
+        'owner'     => 'ironic',
+        'group'     => 'ironic',
+        'require'   => 'Anchor[ironic-inspector::install::end]',
+        'seltype'   => 'tftpdir_t',
+        'ensure'    => 'file',
+        'show_diff' => false,
+        'backup'    => false,
+      )
+    end
+
     context 'when overriding parameters' do
       before :each do
         params.merge!(
@@ -119,6 +156,29 @@ describe 'ironic::pxe' do
       end
       it 'should contain iPXE UEFI chainload image' do
         is_expected.to contain_file("/var/lib/tftpboot/#{platform_params[:uefi_ipxe_bootfile_name]}").with(
+          'owner'     => 'ironic',
+          'group'     => 'ironic',
+          'require'   => 'Anchor[ironic-inspector::install::end]',
+          'seltype'   => 'tftpdir_t',
+          'ensure'    => 'file',
+          'show_diff' => false,
+          'backup'    => false,
+        )
+      end
+
+      it 'should contain PXE UEFI shim image' do
+        is_expected.to contain_file('/var/lib/tftpboot/bootx64.efi').with(
+          'owner'     => 'ironic',
+          'group'     => 'ironic',
+          'require'   => 'Anchor[ironic-inspector::install::end]',
+          'seltype'   => 'tftpdir_t',
+          'ensure'    => 'file',
+          'show_diff' => false,
+          'backup'    => false,
+        )
+      end
+      it 'should contain PXE UEFI grub image' do
+        is_expected.to contain_file('/var/lib/tftpboot/grubx64.efi').with(
           'owner'     => 'ironic',
           'group'     => 'ironic',
           'require'   => 'Anchor[ironic-inspector::install::end]',
@@ -278,16 +338,20 @@ describe 'ironic::pxe' do
         when 'Debian'
           if facts[:operatingsystem] == 'Ubuntu' and facts[:operatingsystemmajrelease] <= '20.04'
             {
+              :grub_efi_package        => 'grub-efi-amd64-signed',
               :ipxe_package            => 'ipxe',
               :pxelinux_package        => 'pxelinux',
+              :shim_package            => 'shim-signed',
               :syslinux_package        => 'syslinux-common',
               :tftp_package            => 'tftpd-hpa',
               :uefi_ipxe_bootfile_name => 'ipxe.efi'
             }
           else
             {
+              :grub_efi_package        => 'grub-efi-amd64-signed',
               :ipxe_package            => 'ipxe',
               :pxelinux_package        => 'pxelinux',
+              :shim_package            => 'shim-signed',
               :syslinux_package        => 'syslinux-common',
               :tftp_package            => 'tftpd-hpa',
               :uefi_ipxe_bootfile_name => 'snponly.efi'
@@ -297,7 +361,9 @@ describe 'ironic::pxe' do
           {
             :dnsmasq_tftp_package    => 'openstack-ironic-dnsmasq-tftp-server',
             :dnsmasq_tftp_service    => 'openstack-ironic-dnsmasq-tftp-server',
+            :grub_efi_package        => 'grub2-efi-x64',
             :ipxe_package            => 'ipxe-bootimgs',
+            :shim_package            => 'shim',
             :syslinux_package        => 'syslinux-tftpboot',
             :tftp_package            => 'tftp-server',
             :uefi_ipxe_bootfile_name => 'snponly.efi'

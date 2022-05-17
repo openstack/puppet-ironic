@@ -70,6 +70,10 @@ class ironic::params {
       $syslinux_package          = 'syslinux-tftpboot'
       $syslinux_path             = '/tftpboot'
       $syslinux_files            = ['pxelinux.0', 'chain.c32', 'ldlinux.c32']
+      $grub_efi_package          = 'grub2-efi-x64'
+      $grub_efi_file             = '/boot/efi/EFI/centos/grubx64.efi'
+      $shim_package              = 'shim'
+      $shim_file                 = '/boot/efi/EFI/centos/shimx64.efi'
     }
     'Debian': {
       $common_package_name       = 'ironic-common'
@@ -105,6 +109,10 @@ class ironic::params {
       $syslinux_package          = 'syslinux-common'
       $syslinux_path             = '/usr/lib/syslinux/modules/bios'
       $syslinux_files            = ['chain.c32', 'libcom32.c32', 'libutil.c32']
+      $grub_efi_package          = 'grub-efi-amd64-signed'
+      $grub_efi_file             = '/usr/lib/grub/x86_64-efi-signed/grubnetx64.efi.signed'
+      $shim_package              = 'shim-signed'
+      $shim_file                 = '/usr/lib/shim/shimx64.efi.signed'
     }
     default: {
       fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, \
