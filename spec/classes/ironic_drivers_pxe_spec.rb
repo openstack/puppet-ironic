@@ -24,6 +24,7 @@ describe 'ironic::drivers::pxe' do
 
   let :default_params do
     { :uefi_ipxe_bootfile_name        => 'snponly.efi',
+      :uefi_pxe_bootfile_name         => 'bootx64.efi',
     }
   end
 
@@ -47,9 +48,9 @@ describe 'ironic::drivers::pxe' do
       is_expected.to contain_ironic_config('pxe/images_path').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/tftp_master_path').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/instance_master_path').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('pxe/uefi_pxe_bootfile_name').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/uefi_pxe_config_template').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/uefi_ipxe_bootfile_name').with_value('snponly.efi')
+      is_expected.to contain_ironic_config('pxe/uefi_pxe_bootfile_name').with_value('bootx64.efi')
       is_expected.to contain_ironic_config('pxe/dir_permission').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/file_permission').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/loader_file_paths').with_value('<SERVICE DEFAULT>')
@@ -79,8 +80,8 @@ describe 'ironic::drivers::pxe' do
           :images_path               => '/mnt/images',
           :tftp_master_path          => '/mnt/master_images',
           :instance_master_path      => '/mnt/ironic/master_images',
-          :uefi_pxe_bootfile_name    => 'bootx64.efi',
           :uefi_ipxe_bootfile_name    => 'ipxe.efi',
+          :uefi_pxe_bootfile_name    => 'shim-x64.efi',
           :uefi_pxe_config_template  => 'foo-uefi',
           :ipxe_timeout              => '60',
           :pxe_bootfile_name         => 'bootx64',

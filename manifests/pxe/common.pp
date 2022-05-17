@@ -41,12 +41,17 @@
 #   (optional) Name of efi file used to boot servers with iPXE + UEFI.
 #   Defaults to undef.
 #
+# [*uefi_pxe_bootfile_name*]
+#   (optional) Name of efi file used to boot servers with PXE + UEFI.
+#   Defaults to undef.
+#
 class ironic::pxe::common (
   $tftp_root               = undef,
   $http_root               = undef,
   $http_port               = undef,
   $ipxe_timeout            = undef,
   $uefi_ipxe_bootfile_name = undef,
+  $uefi_pxe_bootfile_name  = undef,
 ) {
   include ironic::deps
 }
