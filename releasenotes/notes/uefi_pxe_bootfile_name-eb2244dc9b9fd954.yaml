@@ -1,0 +1,12 @@
+---
+features:
+  - |
+    The pxe parameter `uefi_pxe_bootfile_name` is now managed by puppet, keeping
+    the ironic default of `bootx64.efi`.
+
+    The shim EFI binary is copied to the TFTP root directory, to a file named
+    the value of `uefi_pxe_bootfile_name`. The grub EFI binary is copied to
+    the TFTP root directory to a file named `grubx64.efi`.
+
+    With these changes, using the pxe boot driver with UEFI boot will result in
+    a grub network boot which is Secure Boot capable.

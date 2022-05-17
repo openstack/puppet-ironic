@@ -68,6 +68,12 @@
 #   driver.
 #   Defaults to 'ipxe.efi'
 #
+# [*uefi_pxe_bootfile_name*]
+#   (optional) Name of efi file used to boot servers with PXE + UEFI. This
+#   should be consistent with the uefi_pxe_bootfile_name parameter in pxe
+#   driver.
+#   Defaults to 'bootx64.efi'
+#
 # [*tftp_use_xinetd*]
 #   (optional) Override wheter to use xinetd instead of dnsmasq as the tftp
 #   service facilitator.
@@ -85,6 +91,7 @@ class ironic::pxe (
   $enable_ppc64le          = false,
   $ipxe_name_base          = 'ipxe',
   $uefi_ipxe_bootfile_name = 'ipxe.efi',
+  $uefi_pxe_bootfile_name  = 'bootx64.efi',
   $tftp_use_xinetd         = $::ironic::params::xinetd_available
 ) inherits ::ironic::params {
 
@@ -95,6 +102,7 @@ class ironic::pxe (
   $http_root_real = pick($::ironic::pxe::common::http_root, $http_root)
   $http_port_real = pick($::ironic::pxe::common::http_port, $http_port)
   $uefi_ipxe_bootfile_name_real = pick($::ironic::pxe::common::uefi_ipxe_bootfile_name, $uefi_ipxe_bootfile_name)
+  $uefi_pxe_bootfile_name_real = pick($::ironic::pxe::common::uefi_pxe_bootfile_name, $uefi_pxe_bootfile_name)
 
   if $::os['family'] == 'RedHat' {
     $arch = "-${::os['architecture']}"
@@ -277,6 +285,44 @@ class ironic::pxe (
     backup  => false,
     require => Anchor['ironic-inspector::install::end'],
     tag     => 'ironic-tftp-file',
+  }
+
+  ensure_resource( 'package', 'grub-efi', {
+    ensure => $package_ensure,
+    name   => $::ironic::params::grub_efi_package,
+    tag    => ['openstack', 'ironic-support-package'],
+  })
+
+  file { "${tftp_root_real}/grubx64.efi":
+    ensure    => 'file',
+    seltype   => 'tftpdir_t',
+    owner     => 'ironic',
+    group     => 'ironic',
+    mode      => '0744',
+    source    => "${::ironic::params::grub_efi_file}",
+    backup    => false,
+    show_diff => false,
+    require   => Anchor['ironic-inspector::install::end'],
+    tag       => 'ironic-tftp-file',
+  }
+
+  ensure_resource( 'package', 'shim', {
+    ensure => $package_ensure,
+    name   => $::ironic::params::shim_package,
+    tag    => ['openstack', 'ironic-support-package'],
+  })
+
+  file { "${tftp_root_real}/${uefi_pxe_bootfile_name_real}":
+    ensure    => 'file',
+    seltype   => 'tftpdir_t',
+    owner     => 'ironic',
+    group     => 'ironic',
+    mode      => '0744',
+    source    => "${::ironic::params::shim_file}",
+    backup    => false,
+    show_diff => false,
+    require   => Anchor['ironic-inspector::install::end'],
+    tag       => 'ironic-tftp-file',
   }
 
   File["${tftp_root_real}"] -> File<| tag == 'ironic-tftp-file' |>
