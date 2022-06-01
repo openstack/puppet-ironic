@@ -2,23 +2,11 @@ require 'spec_helper'
 
 describe 'ironic::pxe' do
 
-  let :default_params do
-    { :package_ensure => 'present',
-      :tftp_root      => '/tftpboot',
-      :http_root      => '/httpboot',
-      :ipxe_timeout   => 0,
-      :http_port      => 8088, }
-  end
-
   let :params do
     {}
   end
 
   shared_examples_for 'ironic pxe' do
-    let :p do
-      default_params.merge(params)
-    end
-
     it 'should contain directory /tftpboot with selinux type tftpdir_t' do
       is_expected.to contain_file('/tftpboot').with(
         'owner'   => 'ironic',
@@ -46,6 +34,43 @@ describe 'ironic::pxe' do
         'require' => 'Anchor[ironic::config::begin]',
         'ensure'  => 'directory',
         'seltype' => 'httpd_sys_content_t',
+      )
+    end
+
+    it 'should contain syslinux package' do
+      is_expected.to contain_package('syslinux').with(
+        :ensure => 'present',
+        :name   => platform_params[:syslinux_package],
+        :tag    => ['openstack', 'ironic-ipxe', 'ironic-support-package'],
+      )
+    end
+
+    it 'should contain ipxe package' do
+      is_expected.to contain_package('ipxe').with(
+        :ensure => 'present',
+        :name   => platform_params[:ipxe_package],
+        :tag    => ['openstack', 'ironic-ipxe', 'ironic-support-package'],
+      )
+    end
+
+    it 'should contain iPXE chainload images' do
+      is_expected.to contain_file('/tftpboot/undionly.kpxe').with(
+        'owner'   => 'ironic',
+        'group'   => 'ironic',
+        'require' => 'Anchor[ironic-inspector::install::end]',
+        'seltype' => 'tftpdir_t',
+        'ensure'  => 'file',
+        'backup'  => false,
+      )
+    end
+    it 'should contain iPXE UEFI chainload image' do
+      is_expected.to contain_file('/tftpboot/ipxe.efi').with(
+        'owner'   => 'ironic',
+        'group'   => 'ironic',
+        'require' => 'Anchor[ironic-inspector::install::end]',
+        'seltype' => 'tftpdir_t',
+        'ensure'  => 'file',
+        'backup'  => false,
       )
     end
 
@@ -107,8 +132,8 @@ describe 'ironic::pxe' do
           :syslinux_path => false,
         )
       end
-      it 'should not contain package syslinux-tftpboot' do
-        is_expected.not_to contain_package('syslinux-tftpboot')
+      it 'should not contain syslinux package' do
+        is_expected.not_to contain_package('syslinux')
       end
       it 'should not contain tftpboot syslinux file' do
         is_expected.not_to contain_file('/var/lib/ironic/tftpboot/pxelinux.0')
@@ -134,10 +159,6 @@ describe 'ironic::pxe' do
   end
 
   shared_examples_for 'ironic pxe with xinetd' do
-    let :p do
-      default_params.merge(params)
-    end
-
     before :each do
       params.merge!(
         :tftp_use_xinetd => true,
@@ -198,10 +219,6 @@ describe 'ironic::pxe' do
   end
 
   shared_examples_for 'ironic pxe without xinetd' do
-    let :p do
-      default_params.merge(params)
-    end
-
     before :each do
       params.merge!(
         :tftp_use_xinetd => false,
@@ -247,10 +264,17 @@ describe 'ironic::pxe' do
       let(:platform_params) do
         case facts[:osfamily]
         when 'Debian'
-          {}
+          {
+            :ipxe_package     => 'ipxe',
+            :syslinux_package => 'syslinux-common',
+          }
         when 'RedHat'
-          { :dnsmasq_tftp_package => 'openstack-ironic-dnsmasq-tftp-server',
-            :dnsmasq_tftp_service => 'openstack-ironic-dnsmasq-tftp-server' }
+          {
+            :dnsmasq_tftp_package => 'openstack-ironic-dnsmasq-tftp-server',
+            :dnsmasq_tftp_service => 'openstack-ironic-dnsmasq-tftp-server',
+            :ipxe_package         => 'ipxe-bootimgs',
+            :syslinux_package     => 'syslinux-tftpboot',
+          }
         end
       end
 
