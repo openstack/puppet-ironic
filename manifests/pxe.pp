@@ -261,17 +261,9 @@ class ironic::pxe (
   include apache
 
   apache::vhost { 'ipxe_vhost':
-    priority   => '10',
-    options    => ['Indexes','FollowSymLinks'],
-    docroot    => $http_root_real,
-    port       => $http_port_real,
-    # FIXME: for backwards compatibility we have to add listen to the ipxe vhost
-    add_listen => false,
-  }
-  # FIXME: this can be removed after ipxe element is removed from instack-undercloud
-  concat::fragment { 'ipxe_vhost-listen':
-    target  => '10-ipxe_vhost.conf',
-    order   => 1337,
-    content => "Listen ${http_port_real}",
+    priority => '10',
+    options  => ['Indexes','FollowSymLinks'],
+    docroot  => $http_root_real,
+    port     => $http_port_real,
   }
 }
