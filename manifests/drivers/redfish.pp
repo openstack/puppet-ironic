@@ -37,7 +37,7 @@
 #   Defaults to $::os_service_default.
 #
 # [*use_swift*]
-#   (optional) Upload genrated ISO images for virtual media boot to Swift.
+#   (optional) Upload generated ISO images for virtual media boot to Swift.
 #   Defaults to $::os_service_default.
 #
 # [*swift_container*]
@@ -49,7 +49,7 @@
 #   Defaults to $::os_service_default.
 #
 # [*kernel_append_params*]
-#   (optional) Addiitonal kernel parameters to pass down to the instance kernel
+#   (optional) Additional kernel parameters to pass down to the instance kernel
 #   Defaults to $::os_service_default.
 #
 # [*file_permission*]

@@ -39,7 +39,7 @@ describe 'ironic::audit' do
         }
       end
 
-      it 'configures ignore_req_list with a comma separeted list' do
+      it 'configures ignore_req_list with a comma separated list' do
         is_expected.to contain_ironic_config('audit/ignore_req_list').with_value('GET,POST')
       end
     end

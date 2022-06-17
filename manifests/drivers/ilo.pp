@@ -16,7 +16,7 @@
 #
 # [*client_timeout*]
 #   (optional) Maximum time in seconds to wait for iLO commands.
-#   Should be an interger value
+#   Should be an integer value
 #   Defaults to $::os_service_default.
 #
 # [*client_port*]

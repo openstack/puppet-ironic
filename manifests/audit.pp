@@ -13,7 +13,7 @@
 #   Defaults to $::os_service_default
 #
 # [*ignore_req_list*]
-#   (Optional) Commma separated list of Ironic REST API HTTP methoeds
+#   (Optional) Comma separated list of Ironic REST API HTTP methods
 #   to be ignored during audit logging.
 #   Defaults to $::os_service_default
 #

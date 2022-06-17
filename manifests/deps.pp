@@ -52,7 +52,7 @@ class ironic::deps {
   # Support packages need to be installed in the install phase, but we don't
   # put them in the chain above because we don't want any false dependencies
   # between packages with the ironic-package tag and the ironic-support-package
-  # tag.  Note: the package resources here will have a 'before' relationshop on
+  # tag.  Note: the package resources here will have a 'before' relationship on
   # the ironic::install::end anchor.  The line between ironic-support-package and
   # ironic-package should be whether or not ironic services would need to be
   # restarted if the package state was changed.

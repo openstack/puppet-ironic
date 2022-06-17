@@ -6,7 +6,7 @@ describe 'ironic::inspector::db::sync' do
 
     it { is_expected.to contain_class('ironic::deps') }
 
-    it 'runs ironic-inspectror-db_sync' do
+    it 'runs ironic-inspector-db_sync' do
       is_expected.to contain_exec('ironic-inspector-dbsync').with(
         :command     => 'ironic-inspector-dbsync --config-file /etc/ironic-inspector/inspector.conf upgrade',
         :path        => '/usr/bin',

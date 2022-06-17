@@ -32,7 +32,7 @@
 #
 # [*pxe_transfer_protocol*]
 #  (optional) Protocol preferred for transferring the ramdisk.
-#  Some archtecture require tftp is used exclusively.
+#  Some architecture require tftp is used exclusively.
 #  Defaults to 'tftp'. Valid values are 'tftp' or 'http'.
 #
 # [*dhcp_debug*]
@@ -49,7 +49,7 @@
 #   Defaults to $::os_service_default
 #
 # [*api_max_limit*]
-#   (optional) Limit the numer of elements an API list-call returns
+#   (optional) Limit the number of elements an API list-call returns
 #   Defaults to $::os_service_default
 #
 # [*dnsmasq_interface*]
@@ -171,7 +171,7 @@
 #   Defaults to $::os_service_default
 #
 # [*enable_ppc64le*]
-#   (optional) Boolean value to dtermine if ppc64le support should be enabled
+#   (optional) Boolean value to determine if ppc64le support should be enabled
 #   Defaults to false (no ppc64le support)
 #
 # [*default_transport_url*]
@@ -317,7 +317,7 @@ class ironic::inspector (
 
   #Processing hooks string
   #Moved here in favor of removing the
-  #140 chars exeeded error in puppet-lint
+  #140 chars exceeded error in puppet-lint
   $p_hooks = join(delete_undef_values(['$default_processing_hooks', $additional_processing_hooks]), ',')
 
   # Convert the hash to comma separated string of <key>:<value> pairs.

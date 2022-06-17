@@ -21,12 +21,12 @@
 #
 # [*command_retry_timeout*]
 #   (optional) Maximum time in seconds to retry IPMI operations.
-#   Should be an interger value
+#   Should be an integer value
 #   Defaults to $::os_service_default
 #
 # [*min_command_interval*]
 #   (optional) Minimum time, in seconds, between IPMI operations.
-#   Should be an interger value
+#   Should be an integer value
 #   Defaults to $::os_service_default
 #
 # [*use_ipmitool_retries*]
@@ -38,7 +38,7 @@
 #   Defaults to $::os_service_default
 #
 # [*disable_boot_timeout*]
-#   (optional) Whether ironic sends a raw IPMI command to dsiable the 60 second
+#   (optional) Whether ironic sends a raw IPMI command to disable the 60 second
 #   timeout for booting.
 #   Defaults to $::os_service_default
 #

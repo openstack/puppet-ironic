@@ -20,7 +20,7 @@
 # === Parameters
 #
 # [*package_ensure*]
-#   (optional) Control the ensure parameter for the package ressource.
+#   (optional) Control the ensure parameter for the package resource.
 #   Defaults to 'present'.
 #
 # [*enabled*]
@@ -95,7 +95,7 @@
 #   Defaults to $::os_service_default
 #
 # [*configdrive_swift_container*]
-#   (optinal) Swift container to use for storing config drives if
+#   (optional) Swift container to use for storing config drives if
 #   configdrive_use_object_store is true.
 #   Defaults to $::os_service_default
 #

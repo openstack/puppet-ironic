@@ -20,7 +20,7 @@
 # === Parameters
 #
 # [*package_ensure*]
-#   (optional) Control the ensure parameter for the package ressource.
+#   (optional) Control the ensure parameter for the package resource.
 #   Defaults to 'present'.
 #
 # [*enabled*]
@@ -40,7 +40,7 @@
 # [*max_limit*]
 #   (optional) The maximum number of items returned in a single response
 #   from a collection resource.
-#   Should be an valid interger
+#   Should be an valid integer
 #   Defaults to '1000'.
 #
 # [*workers*]

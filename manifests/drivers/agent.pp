@@ -28,7 +28,7 @@
 #
 # [*post_deploy_get_power_state_retries*]
 #   (optional) Number of retries getting power state after a soft power off.
-#   Must be a valid interger.
+#   Must be a valid integer.
 #   Defaults to $::os_service_default
 #
 # [*post_deploy_get_power_state_retry_interval*]

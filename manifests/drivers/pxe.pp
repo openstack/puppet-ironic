@@ -203,7 +203,7 @@ Use the kernel_append_params parameter instead')
   }
 
   if $enable_ppc64le {
-    # FXIME(tonyb): As these are really hash values it would beter to model
+    # FXIME(tonyb): As these are really hash values it would be better to model
     # them that way.  We can do that later, probably when we add another
     # architecture
     ironic_config {
