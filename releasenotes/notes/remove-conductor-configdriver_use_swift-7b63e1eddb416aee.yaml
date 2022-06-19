@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The ``ironic::conductor::configdrive_use_swift`` parameter has been
+    removed.
