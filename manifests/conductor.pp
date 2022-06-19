@@ -195,10 +195,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*api_url*]
-#   (optional) Ironic API URL.
-#   Defaults to undef.
-#
 # [*configdrive_use_swift*]
 #   (optional) Whether to use Swift for storing config drives instead of
 #   the database. Recommended for bigger config drives.
@@ -269,7 +265,6 @@ class ironic::conductor (
   $allow_provisioning_in_maintenance   = $::os_service_default,
   $image_download_concurrency          = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $api_url                             = undef,
   $configdrive_use_swift               = undef,
   $inspect_timeout                     = undef,
   $cleaning_network_name               = undef,
@@ -283,14 +278,6 @@ class ironic::conductor (
 
   # For backward compatibility
   include ironic::glance
-
-  if $api_url != undef {
-    warning('ironic::conductor::api_url is deprecated. \
-Use ironic::service_catalog::endpoint_override instead')
-    ironic_config {
-      'conductor/api_url': value => $api_url;
-    }
-  }
 
   if $configdrive_use_swift != undef {
     warning('configdrive_use_swift is deprecated and will be removed \

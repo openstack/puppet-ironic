@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The ``ironic::conductor::api_url`` parameter has been removed.
