@@ -68,12 +68,6 @@
 #   (optional) Log facility of the dnsmasq process to server tftp server.
 #   Defaults to undef
 #
-# DEPRECATED PARAMETERS
-#
-# [*enable_ppc64le*]
-#   (optional) Boolean value to dtermine if ppc64le support should be enabled
-#   Defaults to undef
-#
 class ironic::pxe (
   $package_ensure          = 'present',
   $tftp_root               = '/tftpboot',
@@ -86,16 +80,10 @@ class ironic::pxe (
   $uefi_ipxe_bootfile_name = 'snponly.efi',
   $tftp_use_xinetd         = $::ironic::params::xinetd_available,
   $dnsmasq_log_facility    = undef,
-  # DEPRECATED PARAMETERS
-  $enable_ppc64le          = undef
 ) inherits ironic::params {
 
   include ironic::deps
   include ironic::pxe::common
-
-  if $enable_ppc64le != undef {
-    warning('The ironic::pxe::enable_ppc64le parameter is deprecated and has no effect.')
-  }
 
   $tftp_root_real = pick($::ironic::pxe::common::tftp_root, $tftp_root)
   $http_root_real = pick($::ironic::pxe::common::http_root, $http_root)
