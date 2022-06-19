@@ -183,14 +183,14 @@ class ironic::drivers::pxe (
     warning('The ironic::drivers::pxe::pxe_append_params parameter is deprecated. \
 Use the kernel_append_params parameter instead')
   }
-  $kernel_append_params_real = pick($pxe_append_params, kernel_append_params)
+  $kernel_append_params_real = pick($pxe_append_params, $kernel_append_params)
   ironic_config {
     'pxe/pxe_append_params': ensure => absent
   }
 
   # Configure ironic.conf
   ironic_config {
-    'pxe/kernel_append_params': value      => $kernel_append_params;
+    'pxe/kernel_append_params': value      => $kernel_append_params_real;
     'pxe/pxe_bootfile_name': value         => $pxe_bootfile_name;
     'pxe/pxe_config_template': value       => $pxe_config_template;
     'pxe/ipxe_bootfile_name': value        => $ipxe_bootfile_name;
