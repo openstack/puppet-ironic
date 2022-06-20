@@ -195,11 +195,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*inspect_timeout*]
-#   (optional) Timeout (seconds) for waiting for node inspection.
-#   0 for unlimited.
-#   Defaults to undef
-#
 # [*cleaning_network_name*]
 #   (optional) If provided the name will be converted to UUID and set
 #   as value of neutron/cleaning_network option in ironic.conf
@@ -260,7 +255,6 @@ class ironic::conductor (
   $allow_provisioning_in_maintenance   = $::os_service_default,
   $image_download_concurrency          = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $inspect_timeout                     = undef,
   $cleaning_network_name               = undef,
   $provisioning_network_name           = undef,
   $rescuing_network_name               = undef,
@@ -272,14 +266,6 @@ class ironic::conductor (
 
   # For backward compatibility
   include ironic::glance
-
-  if $inspect_timeout != undef {
-    warning('inspect_timeout is deprecated and will be removed in a future release. \
-Use inspect_wait_timeout instead')
-    $inspect_wait_timeout_real = $inspect_timeout
-  } else {
-    $inspect_wait_timeout_real = $inspect_wait_timeout
-  }
 
   if ($cleaning_network_name and !is_service_default($cleaning_network)) {
     fail('cleaning_network_name and cleaning_network can not be specified at the same time.')
@@ -338,7 +324,7 @@ Use inspect_wait_timeout instead')
     'deploy/continue_if_disk_secure_erase_fails':  value => $continue_if_disk_secure_erase_fails;
     'deploy/configdrive_use_object_store':         value => $configdrive_use_object_store;
     'conductor/configdrive_swift_container':       value => $configdrive_swift_container;
-    'conductor/inspect_wait_timeout':              value => $inspect_wait_timeout_real;
+    'conductor/inspect_wait_timeout':              value => $inspect_wait_timeout;
     'deploy/default_boot_option':                  value => $default_boot_option;
     'deploy/default_boot_mode':                    value => $default_boot_mode;
     'neutron/port_setup_delay':                    value => $port_setup_delay;

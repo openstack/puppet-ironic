@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The ``ironic::conductor::inspect_timeout`` parameter has been removed.
