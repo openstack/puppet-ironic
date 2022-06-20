@@ -99,7 +99,6 @@ describe 'ironic::conductor' do
           :force_power_state_during_sync     => false,
           :automated_clean                   => false,
           :cleaning_network                  => '00000000-0000-0000-0000-000000000000',
-          :api_url                           => 'https://127.0.0.1:6385',
           :provisioning_network              => '00000000-0000-0000-0000-000000000000',
           :rescuing_network                  => '00000000-0000-0000-0000-000000000000',
           :inspection_network                => '00000000-0000-0000-0000-000000000000',
@@ -133,7 +132,6 @@ describe 'ironic::conductor' do
         is_expected.to contain_ironic_config('DEFAULT/enabled_hardware_types').with_value('ipmi,irmc')
         is_expected.to contain_ironic_config('conductor/force_power_state_during_sync').with_value(p[:force_power_state_during_sync])
         is_expected.to contain_ironic_config('conductor/automated_clean').with_value(p[:automated_clean])
-        is_expected.to contain_ironic_config('conductor/api_url').with_value(p[:api_url])
         is_expected.to contain_ironic_config('neutron/cleaning_network').with_value('00000000-0000-0000-0000-000000000000')
         is_expected.to contain_ironic_config('neutron/provisioning_network').with_value('00000000-0000-0000-0000-000000000000')
         is_expected.to contain_ironic_config('neutron/rescuing_network').with_value('00000000-0000-0000-0000-000000000000')
