@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The ``ironic::pxe::enable_ppc64le`` parameter has been removed.
