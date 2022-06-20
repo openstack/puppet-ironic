@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The ``ironic::driver::pxe::pxe_append_params`` parameter has been removed.
