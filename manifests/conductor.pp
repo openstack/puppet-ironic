@@ -195,11 +195,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*configdrive_use_swift*]
-#   (optional) Whether to use Swift for storing config drives instead of
-#   the database. Recommended for bigger config drives.
-#   Defaults to undef
-#
 # [*inspect_timeout*]
 #   (optional) Timeout (seconds) for waiting for node inspection.
 #   0 for unlimited.
@@ -265,7 +260,6 @@ class ironic::conductor (
   $allow_provisioning_in_maintenance   = $::os_service_default,
   $image_download_concurrency          = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $configdrive_use_swift               = undef,
   $inspect_timeout                     = undef,
   $cleaning_network_name               = undef,
   $provisioning_network_name           = undef,
@@ -278,14 +272,6 @@ class ironic::conductor (
 
   # For backward compatibility
   include ironic::glance
-
-  if $configdrive_use_swift != undef {
-    warning('configdrive_use_swift is deprecated and will be removed \
-in a future release. Use configdrive_use_object_store instead')
-    $configdrive_use_object_store_real = $configdrive_use_swift
-  } else {
-    $configdrive_use_object_store_real = $configdrive_use_object_store
-  }
 
   if $inspect_timeout != undef {
     warning('inspect_timeout is deprecated and will be removed in a future release. \
@@ -350,7 +336,7 @@ Use inspect_wait_timeout instead')
     'deploy/erase_devices_priority':               value => $erase_devices_priority;
     'deploy/erase_devices_metadata_priority':      value => $erase_devices_metadata_priority;
     'deploy/continue_if_disk_secure_erase_fails':  value => $continue_if_disk_secure_erase_fails;
-    'deploy/configdrive_use_object_store':         value => $configdrive_use_object_store_real;
+    'deploy/configdrive_use_object_store':         value => $configdrive_use_object_store;
     'conductor/configdrive_swift_container':       value => $configdrive_swift_container;
     'conductor/inspect_wait_timeout':              value => $inspect_wait_timeout_real;
     'deploy/default_boot_option':                  value => $default_boot_option;
