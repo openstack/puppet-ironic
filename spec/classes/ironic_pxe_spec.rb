@@ -55,22 +55,24 @@ describe 'ironic::pxe' do
 
     it 'should contain iPXE chainload images' do
       is_expected.to contain_file('/tftpboot/undionly.kpxe').with(
-        'owner'   => 'ironic',
-        'group'   => 'ironic',
-        'require' => 'Anchor[ironic-inspector::install::end]',
-        'seltype' => 'tftpdir_t',
-        'ensure'  => 'file',
-        'backup'  => false,
+        'owner'     => 'ironic',
+        'group'     => 'ironic',
+        'require'   => 'Anchor[ironic-inspector::install::end]',
+        'seltype'   => 'tftpdir_t',
+        'ensure'    => 'file',
+        'show_diff' => false,
+        'backup'    => false,
       )
     end
     it 'should contain iPXE UEFI chainload image' do
       is_expected.to contain_file('/tftpboot/snponly.efi').with(
-        'owner'   => 'ironic',
-        'group'   => 'ironic',
-        'require' => 'Anchor[ironic-inspector::install::end]',
-        'seltype' => 'tftpdir_t',
-        'ensure'  => 'file',
-        'backup'  => false,
+        'owner'     => 'ironic',
+        'group'     => 'ironic',
+        'require'   => 'Anchor[ironic-inspector::install::end]',
+        'seltype'   => 'tftpdir_t',
+        'ensure'    => 'file',
+        'show_diff' => false,
+        'backup'    => false,
       )
     end
 
@@ -106,22 +108,24 @@ describe 'ironic::pxe' do
 
       it 'should contain iPXE chainload images' do
         is_expected.to contain_file('/var/lib/tftpboot/undionly.kpxe').with(
-          'owner'   => 'ironic',
-          'group'   => 'ironic',
-          'require' => 'Anchor[ironic-inspector::install::end]',
-          'seltype' => 'tftpdir_t',
-          'ensure'  => 'file',
-          'backup'  => false,
+          'owner'     => 'ironic',
+          'group'     => 'ironic',
+          'require'   => 'Anchor[ironic-inspector::install::end]',
+          'seltype'   => 'tftpdir_t',
+          'ensure'    => 'file',
+          'show_diff' => false,
+          'backup'    => false,
         )
       end
       it 'should contain iPXE UEFI chainload image' do
         is_expected.to contain_file('/var/lib/tftpboot/snponly.efi').with(
-          'owner'   => 'ironic',
-          'group'   => 'ironic',
-          'require' => 'Anchor[ironic-inspector::install::end]',
-          'seltype' => 'tftpdir_t',
-          'ensure'  => 'file',
-          'backup'  => false,
+          'owner'     => 'ironic',
+          'group'     => 'ironic',
+          'require'   => 'Anchor[ironic-inspector::install::end]',
+          'seltype'   => 'tftpdir_t',
+          'ensure'    => 'file',
+          'show_diff' => false,
+          'backup'    => false,
         )
       end
     end
