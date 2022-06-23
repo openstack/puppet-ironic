@@ -233,27 +233,29 @@ class ironic::pxe (
   })
 
   file { "${tftp_root_real}/undionly.kpxe":
-    ensure  => 'file',
-    seltype => 'tftpdir_t',
-    owner   => $::ironic::params::user,
-    group   => $::ironic::params::group,
-    mode    => '0744',
-    source  => "${::ironic::params::ipxe_rom_dir}/undionly.kpxe",
-    backup  => false,
-    require => Anchor['ironic-inspector::install::end'],
-    tag     => 'ironic-tftp-file',
+    ensure    => 'file',
+    seltype   => 'tftpdir_t',
+    owner     => $::ironic::params::user,
+    group     => $::ironic::params::group,
+    mode      => '0744',
+    source    => "${::ironic::params::ipxe_rom_dir}/undionly.kpxe",
+    backup    => false,
+    show_diff => false,
+    require   => Anchor['ironic-inspector::install::end'],
+    tag       => 'ironic-tftp-file',
   }
 
   file { "${tftp_root_real}/${uefi_ipxe_bootfile_name_real}":
-    ensure  => 'file',
-    seltype => 'tftpdir_t',
-    owner   => $::ironic::params::user,
-    group   => $::ironic::params::group,
-    mode    => '0744',
-    source  => "${::ironic::params::ipxe_rom_dir}/${ipxe_name_base}${arch}.efi",
-    backup  => false,
-    require => Anchor['ironic-inspector::install::end'],
-    tag     => 'ironic-tftp-file',
+    ensure    => 'file',
+    seltype   => 'tftpdir_t',
+    owner     => $::ironic::params::user,
+    group     => $::ironic::params::group,
+    mode      => '0744',
+    source    => "${::ironic::params::ipxe_rom_dir}/${ipxe_name_base}${arch}.efi",
+    backup    => false,
+    show_diff => false,
+    require   => Anchor['ironic-inspector::install::end'],
+    tag       => 'ironic-tftp-file',
   }
 
   File["${tftp_root_real}"] -> File<| tag == 'ironic-tftp-file' |>
