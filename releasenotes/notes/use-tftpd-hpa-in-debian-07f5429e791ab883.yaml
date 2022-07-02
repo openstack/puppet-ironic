@@ -1,0 +1,5 @@
+---
+fixes:
+  - |
+    Now the ``tftpd-hap`` package is installed insted of the ``tftpd`` package
+    in Debian and Ubuntu.
