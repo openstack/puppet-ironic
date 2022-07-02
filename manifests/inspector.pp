@@ -345,12 +345,10 @@ class ironic::inspector (
   }
 
   # Install package
-  if $::ironic::params::inspector_package {
-    package { 'ironic-inspector':
-      ensure => $package_ensure,
-      name   => $::ironic::params::inspector_package,
-      tag    => ['openstack', 'ironic-inspector-package'],
-    }
+  package { 'ironic-inspector':
+    ensure => $package_ensure,
+    name   => $::ironic::params::inspector_package,
+    tag    => ['openstack', 'ironic-inspector-package'],
   }
 
   if $::ironic::params::inspector_dnsmasq_package {
