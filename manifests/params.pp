@@ -78,10 +78,7 @@ class ironic::params {
       $inspector_package         = 'ironic-inspector'
       $inspector_dnsmasq_package = false
       $inspector_service         = 'ironic-inspector'
-      # it seems like there is not currently a builtin dnsmasq in the debian packaging
-      # https://packages.debian.org/source/experimental/ironic-inspector
-      # this should be changed to whatever debian will use for dnsmasq
-      $inspector_dnsmasq_service = 'ironic-inspector-dnsmasq'
+      $inspector_dnsmasq_service = false
       # guessing the name, ironic-staging-drivers is not packaged in debian yet
       $staging_drivers_package   = 'ironic-staging-drivers'
       $systemd_python_package    = 'python-systemd'
