@@ -34,6 +34,11 @@
 #   deployment images.
 #   Defaults to '8088'
 #
+# [*pxelinux_path*]
+#   (optional) Path to directory containing pxelinux.0 .
+#   Setting this to False will skip syslinux related resources.
+#   Defaults to '$::ironic::params::pxelinux_path'
+#
 # [*syslinux_path*]
 #   (optional) Path to directory containing syslinux files.
 #   Setting this to False will skip syslinux related resources.
@@ -73,6 +78,7 @@ class ironic::pxe (
   $tftp_root               = '/tftpboot',
   $http_root               = '/httpboot',
   $http_port               = '8088',
+  $pxelinux_path           = $::ironic::params::pxelinux_path,
   $syslinux_path           = $::ironic::params::syslinux_path,
   $syslinux_files          = $::ironic::params::syslinux_files,
   $tftp_bind_host          = undef,
@@ -209,6 +215,24 @@ class ironic::pxe (
 
     Package['dnsmasq-tftp-server'] ~> Service['dnsmasq-tftp-server']
     File[$tftp_root_real] -> Service['dnsmasq-tftp-server']
+  }
+
+  # NOTE(tkajinam): Ubuntu/Debian requires a separate package for pxelinux.0
+  #                 and the file is stored in a different path.
+  if $pxelinux_path {
+    if $ironic::params::pxelinux_package {
+      package { 'pxelinux':
+        ensure => $package_ensure,
+        name   => $::ironic::params::pxelinux_package,
+        tag    => ['openstack', 'ironic-ipxe', 'ironic-support-package'],
+      }
+    }
+
+    ironic::pxe::tftpboot_file { 'pxelinux.0':
+      source_directory      => $pxelinux_path,
+      destination_directory => $tftp_root_real,
+      require               => Anchor['ironic-inspector::install::end'],
+    }
   }
 
   if $syslinux_path {
