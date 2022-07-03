@@ -53,6 +53,8 @@ class ironic::params {
       $staging_drivers_package   = 'openstack-ironic-staging-drivers'
       $systemd_python_package    = 'systemd-python'
       $ipxe_rom_dir              = '/usr/share/ipxe'
+      $ipxe_name_base            = 'ipxe-snponly'
+      $uefi_ipxe_bootfile_name   = 'snponly.efi'
       $ironic_wsgi_script_path   = '/var/www/cgi-bin/ironic'
       $ironic_wsgi_script_source = '/usr/bin/ironic-api-wsgi'
       if (Integer.new($::os['release']['major']) > 8) {
@@ -85,6 +87,8 @@ class ironic::params {
       $staging_drivers_package   = 'ironic-staging-drivers'
       $systemd_python_package    = 'python-systemd'
       $ipxe_rom_dir              = '/usr/lib/ipxe'
+      $ipxe_name_base            = 'snponly'
+      $uefi_ipxe_bootfile_name   = 'snponly.efi'
       $ironic_wsgi_script_path   = '/usr/lib/cgi-bin/ironic'
       $ironic_wsgi_script_source = '/usr/bin/ironic-api-wsgi'
       $xinetd_available          = true

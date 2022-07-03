@@ -192,7 +192,7 @@
 #   (optional) Name of efi file used to boot servers with iPXE + UEFI. This
 #   should be consistent with the uefi_ipxe_bootfile_name parameter in pxe
 #   driver.
-#   Defaults to 'snponly.efi'
+#   Defaults to $::ironic::parmas::uefi_ipxe_bootfile_name
 #
 class ironic::inspector (
   $package_ensure                  = 'present',
@@ -230,14 +230,13 @@ class ironic::inspector (
   $enable_ppc64le                  = false,
   $default_transport_url           = 'fake://',
   $port_physnet_cidr_map           = {},
-  $uefi_ipxe_bootfile_name         = 'snponly.efi',
-) {
+  $uefi_ipxe_bootfile_name         = $::ironic::params::uefi_ipxe_bootfile_name,
+) inherits ironic::params {
 
   validate_legacy(Array, 'validate_array', $dnsmasq_ip_subnets)
   validate_legacy(Hash, 'validate_hash', $port_physnet_cidr_map)
 
   include ironic::deps
-  include ironic::params
   include ironic::pxe::common
   include ironic::inspector::db
   include ironic::inspector::policy

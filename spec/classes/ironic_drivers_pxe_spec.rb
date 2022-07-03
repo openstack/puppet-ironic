@@ -22,20 +22,11 @@ require 'spec_helper'
 
 describe 'ironic::drivers::pxe' do
 
-  let :default_params do
-    { :uefi_ipxe_bootfile_name        => 'snponly.efi',
-    }
-  end
-
   let :params do
     {}
   end
 
   shared_examples_for 'ironic pxe driver' do
-    let :p do
-      default_params.merge(params)
-    end
-
     it 'configures ironic.conf' do
       is_expected.to contain_ironic_config('pxe/kernel_append_params').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/pxe_bootfile_name').with_value('<SERVICE DEFAULT>')
@@ -95,25 +86,25 @@ describe 'ironic::drivers::pxe' do
       end
 
       it 'should replace default parameter with new value' do
-        is_expected.to contain_ironic_config('pxe/kernel_append_params').with_value(p[:kernel_append_params])
-        is_expected.to contain_ironic_config('pxe/pxe_config_template').with_value(p[:pxe_config_template])
-        is_expected.to contain_ironic_config('pxe/tftp_server').with_value(p[:tftp_server])
-        is_expected.to contain_ironic_config('pxe/tftp_root').with_value(p[:tftp_root])
-        is_expected.to contain_ironic_config('pxe/images_path').with_value(p[:images_path])
-        is_expected.to contain_ironic_config('pxe/tftp_master_path').with_value(p[:tftp_master_path])
-        is_expected.to contain_ironic_config('pxe/instance_master_path').with_value(p[:instance_master_path])
-        is_expected.to contain_ironic_config('pxe/uefi_pxe_bootfile_name').with_value(p[:uefi_pxe_bootfile_name])
-        is_expected.to contain_ironic_config('pxe/uefi_pxe_config_template').with_value(p[:uefi_pxe_config_template])
-        is_expected.to contain_ironic_config('pxe/uefi_ipxe_bootfile_name').with_value(p[:uefi_ipxe_bootfile_name])
-        is_expected.to contain_ironic_config('pxe/ipxe_timeout').with_value(p[:ipxe_timeout])
-        is_expected.to contain_ironic_config('pxe/pxe_bootfile_name').with_value(p[:pxe_bootfile_name])
-        is_expected.to contain_ironic_config('pxe/boot_retry_timeout').with_value(p[:boot_retry_timeout])
-        is_expected.to contain_ironic_config('pxe/boot_retry_check_interval').with_value(p[:boot_retry_check_interval])
+        is_expected.to contain_ironic_config('pxe/kernel_append_params').with_value(params[:kernel_append_params])
+        is_expected.to contain_ironic_config('pxe/pxe_config_template').with_value(params[:pxe_config_template])
+        is_expected.to contain_ironic_config('pxe/tftp_server').with_value(params[:tftp_server])
+        is_expected.to contain_ironic_config('pxe/tftp_root').with_value(params[:tftp_root])
+        is_expected.to contain_ironic_config('pxe/images_path').with_value(params[:images_path])
+        is_expected.to contain_ironic_config('pxe/tftp_master_path').with_value(params[:tftp_master_path])
+        is_expected.to contain_ironic_config('pxe/instance_master_path').with_value(params[:instance_master_path])
+        is_expected.to contain_ironic_config('pxe/uefi_pxe_bootfile_name').with_value(params[:uefi_pxe_bootfile_name])
+        is_expected.to contain_ironic_config('pxe/uefi_pxe_config_template').with_value(params[:uefi_pxe_config_template])
+        is_expected.to contain_ironic_config('pxe/uefi_ipxe_bootfile_name').with_value(params[:uefi_ipxe_bootfile_name])
+        is_expected.to contain_ironic_config('pxe/ipxe_timeout').with_value(params[:ipxe_timeout])
+        is_expected.to contain_ironic_config('pxe/pxe_bootfile_name').with_value(params[:pxe_bootfile_name])
+        is_expected.to contain_ironic_config('pxe/boot_retry_timeout').with_value(params[:boot_retry_timeout])
+        is_expected.to contain_ironic_config('pxe/boot_retry_check_interval').with_value(params[:boot_retry_check_interval])
         is_expected.to contain_ironic_config('pxe/dir_permission').with_value('0o755')
         is_expected.to contain_ironic_config('pxe/file_permission').with_value('0o644')
         is_expected.to contain_ironic_config('pxe/loader_file_paths')
           .with_value('ipxe.efi:/usr/share/ipxe/ipxe-snponly-x86_64.efi,undionly.kpxe:/usr/share/ipxe/undionly.kpxe')
-        is_expected.to contain_ironic_config('pxe/ip_version').with_value(p[:ip_version])
+        is_expected.to contain_ironic_config('pxe/ip_version').with_value(params[:ip_version])
       end
     end
 
