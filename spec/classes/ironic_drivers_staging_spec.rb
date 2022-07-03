@@ -41,18 +41,17 @@ describe 'ironic::drivers::staging' do
     end
   end
 
-  # TODO: use OSDefaults.get_supported_os when ironic-staging-drivers is
-  # packaged for Debian and Ubuntu
   on_supported_os({
-    :supported_os   => [ { 'operatingsystem' => 'CentOS',
-                           'operatingsystemrelease' => [ '7' ] } ]
+    :supported_os => OSDefaults.get_supported_os
   }).each do |os,facts|
     context "on #{os}" do
       let (:facts) do
         facts.merge!(OSDefaults.get_facts())
       end
 
-      it_configures 'ironic-staging-drivers'
+      if facts[:osfamily] == 'RedHat'
+        it_configures 'ironic-staging-drivers'
+      end
     end
   end
 
