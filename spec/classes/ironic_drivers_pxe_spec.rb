@@ -39,7 +39,7 @@ describe 'ironic::drivers::pxe' do
       is_expected.to contain_ironic_config('pxe/tftp_master_path').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/instance_master_path').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/uefi_pxe_config_template').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('pxe/uefi_ipxe_bootfile_name').with_value('snponly.efi')
+      is_expected.to contain_ironic_config('pxe/uefi_ipxe_bootfile_name').with_value(platform_params[:uefi_ipxe_bootfile_name])
       is_expected.to contain_ironic_config('pxe/uefi_pxe_bootfile_name').with_value('bootx64.efi')
       is_expected.to contain_ironic_config('pxe/dir_permission').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/file_permission').with_value('<SERVICE DEFAULT>')
@@ -119,6 +119,14 @@ describe 'ironic::drivers::pxe' do
           :concat_basedir         => '/var/lib/puppet/concat',
           :fqdn                   => 'some.host.tld',
         }))
+      end
+
+      let :platform_params do
+        if facts[:operatingsystem] == 'Ubuntu' and facts[:operatingsystemmajrelease] <= '20.04'
+          { :uefi_ipxe_bootfile_name => 'ipxe.efi' }
+        else
+          { :uefi_ipxe_bootfile_name => 'snponly.efi' }
+        end
       end
 
       it_behaves_like 'ironic pxe driver'

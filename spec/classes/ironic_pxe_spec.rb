@@ -65,7 +65,7 @@ describe 'ironic::pxe' do
       )
     end
     it 'should contain iPXE UEFI chainload image' do
-      is_expected.to contain_file('/tftpboot/snponly.efi').with(
+      is_expected.to contain_file("/tftpboot/#{platform_params[:uefi_ipxe_bootfile_name]}").with(
         'owner'     => 'ironic',
         'group'     => 'ironic',
         'require'   => 'Anchor[ironic-inspector::install::end]',
@@ -155,7 +155,7 @@ describe 'ironic::pxe' do
         )
       end
       it 'should contain iPXE UEFI chainload image' do
-        is_expected.to contain_file('/var/lib/tftpboot/snponly.efi').with(
+        is_expected.to contain_file("/var/lib/tftpboot/#{platform_params[:uefi_ipxe_bootfile_name]}").with(
           'owner'     => 'ironic',
           'group'     => 'ironic',
           'require'   => 'Anchor[ironic-inspector::install::end]',
@@ -336,23 +336,37 @@ describe 'ironic::pxe' do
       let(:platform_params) do
         case facts[:osfamily]
         when 'Debian'
-          {
-            :grub_efi_package => 'grub-efi-amd64-signed',
-            :ipxe_package     => 'ipxe',
-            :shim_package     => 'shim-signed',
-            :pxelinux_package => 'pxelinux',
-            :syslinux_package => 'syslinux-common',
-            :tftp_package     => 'tftpd-hpa',
-          }
+          if facts[:operatingsystem] == 'Ubuntu' and facts[:operatingsystemmajrelease] <= '20.04'
+            {
+              :grub_efi_package        => 'grub-efi-amd64-signed',
+              :ipxe_package            => 'ipxe',
+              :shim_package            => 'shim-signed',
+              :pxelinux_package        => 'pxelinux',
+              :syslinux_package        => 'syslinux-common',
+              :tftp_package            => 'tftpd-hpa',
+              :uefi_ipxe_bootfile_name => 'ipxe.efi'
+            }
+          else
+            {
+              :grub_efi_package        => 'grub-efi-amd64-signed',
+              :ipxe_package            => 'ipxe',
+              :shim_package            => 'shim-signed',
+              :pxelinux_package        => 'pxelinux',
+              :syslinux_package        => 'syslinux-common',
+              :tftp_package            => 'tftpd-hpa',
+              :uefi_ipxe_bootfile_name => 'snponly.efi'
+            }
+          end
         when 'RedHat'
           {
-            :dnsmasq_tftp_package => 'openstack-ironic-dnsmasq-tftp-server',
-            :dnsmasq_tftp_service => 'openstack-ironic-dnsmasq-tftp-server',
-            :grub_efi_package     => 'grub2-efi-x64',
-            :ipxe_package         => 'ipxe-bootimgs',
-            :shim_package         => 'shim',
-            :syslinux_package     => 'syslinux-tftpboot',
-            :tftp_package         => 'tftp-server',
+            :dnsmasq_tftp_package    => 'openstack-ironic-dnsmasq-tftp-server',
+            :dnsmasq_tftp_service    => 'openstack-ironic-dnsmasq-tftp-server',
+            :grub_efi_package        => 'grub2-efi-x64',
+            :ipxe_package            => 'ipxe-bootimgs',
+            :shim_package            => 'shim',
+            :syslinux_package        => 'syslinux-tftpboot',
+            :tftp_package            => 'tftp-server',
+            :uefi_ipxe_bootfile_name => 'snponly.efi'
           }
         end
       end
