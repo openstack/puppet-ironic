@@ -63,6 +63,8 @@ class ironic::params {
         $tftpd_package           = 'tftp-server'
       }
       $ipxe_package              = 'ipxe-bootimgs'
+      $pxelinux_package          = false
+      $pxelinux_path             = false
       $syslinux_package          = 'syslinux-tftpboot'
       $syslinux_path             = '/tftpboot'
       $syslinux_files            = ['pxelinux.0', 'chain.c32', 'ldlinux.c32']
@@ -95,13 +97,11 @@ class ironic::params {
       $xinetd_available          = true
       $tftpd_package             = 'tftpd-hpa'
       $ipxe_package              = 'ipxe'
+      $pxelinux_package          = 'pxelinux'
+      $pxelinux_path             = '/usr/lib/PXELINUX'
       $syslinux_package          = 'syslinux-common'
-      if $::operatingsystem == 'Debian' {
-        $syslinux_path = '/usr/lib/syslinux'
-      } else {
-        $syslinux_path = '/var/lib/tftpboot'
-      }
-      $syslinux_files            = ['pxelinux.0', 'chain.c32', 'libcom32.c32', 'libutil.c32']
+      $syslinux_path             = '/usr/lib/syslinux/modules/bios'
+      $syslinux_files            = ['chain.c32', 'libcom32.c32', 'libutil.c32']
       $grub_efi_package          = 'grub-efi-amd64-signed'
       $grub_efi_file             = '/usr/lib/grub/x86_64-efi-signed/grubnetx64.efi.signed'
       $shim_package              = 'shim-signed'
