@@ -85,8 +85,7 @@
 #   (optional) Bootfile DHCP parameter for UEFI boot mode for the
 #   ipxe boot interface. No separate configuration template is required
 #   when using ipxe.
-#   Defaults to snponly.efi, which supports UEFI firmware with network
-#   enablement, which is a standard feature in UEFI.
+#   Defaults to $::ironic::params::uefi_ipxe_bootfile_name
 #
 # [*ipxe_timeout*]
 #   (optional) ipxe timeout in second.
@@ -142,7 +141,7 @@ class ironic::drivers::pxe (
   $instance_master_path      = $::os_service_default,
   $uefi_pxe_bootfile_name    = 'bootx64.efi',
   $uefi_pxe_config_template  = $::os_service_default,
-  $uefi_ipxe_bootfile_name   = 'snponly.efi',
+  $uefi_ipxe_bootfile_name   = $::ironic::params::uefi_ipxe_bootfile_name,
   $ipxe_timeout              = $::os_service_default,
   $enable_ppc64le            = false,
   $boot_retry_timeout        = $::os_service_default,
@@ -152,7 +151,7 @@ class ironic::drivers::pxe (
   $loader_file_paths         = $::os_service_default,
   # DEPRECATED PARAMETERS
   $ip_version                = undef,
-) {
+) inherits ironic::params {
 
   include ironic::deps
   include ironic::pxe::common

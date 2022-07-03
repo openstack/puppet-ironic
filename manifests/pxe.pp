@@ -54,15 +54,15 @@
 #
 # [*ipxe_name_base*]
 #   (optional) Beginning of the source file name which is copied to
-#   $tftproot/ipxe.efi. Setting this to 'ipxe-snponly' on CentOS8 would result
-#   in the source file being /usr/share/ipxe/ipxe-snponly-x86_64.efi
-#   Defaults to 'ipxe-snponly'
+#   $tftproot/ipxe.efi. Setting this to 'ipxe-snponly' on CentOS/RHEL would
+#   results in the source file being /usr/share/ipxe/ipxe-snponly-x86_64.efi.
+#   Defaults to $::ironic::params::ipxe_name_base
 #
 # [*uefi_ipxe_bootfile_name*]
 #   (optional) Name of efi file used to boot servers with iPXE + UEFI. This
 #   should be consistent with the uefi_ipxe_bootfile_name parameter in pxe
 #   driver.
-#   Defaults to 'snponly.efi'
+#   Defaults to $::ironic::params::uefi_ipxe_bootfile_name
 #
 # [*uefi_pxe_bootfile_name*]
 #   (optional) Name of efi file used to boot servers with PXE + UEFI. This
@@ -88,8 +88,8 @@ class ironic::pxe (
   $syslinux_path           = $::ironic::params::syslinux_path,
   $syslinux_files          = $::ironic::params::syslinux_files,
   $tftp_bind_host          = undef,
-  $ipxe_name_base          = 'ipxe-snponly',
-  $uefi_ipxe_bootfile_name = 'snponly.efi',
+  $ipxe_name_base          = $::ironic::params::ipxe_name_base,
+  $uefi_ipxe_bootfile_name = $::ironic::params::uefi_ipxe_bootfile_name,
   $uefi_pxe_bootfile_name  = 'bootx64.efi',
   $tftp_use_xinetd         = $::ironic::params::xinetd_available,
   $dnsmasq_log_facility    = undef,
