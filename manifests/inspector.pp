@@ -252,13 +252,6 @@ class ironic::inspector (
   $ipxe_timeout_real            = pick($::ironic::pxe::common::ipxe_timeout, $ipxe_timeout)
   $uefi_ipxe_bootfile_name_real = pick($::ironic::pxe::common::uefi_ipxe_bootfile_name, $uefi_ipxe_bootfile_name)
 
-  file { '/etc/ironic-inspector/inspector.conf':
-    ensure  => 'present',
-    owner   => $::ironic::params::inspector_user,
-    group   => $::ironic::params::inspector_group,
-    require => Anchor['ironic-inspector::config::begin'],
-  }
-
   $dnsmasq_local_ip_real = normalize_ip_for_uri($dnsmasq_local_ip)
   $dnsmasq_ip_subnets_real = ipv6_normalize_dnsmasq_ip_subnets($dnsmasq_ip_subnets)
 

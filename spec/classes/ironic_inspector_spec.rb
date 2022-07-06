@@ -127,14 +127,6 @@ describe 'ironic::inspector' do
       is_expected.to contain_ironic_inspector_config('port_physnet/cidr_map').with_value('')
     end
 
-    it 'should contain file /etc/ironic-inspector/inspector.conf' do
-      is_expected.to contain_file('/etc/ironic-inspector/inspector.conf').with(
-        'ensure'  => 'present',
-        'owner'   => 'ironic-inspector',
-        'group'   => 'ironic-inspector',
-        'require' => 'Anchor[ironic-inspector::config::begin]',
-      )
-    end
     it 'should contain file /etc/ironic-inspector/dnsmasq.conf' do
       is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with(
         'ensure'  => 'present',
