@@ -215,6 +215,7 @@ describe 'ironic::pxe' do
     it 'should install tftp-server package' do
       is_expected.to contain_package('tftp-server').with(
         'ensure' => 'present',
+        'name'   => platform_params[:tftp_package]
       )
     end
 
@@ -316,6 +317,7 @@ describe 'ironic::pxe' do
             :ipxe_package     => 'ipxe',
             :shim_package     => 'shim-signed',
             :syslinux_package => 'syslinux-common',
+            :tftp_package     => 'tftpd-hpa',
           }
         when 'RedHat'
           {
@@ -325,6 +327,7 @@ describe 'ironic::pxe' do
             :ipxe_package         => 'ipxe-bootimgs',
             :shim_package         => 'shim',
             :syslinux_package     => 'syslinux-tftpboot',
+            :tftp_package         => 'tftp-server',
           }
         end
       end

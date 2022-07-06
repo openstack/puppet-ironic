@@ -93,7 +93,7 @@ class ironic::params {
       $ironic_wsgi_script_path   = '/usr/lib/cgi-bin/ironic'
       $ironic_wsgi_script_source = '/usr/bin/ironic-api-wsgi'
       $xinetd_available          = true
-      $tftpd_package             = 'tftpd'
+      $tftpd_package             = 'tftpd-hpa'
       $ipxe_package              = 'ipxe'
       $syslinux_package          = 'syslinux-common'
       if $::operatingsystem == 'Debian' {
