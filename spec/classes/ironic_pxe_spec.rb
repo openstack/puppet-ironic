@@ -200,7 +200,7 @@ describe 'ironic::pxe' do
         is_expected.not_to contain_package('syslinux')
       end
       it 'should not contain tftpboot syslinux file' do
-        is_expected.not_to contain_file('/var/lib/ironic/tftpboot/pxelinux.0')
+        is_expected.not_to contain_file('/var/lib/ironic/tftpboot/chain.c32')
       end
     end
   end
@@ -301,6 +301,30 @@ describe 'ironic::pxe' do
     end
   end
 
+  shared_examples_for 'ironic pxe with pxelinux package' do
+    it 'should contain pxelinux package' do
+      is_expected.to contain_package('pxelinux').with(
+        :ensure => 'present',
+        :name   => platform_params[:pxelinux_package],
+        :tag    => ['openstack', 'ironic-ipxe', 'ironic-support-package'],
+      )
+    end
+
+    context 'when excluding pxelinux' do
+      before :each do
+        params.merge!(
+          :pxelinux_path => false,
+        )
+      end
+      it 'should not contain pxelinux package' do
+        is_expected.not_to contain_package('pxelinux')
+      end
+      it 'should not contain pxelinux.0 file' do
+        is_expected.not_to contain_file('/var/lib/ironic/tftpboot/pxelinux.0')
+      end
+    end
+  end
+
   on_supported_os({
     :supported_os => OSDefaults.get_supported_os
   }).each do |os,facts|
@@ -316,6 +340,7 @@ describe 'ironic::pxe' do
             :grub_efi_package => 'grub-efi-amd64-signed',
             :ipxe_package     => 'ipxe',
             :shim_package     => 'shim-signed',
+            :pxelinux_package => 'pxelinux',
             :syslinux_package => 'syslinux-common',
             :tftp_package     => 'tftpd-hpa',
           }
@@ -340,6 +365,10 @@ describe 'ironic::pxe' do
 
       unless facts[:osfamily] == 'RedHat' and facts[:operatingsystemmajrelease].to_i >= 9
         it_behaves_like 'ironic pxe with xinetd'
+      end
+
+      if facts[:osfamily] == 'Debian'
+        it_behaves_like 'ironic pxe with pxelinux package' 
       end
     end
   end

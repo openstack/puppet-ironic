@@ -1,0 +1,12 @@
+---
+fixes:
+  - |
+    Now the ``ironic::pxe`` class properly installs the pxelinux.0 file using
+    the separate ``pxelinux`` package in Debian and Ubuntu. The new
+    ``pxelinux_file_path`` parameter can be used to determine the source path
+    to locate the file. When this parameter is set to false then the class
+    does not manage the file.
+
+  - |
+    The wrong source directory to copy syslinux files in Debiand or Ubuntu has
+    been fixed.
