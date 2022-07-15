@@ -33,7 +33,7 @@ describe 'Puppet::Type.type(:ironic_config)' do
     expect(@ironic_config[:value]).to eq(['bar'])
   end
 
-  it 'should not accept a value with whitespace' do
+  it 'should accept a value with whitespace' do
     @ironic_config[:value] = 'b ar'
     expect(@ironic_config[:value]).to eq(['b ar'])
   end
