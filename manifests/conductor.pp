@@ -193,6 +193,15 @@
 #   parallel.
 #   Defaults to $::os_service_default
 #
+# [*heartbeat_interval*]
+#   (optional) Seconds between conductor heart beats.
+#   Defaults to $::os_service_default
+#
+# [*heartbeat_timeout*]
+#   (optional) Maximum time (in seconds) since the last check-in of
+#   a conductor.
+#   Defaults to $::os_service_default
+#
 # DEPRECATED PARAMETERS
 #
 # [*api_url*]
@@ -268,6 +277,8 @@ class ironic::conductor (
   $bootloader                          = $::os_service_default,
   $allow_provisioning_in_maintenance   = $::os_service_default,
   $image_download_concurrency          = $::os_service_default,
+  $heartbeat_interval                  = $::os_service_default,
+  $heartbeat_timeout                   = $::os_service_default,
   # DEPRECATED PARAMETERS
   $api_url                             = undef,
   $configdrive_use_swift               = undef,
@@ -383,6 +394,8 @@ Use inspect_wait_timeout instead')
     'conductor/bootloader':                        value => $bootloader;
     'conductor/allow_provisioning_in_maintenance': value => $allow_provisioning_in_maintenance;
     'DEFAULT/image_download_concurrency':          value => $image_download_concurrency;
+    'conductor/heartbeat_interval':                value => $heartbeat_interval;
+    'conductor/heartbeat_timeout':                 value => $heartbeat_timeout;
   }
 
   if $cleaning_network_name {
