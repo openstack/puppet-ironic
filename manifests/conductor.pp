@@ -198,6 +198,15 @@
 #   ramdisk. Set to 0 to disable timeout. (integer value)
 #   Defaults to $::os_service_default
 #
+# [*heartbeat_interval*]
+#   (optional) Seconds between conductor heart beats.
+#   Defaults to $::os_service_default
+#
+# [*heartbeat_timeout*]
+#   (optional) Maximum time (in seconds) since the last check-in of
+#   a conductor.
+#   Defaults to $::os_service_default
+#
 # DEPRECATED PARAMETERS
 #
 # [*cleaning_network_name*]
@@ -260,6 +269,8 @@ class ironic::conductor (
   $allow_provisioning_in_maintenance   = $::os_service_default,
   $image_download_concurrency          = $::os_service_default,
   $deploy_callback_timeout             = $::os_service_default,
+  $heartbeat_interval                  = $::os_service_default,
+  $heartbeat_timeout                   = $::os_service_default,
   # DEPRECATED PARAMETERS
   $cleaning_network_name               = undef,
   $provisioning_network_name           = undef,
@@ -349,6 +360,8 @@ class ironic::conductor (
     'conductor/allow_provisioning_in_maintenance': value => $allow_provisioning_in_maintenance;
     'DEFAULT/image_download_concurrency':          value => $image_download_concurrency;
     'conductor/deploy_callback_timeout':           value => $deploy_callback_timeout;
+    'conductor/heartbeat_interval':                value => $heartbeat_interval;
+    'conductor/heartbeat_timeout':                 value => $heartbeat_timeout;
   }
 
   if $cleaning_network_name {
