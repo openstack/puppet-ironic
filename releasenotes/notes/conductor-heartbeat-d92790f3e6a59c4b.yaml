@@ -1,0 +1,8 @@
+---
+features:
+  - |
+    The ``ironic::conductor`` class now supports the following two new
+    parameters.
+
+    - ``heartbeat_interval``
+    - ``heartbeat_timeout``
