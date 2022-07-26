@@ -90,6 +90,7 @@ describe 'ironic::conductor' do
       is_expected.to contain_ironic_config('conductor/rescue_ramdisk').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/bootloader').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('DEFAULT/image_download_concurrency').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('conductor/deploy_callback_timeout').with(:value => '<SERVICE DEFAULT>')
     end
 
     context 'when overriding parameters' do
@@ -126,6 +127,7 @@ describe 'ironic::conductor' do
           :bootloader                        => 'http://host/bootloader',
           :allow_provisioning_in_maintenance => false,
           :image_download_concurrency        => 20,
+          :deploy_callback_timeout           => 1800,
         )
       end
       it 'should replace default parameter with new value' do
@@ -161,6 +163,7 @@ describe 'ironic::conductor' do
         is_expected.to contain_ironic_config('conductor/bootloader').with_value(p[:bootloader])
         is_expected.to contain_ironic_config('conductor/allow_provisioning_in_maintenance').with_value(p[:allow_provisioning_in_maintenance])
         is_expected.to contain_ironic_config('DEFAULT/image_download_concurrency').with_value(p[:image_download_concurrency])
+        is_expected.to contain_ironic_config('conductor/deploy_callback_timeout').with_value(p[:deploy_callback_timeout])
       end
     end
 

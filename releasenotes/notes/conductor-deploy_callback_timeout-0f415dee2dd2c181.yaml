@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The new ``ironic::conductor::deploy_callback_timeout`` parameter has been added.

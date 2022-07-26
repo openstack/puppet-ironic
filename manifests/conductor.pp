@@ -193,6 +193,11 @@
 #   parallel.
 #   Defaults to $::os_service_default
 #
+# [*deploy_callback_timeout*]
+#   (optional) Timeout (seconds) to wait for a callback from a deploy
+#   ramdisk. Set to 0 to disable timeout. (integer value)
+#   Defaults to $::os_service_default
+#
 # DEPRECATED PARAMETERS
 #
 # [*cleaning_network_name*]
@@ -254,6 +259,7 @@ class ironic::conductor (
   $bootloader                          = $::os_service_default,
   $allow_provisioning_in_maintenance   = $::os_service_default,
   $image_download_concurrency          = $::os_service_default,
+  $deploy_callback_timeout             = $::os_service_default,
   # DEPRECATED PARAMETERS
   $cleaning_network_name               = undef,
   $provisioning_network_name           = undef,
@@ -342,6 +348,7 @@ class ironic::conductor (
     'conductor/bootloader':                        value => $bootloader;
     'conductor/allow_provisioning_in_maintenance': value => $allow_provisioning_in_maintenance;
     'DEFAULT/image_download_concurrency':          value => $image_download_concurrency;
+    'conductor/deploy_callback_timeout':           value => $deploy_callback_timeout;
   }
 
   if $cleaning_network_name {
