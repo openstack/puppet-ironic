@@ -21,20 +21,13 @@ describe 'basic ironic' do
       apply_manifest(pp, :catch_changes  => true)
     end
 
-    if os[:family].casecmp('RedHat') == 0
-      # Ironic API port
-      describe port(6385) do
-        it { is_expected.to be_listening }
-      end
-      # Inspector API port
-      describe port(5050) do
-        it { is_expected.to be_listening.with('tcp') }
-      end
-    else # Inspector is not packaged, so only test Ironic
-      # Ironic API port
-      describe port(6385) do
-        it { is_expected.to be_listening }
-      end
+    # Ironic API port
+    describe port(6385) do
+      it { is_expected.to be_listening }
+    end
+    # Inspector API port
+    describe port(5050) do
+      it { is_expected.to be_listening.with('tcp') }
     end
 
   end
