@@ -119,6 +119,8 @@ class ironic::pxe (
     before  => Anchor['ironic::config::end'],
   }
 
+  # NOTE(tkajinam): ironic-common package is also installed by the base ironic
+  #                 class so here we need ensure_resource
   ensure_resource( 'package', 'ironic-common', {
     ensure => $package_ensure,
     name   => $::ironic::params::common_package_name,
@@ -148,11 +150,11 @@ class ironic::pxe (
       fail('xinetd is not available in this distro. Please use tftp_use_xinetd=false')
     }
 
-    ensure_resource( 'package', 'tftp-server', {
-      'ensure' => $package_ensure,
-      'name'   => $::ironic::params::tftpd_package,
-      'tag'    => ['openstack', 'ironic-ipxe', 'ironic-support-package'],
-    })
+    package { 'tftp-server':
+      ensure => $package_ensure,
+      name   => $::ironic::params::tftpd_package,
+      tag    => ['openstack', 'ironic-ipxe', 'ironic-support-package'],
+    }
 
     $options = "--map-file ${tftp_root_real}/map-file"
 
@@ -233,11 +235,11 @@ class ironic::pxe (
   }
 
   if $syslinux_path {
-    ensure_resource( 'package', 'syslinux', {
+    package { 'syslinux':
       ensure => $package_ensure,
       name   => $::ironic::params::syslinux_package,
       tag    => ['openstack', 'ironic-ipxe', 'ironic-support-package'],
-    })
+    }
 
     ironic::pxe::tftpboot_file { $syslinux_files:
       source_directory      => $syslinux_path,
@@ -246,11 +248,11 @@ class ironic::pxe (
     }
   }
 
-  ensure_resource( 'package', 'ipxe', {
+  package { 'ipxe':
     ensure => $package_ensure,
     name   => $::ironic::params::ipxe_package,
     tag    => ['openstack', 'ironic-ipxe', 'ironic-support-package'],
-  })
+  }
 
   file { "${tftp_root_real}/undionly.kpxe":
     ensure    => 'file',
