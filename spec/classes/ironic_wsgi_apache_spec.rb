@@ -9,6 +9,7 @@ describe 'ironic::wsgi::apache' do
         :bind_port                   => 6385,
         :group                       => 'ironic',
         :path                        => '/',
+        :priority                    => 10,
         :servername                  => facts[:fqdn],
         :ssl                         => false,
         :threads                     => 15,
@@ -22,8 +23,8 @@ describe 'ironic::wsgi::apache' do
         :headers                     => nil,
         :request_headers             => nil,
         :custom_wsgi_process_options => {},
-        :access_log_file             => false,
-        :access_log_format           => false,
+        :access_log_file             => nil,
+        :access_log_format           => nil,
       )}
     end
 
@@ -34,7 +35,7 @@ describe 'ironic::wsgi::apache' do
           :bind_host                   => '10.42.51.1',
           :port                        => 12345,
           :ssl                         => true,
-         :vhost_custom_fragment        => 'Timeout 99',
+          :vhost_custom_fragment       => 'Timeout 99',
           :wsgi_process_display_name   => 'ironic',
           :workers                     => 37,
           :access_log_file             => '/var/log/httpd/access_log',
