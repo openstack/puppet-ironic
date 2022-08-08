@@ -83,6 +83,8 @@ describe 'ironic::conductor' do
       is_expected.to contain_ironic_config('conductor/power_state_sync_max_retries').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/power_failure_recovery_interval').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/conductor_group').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('conductor/heartbeat_interval').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('conductor/heartbeat_timeout').with(:value => '<SERVICE DEFAULT>')
     end
 
     context 'when overriding parameters' do
@@ -116,6 +118,8 @@ describe 'ironic::conductor' do
           :rescue_kernel                     => 'http://host/rescue.kernel',
           :rescue_ramdisk                    => 'http://host/rescue.ramdisk',
           :allow_provisioning_in_maintenance => false,
+          :heartbeat_interval                => 10,
+          :heartbeat_timeout                 => 60,
         )
       end
       it 'should replace default parameter with new value' do
@@ -148,6 +152,8 @@ describe 'ironic::conductor' do
         is_expected.to contain_ironic_config('conductor/rescue_kernel').with_value(p[:rescue_kernel])
         is_expected.to contain_ironic_config('conductor/rescue_ramdisk').with_value(p[:rescue_ramdisk])
         is_expected.to contain_ironic_config('conductor/allow_provisioning_in_maintenance').with_value(p[:allow_provisioning_in_maintenance])
+        is_expected.to contain_ironic_config('conductor/heartbeat_interval').with_value(p[:heartbeat_interval])
+        is_expected.to contain_ironic_config('conductor/heartbeat_timeout').with_value(p[:heartbeat_timeout])
       end
     end
 
