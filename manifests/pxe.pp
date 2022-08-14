@@ -32,7 +32,7 @@
 # [*http_port*]
 #   (optional) port used by the HTTP service serving introspection and
 #   deployment images.
-#   Defaults to '8088'
+#   Defaults to 8088
 #
 # [*pxelinux_path*]
 #   (optional) Path to directory containing pxelinux.0 .
@@ -83,7 +83,7 @@ class ironic::pxe (
   $package_ensure          = 'present',
   $tftp_root               = '/tftpboot',
   $http_root               = '/httpboot',
-  $http_port               = '8088',
+  $http_port               = 8088,
   $pxelinux_path           = $::ironic::params::pxelinux_path,
   $syslinux_path           = $::ironic::params::syslinux_path,
   $syslinux_files          = $::ironic::params::syslinux_files,
