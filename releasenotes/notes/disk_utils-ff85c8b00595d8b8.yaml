@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The new ``ironic::disk_utils`` class has been added.
