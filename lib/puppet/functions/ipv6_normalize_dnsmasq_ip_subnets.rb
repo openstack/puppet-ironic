@@ -7,8 +7,6 @@ Puppet::Functions.create_function(:ipv6_normalize_dnsmasq_ip_subnets) do
       begin
         if ip_subnet["netmask"]
           if IPAddr.new(ip_subnet["netmask"]).ipv6?
-            # TODO(hjensas) Once we have ruby stdlib >= 2.5.x we can use
-            # IPAddr.new().prefix instead of counting 1's.
             prefix = IPAddr.new(ip_subnet["netmask"]).to_i.to_s(2).count("1")
             Puppet.debug("Netmask #{ip_subnet["netmask"]} changed to prefix #{prefix}")
             ip_subnet_dup["netmask"] = prefix
