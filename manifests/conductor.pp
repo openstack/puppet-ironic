@@ -190,6 +190,15 @@
 #   after the next heartbeat.
 #   Defaults to $::os_service_default
 #
+# [*heartbeat_interval*]
+#   (optional) Seconds between conductor heart beats.
+#   Defaults to $::os_service_default
+#
+# [*heartbeat_timeout*]
+#   (optional) Maximum time (in seconds) since the last check-in of
+#   a conductor.
+#   Defaults to $::os_service_default
+#
 class ironic::conductor (
   $package_ensure                      = 'present',
   $enabled                             = true,
@@ -225,6 +234,8 @@ class ironic::conductor (
   $rescue_kernel                       = $::os_service_default,
   $rescue_ramdisk                      = $::os_service_default,
   $allow_provisioning_in_maintenance   = $::os_service_default,
+  $heartbeat_interval                  = $::os_service_default,
+  $heartbeat_timeout                   = $::os_service_default,
 ) {
 
   include ::ironic::deps
@@ -315,6 +326,8 @@ class ironic::conductor (
     'conductor/rescue_kernel':                     value => $rescue_kernel;
     'conductor/rescue_ramdisk':                    value => $rescue_ramdisk;
     'conductor/allow_provisioning_in_maintenance': value => $allow_provisioning_in_maintenance;
+    'conductor/heartbeat_interval':                value => $heartbeat_interval;
+    'conductor/heartbeat_timeout':                 value => $heartbeat_timeout;
   }
 
   if $cleaning_network_name {
