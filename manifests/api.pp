@@ -23,6 +23,10 @@
 #   (optional) Control the ensure parameter for the package resource.
 #   Defaults to 'present'.
 #
+# [*manage_service*]
+#   (optional) Whether the service should be managed by Puppet.
+#   Defaults to true.
+#
 # [*enabled*]
 #   (optional) Define if the service must be enabled or not.
 #   Defaults to true.
@@ -71,6 +75,7 @@
 #
 class ironic::api (
   $package_ensure               = 'present',
+  $manage_service               = true,
   $enabled                      = true,
   $service_name                 = $::ironic::params::api_service,
   $host_ip                      = '0.0.0.0',
@@ -105,36 +110,38 @@ class ironic::api (
     }
   }
 
-  if $enabled {
-    $ensure = 'running'
-  } else {
-    $ensure = 'stopped'
-  }
-
-  if $service_name == $::ironic::params::api_service {
-    service { 'ironic-api':
-      ensure     => $ensure,
-      name       => $::ironic::params::api_service,
-      enable     => $enabled,
-      hasstatus  => true,
-      hasrestart => true,
-      tag        => 'ironic-service',
+  if $manage_service {
+    if $enabled {
+      $ensure = 'running'
+    } else {
+      $ensure = 'stopped'
     }
-    Keystone_endpoint<||> -> Service['ironic-api']
-  } elsif $service_name == 'httpd' {
-    service { 'ironic-api':
-      ensure => 'stopped',
-      name   => $::ironic::params::api_service,
-      enable => false,
-      tag    => 'ironic-service',
-    }
-    Service <| title == 'httpd' |> { tag +> 'ironic-service' }
 
-    # we need to make sure ironic-api/eventlet is stopped before trying to start apache
-    Service['ironic-api'] -> Service[$service_name]
-  } else {
-    fail("Invalid service_name. Either ironic-api/openstack-ironic-api for running as a \
+    if $service_name == $::ironic::params::api_service {
+      service { 'ironic-api':
+        ensure     => $ensure,
+        name       => $::ironic::params::api_service,
+        enable     => $enabled,
+        hasstatus  => true,
+        hasrestart => true,
+        tag        => 'ironic-service',
+      }
+      Keystone_endpoint<||> -> Service['ironic-api']
+    } elsif $service_name == 'httpd' {
+      service { 'ironic-api':
+        ensure => 'stopped',
+        name   => $::ironic::params::api_service,
+        enable => false,
+        tag    => 'ironic-service',
+      }
+      Service <| title == 'httpd' |> { tag +> 'ironic-service' }
+
+      # we need to make sure ironic-api/eventlet is stopped before trying to start apache
+      Service['ironic-api'] -> Service[$service_name]
+    } else {
+      fail("Invalid service_name. Either ironic-api/openstack-ironic-api for running as a \
 standalone service, or httpd for being run by a httpd server")
+    }
   }
 
   oslo::middleware { 'ironic_config':

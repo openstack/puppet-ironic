@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``manage_service`` parameter has been added. This parameter
+    controls whether the service should be managed by Puppet.

@@ -21,6 +21,10 @@
 #   (optional) Control the ensure parameter for the package resource
 #   Defaults to 'present'
 #
+# [*manage_service*]
+#   (optional) Whether the service should be managed by Puppet.
+#   Defaults to true.
+#
 # [*tftp_root*]
 #   (optional) Folder location to deploy PXE boot files
 #   Defaults to '/tftpboot'
@@ -81,6 +85,7 @@
 #
 class ironic::pxe (
   $package_ensure          = 'present',
+  $manage_service          = true,
   $tftp_root               = '/tftpboot',
   $http_root               = '/httpboot',
   $http_port               = 8088,
@@ -204,16 +209,18 @@ class ironic::pxe (
       content => template('ironic/dnsmasq_tftp_server.erb'),
     }
 
-    service { 'dnsmasq-tftp-server':
-      ensure    => 'running',
-      name      => $::ironic::params::dnsmasq_tftp_service,
-      enable    => true,
-      hasstatus => true,
-      subscribe => File['/etc/ironic/dnsmasq-tftp-server.conf'],
-    }
+    if $manage_service {
+      service { 'dnsmasq-tftp-server':
+        ensure    => 'running',
+        name      => $::ironic::params::dnsmasq_tftp_service,
+        enable    => true,
+        hasstatus => true,
+        subscribe => File['/etc/ironic/dnsmasq-tftp-server.conf'],
+      }
 
-    Package['dnsmasq-tftp-server'] ~> Service['dnsmasq-tftp-server']
-    File[$tftp_root_real] -> Service['dnsmasq-tftp-server']
+      Package['dnsmasq-tftp-server'] ~> Service['dnsmasq-tftp-server']
+      File[$tftp_root_real] -> Service['dnsmasq-tftp-server']
+    }
   }
 
   # NOTE(tkajinam): Ubuntu/Debian requires a separate package for pxelinux.0

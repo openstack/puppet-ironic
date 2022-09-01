@@ -21,6 +21,10 @@
 #   (optional) Control the ensure parameter for the package resource
 #   Defaults to 'present'
 #
+# [*manage_service*]
+#   (optional) Whether the service should be managed by Puppet.
+#   Defaults to true.
+#
 # [*enabled*]
 #   (optional) Define if the service must be enabled or not
 #   Defaults to true
@@ -196,6 +200,7 @@
 #
 class ironic::inspector (
   $package_ensure                  = 'present',
+  $manage_service                  = true,
   $enabled                         = true,
   $listen_address                  = $::os_service_default,
   $pxe_transfer_protocol           = 'tftp',
@@ -355,33 +360,35 @@ class ironic::inspector (
     include ironic::inspector::db::sync
   }
 
-  if $enabled {
-    $ensure = 'running'
-  } else {
-    $ensure = 'stopped'
-  }
+  if $manage_service {
+    if $enabled {
+      $ensure = 'running'
+    } else {
+      $ensure = 'stopped'
+    }
 
-  # Manage services
-  service { 'ironic-inspector':
-    ensure    => $ensure,
-    name      => $::ironic::params::inspector_service,
-    enable    => $enabled,
-    hasstatus => true,
-    tag       => 'ironic-inspector-service',
-  }
-  Keystone_endpoint<||> -> Service['ironic-inspector']
-
-  if $::ironic::params::inspector_dnsmasq_service {
-    service { 'ironic-inspector-dnsmasq':
+    # Manage services
+    service { 'ironic-inspector':
       ensure    => $ensure,
-      name      => $::ironic::params::inspector_dnsmasq_service,
+      name      => $::ironic::params::inspector_service,
       enable    => $enabled,
       hasstatus => true,
-      tag       => 'ironic-inspector-dnsmasq-service',
-      subscribe => File['/etc/ironic-inspector/dnsmasq.conf'],
+      tag       => 'ironic-inspector-service',
     }
-  } else {
-    warning('The ironic-inspector-dnsmasq service is not available. \
-Please set up the dnsmasq service additionally.')
+    Keystone_endpoint<||> -> Service['ironic-inspector']
+
+    if $::ironic::params::inspector_dnsmasq_service {
+      service { 'ironic-inspector-dnsmasq':
+        ensure    => $ensure,
+        name      => $::ironic::params::inspector_dnsmasq_service,
+        enable    => $enabled,
+        hasstatus => true,
+        tag       => 'ironic-inspector-dnsmasq-service',
+        subscribe => File['/etc/ironic-inspector/dnsmasq.conf'],
+      }
+    } else {
+      warning("The ironic-inspector-dnsmasq service is not available. \
+Please set up the dnsmasq service additionally.")
+    }
   }
 }

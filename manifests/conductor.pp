@@ -27,6 +27,10 @@
 #   (optional) Define if the service must be enabled or not.
 #   Defaults to true.
 #
+# [*manage_service*]
+#   (optional) Whether the service should be managed by Puppet.
+#   Defaults to true.
+#
 # [*enabled_hardware_types*]
 #  (optional) Array of hardware types to load during service initialization.
 #  Defaults to $::os_service_default
@@ -236,6 +240,7 @@
 class ironic::conductor (
   $package_ensure                      = 'present',
   $enabled                             = true,
+  $manage_service                      = true,
   $enabled_hardware_types              = $::os_service_default,
   $force_power_state_during_sync       = true,
   $http_url                            = $::os_service_default,
@@ -417,19 +422,20 @@ class ironic::conductor (
     }
   }
 
-  if $enabled {
-    $ensure = 'running'
-  } else {
-    $ensure = 'stopped'
-  }
+  if $manage_service {
+    if $enabled {
+      $ensure = 'running'
+    } else {
+      $ensure = 'stopped'
+    }
 
-  # Manage service
-  service { 'ironic-conductor':
-    ensure    => $ensure,
-    name      => $::ironic::params::conductor_service,
-    enable    => $enabled,
-    hasstatus => true,
-    tag       => 'ironic-service',
+    # Manage service
+    service { 'ironic-conductor':
+      ensure    => $ensure,
+      name      => $::ironic::params::conductor_service,
+      enable    => $enabled,
+      hasstatus => true,
+      tag       => 'ironic-service',
+    }
   }
-
 }
