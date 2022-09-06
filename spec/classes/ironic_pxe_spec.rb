@@ -113,6 +113,16 @@ describe 'ironic::pxe' do
       )
     end
 
+    it 'should configure http server' do
+      is_expected.to contain_class('apache')
+      is_expected.to contain_apache__vhost('ipxe_vhost').with(
+        :priority => 10,
+        :options  => ['Indexes','FollowSymLinks'],
+        :docroot  => '/httpboot',
+        :port     => 8088
+      )
+    end
+
     context 'when overriding parameters' do
       before :each do
         params.merge!(
@@ -186,6 +196,16 @@ describe 'ironic::pxe' do
           'ensure'    => 'file',
           'show_diff' => false,
           'backup'    => false,
+        )
+      end
+
+      it 'should configure http server' do
+        is_expected.to contain_class('apache')
+        is_expected.to contain_apache__vhost('ipxe_vhost').with(
+          :priority => 10,
+          :options  => ['Indexes','FollowSymLinks'],
+          :docroot  => '/var/www/httpboot',
+          :port     => 3816,
         )
       end
     end
