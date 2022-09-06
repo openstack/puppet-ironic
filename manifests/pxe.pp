@@ -25,6 +25,10 @@
 #   (optional) Whether the service should be managed by Puppet.
 #   Defaults to true.
 #
+# [*enabled*]
+#   (optional) Define if the service must be enabled or not.
+#   Defaults to true.
+#
 # [*tftp_root*]
 #   (optional) Folder location to deploy PXE boot files
 #   Defaults to '/tftpboot'
@@ -86,6 +90,7 @@
 class ironic::pxe (
   $package_ensure          = 'present',
   $manage_service          = true,
+  $enabled                 = true,
   $tftp_root               = '/tftpboot',
   $http_root               = '/httpboot',
   $http_port               = 8088,
@@ -210,10 +215,16 @@ class ironic::pxe (
     }
 
     if $manage_service {
+      if $enabled {
+        $ensure = 'running'
+      } else {
+        $ensure = 'stopped'
+      }
+
       service { 'dnsmasq-tftp-server':
-        ensure    => 'running',
+        ensure    => $ensure,
         name      => $::ironic::params::dnsmasq_tftp_service,
-        enable    => true,
+        enable    => $enabled,
         hasstatus => true,
         subscribe => File['/etc/ironic/dnsmasq-tftp-server.conf'],
       }

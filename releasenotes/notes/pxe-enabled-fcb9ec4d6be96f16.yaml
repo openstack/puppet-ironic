@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``ironic::pxe::enabled`` parameter has been added. This parameter
+    determines status of the dnsmasq tftp server service.
