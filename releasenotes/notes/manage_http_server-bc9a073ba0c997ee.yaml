@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    The ``ironic::pxe::manage_http_server`` parameter has been added. When
+    this parameter is set to ``false``, the ``ironic::pxe`` class does not
+    manage the Apache HTTP Server.

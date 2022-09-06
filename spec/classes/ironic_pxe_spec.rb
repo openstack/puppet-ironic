@@ -223,6 +223,18 @@ describe 'ironic::pxe' do
         is_expected.not_to contain_file('/var/lib/ironic/tftpboot/chain.c32')
       end
     end
+
+    context 'when http server disabled' do
+      before :each do
+        params.merge!(
+          :manage_http_server => false,
+        )
+      end
+      it 'should not configure http server' do
+        is_expected.not_to contain_class('apache')
+        is_expected.not_to contain_apache__vhost('ipxe_vhost')
+      end
+    end
   end
 
   shared_examples_for 'ironic pxe with xinetd' do
