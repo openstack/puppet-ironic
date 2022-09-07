@@ -87,6 +87,10 @@
 #   (optional) Log facility of the dnsmasq process to server tftp server.
 #   Defaults to undef
 #
+# [*manage_http_server*]
+#   (optional) Set up Apache HTTP Server.
+#   Defaults to true
+#
 class ironic::pxe (
   $package_ensure          = 'present',
   $manage_service          = true,
@@ -103,6 +107,7 @@ class ironic::pxe (
   $uefi_pxe_bootfile_name  = 'bootx64.efi',
   $tftp_use_xinetd         = $::ironic::params::xinetd_available,
   $dnsmasq_log_facility    = undef,
+  $manage_http_server      = true,
 ) inherits ironic::params {
 
   include ironic::deps
@@ -144,15 +149,6 @@ class ironic::pxe (
     group   => $::ironic::params::group,
     require => Anchor['ironic::install::end'],
     tag     => 'ironic-tftp-file',
-  }
-
-  file { $http_root_real:
-    ensure  => 'directory',
-    seltype => 'httpd_sys_content_t',
-    owner   => $::ironic::params::user,
-    group   => $::ironic::params::group,
-    require => Anchor['ironic::config::begin'],
-    before  => Anchor['ironic::config::end'],
   }
 
   if $tftp_use_xinetd {
@@ -338,12 +334,24 @@ class ironic::pxe (
 
   File["${tftp_root_real}"] -> File<| tag == 'ironic-tftp-file' |>
 
-  include apache
+  # HTTP server
+  if $manage_http_server {
+    file { $http_root_real:
+      ensure  => 'directory',
+      seltype => 'httpd_sys_content_t',
+      owner   => $::ironic::params::user,
+      group   => $::ironic::params::group,
+      require => Anchor['ironic::config::begin'],
+      before  => Anchor['ironic::config::end'],
+    }
 
-  apache::vhost { 'ipxe_vhost':
-    priority => 10,
-    options  => ['Indexes','FollowSymLinks'],
-    docroot  => $http_root_real,
-    port     => $http_port_real,
+    include apache
+
+    apache::vhost { 'ipxe_vhost':
+      priority => 10,
+      options  => ['Indexes','FollowSymLinks'],
+      docroot  => $http_root_real,
+      port     => $http_port_real,
+    }
   }
 }
