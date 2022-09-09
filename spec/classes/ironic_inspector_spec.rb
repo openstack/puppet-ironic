@@ -111,10 +111,12 @@ describe 'ironic::inspector' do
     end
 
     it 'ensure ironic inspector dnsmasq service is running' do
-      is_expected.to contain_service('ironic-inspector-dnsmasq').with(
-        'hasstatus' => true,
-        'tag'       => 'ironic-inspector-dnsmasq-service',
-      )
+      if platform_params.has_key?(:inspector_dnsmasq_package)
+        is_expected.to contain_service('ironic-inspector-dnsmasq').with(
+          'hasstatus' => true,
+          'tag'       => 'ironic-inspector-dnsmasq-service',
+        )
+      end
     end
 
     it 'configures inspector.conf' do
