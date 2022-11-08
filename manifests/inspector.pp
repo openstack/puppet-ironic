@@ -481,13 +481,17 @@ Use ironic::inspector::ironic::endpoint_override instead.')
   }
   Keystone_endpoint<||> -> Service['ironic-inspector']
 
-  service { 'ironic-inspector-dnsmasq':
-    ensure    => $ensure,
-    name      => $::ironic::params::inspector_dnsmasq_service,
-    enable    => $enabled,
-    hasstatus => true,
-    tag       => 'ironic-inspector-dnsmasq-service',
-    subscribe => File['/etc/ironic-inspector/dnsmasq.conf'],
+  if $::ironic::params::inspector_dnsmasq_service {
+    service { 'ironic-inspector-dnsmasq':
+      ensure    => $ensure,
+      name      => $::ironic::params::inspector_dnsmasq_service,
+      enable    => $enabled,
+      hasstatus => true,
+      tag       => 'ironic-inspector-dnsmasq-service',
+      subscribe => File['/etc/ironic-inspector/dnsmasq.conf'],
+    }
+  } else {
+    warning('The ironic-inspector-dnsmasq service is not available. \
+Please set up the dnsmasq service additionally.')
   }
-
 }
