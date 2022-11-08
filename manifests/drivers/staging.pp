@@ -15,10 +15,13 @@ class ironic::drivers::staging (
   include ironic::deps
   include ironic::params
 
-  package { 'ironic-staging-drivers':
-    ensure => $package_ensure,
-    name   => $::ironic::params::staging_drivers_package,
-    tag    => ['openstack', 'ironic-support-package'],
+  if $::ironic::params::staging_drivers_package {
+    package { 'ironic-staging-drivers':
+      ensure => $package_ensure,
+      name   => $::ironic::params::staging_drivers_package,
+      tag    => ['openstack', 'ironic-support-package'],
+    }
+  } else {
+    fail('This distribution does not provide the staging driver package.')
   }
-
 }
