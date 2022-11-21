@@ -57,13 +57,8 @@ class ironic::params {
       $uefi_ipxe_bootfile_name   = 'snponly.efi'
       $ironic_wsgi_script_path   = '/var/www/cgi-bin/ironic'
       $ironic_wsgi_script_source = '/usr/bin/ironic-api-wsgi'
-      if (Integer.new($::os['release']['major']) > 8) {
-        $xinetd_available        = false
-        $tftpd_package           = false
-      } else {
-        $xinetd_available        = true
-        $tftpd_package           = 'tftp-server'
-      }
+      $xinetd_available          = false
+      $tftpd_package             = false
       $ipxe_package              = 'ipxe-bootimgs'
       $pxelinux_package          = false
       $pxelinux_path             = false

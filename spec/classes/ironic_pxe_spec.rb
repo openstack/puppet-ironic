@@ -409,11 +409,8 @@ describe 'ironic::pxe' do
         it_behaves_like 'ironic pxe without xinetd'
       end
 
-      unless facts[:osfamily] == 'RedHat' and facts[:operatingsystemmajrelease].to_i >= 9
-        it_behaves_like 'ironic pxe with xinetd'
-      end
-
       if facts[:osfamily] == 'Debian'
+        it_behaves_like 'ironic pxe with xinetd'
         it_behaves_like 'ironic pxe with pxelinux package' 
       end
     end
