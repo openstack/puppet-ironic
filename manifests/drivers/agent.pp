@@ -68,7 +68,16 @@
 #   (optional) Number of times to try connecting to the agent for a command.
 #   Defaults to $::os_service_default
 #
-
+# [*command_wait_attempts*]
+#   (optional) Number of attempts to check for asynchronous commands completion
+#   before timing out.
+#   Defaults to $::os_service_default
+#
+# [*command_wait_interval*]
+#   (optional) Number of seconds to wait for between checks for asynchronous
+#   commands completion.
+#   Defaults to $::os_service_default
+#
 class ironic::drivers::agent (
   $stream_raw_images                            = $::os_service_default,
   $image_download_source                        = $::os_service_default,
@@ -81,6 +90,8 @@ class ironic::drivers::agent (
   $deploy_logs_swift_days_to_expire             = $::os_service_default,
   $command_timeout                              = $::os_service_default,
   $max_command_attempts                         = $::os_service_default,
+  $command_wait_attempts                        = $::os_service_default,
+  $command_wait_interval                        = $::os_service_default,
 ) {
 
   include ironic::deps
@@ -98,6 +109,8 @@ class ironic::drivers::agent (
     'agent/deploy_logs_swift_days_to_expire':           value => $deploy_logs_swift_days_to_expire;
     'agent/command_timeout':                            value => $command_timeout;
     'agent/max_command_attempts':                       value => $max_command_attempts;
+    'agent/command_wait_attempts':                      value => $command_wait_attempts;
+    'agent/command_wait_interval':                      value => $command_wait_interval;
   }
 
 }

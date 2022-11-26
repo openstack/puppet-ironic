@@ -1,0 +1,8 @@
+---
+features:
+  - |
+    The ``ironic::drivers::agent`` class now supports the following two new
+    parameters.
+
+    - ``command_wait_attempts``
+    - ``command_wait_interval``

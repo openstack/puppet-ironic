@@ -38,6 +38,8 @@ describe 'ironic::drivers::agent' do
       is_expected.to contain_ironic_config('agent/deploy_logs_swift_days_to_expire').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('agent/command_timeout').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('agent/max_command_attempts').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('agent/command_wait_interval').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('agent/command_wait_attempts').with_value('<SERVICE DEFAULT>')
     end
 
     context 'when overriding parameters' do
@@ -52,7 +54,9 @@ describe 'ironic::drivers::agent' do
                       :deploy_logs_swift_container => 'cont',
                       :deploy_logs_swift_days_to_expire => 5,
                       :command_timeout => 90,
-                      :max_command_attempts => 5)
+                      :max_command_attempts => 5,
+                      :command_wait_interval => 2,
+                      :command_wait_attempts => 100)
       end
       it 'should replace default parameter with new value' do
         is_expected.to contain_ironic_config('agent/stream_raw_images').with_value(p[:stream_raw_images])
@@ -66,6 +70,8 @@ describe 'ironic::drivers::agent' do
         is_expected.to contain_ironic_config('agent/deploy_logs_swift_days_to_expire').with_value(p[:deploy_logs_swift_days_to_expire])
         is_expected.to contain_ironic_config('agent/command_timeout').with_value(p[:command_timeout])
         is_expected.to contain_ironic_config('agent/max_command_attempts').with_value(p[:max_command_attempts])
+        is_expected.to contain_ironic_config('agent/command_wait_interval').with_value(p[:command_wait_interval])
+        is_expected.to contain_ironic_config('agent/command_wait_attempts').with_value(p[:command_wait_attempts])
       end
     end
 
