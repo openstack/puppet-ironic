@@ -122,11 +122,7 @@ describe 'ironic::drivers::pxe' do
       end
 
       let :platform_params do
-        if facts[:operatingsystem] == 'Ubuntu' and facts[:operatingsystemmajrelease] <= '20.04'
-          { :uefi_ipxe_bootfile_name => 'ipxe.efi' }
-        else
-          { :uefi_ipxe_bootfile_name => 'snponly.efi' }
-        end
+        { :uefi_ipxe_bootfile_name => 'snponly.efi' }
       end
 
       it_behaves_like 'ironic pxe driver'

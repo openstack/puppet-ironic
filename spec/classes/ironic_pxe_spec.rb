@@ -368,27 +368,15 @@ describe 'ironic::pxe' do
       let(:platform_params) do
         case facts[:osfamily]
         when 'Debian'
-          if facts[:operatingsystem] == 'Ubuntu' and facts[:operatingsystemmajrelease] <= '20.04'
-            {
-              :grub_efi_package        => 'grub-efi-amd64-signed',
-              :ipxe_package            => 'ipxe',
-              :shim_package            => 'shim-signed',
-              :pxelinux_package        => 'pxelinux',
-              :syslinux_package        => 'syslinux-common',
-              :tftp_package            => 'tftpd-hpa',
-              :uefi_ipxe_bootfile_name => 'ipxe.efi'
-            }
-          else
-            {
-              :grub_efi_package        => 'grub-efi-amd64-signed',
-              :ipxe_package            => 'ipxe',
-              :shim_package            => 'shim-signed',
-              :pxelinux_package        => 'pxelinux',
-              :syslinux_package        => 'syslinux-common',
-              :tftp_package            => 'tftpd-hpa',
-              :uefi_ipxe_bootfile_name => 'snponly.efi'
-            }
-          end
+          {
+            :grub_efi_package        => 'grub-efi-amd64-signed',
+            :ipxe_package            => 'ipxe',
+            :shim_package            => 'shim-signed',
+            :pxelinux_package        => 'pxelinux',
+            :syslinux_package        => 'syslinux-common',
+            :tftp_package            => 'tftpd-hpa',
+            :uefi_ipxe_bootfile_name => 'snponly.efi'
+          }
         when 'RedHat'
           {
             :dnsmasq_tftp_package    => 'openstack-ironic-dnsmasq-tftp-server',
