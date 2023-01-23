@@ -29,7 +29,7 @@ describe 'ironic::inspector::policy' do
           },
           :policy_path  => '/etc/ironic-inspector/policy.yaml',
           :file_user    => 'root',
-          :file_group   => 'ironic',
+          :file_group   => 'ironic-inspector',
           :file_format  => 'yaml',
           :purge_config => false,
         )
@@ -58,7 +58,7 @@ describe 'ironic::inspector::policy' do
           :policies     => {},
           :policy_path  => '/etc/ironic-inspector/policy.yaml',
           :file_user    => 'root',
-          :file_group   => 'ironic',
+          :file_group   => 'ironic-inspector',
           :file_format  => 'yaml',
           :purge_config => true,
         )
