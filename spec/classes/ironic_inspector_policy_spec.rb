@@ -9,6 +9,7 @@ describe 'ironic::inspector::policy' do
           :enforce_scope        => false,
           :enforce_new_defaults => false,
           :policy_path          => '/etc/ironic-inspector/policy.yaml',
+          :policy_default_rule  => 'default',
           :policy_dirs          => '/etc/ironic-inspector/policy.d',
           :policies             => {
             'context_is_admin' => {
@@ -37,6 +38,7 @@ describe 'ironic::inspector::policy' do
           :enforce_scope        => false,
           :enforce_new_defaults => false,
           :policy_file          => '/etc/ironic-inspector/policy.yaml',
+          :policy_default_rule  => 'default',
           :policy_dirs          => '/etc/ironic-inspector/policy.d',
         )
       end
