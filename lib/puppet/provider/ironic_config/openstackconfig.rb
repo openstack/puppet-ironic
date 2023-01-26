@@ -1,10 +1,9 @@
 require File.join(File.dirname(__FILE__), '..','..','..', 'puppet/provider/ironic')
 
 Puppet::Type.type(:ironic_config).provide(
-  :ini_setting,
-  :parent => Puppet::Type.type(:openstack_config).provider(:ini_setting)
+  :openstackconfig,
+  :parent => Puppet::Type.type(:openstack_config).provider(:ruby)
 ) do
-
 
   def self.file_path
     '/etc/ironic/ironic.conf'
@@ -38,5 +37,4 @@ Puppet::Type.type(:ironic_config).provide(
     res = openstack.openstack_request('project', 'show', properties)
     return "AUTH_#{res[:name]}"
   end
-
 end
