@@ -32,7 +32,7 @@ describe Puppet::Provider::Ironic do
 
     it 'should fail if config is empty' do
       conf = {}
-      klass.expects(:ironic_conf).returns(conf)
+      expect(klass).to receive(:ironic_conf).and_return(conf)
       expect do
         klass.ironic_credentials
       end.to raise_error(Puppet::Error, credential_error)
@@ -40,7 +40,7 @@ describe Puppet::Provider::Ironic do
 
     it 'should fail if config does not have keystone_authtoken section.' do
       conf = {'foo' => 'bar'}
-      klass.expects(:ironic_conf).returns(conf)
+      expect(klass).to receive(:ironic_conf).and_return(conf)
       expect do
         klass.ironic_credentials
       end.to raise_error(Puppet::Error, credential_error)
@@ -48,7 +48,7 @@ describe Puppet::Provider::Ironic do
 
     it 'should fail if config does not contain all auth params' do
       conf = {'keystone_authtoken' => {'invalid_value' => 'foo'}}
-      klass.expects(:ironic_conf).returns(conf)
+      expect(klass).to receive(:ironic_conf).and_return(conf)
       expect do
        klass.ironic_credentials
       end.to raise_error(Puppet::Error, credential_error)
@@ -67,18 +67,20 @@ describe Puppet::Provider::Ironic do
         :OS_PROJECT_DOMAIN_NAME => credential_hash['project_domain_name'],
         :OS_USER_DOMAIN_NAME    => credential_hash['user_domain_name'],
       }
-      klass.expects(:get_ironic_credentials).with().returns(credential_hash)
-      klass.expects(:withenv).with(authenv)
+      expect(klass).to receive(:get_ironic_credentials).with(no_args).and_return(credential_hash)
+      expect(klass).to receive(:withenv).with(authenv)
       klass.auth_ironic('test_retries')
     end
 
     ['[Errno 111] Connection refused',
      '(HTTP 400)'].reverse.each do |valid_message|
       it "should retry when ironic cli returns with error #{valid_message}" do
-        klass.expects(:get_ironic_credentials).with().returns({})
-        klass.expects(:sleep).with(10).returns(nil)
-        klass.expects(:ironic).twice.with(['test_retries']).raises(
-          Exception, valid_message).then.returns('')
+        expect(klass).to receive(:get_ironic_credentials).with(no_args).and_return({})
+        expect(klass).to receive(:sleep).with(10).and_return(nil)
+        expect(klass).to receive(:ironic).with(['test_retries']).and_invoke(
+          lambda { |x| raise valid_message },
+          lambda { |x| return '' }
+        )
         klass.auth_ironic('test_retries')
       end
     end
@@ -93,7 +95,7 @@ describe Puppet::Provider::Ironic do
         net1
         net2
       EOT
-      klass.expects(:auth_ironic).returns(output)
+      expect(klass).to receive(:auth_ironic).and_return(output)
       result = klass.list_ironic_resources('foo')
       expect(result).to eql(['net1', 'net2'])
     end
