@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The new ``ironic::inventory`` class has been added.
