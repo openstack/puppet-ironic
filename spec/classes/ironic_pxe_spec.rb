@@ -366,7 +366,7 @@ describe 'ironic::pxe' do
       end
 
       let(:platform_params) do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           {
             :grub_efi_package        => 'grub-efi-amd64-signed',
@@ -393,11 +393,11 @@ describe 'ironic::pxe' do
 
       it_behaves_like 'ironic pxe'
 
-      if facts[:osfamily] == 'RedHat'
+      if facts[:os]['family'] == 'RedHat'
         it_behaves_like 'ironic pxe without xinetd'
       end
 
-      if facts[:osfamily] == 'Debian'
+      if facts[:os]['family'] == 'Debian'
         it_behaves_like 'ironic pxe with xinetd'
         it_behaves_like 'ironic pxe with pxelinux package' 
       end

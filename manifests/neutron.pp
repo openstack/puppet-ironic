@@ -18,7 +18,7 @@
 #
 # [*auth_url*]
 #   The address of the keystone api endpoint.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*project_name*]
 #   The Keystone project name.
@@ -30,7 +30,7 @@
 #
 # [*password*]
 #   The admin password for ironic to connect to neutron.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*user_domain_name*]
 #   The name of user's domain (required for Identity V3).
@@ -42,16 +42,16 @@
 #
 # [*system_scope*]
 #   (Optional) Scope for system operations
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*region_name*]
 #   (optional) Region name for connecting to neutron in admin context
 #   through the OpenStack Identity service.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*endpoint_override*]
 #   The endpoint URL for requests for this client
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*dhcpv6_stateful_address_count*]
 #   Number of IPv6 addresses to allocate for ports created for provisioning,
@@ -60,28 +60,28 @@
 #   CLID/IAID. Due to non-identical identifiers multiple addresses must be
 #   reserved for the host to ensure each step of the boot process can
 #   successfully lease addresses.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 class ironic::neutron (
   $auth_type                     = 'password',
-  $auth_url                      = $::os_service_default,
+  $auth_url                      = $facts['os_service_default'],
   $project_name                  = 'services',
   $username                      = 'ironic',
-  $password                      = $::os_service_default,
+  $password                      = $facts['os_service_default'],
   $user_domain_name              = 'Default',
   $project_domain_name           = 'Default',
-  $system_scope                  = $::os_service_default,
-  $region_name                   = $::os_service_default,
-  $endpoint_override             = $::os_service_default,
-  $dhcpv6_stateful_address_count = $::os_service_default,
+  $system_scope                  = $facts['os_service_default'],
+  $region_name                   = $facts['os_service_default'],
+  $endpoint_override             = $facts['os_service_default'],
+  $dhcpv6_stateful_address_count = $facts['os_service_default'],
 ) {
 
   if is_service_default($system_scope) {
     $project_name_real = $project_name
     $project_domain_name_real = $project_domain_name
   } else {
-    $project_name_real = $::os_service_default
-    $project_domain_name_real = $::os_service_default
+    $project_name_real = $facts['os_service_default']
+    $project_domain_name_real = $facts['os_service_default']
   }
 
   ironic_config {

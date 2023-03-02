@@ -22,53 +22,53 @@
 # [*kernel_append_params*]
 #   (optional) Additional append parameters for baremetal PXE boot.
 #   Should be valid pxe parameters
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*pxe_bootfile_name*]
 #   (optional) Bootfile DHCP parameter.
 #   If not set, its value is detected.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*pxe_config_template*]
 #   (optional) Template file for PXE configuration.
 #   If set, should be an valid template file. Otherwise, its value is detected.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*ipxe_bootfile_name*]
 #   (optional) Bootfile DHCP parameter when the ipxe boot interface is set
 #   for a baremetal node. If not set, its value is detected.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*ipxe_config_template*]
 #   (optional) Template file for PXE configuration with the iPXE boot
 #   interface. If set, should be an valid template file. Otherwise,
 #   its value is detected.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*tftp_server*]
 #   (optional) IP address of Ironic compute node's tftp server.
 #   Should be an valid IP address
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*tftp_root*]
 #   (optional) Ironic compute node's tftp root path.
 #   Should be an valid path
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*images_path*]
 #   (optional) Directory where images are stored on disk.
 #   Should be an valid directory
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*tftp_master_path*]
 #   (optional) Directory where master tftp images are stored on disk.
 #   Should be an valid directory
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*instance_master_path*]
 #   (optional) Directory where master tftp images are stored on disk.
 #   Should be an valid directory
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*uefi_pxe_bootfile_name*]
 #   (optional) Bootfile DHCP parameter for UEFI boot mode for the
@@ -79,7 +79,7 @@
 #
 # [*uefi_pxe_config_template*]
 #   (optional) Template file for PXE configuration for UEFI boot loader.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*uefi_ipxe_bootfile_name*]
 #   (optional) Bootfile DHCP parameter for UEFI boot mode for the
@@ -90,7 +90,7 @@
 # [*ipxe_timeout*]
 #   (optional) ipxe timeout in second.
 #   Should be an valid integer
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*enable_ppc64le*]
 #   (optional) Boolean value to dtermine if ppc64le support should be enabled
@@ -98,26 +98,26 @@
 #
 # [*boot_retry_timeout*]
 #   (optional) Timeout (in seconds) after which PXE boot should be retried.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*boot_retry_check_interval*]
 #   (optional) How often (in seconds) to check for PXE boot status.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*dir_permission*]
 #   (optional) THe permission that will be applied to the TFTP folders upon
 #   creation.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*file_permission*]
 #   (optional) The permission which is used on files created as part of
 #   configuration and setup of file assets for PXE based operations.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*loader_file_paths*]
 #   (optional) Dictionary describing the bootloaders to load into conductor
 #   PXE/iXPE boot folders values from the host operating system.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # DEPRECATED PARAMETERS
 #
@@ -126,29 +126,29 @@
 #   Ironic presently attempts both IPv4 and IPv6, this option is effectively
 #   ignored by ironic, and should anticipate being removed in a future
 #   release.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 class ironic::drivers::pxe (
-  $kernel_append_params      = $::os_service_default,
-  $pxe_bootfile_name         = $::os_service_default,
-  $pxe_config_template       = $::os_service_default,
-  $ipxe_bootfile_name        = $::os_service_default,
-  $ipxe_config_template      = $::os_service_default,
-  $tftp_server               = $::os_service_default,
-  $tftp_root                 = $::os_service_default,
-  $images_path               = $::os_service_default,
-  $tftp_master_path          = $::os_service_default,
-  $instance_master_path      = $::os_service_default,
+  $kernel_append_params      = $facts['os_service_default'],
+  $pxe_bootfile_name         = $facts['os_service_default'],
+  $pxe_config_template       = $facts['os_service_default'],
+  $ipxe_bootfile_name        = $facts['os_service_default'],
+  $ipxe_config_template      = $facts['os_service_default'],
+  $tftp_server               = $facts['os_service_default'],
+  $tftp_root                 = $facts['os_service_default'],
+  $images_path               = $facts['os_service_default'],
+  $tftp_master_path          = $facts['os_service_default'],
+  $instance_master_path      = $facts['os_service_default'],
   $uefi_pxe_bootfile_name    = 'bootx64.efi',
-  $uefi_pxe_config_template  = $::os_service_default,
+  $uefi_pxe_config_template  = $facts['os_service_default'],
   $uefi_ipxe_bootfile_name   = $::ironic::params::uefi_ipxe_bootfile_name,
-  $ipxe_timeout              = $::os_service_default,
+  $ipxe_timeout              = $facts['os_service_default'],
   $enable_ppc64le            = false,
-  $boot_retry_timeout        = $::os_service_default,
-  $boot_retry_check_interval = $::os_service_default,
-  $dir_permission            = $::os_service_default,
-  $file_permission           = $::os_service_default,
-  $loader_file_paths         = $::os_service_default,
+  $boot_retry_timeout        = $facts['os_service_default'],
+  $boot_retry_check_interval = $facts['os_service_default'],
+  $dir_permission            = $facts['os_service_default'],
+  $file_permission           = $facts['os_service_default'],
+  $loader_file_paths         = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
   $ip_version                = undef,
 ) inherits ironic::params {
@@ -163,7 +163,7 @@ class ironic::drivers::pxe (
   if $ip_version != undef {
     warning('The ironic::drivers::pxe:ip_version parameter is deprecated and will be removed in the future.')
   }
-  $ip_version_real = pick($ip_version, $::os_service_default)
+  $ip_version_real = pick($ip_version, $facts['os_service_default'])
 
   # Configure ironic.conf
   ironic_config {

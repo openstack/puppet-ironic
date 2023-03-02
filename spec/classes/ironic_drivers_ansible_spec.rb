@@ -93,7 +93,7 @@ describe 'ironic::drivers::ansible' do
       end
 
       let :platform_params do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           { :systemd_python_package => 'python-systemd' }
         when 'RedHat'

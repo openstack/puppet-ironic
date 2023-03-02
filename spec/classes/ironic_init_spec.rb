@@ -284,14 +284,11 @@ describe 'ironic' do
   }).each do |os,facts|
     context "on #{os}" do
       let (:facts) do
-        facts.merge!(OSDefaults.get_facts({
-          :concat_basedir         => '/var/lib/puppet/concat',
-          :fqdn                   => 'some.host.tld',
-        }))
+        facts.merge!(OSDefaults.get_facts())
       end
 
       let :platform_params do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           { :common_package_name => 'ironic-common',
             :lib_package_name    => 'python3-ironic-lib' }

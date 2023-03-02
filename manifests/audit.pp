@@ -6,21 +6,21 @@
 #
 # [*enabled*]
 #   (Optional) Enable auditing of API requests
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*audit_map_file*]
 #   (Optional) Path to audit map file for ironic-api service.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*ignore_req_list*]
 #   (Optional) Comma separated list of Ironic REST API HTTP methods
 #   to be ignored during audit logging.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 class ironic::audit (
-  $enabled         = $::os_service_default,
-  $audit_map_file  = $::os_service_default,
-  $ignore_req_list = $::os_service_default,
+  $enabled         = $facts['os_service_default'],
+  $audit_map_file  = $facts['os_service_default'],
+  $ignore_req_list = $facts['os_service_default'],
 ) {
 
   include ironic::deps

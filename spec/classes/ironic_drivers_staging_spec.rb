@@ -49,7 +49,7 @@ describe 'ironic::drivers::staging' do
         facts.merge!(OSDefaults.get_facts())
       end
 
-      if facts[:osfamily] == 'RedHat'
+      if facts[:os]['family'] == 'RedHat'
         it_configures 'ironic-staging-drivers'
       end
     end

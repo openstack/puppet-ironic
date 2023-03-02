@@ -32,7 +32,7 @@
 # [*listen_address*]
 #   (optional) The listen IP for the Ironic-inspector API server.
 #   Should be an valid IP address
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*pxe_transfer_protocol*]
 #  (optional) Protocol preferred for transferring the ramdisk.
@@ -50,11 +50,11 @@
 # [*timeout*]
 #   (optional) Timeout after which introspection is considered failed,
 #   set to 0 to disable.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*api_max_limit*]
 #   (optional) Limit the number of elements an API list-call returns
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*dnsmasq_interface*]
 #   (optional) The interface for the ironic-inspector dnsmasq process
@@ -67,12 +67,12 @@
 #
 # [*always_store_ramdisk_logs*]
 #   (optional) Whether to store ramdisk logs even for successful introspection.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*add_ports*]
 #   (optional)  Which MAC addresses to add as ports during introspection.
 #   Allowed values: all, active, pxe.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*keep_ports*]
 #   (optional) Which ports to keep after introspection
@@ -146,7 +146,7 @@
 #
 # [*ipxe_timeout*]
 #   (optional) ipxe timeout in second. Should be an integer.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*http_port*]
 #   (optional) port used by the HTTP service serving introspection images.
@@ -162,17 +162,17 @@
 #
 # [*detect_boot_mode*]
 #   (optional) Whether to store the boot mode (BIOS or UEFI).
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*node_not_found_hook*]
 #   (optional) Plugin to run when a node is not found during lookup.
 #   For example, "enroll" hook can be used for node auto-discovery.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*discovery_default_driver*]
 #   (optional) The default driver to use for auto-discovered nodes.
 #   Requires node_not_found_hook set to "enroll".
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*enable_ppc64le*]
 #   (optional) Boolean value to determine if ppc64le support should be enabled
@@ -202,16 +202,16 @@ class ironic::inspector (
   $package_ensure                  = 'present',
   $manage_service                  = true,
   $enabled                         = true,
-  $listen_address                  = $::os_service_default,
+  $listen_address                  = $facts['os_service_default'],
   $pxe_transfer_protocol           = 'tftp',
   $dhcp_debug                      = false,
   $auth_strategy                   = 'keystone',
-  $timeout                         = $::os_service_default,
-  $api_max_limit                   = $::os_service_default,
+  $timeout                         = $facts['os_service_default'],
+  $api_max_limit                   = $facts['os_service_default'],
   $dnsmasq_interface               = 'br-ctlplane',
   $ramdisk_logs_dir                = '/var/log/ironic-inspector/ramdisk/',
-  $always_store_ramdisk_logs       = $::os_service_default,
-  $add_ports                       = $::os_service_default,
+  $always_store_ramdisk_logs       = $facts['os_service_default'],
+  $add_ports                       = $facts['os_service_default'],
   $keep_ports                      = 'all',
   $store_data                      = 'none',
   $dnsmasq_ip_subnets              = [],
@@ -225,13 +225,13 @@ class ironic::inspector (
   $kernel_filename                 = 'agent.kernel',
   $additional_processing_hooks     = undef,
   $ramdisk_kernel_args             = undef,
-  $ipxe_timeout                    = $::os_service_default,
+  $ipxe_timeout                    = $facts['os_service_default'],
   $http_port                       = '8088',
-  $detect_boot_mode                = $::os_service_default,
+  $detect_boot_mode                = $facts['os_service_default'],
   $tftp_root                       = '/tftpboot',
   $http_root                       = '/httpboot',
-  $node_not_found_hook             = $::os_service_default,
-  $discovery_default_driver        = $::os_service_default,
+  $node_not_found_hook             = $facts['os_service_default'],
+  $discovery_default_driver        = $facts['os_service_default'],
   $enable_ppc64le                  = false,
   $default_transport_url           = 'fake://',
   $port_physnet_cidr_map           = {},

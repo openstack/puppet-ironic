@@ -23,16 +23,16 @@
 #
 # [*enabled_list*]
 #   List of enabled implementations.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*default*]
 #   The default implementation to use when none is requested by a user.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 define ironic::drivers::hardware_interface (
   $interface_type = $title,
-  $enabled_list   = $::os_service_default,
-  $default        = $::os_service_default,
+  $enabled_list   = $facts['os_service_default'],
+  $default        = $facts['os_service_default'],
 ) {
 
   include ironic::deps
@@ -41,7 +41,7 @@ define ironic::drivers::hardware_interface (
     validate_legacy(Array, 'validate_array', $enabled_list)
     $enabled_list_real = join($enabled_list, ',')
   } else {
-    $enabled_list_real = $::os_service_default
+    $enabled_list_real = $facts['os_service_default']
   }
 
   ironic_config {

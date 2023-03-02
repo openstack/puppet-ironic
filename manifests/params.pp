@@ -37,7 +37,7 @@ class ironic::params {
   $proliantutils_package_name = 'python3-proliantutils'
   $dracclient_package_name    = 'python3-dracclient'
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat': {
       $common_package_name       = 'openstack-ironic-common'
       $api_package               = 'openstack-ironic-api'
@@ -104,8 +104,7 @@ class ironic::params {
       $shim_file                 = '/usr/lib/shim/shimx64.efi.signed'
     }
     default: {
-      fail("Unsupported osfamily: ${::osfamily} operatingsystem: ${::operatingsystem}, \
-module ${module_name} only support osfamily RedHat and Debian")
+      fail("Unsupported osfamily: ${facts['os']['family']}")
     }
   }
 

@@ -379,14 +379,11 @@ describe 'ironic::inspector' do
   }).each do |os,facts|
     context "on #{os}" do
       let (:facts) do
-        facts.merge!(OSDefaults.get_facts({
-          :concat_basedir         => '/var/lib/puppet/concat',
-          :fqdn                   => 'some.host.tld',
-        }))
+        facts.merge!(OSDefaults.get_facts())
       end
 
       let :platform_params do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           { :inspector_package => 'ironic-inspector',
             :inspector_service => 'ironic-inspector' }

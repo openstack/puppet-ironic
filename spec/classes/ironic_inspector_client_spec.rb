@@ -52,7 +52,7 @@ describe 'ironic::inspector::client' do
       end
 
       let (:platform_params) do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           { :inspector_client_package => 'python3-ironic-inspector-client' }
         when 'RedHat'

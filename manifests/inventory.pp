@@ -6,16 +6,16 @@
 #
 # [*data_backend*]
 #  (Optional) The storage backend for storing introspection data.
-#  Defaults to $::os_service_default.
+#  Defaults to $facts['os_service_default'].
 #
 # [*swift_data_container*]
 #  (Optional) The Swift introspection data container to store the inventory
 #  data.
-#  Defaults to $::os_service_default.
+#  Defaults to $facts['os_service_default'].
 #
 class ironic::inventory (
-  $data_backend         = $::os_service_default,
-  $swift_data_container = $::os_service_default,
+  $data_backend         = $facts['os_service_default'],
+  $swift_data_container = $facts['os_service_default'],
 ) {
 
   include ironic::deps

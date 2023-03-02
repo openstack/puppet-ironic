@@ -67,7 +67,7 @@ describe 'ironic::drivers::ilo' do
       end
 
       let (:platform_params) do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           { :proliantutils_package_name => 'python3-proliantutils' }
         when 'RedHat'

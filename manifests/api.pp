@@ -49,7 +49,7 @@
 #
 # [*workers*]
 #   (Optional) The number of workers to spawn.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*service_name*]
 #   (optional) Name of the service that will be providing the
@@ -62,16 +62,16 @@
 #
 # [*public_endpoint*]
 #   (Optional) Public URL to use when building the links to the API resources
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*enable_proxy_headers_parsing*]
 #   (Optional) Enable paste middleware to handle SSL requests through
 #   HTTPProxyToWSGI middleware.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*max_request_body_size*]
 #   (Optional) Set max request body size
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 class ironic::api (
   $package_ensure               = 'present',
@@ -81,10 +81,10 @@ class ironic::api (
   $host_ip                      = '0.0.0.0',
   $port                         = '6385',
   $max_limit                    = '1000',
-  $workers                      = $::os_service_default,
-  $public_endpoint              = $::os_service_default,
-  $enable_proxy_headers_parsing = $::os_service_default,
-  $max_request_body_size        = $::os_service_default,
+  $workers                      = $facts['os_service_default'],
+  $public_endpoint              = $facts['os_service_default'],
+  $enable_proxy_headers_parsing = $facts['os_service_default'],
+  $max_request_body_size        = $facts['os_service_default'],
 ) inherits ironic::params {
 
   include ironic::deps

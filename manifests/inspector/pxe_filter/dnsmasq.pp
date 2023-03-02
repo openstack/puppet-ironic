@@ -16,11 +16,11 @@
 #
 # [*dnsmasq_start_command*]
 #   (optional) A (shell) command line to start the dnsmasq service.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*dnsmasq_stop_command*]
 #   (optional) A (shell) command line to stop the dnsmasq service.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*purge_dhcp_hostsdir*]
 #   (optional) Purge the hostsdir upon driver initialization. Setting to false
@@ -28,18 +28,18 @@
 #   there are multiple processes executing inside of the same host and
 #   namespace. In this case, the Operator is responsible for setting up a
 #   custom cleaning facility.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 class ironic::inspector::pxe_filter::dnsmasq (
-  $dnsmasq_start_command = $::os_service_default,
-  $dnsmasq_stop_command  = $::os_service_default,
-  $purge_dhcp_hostsdir   = $::os_service_default,
+  $dnsmasq_start_command = $facts['os_service_default'],
+  $dnsmasq_stop_command  = $facts['os_service_default'],
+  $purge_dhcp_hostsdir   = $facts['os_service_default'],
 ) {
 
   include ironic::deps
   include ironic::inspector
 
-  $hostsdir = pick($::ironic::inspector::dnsmasq_dhcp_hostsdir, $::os_service_default)
+  $hostsdir = pick($::ironic::inspector::dnsmasq_dhcp_hostsdir, $facts['os_service_default'])
 
   ironic_inspector_config {
     'dnsmasq_pxe_filter/dhcp_hostsdir':         value => $hostsdir;

@@ -201,7 +201,7 @@ describe 'ironic::conductor' do
         facts.merge!(OSDefaults.get_facts())
       end
 
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           let :platform_params do
             { :conductor_package => 'ironic-conductor',

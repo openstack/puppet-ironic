@@ -18,7 +18,7 @@
 #
 # [*auth_url*]
 #   The address of the keystone api endpoint.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*project_name*]
 #   The Keystone project name.
@@ -30,7 +30,7 @@
 #
 # [*password*]
 #   The admin password for ironic to connect to glance.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*user_domain_name*]
 #   The name of user's domain (required for Identity V3).
@@ -42,54 +42,54 @@
 #
 # [*system_scope*]
 #   (Optional) Scope for system operations
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*region_name*]
 #   (optional) Region name for connecting to glance in admin context
 #   through the OpenStack Identity service.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*num_retries*]
 #   (optional) Number retries when downloading an image from glance.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*api_insecure*]
 #   (optional) Allow to perform insecure SSL (https) requests to glance.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*swift_account*]
 #   (optional) The account that Glance uses to communicate with Swift.
 #   The format is "AUTH_uuid".
 #   Can not be set together with swift_account_project_name.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*swift_account_prefix*]
 #   (optional) The prefix added to the project uuid to determine the swift
 #   account.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*swift_container*]
 #   (optional) Swift container where Glance images are stored. Used for
 #   generating temporary URLs.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*swift_endpoint_url*]
 #   (optional) Swift endpoint to use for generating temporary URLs.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*swift_temp_url_key*]
 #   (optional) The secret token given to Swift to allow temporary URL
 #   downloads. Required for several drivers (e.g. agent_ipmitool).
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*swift_temp_url_duration*]
 #   (optional) The length of time in seconds that the temporary URL will be
 #   valid for.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*endpoint_override*]
 #   The endpoint URL for requests for this client
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # DEPRECATED PARAMETERS
 #
@@ -102,23 +102,23 @@
 #
 class ironic::glance (
   $auth_type                  = 'password',
-  $auth_url                   = $::os_service_default,
+  $auth_url                   = $facts['os_service_default'],
   $project_name               = 'services',
   $username                   = 'ironic',
-  $password                   = $::os_service_default,
+  $password                   = $facts['os_service_default'],
   $user_domain_name           = 'Default',
   $project_domain_name        = 'Default',
-  $system_scope               = $::os_service_default,
-  $region_name                = $::os_service_default,
-  $num_retries                = $::os_service_default,
-  $api_insecure               = $::os_service_default,
-  $swift_account              = $::os_service_default,
-  $swift_account_prefix       = $::os_service_default,
-  $swift_container            = $::os_service_default,
-  $swift_endpoint_url         = $::os_service_default,
-  $swift_temp_url_key         = $::os_service_default,
-  $swift_temp_url_duration    = $::os_service_default,
-  $endpoint_override          = $::os_service_default,
+  $system_scope               = $facts['os_service_default'],
+  $region_name                = $facts['os_service_default'],
+  $num_retries                = $facts['os_service_default'],
+  $api_insecure               = $facts['os_service_default'],
+  $swift_account              = $facts['os_service_default'],
+  $swift_account_prefix       = $facts['os_service_default'],
+  $swift_container            = $facts['os_service_default'],
+  $swift_endpoint_url         = $facts['os_service_default'],
+  $swift_temp_url_key         = $facts['os_service_default'],
+  $swift_temp_url_duration    = $facts['os_service_default'],
+  $endpoint_override          = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
   $swift_account_project_name = undef,
 ) {
@@ -137,8 +137,8 @@ class ironic::glance (
     $project_name_real = $project_name
     $project_domain_name_real = $project_domain_name
   } else {
-    $project_name_real = $::os_service_default
-    $project_domain_name_real = $::os_service_default
+    $project_name_real = $facts['os_service_default']
+    $project_domain_name_real = $facts['os_service_default']
   }
 
   ironic_config {

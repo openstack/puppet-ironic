@@ -16,16 +16,16 @@
 #
 # [*driver*]
 #   (optional) PXE filter driver to use.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*sync_period*]
 #   (optional) Number of seconds between periodic updates of filters.
 #   Should be a non-negative integer value.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 class ironic::inspector::pxe_filter (
-  $driver      = $::os_service_default,
-  $sync_period = $::os_service_default,
+  $driver      = $facts['os_service_default'],
+  $sync_period = $facts['os_service_default'],
 ) {
 
   include ironic::deps

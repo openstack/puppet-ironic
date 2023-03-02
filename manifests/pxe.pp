@@ -119,8 +119,8 @@ class ironic::pxe (
   $uefi_ipxe_bootfile_name_real = pick($::ironic::pxe::common::uefi_ipxe_bootfile_name, $uefi_ipxe_bootfile_name)
   $uefi_pxe_bootfile_name_real = pick($::ironic::pxe::common::uefi_pxe_bootfile_name, $uefi_pxe_bootfile_name)
 
-  if $::os['family'] == 'RedHat' {
-    $arch = "-${::os['architecture']}"
+  if $facts['os']['family'] == 'RedHat' {
+    $arch = "-${facts['os']['architecture']}"
   } else {
     $arch = ''
   }

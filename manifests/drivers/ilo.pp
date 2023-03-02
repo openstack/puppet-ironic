@@ -17,32 +17,32 @@
 # [*client_timeout*]
 #   (optional) Maximum time in seconds to wait for iLO commands.
 #   Should be an integer value
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*client_port*]
 #   (optional) Port to use for iLO operations.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*use_web_server_for_images*]
 #   (optional) Whether to use the Web server (the same as used for iPXE)
 #   to host virtual media images.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*default_boot_mode*]
 #   (optional) The default boot mode to use when no boot mode is explicitly
 #   requested. Accepts values "uefi", "bios" and "auto". The "auto" value will
 #   use UEFI if it's available on the machine, BIOS otherwise.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*package_ensure*]
 #   (optional) The state of the proliantutils package
 #   Defaults to 'present'
 #
 class ironic::drivers::ilo (
-  $client_timeout            = $::os_service_default,
-  $client_port               = $::os_service_default,
-  $use_web_server_for_images = $::os_service_default,
-  $default_boot_mode         = $::os_service_default,
+  $client_timeout            = $facts['os_service_default'],
+  $client_port               = $facts['os_service_default'],
+  $use_web_server_for_images = $facts['os_service_default'],
+  $default_boot_mode         = $facts['os_service_default'],
   $package_ensure            = 'present',
 ) {
 

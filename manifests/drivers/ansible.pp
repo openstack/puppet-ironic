@@ -20,65 +20,65 @@
 #
 # [*ansible_extra_args*]
 #   (optional) Extra arguments to pass on every invocation of ansible.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*playbooks_path*]
 #   (optional) Path to directory with playbooks, roles and local inventory.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*config_file_path*]
 #   (optional) Path to ansible configuration file.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*image_store_insecure*]
 #   (optional) Skip verifying SSL connections to the image store when
 #   downloading the image.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*default_username*]
 #   (optional) Default name of the user to use for Ansible when connecting to
 #   the ramdisk over SSH.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*default_key_file*]
 #   (optional) Absolute path to the private SSH key file to use by Ansible
 #   by default when connecting to the ramdisk over SSH.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*default_deploy_playbook*]
 #   (optional) Path to the default playbook used for deployment.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*default_shutdown_playbook*]
 #   (optional) Path to the default playbook used for graceful shutdown.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*default_clean_playbook*]
 #   (optional) Path to the default playbook used for cleaning.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*default_clean_steps_config*]
 #   (optional) Path to the default auxiliary cleaning steps file used during
 #   cleaning.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*default_python_interpreter*]
 #   (optional) Absolute path to the python interpreter on the managed machines.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 
 class ironic::drivers::ansible (
   $package_ensure             = 'present',
-  $ansible_extra_args         = $::os_service_default,
-  $playbooks_path             = $::os_service_default,
-  $config_file_path           = $::os_service_default,
-  $image_store_insecure       = $::os_service_default,
-  $default_username           = $::os_service_default,
-  $default_key_file           = $::os_service_default,
-  $default_deploy_playbook    = $::os_service_default,
-  $default_shutdown_playbook  = $::os_service_default,
-  $default_clean_playbook     = $::os_service_default,
-  $default_clean_steps_config = $::os_service_default,
-  $default_python_interpreter = $::os_service_default,
+  $ansible_extra_args         = $facts['os_service_default'],
+  $playbooks_path             = $facts['os_service_default'],
+  $config_file_path           = $facts['os_service_default'],
+  $image_store_insecure       = $facts['os_service_default'],
+  $default_username           = $facts['os_service_default'],
+  $default_key_file           = $facts['os_service_default'],
+  $default_deploy_playbook    = $facts['os_service_default'],
+  $default_shutdown_playbook  = $facts['os_service_default'],
+  $default_clean_playbook     = $facts['os_service_default'],
+  $default_clean_steps_config = $facts['os_service_default'],
+  $default_python_interpreter = $facts['os_service_default'],
 ) {
 
   include ironic::deps
