@@ -286,6 +286,9 @@ class ironic::conductor (
   include ironic::deps
   include ironic::params
 
+  validate_legacy(Boolean, 'validate_bool', $enabled)
+  validate_legacy(Boolean, 'validate_bool', $manage_service)
+
   # For backward compatibility
   include ironic::glance
 

@@ -92,6 +92,9 @@ class ironic::api (
   include ironic::policy
   include ironic::api::authtoken
 
+  validate_legacy(Boolean, 'validate_bool', $manage_service)
+  validate_legacy(Boolean, 'validate_bool', $enabled)
+
   # Configure ironic.conf
   ironic_config {
     'api/host_ip':         value => $host_ip;

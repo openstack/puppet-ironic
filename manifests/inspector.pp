@@ -238,6 +238,12 @@ class ironic::inspector (
   $uefi_ipxe_bootfile_name         = $::ironic::params::uefi_ipxe_bootfile_name,
 ) inherits ironic::params {
 
+  validate_legacy(Boolean, 'validate_bool', $manage_service)
+  validate_legacy(Boolean, 'validate_bool', $enabled)
+  validate_legacy(Boolean, 'validate_bool', $dhcp_debug)
+  validate_legacy(Boolean, 'validate_bool', $dnsmasq_dhcp_sequential_ip)
+  validate_legacy(Boolean, 'validate_bool', $sync_db)
+  validate_legacy(Boolean, 'validate_bool', $enable_ppc64le)
   validate_legacy(Array, 'validate_array', $dnsmasq_ip_subnets)
   validate_legacy(Hash, 'validate_hash', $port_physnet_cidr_map)
 
