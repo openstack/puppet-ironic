@@ -61,7 +61,7 @@ describe 'ironic::conductor' do
 
     it 'configures ironic.conf' do
       is_expected.to contain_ironic_config('DEFAULT/enabled_hardware_types').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('conductor/force_power_state_during_sync').with_value(p[:force_power_state_during_sync])
+      is_expected.to contain_ironic_config('conductor/force_power_state_during_sync').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/automated_clean').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('neutron/cleaning_network').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('neutron/provisioning_network').with(:value => '<SERVICE DEFAULT>')

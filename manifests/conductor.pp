@@ -39,7 +39,7 @@
 #   (optional) Should the hardware power state be set to the state recorded in
 #   the database (True) or should the database be updated based on the hardware
 #   state (False).
-#   Defaults to true.
+#   Defaults to $facts['os_service_default']
 #
 # [*http_url*]
 #   (optional) ironic-conductor node's HTTP server URL.
@@ -242,7 +242,7 @@ class ironic::conductor (
   $enabled                             = true,
   $manage_service                      = true,
   $enabled_hardware_types              = $facts['os_service_default'],
-  $force_power_state_during_sync       = true,
+  $force_power_state_during_sync       = $facts['os_service_default'],
   $http_url                            = $facts['os_service_default'],
   $http_root                           = $facts['os_service_default'],
   $force_raw_images                    = $facts['os_service_default'],
