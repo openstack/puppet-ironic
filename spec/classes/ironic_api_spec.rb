@@ -30,9 +30,6 @@ describe 'ironic::api' do
   let :params do
     { :package_ensure    => 'present',
       :enabled           => true,
-      :port              => '6385',
-      :max_limit         => '1000',
-      :host_ip           => '0.0.0.0',
     }
   end
 
@@ -64,9 +61,9 @@ describe 'ironic::api' do
     end
 
     it 'configures ironic.conf' do
-      is_expected.to contain_ironic_config('api/port').with_value(p[:port])
-      is_expected.to contain_ironic_config('api/host_ip').with_value(p[:host_ip])
-      is_expected.to contain_ironic_config('api/max_limit').with_value(p[:max_limit])
+      is_expected.to contain_ironic_config('api/port').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('api/host_ip').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('api/max_limit').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('api/api_workers').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('api/public_endpoint').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_oslo__middleware('ironic_config').with(
