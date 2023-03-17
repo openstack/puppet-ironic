@@ -113,6 +113,10 @@ class ironic::pxe (
   include ironic::deps
   include ironic::pxe::common
 
+  validate_legacy(Boolean, 'validate_bool', $manage_service)
+  validate_legacy(Boolean, 'validate_bool', $enabled)
+  validate_legacy(Boolean, 'validate_bool', $manage_http_server)
+
   $tftp_root_real = pick($::ironic::pxe::common::tftp_root, $tftp_root)
   $http_root_real = pick($::ironic::pxe::common::http_root, $http_root)
   $http_port_real = pick($::ironic::pxe::common::http_port, $http_port)

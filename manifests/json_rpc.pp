@@ -103,6 +103,8 @@ class ironic::json_rpc (
 
   include ironic::deps
 
+  validate_legacy(Boolean, 'validate_bool', $use_ssl)
+
   if is_service_default($system_scope) {
     $project_name_real = $project_name
     $project_domain_name_real = $project_domain_name
