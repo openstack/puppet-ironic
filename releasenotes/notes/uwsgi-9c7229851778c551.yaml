@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    A new calss ``ironic::wsgi::wsgi`` was added to allow configuring uwsgi in
+    operating systems that support this (ie: currently Debian). This helps
+    configuring the number of processes, threads and listen socket.
+    Also, a new ``ironic_api_uwsgi_config`` provider was added.

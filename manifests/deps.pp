@@ -49,6 +49,11 @@ class ironic::deps {
   Anchor['ironic::db::end']
   -> Anchor['ironic-inspector::dbsync::begin']
 
+  # On any uwsgi config change, we must restart Ironic API.
+  Anchor['ironic::config::begin']
+  -> Ironic_api_uwsgi_config<||>
+  ~> Anchor['ironic::config::end']
+
   # Support packages need to be installed in the install phase, but we don't
   # put them in the chain above because we don't want any false dependencies
   # between packages with the ironic-package tag and the ironic-support-package
