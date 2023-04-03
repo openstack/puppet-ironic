@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The new ``ironic::redfish::firmware_source`` parameter has been added.

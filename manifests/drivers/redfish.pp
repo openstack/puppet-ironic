@@ -67,6 +67,10 @@
 #   update tasks.
 #   Defaults to $facts['os_service_default']
 #
+# [*firmware_source*]
+#   (optional) Specifies how firmware image should be served.
+#   Defaults to $facts['os_service_default']
+#
 class ironic::drivers::redfish (
   $package_ensure                  = 'present',
   $connection_attempts             = $facts['os_service_default'],
@@ -80,6 +84,7 @@ class ironic::drivers::redfish (
   $file_permission                 = $facts['os_service_default'],
   $firmware_update_status_interval = $facts['os_service_default'],
   $firmware_update_fail_interval   = $facts['os_service_default'],
+  $firmware_source                 = $facts['os_service_default'],
 ) {
 
   include ironic::deps
@@ -97,6 +102,7 @@ class ironic::drivers::redfish (
     'redfish/file_permission':                 value => $file_permission;
     'redfish/firmware_update_status_interval': value => $firmware_update_status_interval;
     'redfish/firmware_update_fail_interval':   value => $firmware_update_fail_interval;
+    'redfish/firmware_source':                 value => $firmware_source;
   }
 
   ensure_packages('python-sushy',

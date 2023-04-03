@@ -38,6 +38,7 @@ describe 'ironic::drivers::redfish' do
       is_expected.to contain_ironic_config('redfish/file_permission').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('redfish/firmware_update_status_interval').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('redfish/firmware_update_fail_interval').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('redfish/firmware_source').with_value('<SERVICE DEFAULT>')
     end
 
     it 'installs sushy package' do
@@ -62,7 +63,8 @@ describe 'ironic::drivers::redfish' do
           :file_permission                 => '0o644',
           :firmware_update_status_interval => 60,
           :firmware_update_fail_interval   => 60,
-          )
+          :firmware_source                 => 'http',
+        )
       end
 
       it 'should replace default parameter with new value' do
@@ -77,6 +79,7 @@ describe 'ironic::drivers::redfish' do
         is_expected.to contain_ironic_config('redfish/file_permission').with_value('0o644')
         is_expected.to contain_ironic_config('redfish/firmware_update_status_interval').with_value(60)
         is_expected.to contain_ironic_config('redfish/firmware_update_fail_interval').with_value(60)
+        is_expected.to contain_ironic_config('redfish/firmware_source').with_value('http')
       end
     end
 
