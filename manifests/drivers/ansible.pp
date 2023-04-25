@@ -65,7 +65,7 @@
 # [*default_python_interpreter*]
 #   (optional) Absolute path to the python interpreter on the managed machines.
 #   Defaults to $facts['os_service_default']
-
+#
 class ironic::drivers::ansible (
   $package_ensure             = 'present',
   $ansible_extra_args         = $facts['os_service_default'],

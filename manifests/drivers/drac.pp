@@ -9,7 +9,7 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-
+#
 # Configure the DRAC driver in Ironic
 #
 # === Parameters
@@ -18,7 +18,7 @@
 #   (optional) The state of the dracclient package
 #   Defaults to 'present'
 #
-
+#
 class ironic::drivers::drac (
   $package_ensure = 'present',
 ) {

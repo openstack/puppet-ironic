@@ -128,7 +128,7 @@
 #
 #   class { 'ironic::wsgi::apache': }
 #
-
+#
 class ironic::wsgi::apache (
   $servername                  = $facts['networking']['fqdn'],
   $port                        = 6385,
