@@ -84,7 +84,7 @@ class ironic::params {
       $inspector_dnsmasq_service = false
       # guessing the name, ironic-staging-drivers is not packaged in debian yet
       $staging_drivers_package   = 'ironic-staging-drivers'
-      $systemd_python_package    = 'python-systemd'
+      $systemd_python_package    = 'python3-systemd'
       $ipxe_rom_dir              = '/usr/lib/ipxe'
       $ipxe_name_base            = 'snponly'
       $uefi_ipxe_bootfile_name   = 'snponly.efi'
