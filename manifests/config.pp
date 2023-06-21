@@ -21,12 +21,10 @@
 #   or Puppet catalog compilation will fail with duplicate resources.
 #
 class ironic::config (
-  $ironic_config = {},
+  Hash $ironic_config = {},
 ) {
 
   include ironic::deps
-
-  validate_legacy(Hash, 'validate_hash', $ironic_config)
 
   create_resources('ironic_config', $ironic_config)
 }

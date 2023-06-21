@@ -87,7 +87,7 @@ class ironic::json_rpc (
   $http_basic_auth_user_file = $facts['os_service_default'],
   $host_ip                   = $facts['os_service_default'],
   $port                      = $facts['os_service_default'],
-  $use_ssl                   = false,
+  Boolean $use_ssl           = false,
   $auth_type                 = 'password',
   $auth_url                  = $facts['os_service_default'],
   $project_name              = 'services',
@@ -102,8 +102,6 @@ class ironic::json_rpc (
 ) {
 
   include ironic::deps
-
-  validate_legacy(Boolean, 'validate_bool', $use_ssl)
 
   if is_service_default($system_scope) {
     $project_name_real = $project_name

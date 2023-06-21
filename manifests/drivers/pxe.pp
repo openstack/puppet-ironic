@@ -143,7 +143,7 @@ class ironic::drivers::pxe (
   $uefi_pxe_config_template  = $facts['os_service_default'],
   $uefi_ipxe_bootfile_name   = $::ironic::params::uefi_ipxe_bootfile_name,
   $ipxe_timeout              = $facts['os_service_default'],
-  $enable_ppc64le            = false,
+  Boolean $enable_ppc64le    = false,
   $boot_retry_timeout        = $facts['os_service_default'],
   $boot_retry_check_interval = $facts['os_service_default'],
   $dir_permission            = $facts['os_service_default'],
@@ -154,8 +154,6 @@ class ironic::drivers::pxe (
 ) inherits ironic::params {
 
   include ironic::deps
-
-  validate_legacy(Boolean, 'validate_bool', $enable_ppc64le)
 
   include ironic::pxe::common
   $tftp_root_real               = pick($::ironic::pxe::common::tftp_root, $tftp_root)

@@ -92,30 +92,26 @@
 #   Defaults to true
 #
 class ironic::pxe (
-  $package_ensure          = 'present',
-  $manage_service          = true,
-  $enabled                 = true,
-  $tftp_root               = '/tftpboot',
-  $http_root               = '/httpboot',
-  $http_port               = 8088,
-  $pxelinux_path           = $::ironic::params::pxelinux_path,
-  $syslinux_path           = $::ironic::params::syslinux_path,
-  $syslinux_files          = $::ironic::params::syslinux_files,
-  $tftp_bind_host          = undef,
-  $ipxe_name_base          = $::ironic::params::ipxe_name_base,
-  $uefi_ipxe_bootfile_name = $::ironic::params::uefi_ipxe_bootfile_name,
-  $uefi_pxe_bootfile_name  = 'bootx64.efi',
-  $tftp_use_xinetd         = $::ironic::params::xinetd_available,
-  $dnsmasq_log_facility    = undef,
-  $manage_http_server      = true,
+  $package_ensure             = 'present',
+  Boolean $manage_service     = true,
+  Boolean $enabled            = true,
+  $tftp_root                  = '/tftpboot',
+  $http_root                  = '/httpboot',
+  $http_port                  = 8088,
+  $pxelinux_path              = $::ironic::params::pxelinux_path,
+  $syslinux_path              = $::ironic::params::syslinux_path,
+  $syslinux_files             = $::ironic::params::syslinux_files,
+  $tftp_bind_host             = undef,
+  $ipxe_name_base             = $::ironic::params::ipxe_name_base,
+  $uefi_ipxe_bootfile_name    = $::ironic::params::uefi_ipxe_bootfile_name,
+  $uefi_pxe_bootfile_name     = 'bootx64.efi',
+  Boolean $tftp_use_xinetd    = $::ironic::params::xinetd_available,
+  $dnsmasq_log_facility       = undef,
+  Boolean $manage_http_server = true,
 ) inherits ironic::params {
 
   include ironic::deps
   include ironic::pxe::common
-
-  validate_legacy(Boolean, 'validate_bool', $manage_service)
-  validate_legacy(Boolean, 'validate_bool', $enabled)
-  validate_legacy(Boolean, 'validate_bool', $manage_http_server)
 
   $tftp_root_real = pick($::ironic::pxe::common::tftp_root, $tftp_root)
   $http_root_real = pick($::ironic::pxe::common::http_root, $http_root)

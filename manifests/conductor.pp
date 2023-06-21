@@ -239,8 +239,8 @@
 #
 class ironic::conductor (
   $package_ensure                      = 'present',
-  $enabled                             = true,
-  $manage_service                      = true,
+  Boolean $enabled                     = true,
+  Boolean $manage_service              = true,
   $enabled_hardware_types              = $facts['os_service_default'],
   $force_power_state_during_sync       = $facts['os_service_default'],
   $http_url                            = $facts['os_service_default'],
@@ -248,7 +248,8 @@ class ironic::conductor (
   $force_raw_images                    = $facts['os_service_default'],
   $automated_clean                     = $facts['os_service_default'],
   $cleaning_network                    = $facts['os_service_default'],
-  $cleaning_disk_erase                 = undef,
+  Optional[Enum['full', 'metadata', 'none']] $cleaning_disk_erase
+    = undef,
   $continue_if_disk_secure_erase_fails = $facts['os_service_default'],
   $provisioning_network                = $facts['os_service_default'],
   $rescuing_network                    = $facts['os_service_default'],
@@ -286,9 +287,6 @@ class ironic::conductor (
   include ironic::deps
   include ironic::params
 
-  validate_legacy(Boolean, 'validate_bool', $enabled)
-  validate_legacy(Boolean, 'validate_bool', $manage_service)
-
   # For backward compatibility
   include ironic::glance
 
@@ -311,11 +309,6 @@ class ironic::conductor (
   # NOTE(dtantsur): all in-tree drivers are IPA-based, so it won't hurt
   # including its manifest (which only contains configuration options)
   include ironic::drivers::agent
-
-  if $cleaning_disk_erase {
-    validate_legacy(Enum['full', 'metadata', 'none'], 'validate_re', $cleaning_disk_erase,
-      [['^full$', '^metadata$', '^none$']])
-  }
 
   case $cleaning_disk_erase {
     'full': {

@@ -22,8 +22,9 @@ class ironic::inventory (
   include ironic::params
 
   if ! is_service_default($data_backend) {
-    validate_legacy(Enum['none', 'database', 'swift'], 'validate_re', $data_backend,
-      ['^none$', '^database$', '^swift$'])
+    if ! member(['none', 'database', 'swift'], $data_backend) {
+      fail('Unsupported data backend')
+    }
   }
 
   ironic_config {

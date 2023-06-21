@@ -75,8 +75,8 @@
 #
 class ironic::api (
   $package_ensure               = 'present',
-  $manage_service               = true,
-  $enabled                      = true,
+  Boolean $manage_service       = true,
+  Boolean $enabled              = true,
   $service_name                 = $::ironic::params::api_service,
   $host_ip                      = $facts['os_service_default'],
   $port                         = $facts['os_service_default'],
@@ -91,9 +91,6 @@ class ironic::api (
   include ironic::params
   include ironic::policy
   include ironic::api::authtoken
-
-  validate_legacy(Boolean, 'validate_bool', $manage_service)
-  validate_legacy(Boolean, 'validate_bool', $enabled)
 
   # Configure ironic.conf
   ironic_config {
