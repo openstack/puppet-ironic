@@ -24,10 +24,6 @@ describe 'ironic::drivers::hardware_interface' do
   let (:title) { 'foo' }
 
   shared_examples_for 'ironic hardware interface' do
-    let :p do
-      params
-    end
-
     it 'configures ironic.conf' do
       is_expected.to contain_ironic_config('DEFAULT/enabled_foo_interfaces').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('DEFAULT/default_foo_interface').with_value('<SERVICE DEFAULT>')
@@ -36,17 +32,16 @@ describe 'ironic::drivers::hardware_interface' do
     context 'when overriding parameters' do
       before :each do
         params.merge!(
-            :enabled_list => ['one', 'two'],
-            :default      => 'two',
+          :enabled_list => ['one', 'two'],
+          :default      => 'two',
         )
       end
 
       it 'should replace default parameter with new value' do
         is_expected.to contain_ironic_config('DEFAULT/enabled_foo_interfaces').with_value('one,two')
-        is_expected.to contain_ironic_config('DEFAULT/default_foo_interface').with_value(p[:default])
+        is_expected.to contain_ironic_config('DEFAULT/default_foo_interface').with_value('two')
       end
     end
-
   end
 
   on_supported_os({

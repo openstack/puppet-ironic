@@ -37,15 +37,8 @@ define ironic::drivers::hardware_interface (
 
   include ironic::deps
 
-  if !is_service_default($enabled_list) and !empty($enabled_list){
-    validate_legacy(Array, 'validate_array', $enabled_list)
-    $enabled_list_real = join($enabled_list, ',')
-  } else {
-    $enabled_list_real = $facts['os_service_default']
-  }
-
   ironic_config {
-    "DEFAULT/enabled_${interface_type}_interfaces": value => $enabled_list_real;
+    "DEFAULT/enabled_${interface_type}_interfaces": value => join(any2array($enabled_list), ',');
     "DEFAULT/default_${interface_type}_interface":  value => $default;
   }
 }
