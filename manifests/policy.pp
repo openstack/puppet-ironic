@@ -65,6 +65,7 @@ class ironic::policy (
     file_group   => $::ironic::params::group,
     file_format  => 'yaml',
     purge_config => $purge_config,
+    tag          => 'ironic',
   }
 
   create_resources('openstacklib::policy', { $policy_path => $policy_parameters })
