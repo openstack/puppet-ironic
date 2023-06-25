@@ -54,6 +54,15 @@ class ironic::deps {
   -> Ironic_api_uwsgi_config<||>
   ~> Anchor['ironic::config::end']
 
+  # policy config should occur in the config block also.
+  Anchor['ironic::config::begin']
+  -> Openstacklib::Policy<||>
+  ~> Anchor['ironic::config::end']
+
+  Anchor['ironic-inspector::config::begin']
+  -> Openstacklib::Policy<||>
+  ~> Anchor['ironic-inspector::config::end']
+
   # Support packages need to be installed in the install phase, but we don't
   # put them in the chain above because we don't want any false dependencies
   # between packages with the ironic-package tag and the ironic-support-package
