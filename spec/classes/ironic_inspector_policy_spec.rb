@@ -32,6 +32,7 @@ describe 'ironic::inspector::policy' do
           :file_group   => 'ironic-inspector',
           :file_format  => 'yaml',
           :purge_config => false,
+          :tag          => 'ironic-inspector',
         )
         is_expected.to contain_oslo__policy('ironic_inspector_config').with(
           :enforce_scope        => false,
@@ -61,6 +62,7 @@ describe 'ironic::inspector::policy' do
           :file_group   => 'ironic-inspector',
           :file_format  => 'yaml',
           :purge_config => true,
+          :tag          => 'ironic-inspector',
         )
         is_expected.to contain_oslo__policy('ironic_inspector_config').with(
           :enforce_scope        => false,
