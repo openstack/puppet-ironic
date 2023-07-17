@@ -241,7 +241,7 @@
 #   Defaults to $facts['os_service_default']
 #
 class ironic (
-  $enabled                            = true,
+  Boolean $enabled                    = true,
   $package_ensure                     = 'present',
   $my_ip                              = $facts['os_service_default'],
   $my_ipv6                            = $facts['os_service_default'],
@@ -280,9 +280,9 @@ class ironic (
   $amqp_sasl_config_name              = $facts['os_service_default'],
   $amqp_username                      = $facts['os_service_default'],
   $amqp_password                      = $facts['os_service_default'],
-  $sync_db                            = true,
-  $db_online_data_migrations          = false,
-  $purge_config                       = false,
+  Boolean $sync_db                    = true,
+  Boolean $db_online_data_migrations  = false,
+  Boolean $purge_config               = false,
   $notification_transport_url         = $facts['os_service_default'],
   $notification_driver                = $facts['os_service_default'],
   $notification_topics                = $facts['os_service_default'],
@@ -298,9 +298,10 @@ class ironic (
   include ironic::neutron
 
   ensure_resource( 'package', 'ironic-common', {
-      ensure => $package_ensure,
-      name   => $::ironic::params::common_package_name,
-      tag    => ['openstack', 'ironic-package'],})
+    ensure => $package_ensure,
+    name   => $::ironic::params::common_package_name,
+    tag    => ['openstack', 'ironic-package'],
+  })
 
   package { 'ironic-lib':
     ensure => $package_ensure,
