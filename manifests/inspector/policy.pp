@@ -62,6 +62,7 @@ class ironic::inspector::policy (
     file_group   => $::ironic::params::inspector_group,
     file_format  => 'yaml',
     purge_config => $purge_config,
+    tag          => 'ironic-inspector',
   }
 
   create_resources('openstacklib::policy', { $policy_path => $policy_parameters })
