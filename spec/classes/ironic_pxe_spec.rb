@@ -117,7 +117,7 @@ describe 'ironic::pxe' do
       is_expected.to contain_class('apache')
       is_expected.to contain_apache__vhost('ipxe_vhost').with(
         :priority => 10,
-        :options  => ['Indexes','FollowSymLinks'],
+        :options  => ['-Indexes', '+FollowSymLinks'],
         :docroot  => '/httpboot',
         :port     => 8088
       )
@@ -203,7 +203,7 @@ describe 'ironic::pxe' do
         is_expected.to contain_class('apache')
         is_expected.to contain_apache__vhost('ipxe_vhost').with(
           :priority => 10,
-          :options  => ['Indexes','FollowSymLinks'],
+          :options  => ['-Indexes', '+FollowSymLinks'],
           :docroot  => '/var/www/httpboot',
           :port     => 3816,
         )

@@ -349,7 +349,7 @@ class ironic::pxe (
 
     apache::vhost { 'ipxe_vhost':
       priority => 10,
-      options  => ['Indexes','FollowSymLinks'],
+      options  => ['-Indexes', '+FollowSymLinks'],
       docroot  => $http_root_real,
       port     => $http_port_real,
     }
