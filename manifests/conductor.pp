@@ -47,7 +47,7 @@
 #
 # [*http_root*]
 #   (optional) ironic-conductor node's HTTP root path.
-#   Defaults to $facts['os_service_default']
+#   Defaults to '/httpboot'
 #
 # [*force_raw_images*]
 #   (optional) If true, convert backing images to "raw" disk image format.
@@ -244,7 +244,7 @@ class ironic::conductor (
   $enabled_hardware_types              = $facts['os_service_default'],
   $force_power_state_during_sync       = $facts['os_service_default'],
   $http_url                            = $facts['os_service_default'],
-  $http_root                           = $facts['os_service_default'],
+  $http_root                           = '/httpboot',
   $force_raw_images                    = $facts['os_service_default'],
   $automated_clean                     = $facts['os_service_default'],
   $cleaning_network                    = $facts['os_service_default'],
@@ -329,13 +329,16 @@ class ironic::conductor (
     }
   }
 
+  include ironic::pxe::common
+  $http_root_real = pick($::ironic::pxe::common::http_root, $http_root)
+
   # Configure ironic.conf
   ironic_config {
     'DEFAULT/enabled_hardware_types':              value => join(any2array($enabled_hardware_types), ',');
     'conductor/force_power_state_during_sync':     value => $force_power_state_during_sync;
     'conductor/automated_clean':                   value => $automated_clean;
     'deploy/http_url':                             value => $http_url;
-    'deploy/http_root':                            value => $http_root;
+    'deploy/http_root':                            value => $http_root_real;
     'DEFAULT/force_raw_images':                    value => $force_raw_images;
     'deploy/erase_devices_priority':               value => $erase_devices_priority;
     'deploy/erase_devices_metadata_priority':      value => $erase_devices_metadata_priority;
