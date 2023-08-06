@@ -60,7 +60,6 @@
 # [*cleaning_network*]
 #   (optional) UUID or name of the network to create Neutron ports on, when
 #   booting to a ramdisk for cleaning using Neutron DHCP.
-#   Can not be specified together with cleaning_network_name.
 #   Defaults to $facts['os_service_default']
 #
 # [*cleaning_disk_erase*]
@@ -79,18 +78,16 @@
 # [*provisioning_network*]
 #   (optional) Neutron network UUID or name for the ramdisk to be booted into
 #   for provisioning nodes. Required for neutron network interface.
-#   Can not be specified together with provisioning_network_name.
 #   Defaults to $facts['os_service_default']
 #
 # [*rescuing_network*]
 #   (optional) Neutron network UUID or name for the ramdisk to be booted into
-#   for rescue. Can not be specified together with rescuing_network_name.
+#   for rescue.
 #   Defaults to $facts['os_service_default']
 #
 # [*inspection_network*]
 #   (optional) Neutron network UUID or name for the ramdisk to be booted into
-#   for in-band inspection. Can not be specified together with
-#   inspection_network_name.
+#   for in-band inspection.
 #   Defaults to $facts['os_service_default']
 #
 # [*configdrive_use_object_store*]
@@ -211,32 +208,6 @@
 #   a conductor.
 #   Defaults to $facts['os_service_default']
 #
-# DEPRECATED PARAMETERS
-#
-# [*cleaning_network_name*]
-#   (optional) If provided the name will be converted to UUID and set
-#   as value of neutron/cleaning_network option in ironic.conf
-#   Can not be specified together with cleaning_network.
-#   Defaults to undef, which leaves the configuration intact
-#
-# [*provisioning_network_name*]
-#   (optional) If provided the name will be converted to UUID and set
-#   as value of neutron/provisioning_network option in ironic.conf
-#   Can not be specified together with provisioning_network.
-#   Defaults to undef, which leaves the configuration intact
-#
-# [*rescuing_network_name*]
-#   (optional) If provided the name will be converted to UUID and set
-#   as value of neutron/rescuing option in ironic.conf
-#   Can not be specified together with rescuing_network.
-#   Defaults to undef, which leaves the configuration intact
-#
-# [*inspection_network_name*]
-#   (optional) If provided the name will be converted to UUID and set
-#   as value of neutron/inspection_network option in ironic.conf
-#   Can not be specified together with inspection_network.
-#   Defaults to undef, which leaves the configuration intact
-#
 class ironic::conductor (
   $package_ensure                      = 'present',
   Boolean $enabled                     = true,
@@ -277,11 +248,6 @@ class ironic::conductor (
   $deploy_callback_timeout             = $facts['os_service_default'],
   $heartbeat_interval                  = $facts['os_service_default'],
   $heartbeat_timeout                   = $facts['os_service_default'],
-  # DEPRECATED PARAMETERS
-  $cleaning_network_name               = undef,
-  $provisioning_network_name           = undef,
-  $rescuing_network_name               = undef,
-  $inspection_network_name             = undef,
 ) {
 
   include ironic::deps
@@ -289,22 +255,6 @@ class ironic::conductor (
 
   # For backward compatibility
   include ironic::glance
-
-  if ($cleaning_network_name and !is_service_default($cleaning_network)) {
-    fail('cleaning_network_name and cleaning_network can not be specified at the same time.')
-  }
-
-  if ($provisioning_network_name and !is_service_default($provisioning_network)) {
-    fail('provisioning_network_name and provisioning_network can not be specified in the same time.')
-  }
-
-  if ($rescuing_network_name and !is_service_default($rescuing_network)) {
-    fail('rescuing_network_name and rescuing_network can not be specified in the same time.')
-  }
-
-  if ($inspection_network_name and !is_service_default($inspection_network)) {
-    fail('inspection_network_name and inspection_network can not be specified in the same time.')
-  }
 
   # NOTE(dtantsur): all in-tree drivers are IPA-based, so it won't hurt
   # including its manifest (which only contains configuration options)
@@ -365,48 +315,11 @@ class ironic::conductor (
     'conductor/heartbeat_timeout':                 value => $heartbeat_timeout;
   }
 
-  if $cleaning_network_name {
-    warning('The cleaning_network_name parameter is deprecated. Use the cleaning_network parameter instead.')
-    ironic_config {
-      'neutron/cleaning_network': value => $cleaning_network_name, transform_to => 'net_uuid';
-    }
-  } else {
-    ironic_config {
-      'neutron/cleaning_network': value => $cleaning_network;
-    }
-  }
-
-  if $provisioning_network_name {
-    warning('The provisioning_network_name parameter is deprecated. Use the provisioning_network parameter instead.')
-    ironic_config {
-      'neutron/provisioning_network': value => $provisioning_network_name, transform_to => 'net_uuid';
-    }
-  } else {
-    ironic_config {
-      'neutron/provisioning_network': value => $provisioning_network;
-    }
-  }
-
-  if $rescuing_network_name {
-    warning('The rescuing_network_name parameter is deprecated. Use the rescuing_network parameter instead.')
-    ironic_config {
-      'neutron/rescuing_network': value => $rescuing_network_name, transform_to => 'net_uuid';
-    }
-  } else {
-    ironic_config {
-      'neutron/rescuing_network': value => $rescuing_network;
-    }
-  }
-
-  if $inspection_network_name {
-    warning('The inspection_network_name parameter is deprecated. Use the inspection_network parameter instead.')
-    ironic_config {
-      'neutron/inspection_network': value => $inspection_network_name, transform_to => 'net_uuid';
-    }
-  } else {
-    ironic_config {
-      'neutron/inspection_network': value => $inspection_network;
-    }
+  ironic_config {
+    'neutron/cleaning_network':     value => $cleaning_network;
+    'neutron/provisioning_network': value => $provisioning_network;
+    'neutron/rescuing_network':     value => $rescuing_network;
+    'neutron/inspection_network':   value => $inspection_network;
   }
 
   # Install package
