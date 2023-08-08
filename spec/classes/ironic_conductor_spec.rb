@@ -172,25 +172,6 @@ describe 'ironic::conductor' do
         is_expected.to contain_ironic_config('conductor/heartbeat_timeout').with_value(p[:heartbeat_timeout])
       end
     end
-
-    context 'when overriding parameters' do
-      before :each do
-        params.merge!(
-          :provisioning_network_name => 'abc',
-          :cleaning_network_name => 'abc',
-          :rescuing_network_name => 'abc',
-          :inspection_network_name => 'abc',
-        )
-      end
-      it 'should set provisioning/cleaning/rescuing with new value' do
-          is_expected.to contain_ironic_config('neutron/cleaning_network').with_value('abc').with_transform_to('net_uuid')
-          is_expected.to contain_ironic_config('neutron/provisioning_network').with_value('abc').with_transform_to('net_uuid')
-          is_expected.to contain_ironic_config('neutron/rescuing_network').with_value('abc').with_transform_to('net_uuid')
-          is_expected.to contain_ironic_config('neutron/inspection_network').with_value('abc').with_transform_to('net_uuid')
-      end
-    end
-
-
   end
 
   on_supported_os({

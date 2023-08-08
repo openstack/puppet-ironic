@@ -1,0 +1,10 @@
+---
+upgrade:
+  - |
+    The following parameters of the ``ironic::conductor`` class have been
+    removed.
+
+    - ``cleaning_network_name``
+    - ``provisioning_network_name``
+    - ``rescuing_network_name``
+    - ``inspection_network_name``
