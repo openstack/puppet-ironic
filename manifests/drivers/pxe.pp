@@ -139,7 +139,7 @@ class ironic::drivers::pxe (
   $images_path               = $facts['os_service_default'],
   $tftp_master_path          = $facts['os_service_default'],
   $instance_master_path      = $facts['os_service_default'],
-  $uefi_pxe_bootfile_name    = 'bootx64.efi',
+  $uefi_pxe_bootfile_name    = $::ironic::params::uefi_pxe_bootfile_name,
   $uefi_pxe_config_template  = $facts['os_service_default'],
   $uefi_ipxe_bootfile_name   = $::ironic::params::uefi_ipxe_bootfile_name,
   $ipxe_timeout              = $facts['os_service_default'],

@@ -76,7 +76,7 @@
 #   (optional) Name of efi file used to boot servers with PXE + UEFI. This
 #   should be consistent with the uefi_pxe_bootfile_name parameter in pxe
 #   driver.
-#   Defaults to 'bootx64.efi'
+#   Defaults to $::ironic::params::uefi_pxe_bootfile_name
 #
 # [*tftp_use_xinetd*]
 #   (optional) Override wheter to use xinetd instead of dnsmasq as the tftp
@@ -104,7 +104,7 @@ class ironic::pxe (
   $tftp_bind_host             = undef,
   $ipxe_name_base             = $::ironic::params::ipxe_name_base,
   $uefi_ipxe_bootfile_name    = $::ironic::params::uefi_ipxe_bootfile_name,
-  $uefi_pxe_bootfile_name     = 'bootx64.efi',
+  $uefi_pxe_bootfile_name     = $::ironic::params::uefi_pxe_bootfile_name,
   Boolean $tftp_use_xinetd    = $::ironic::params::xinetd_available,
   $dnsmasq_log_facility       = undef,
   Boolean $manage_http_server = true,
