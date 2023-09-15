@@ -84,12 +84,6 @@ describe 'ironic' do
       })
     end
 
-    it 'configures credentials for rabbit' do
-      is_expected.to contain_oslo__messaging__rabbit('ironic_config').with(
-        :kombu_failover_strategy => '<SERVICE DEFAULT>'
-      )
-    end
-
     it 'configures ironic.conf' do
       is_expected.to contain_ironic_config('DEFAULT/auth_strategy').with_value('keystone')
       is_expected.to contain_ironic_config('DEFAULT/my_ip').with_value('<SERVICE DEFAULT>')
@@ -107,7 +101,12 @@ describe 'ironic' do
       )
 
       is_expected.to contain_oslo__messaging__rabbit('ironic_config').with(
-        :heartbeat_in_pthread => '<SERVICE DEFAULT>'
+        :heartbeat_in_pthread            => '<SERVICE DEFAULT>',
+        :rabbit_quorum_queue             => '<SERVICE DEFAULT>',
+        :kombu_failover_strategy         => '<SERVICE DEFAULT>',
+        :rabbit_quorum_delivery_limit    => '<SERVICE DEFAULT>',
+        :rabbit_quorum_max_memory_length => '<SERVICE DEFAULT>',
+        :rabbit_quorum_max_memory_bytes  => '<SERVICE DEFAULT>',
       )
     end
   end
