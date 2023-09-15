@@ -72,6 +72,10 @@ class ironic::params {
           $grub_efi_file = '/boot/efi/EFI/redhat/grubx64.efi'
           $shim_file     = '/boot/efi/EFI/redhat/shimx64.efi'
         }
+        'AlmaLinux':{
+          $grub_efi_file = '/boot/efi/EFI/almalinux/grubx64.efi'
+          $shim_file     = '/boot/efi/EFI/almalinux/shimx64.efi'
+        }
         default: {
           $grub_efi_file = '/boot/efi/EFI/centos/grubx64.efi'
           $shim_file     = '/boot/efi/EFI/centos/shimx64.efi'
