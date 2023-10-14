@@ -69,7 +69,7 @@ describe 'ironic::conductor' do
       is_expected.to contain_ironic_config('neutron/inspection_network').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('deploy/continue_if_disk_secure_erase_fails').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('deploy/http_url').with(:value => '<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('deploy/http_root').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('deploy/http_root').with(:value => '/httpboot')
       is_expected.to contain_ironic_config('DEFAULT/force_raw_images').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('deploy/configdrive_use_object_store').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/configdrive_swift_container').with(:value => '<SERVICE DEFAULT>')

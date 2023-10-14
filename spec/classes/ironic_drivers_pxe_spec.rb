@@ -34,7 +34,7 @@ describe 'ironic::drivers::pxe' do
       is_expected.to contain_ironic_config('pxe/ipxe_bootfile_name').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/ipxe_config_template').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/tftp_server').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('pxe/tftp_root').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('pxe/tftp_root').with_value('/tftpboot')
       is_expected.to contain_ironic_config('pxe/images_path').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/tftp_master_path').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/instance_master_path').with_value('<SERVICE DEFAULT>')

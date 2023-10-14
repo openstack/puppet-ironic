@@ -53,7 +53,7 @@
 # [*tftp_root*]
 #   (optional) Ironic compute node's tftp root path.
 #   Should be an valid path
-#   Defaults to $facts['os_service_default'].
+#   Defaults to '/tftpboot'.
 #
 # [*images_path*]
 #   (optional) Directory where images are stored on disk.
@@ -135,7 +135,7 @@ class ironic::drivers::pxe (
   $ipxe_bootfile_name        = $facts['os_service_default'],
   $ipxe_config_template      = $facts['os_service_default'],
   $tftp_server               = $facts['os_service_default'],
-  $tftp_root                 = $facts['os_service_default'],
+  $tftp_root                 = '/tftpboot',
   $images_path               = $facts['os_service_default'],
   $tftp_master_path          = $facts['os_service_default'],
   $instance_master_path      = $facts['os_service_default'],
