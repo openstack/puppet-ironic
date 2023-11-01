@@ -271,7 +271,7 @@ describe 'ironic::inspector' do
           'content' => /ipxe/,
         )
         is_expected.to contain_file('/var/www/httpboot/inspector.ipxe').with_content(
-            /kernel http:\/\/192.168.0.1:3816\/agent.kernel ipa-inspection-callback-url=http:\/\/192.168.0.1:5050\/v1\/continue ipa-inspection-collectors=default.* foo=bar || goto retry_boot/
+            /kernel http:\/\/192.168.0.1:3816\/agent.kernel ipa-inspection-callback-url=http:\/\/192.168.0.1:5050\/v1\/continue ipa-inspection-collectors=default .* foo=bar || goto retry_boot/
         )
       end
 
@@ -297,7 +297,7 @@ describe 'ironic::inspector' do
 
         it 'should contain file /var/www/httpboot/inspector.ipxe' do
           is_expected.to contain_file('/var/www/httpboot/inspector.ipxe').with_content(
-            /kernel http:\/\/\[fd00::1\]:3816\/agent.kernel ipa-inspection-callback-url=http:\/\/\[fd00::1\]:5050\/v1\/continue ipa-inspection-collectors=default.* foo=bar || goto retry_boot/
+            /kernel http:\/\/\[fd00::1\]:3816\/agent.kernel ipa-inspection-callback-url=http:\/\/\[fd00::1\]:5050\/v1\/continue ipa-inspection-collectors=default .* foo=bar || goto retry_boot/
           )
         end
       end

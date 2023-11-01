@@ -134,7 +134,7 @@
 #
 # [*ramdisk_kernel_args*]
 #   String with kernel arguments to send to the ramdisk on boot.
-#   Defaults to undef
+#   Defaults to ''
 #
 # [*ramdisk_filename*]
 #   The filename of ramdisk which is used in pxelinux_cfg/ipxelinux_cfg templates
@@ -220,11 +220,11 @@ class ironic::inspector (
   $dnsmasq_dhcp_hostsdir                      = undef,
   $dnsmasq_log_facility                       = undef,
   Boolean $sync_db                            = true,
-  $ramdisk_collectors                         = 'default',
-  $ramdisk_filename                           = 'agent.ramdisk',
-  $kernel_filename                            = 'agent.kernel',
+  String[1] $ramdisk_collectors               = 'default',
+  String[1] $ramdisk_filename                 = 'agent.ramdisk',
+  String[1] $kernel_filename                  = 'agent.kernel',
   $additional_processing_hooks                = undef,
-  $ramdisk_kernel_args                        = undef,
+  String $ramdisk_kernel_args                 = '',
   $ipxe_timeout                               = $facts['os_service_default'],
   $http_port                                  = '8088',
   $detect_boot_mode                           = $facts['os_service_default'],
