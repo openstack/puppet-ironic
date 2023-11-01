@@ -15,6 +15,8 @@ class ironic::drivers::staging (
   include ironic::deps
   include ironic::params
 
+  warning('Support for staging driver has been deprecated and will be removed in a future release.')
+
   if $::ironic::params::staging_drivers_package {
     package { 'ironic-staging-drivers':
       ensure => $package_ensure,
