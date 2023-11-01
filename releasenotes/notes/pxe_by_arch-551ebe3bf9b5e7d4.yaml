@@ -1,0 +1,9 @@
+---
+features:
+  - |
+    The following parameters have been added to the ``ironic::drive::pxe``
+    class.
+
+    - ``pxe_bootfile_name_by_arch``
+    - ``ipxe_bootfile_name_by_arch``
+    - ``pxe_config_template_by_arch``

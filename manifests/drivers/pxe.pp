@@ -119,6 +119,18 @@
 #   PXE/iXPE boot folders values from the host operating system.
 #   Defaults to $facts['os_service_default'].
 #
+# [*pxe_bootfile_name_by_arch*]
+#   (optional) Bootfile DHCP parameter per node architecture.
+#   Defaults to $facts['os_service_default'].
+#
+# [*ipxe_bootfile_name_by_arch*]
+#   (optional) Bootfile DHCP parameter per node architecture.
+#   Defaults to $facts['os_service_default'].
+#
+# [*pxe_config_template_by_arch*]
+#   (optional) Template file for PXE configuration per node architecture.
+#   Defaults to $facts['os_service_default'].
+#
 # DEPRECATED PARAMETERS
 #
 # [*ip_version*]
@@ -129,28 +141,31 @@
 #   Defaults to $facts['os_service_default'].
 #
 class ironic::drivers::pxe (
-  $kernel_append_params      = $facts['os_service_default'],
-  $pxe_bootfile_name         = $facts['os_service_default'],
-  $pxe_config_template       = $facts['os_service_default'],
-  $ipxe_bootfile_name        = $facts['os_service_default'],
-  $ipxe_config_template      = $facts['os_service_default'],
-  $tftp_server               = $facts['os_service_default'],
-  $tftp_root                 = '/tftpboot',
-  $images_path               = $facts['os_service_default'],
-  $tftp_master_path          = $facts['os_service_default'],
-  $instance_master_path      = $facts['os_service_default'],
-  $uefi_pxe_bootfile_name    = $::ironic::params::uefi_pxe_bootfile_name,
-  $uefi_pxe_config_template  = $facts['os_service_default'],
-  $uefi_ipxe_bootfile_name   = $::ironic::params::uefi_ipxe_bootfile_name,
-  $ipxe_timeout              = $facts['os_service_default'],
-  Boolean $enable_ppc64le    = false,
-  $boot_retry_timeout        = $facts['os_service_default'],
-  $boot_retry_check_interval = $facts['os_service_default'],
-  $dir_permission            = $facts['os_service_default'],
-  $file_permission           = $facts['os_service_default'],
-  $loader_file_paths         = $facts['os_service_default'],
+  $kernel_append_params        = $facts['os_service_default'],
+  $pxe_bootfile_name           = $facts['os_service_default'],
+  $pxe_config_template         = $facts['os_service_default'],
+  $ipxe_bootfile_name          = $facts['os_service_default'],
+  $ipxe_config_template        = $facts['os_service_default'],
+  $tftp_server                 = $facts['os_service_default'],
+  $tftp_root                   = '/tftpboot',
+  $images_path                 = $facts['os_service_default'],
+  $tftp_master_path            = $facts['os_service_default'],
+  $instance_master_path        = $facts['os_service_default'],
+  $uefi_pxe_bootfile_name      = $::ironic::params::uefi_pxe_bootfile_name,
+  $uefi_pxe_config_template    = $facts['os_service_default'],
+  $uefi_ipxe_bootfile_name     = $::ironic::params::uefi_ipxe_bootfile_name,
+  $ipxe_timeout                = $facts['os_service_default'],
+  Boolean $enable_ppc64le      = false,
+  $boot_retry_timeout          = $facts['os_service_default'],
+  $boot_retry_check_interval   = $facts['os_service_default'],
+  $dir_permission              = $facts['os_service_default'],
+  $file_permission             = $facts['os_service_default'],
+  $loader_file_paths           = $facts['os_service_default'],
+  $pxe_bootfile_name_by_arch   = $facts['os_service_default'],
+  $ipxe_bootfile_name_by_arch  = $facts['os_service_default'],
+  $pxe_config_template_by_arch = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
-  $ip_version                = undef,
+  $ip_version                  = undef,
 ) inherits ironic::params {
 
   include ironic::deps
@@ -196,6 +211,19 @@ class ironic::drivers::pxe (
     'pxe/ip_version': value                => $ip_version_real;
   }
 
+  $pxe_bootfile_name_by_arch_real = $pxe_bootfile_name_by_arch ? {
+    Hash    => join(join_keys_to_values($pxe_bootfile_name_by_arch, ':'), ','),
+    default => join(any2array($pxe_bootfile_name_by_arch), ',')
+  }
+  $ipxe_bootfile_name_by_arch_real = $ipxe_bootfile_name_by_arch ? {
+    Hash    => join(join_keys_to_values($ipxe_bootfile_name_by_arch, ':'), ','),
+    default => join(any2array($ipxe_bootfile_name_by_arch), ',')
+  }
+  $pxe_config_template_by_arch_real = $pxe_config_template_by_arch ? {
+    Hash    => join(join_keys_to_values($pxe_config_template_by_arch, ':'), ','),
+    default => join(any2array($pxe_config_template_by_arch), ',')
+  }
+
   if $enable_ppc64le {
     # FXIME(tonyb): As these are really hash values it would be better to model
     # them that way.  We can do that later, probably when we add another
@@ -210,6 +238,15 @@ class ironic::drivers::pxe (
       'pxe/pxe_config_template_by_arch': value => 'ppc64le:$pybasedir/drivers/modules/pxe_config.template';
       'pxe/pxe_bootfile_name_by_arch': value   => 'ppc64le:config';
     }
+  } else {
+    ironic_config {
+      'pxe/pxe_config_template_by_arch': value => $pxe_config_template_by_arch_real;
+      'pxe/pxe_bootfile_name_by_arch':   value => $pxe_bootfile_name_by_arch_real;
+    }
+  }
+
+  ironic_config {
+    'pxe/ipxe_bootfile_name_by_arch': value => $ipxe_bootfile_name_by_arch_real;
   }
 
 }

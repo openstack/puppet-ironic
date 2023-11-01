@@ -45,6 +45,9 @@ describe 'ironic::drivers::pxe' do
       is_expected.to contain_ironic_config('pxe/file_permission').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/loader_file_paths').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/ipxe_enabled').with_ensure('absent')
+      is_expected.to contain_ironic_config('pxe/pxe_bootfile_name_by_arch').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('pxe/ipxe_bootfile_name_by_arch').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('pxe/pxe_config_template_by_arch').with_value('<SERVICE DEFAULT>')
     end
 
     context 'when overriding only enable_ppc64le' do
@@ -63,25 +66,36 @@ describe 'ironic::drivers::pxe' do
     context 'when overriding parameters' do
       before do
         params.merge!(
-          :kernel_append_params      => 'foo',
-          :pxe_config_template       => 'bar',
-          :tftp_server               => '192.168.0.1',
-          :tftp_root                 => '/mnt/ftp',
-          :images_path               => '/mnt/images',
-          :tftp_master_path          => '/mnt/master_images',
-          :instance_master_path      => '/mnt/ironic/master_images',
-          :uefi_ipxe_bootfile_name    => 'ipxe.efi',
-          :uefi_pxe_bootfile_name    => 'shim-x64.efi',
-          :uefi_pxe_config_template  => 'foo-uefi',
-          :ipxe_timeout              => '60',
-          :pxe_bootfile_name         => 'bootx64',
-          :boot_retry_timeout        => 600,
-          :boot_retry_check_interval => 120,
-          :dir_permission            => '0o755',
-          :file_permission           => '0o644',
-          :loader_file_paths         => ['ipxe.efi:/usr/share/ipxe/ipxe-snponly-x86_64.efi',
-                                         'undionly.kpxe:/usr/share/ipxe/undionly.kpxe'],
-          :ip_version                => 6,
+          :kernel_append_params        => 'foo',
+          :pxe_config_template         => 'bar',
+          :tftp_server                 => '192.168.0.1',
+          :tftp_root                   => '/mnt/ftp',
+          :images_path                 => '/mnt/images',
+          :tftp_master_path            => '/mnt/master_images',
+          :instance_master_path        => '/mnt/ironic/master_images',
+          :uefi_ipxe_bootfile_name     => 'ipxe.efi',
+          :uefi_pxe_bootfile_name      => 'shim-x64.efi',
+          :uefi_pxe_config_template    => 'foo-uefi',
+          :ipxe_timeout                => '60',
+          :pxe_bootfile_name           => 'bootx64',
+          :boot_retry_timeout          => 600,
+          :boot_retry_check_interval   => 120,
+          :dir_permission              => '0o755',
+          :file_permission             => '0o644',
+          :loader_file_paths           => [
+            'ipxe.efi:/usr/share/ipxe/ipxe-snponly-x86_64.efi',
+            'undionly.kpxe:/usr/share/ipxe/undionly.kpxe'
+          ],
+          :ip_version                  => 6,
+          :pxe_bootfile_name_by_arch   => [
+            'aarch64:grubaa64.efi'
+          ],
+          :ipxe_bootfile_name_by_arch  => [
+            'aarch64:ipxe_aa64.efi'
+          ],
+          :pxe_config_template_by_arch => [
+            'aarch64:/opt/share/grubaa64_pxe_config.template'
+          ]
         )
       end
 
@@ -105,22 +119,39 @@ describe 'ironic::drivers::pxe' do
         is_expected.to contain_ironic_config('pxe/loader_file_paths')
           .with_value('ipxe.efi:/usr/share/ipxe/ipxe-snponly-x86_64.efi,undionly.kpxe:/usr/share/ipxe/undionly.kpxe')
         is_expected.to contain_ironic_config('pxe/ip_version').with_value(params[:ip_version])
+        is_expected.to contain_ironic_config('pxe/pxe_bootfile_name_by_arch').with_value('aarch64:grubaa64.efi')
+        is_expected.to contain_ironic_config('pxe/ipxe_bootfile_name_by_arch').with_value('aarch64:ipxe_aa64.efi')
+        is_expected.to contain_ironic_config('pxe/pxe_config_template_by_arch')
+          .with_value('aarch64:/opt/share/grubaa64_pxe_config.template')
       end
     end
 
     context 'when overriding parameters (hash values)' do
       before do
         params.merge!(
-          :loader_file_paths => {
+          :loader_file_paths           => {
             'ipxe.efi'      => '/usr/share/ipxe/ipxe-snponly-x86_64.efi',
             'undionly.kpxe' => '/usr/share/ipxe/undionly.kpxe'
           },
+          :pxe_bootfile_name_by_arch   => {
+            'aarch64' => 'grubaa64.efi'
+          },
+          :ipxe_bootfile_name_by_arch  => {
+            'aarch64' => 'ipxe_aa64.efi'
+          },
+          :pxe_config_template_by_arch => {
+            'aarch64' => '/opt/share/grubaa64_pxe_config.template'
+          }
         )
       end
 
       it 'should replace default parameter with new value' do
         is_expected.to contain_ironic_config('pxe/loader_file_paths')
           .with_value('ipxe.efi:/usr/share/ipxe/ipxe-snponly-x86_64.efi,undionly.kpxe:/usr/share/ipxe/undionly.kpxe')
+        is_expected.to contain_ironic_config('pxe/pxe_bootfile_name_by_arch').with_value('aarch64:grubaa64.efi')
+        is_expected.to contain_ironic_config('pxe/ipxe_bootfile_name_by_arch').with_value('aarch64:ipxe_aa64.efi')
+        is_expected.to contain_ironic_config('pxe/pxe_config_template_by_arch')
+          .with_value('aarch64:/opt/share/grubaa64_pxe_config.template')
       end
     end
 
