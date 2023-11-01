@@ -92,10 +92,6 @@
 #   Should be an valid integer
 #   Defaults to $facts['os_service_default'].
 #
-# [*enable_ppc64le*]
-#   (optional) Boolean value to dtermine if ppc64le support should be enabled
-#   Defaults to false (no ppc64le support)
-#
 # [*boot_retry_timeout*]
 #   (optional) Timeout (in seconds) after which PXE boot should be retried.
 #   Defaults to $facts['os_service_default'].
@@ -140,6 +136,10 @@
 #   release.
 #   Defaults to $facts['os_service_default'].
 #
+# [*enable_ppc64le*]
+#   (optional) Boolean value to dtermine if ppc64le support should be enabled
+#   Defaults to false (no ppc64le support)
+#
 class ironic::drivers::pxe (
   $kernel_append_params        = $facts['os_service_default'],
   $pxe_bootfile_name           = $facts['os_service_default'],
@@ -155,7 +155,6 @@ class ironic::drivers::pxe (
   $uefi_pxe_config_template    = $facts['os_service_default'],
   $uefi_ipxe_bootfile_name     = $::ironic::params::uefi_ipxe_bootfile_name,
   $ipxe_timeout                = $facts['os_service_default'],
-  Boolean $enable_ppc64le      = false,
   $boot_retry_timeout          = $facts['os_service_default'],
   $boot_retry_check_interval   = $facts['os_service_default'],
   $dir_permission              = $facts['os_service_default'],
@@ -166,6 +165,7 @@ class ironic::drivers::pxe (
   $pxe_config_template_by_arch = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
   $ip_version                  = undef,
+  Boolean $enable_ppc64le      = false,
 ) inherits ironic::params {
 
   include ironic::deps
@@ -225,6 +225,10 @@ class ironic::drivers::pxe (
   }
 
   if $enable_ppc64le {
+    warning("The enable_ppc64le parameter is deprecated. \
+Use the pxe_config_template_by_arch parameter and the pxe_bootfile_name_by_arch parameter \
+to configure the required options")
+
     # FXIME(tonyb): As these are really hash values it would be better to model
     # them that way.  We can do that later, probably when we add another
     # architecture
