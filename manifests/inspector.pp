@@ -126,7 +126,7 @@
 #
 # [*ramdisk_collectors*]
 #   Comma-separated list of IPA inspection collectors
-#   Defaults to 'default'
+#   Defaults to undef
 #
 # [*additional_processing_hooks*]
 #   Comma-separated list of processing hooks to append to the default list.
@@ -220,7 +220,7 @@ class ironic::inspector (
   $dnsmasq_dhcp_hostsdir                      = undef,
   $dnsmasq_log_facility                       = undef,
   Boolean $sync_db                            = true,
-  String[1] $ramdisk_collectors               = 'default',
+  Optional[String[1]] $ramdisk_collectors     = undef,
   String[1] $ramdisk_filename                 = 'agent.ramdisk',
   String[1] $kernel_filename                  = 'agent.kernel',
   $additional_processing_hooks                = undef,
