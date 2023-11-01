@@ -166,6 +166,11 @@ class ironic::drivers::pxe (
   }
   $ip_version_real = pick($ip_version, $facts['os_service_default'])
 
+  $loader_file_paths_real = $loader_file_paths ? {
+    Hash    => join(join_keys_to_values($loader_file_paths, ':'), ','),
+    default => join(any2array($loader_file_paths), ',')
+  }
+
   # Configure ironic.conf
   ironic_config {
     'pxe/kernel_append_params': value      => $kernel_append_params;
@@ -186,7 +191,7 @@ class ironic::drivers::pxe (
     'pxe/boot_retry_check_interval': value => $boot_retry_check_interval;
     'pxe/dir_permission': value            => $dir_permission;
     'pxe/file_permission': value           => $file_permission;
-    'pxe/loader_file_paths': value         => join(any2array($loader_file_paths), ',');
+    'pxe/loader_file_paths': value         => $loader_file_paths_real;
     'pxe/ipxe_enabled': ensure             => absent;
     'pxe/ip_version': value                => $ip_version_real;
   }

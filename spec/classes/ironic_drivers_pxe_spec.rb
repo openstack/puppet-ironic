@@ -108,6 +108,22 @@ describe 'ironic::drivers::pxe' do
       end
     end
 
+    context 'when overriding parameters (hash values)' do
+      before do
+        params.merge!(
+          :loader_file_paths => {
+            'ipxe.efi'      => '/usr/share/ipxe/ipxe-snponly-x86_64.efi',
+            'undionly.kpxe' => '/usr/share/ipxe/undionly.kpxe'
+          },
+        )
+      end
+
+      it 'should replace default parameter with new value' do
+        is_expected.to contain_ironic_config('pxe/loader_file_paths')
+          .with_value('ipxe.efi:/usr/share/ipxe/ipxe-snponly-x86_64.efi,undionly.kpxe:/usr/share/ipxe/undionly.kpxe')
+      end
+    end
+
   end
 
   on_supported_os({
