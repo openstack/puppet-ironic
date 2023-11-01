@@ -4,7 +4,7 @@ describe 'ironic::db::postgresql' do
 
   shared_examples_for 'ironic::db::postgresql' do
     let :req_params do
-      { :password => 'pw' }
+      { :password => 'ironicpass' }
     end
 
     let :pre_condition do
@@ -18,9 +18,12 @@ describe 'ironic::db::postgresql' do
 
       it { is_expected.to contain_class('ironic::deps') }
 
-      it { is_expected.to contain_postgresql__server__db('ironic').with(
-        :user     => 'ironic',
-        :password => 'md554bdb85e136b50c40104fd9f73e1294d'
+      it { is_expected.to contain_openstacklib__db__postgresql('ironic').with(
+        :user       => 'ironic',
+        :password   => 'ironicpass',
+        :dbname     => 'ironic',
+        :encoding   => nil,
+        :privileges => 'ALL',
       )}
     end
 
