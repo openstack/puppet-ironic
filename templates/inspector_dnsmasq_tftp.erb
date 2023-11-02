@@ -35,9 +35,9 @@ dhcp-option-force=option:mtu,<%= s['mtu'] %>
 <%- @_routes << route['destination'] + ',' + route['nexthop'] -%>
 <% end -%>
 <% if s['tag'] -%>
-dhcp-option=tag:<%= s['tag'] -%>,option:classless-static-route,<%= @_routes.join(',') -%>
+dhcp-option=tag:<%= s['tag'] -%>,option:classless-static-route,<%= @_routes.join(',') %>
 <% else -%>
-dhcp-option=option:classless-static-route,<%= @_routes.join(',') -%>
+dhcp-option=option:classless-static-route,<%= @_routes.join(',') %>
 <% end -%>
 <% end -%>
 <% end -%>
