@@ -132,8 +132,8 @@ describe 'ironic::inspector' do
     it 'should contain file /etc/ironic-inspector/dnsmasq.conf' do
       is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with(
         'ensure'  => 'present',
-        'require' => 'Anchor[ironic-inspector::config::begin]',
         'content' => /pxelinux/,
+        'tag'     => 'ironic-inspector-dnsmasq-file',
       )
       is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
         /dhcp-range=192.168.0.100,192.168.0.120,10m/
@@ -178,8 +178,8 @@ describe 'ironic::inspector' do
         'group'   => 'ironic-inspector',
         'seltype' => 'tftpdir_t',
         'ensure'  => 'present',
-        'require' => 'Anchor[ironic-inspector::config::begin]',
         'content' => /default/,
+        'tag'     => 'ironic-inspector-dnsmasq-file',
       )
       is_expected.to contain_file('/tftpboot/pxelinux.cfg/default').with_content(
         /^append initrd=agent.ramdisk ipa-inspection-callback-url=http:\/\/192.168.0.1:5050\/v1\/continue /
@@ -227,8 +227,8 @@ describe 'ironic::inspector' do
       it 'should contain file /etc/ironic-inspector/dnsmasq.conf' do
         is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with(
           'ensure'  => 'present',
-          'require' => 'Anchor[ironic-inspector::config::begin]',
           'content' => /ipxe/,
+          'tag'     => 'ironic-inspector-dnsmasq-file',
         )
         is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
             /dhcp-boot=tag:ipxe,http:\/\/192.168.0.1:3816\/inspector.ipxe/
@@ -268,7 +268,6 @@ describe 'ironic::inspector' do
           'group'   => 'ironic-inspector',
           'seltype' => 'httpd_sys_content_t',
           'ensure'  => 'present',
-          'require' => 'Anchor[ironic-inspector::config::begin]',
           'content' => /ipxe/,
         )
         is_expected.to contain_file('/var/www/httpboot/inspector.ipxe').with_content(
@@ -333,7 +332,6 @@ describe 'ironic::inspector' do
         is_expected.to contain_file('/tftpboot/ppc64le').with(
           'owner'   => 'ironic-inspector',
           'group'   => 'ironic-inspector',
-          'require' => 'Anchor[ironic-inspector::config::begin]',
           'ensure'  => 'directory',
           'seltype' => 'tftpdir_t',
         )
@@ -344,7 +342,6 @@ describe 'ironic::inspector' do
           'group'   => 'ironic-inspector',
           'seltype' => 'tftpdir_t',
           'ensure'  => 'present',
-          'require' => 'Anchor[ironic-inspector::config::begin]',
           'content' => /default/,
         )
         is_expected.to contain_file('/tftpboot/ppc64le/default').with_content(
@@ -375,8 +372,8 @@ describe 'ironic::inspector' do
           'group'   => 'ironic-inspector',
           'seltype' => 'tftpdir_t',
           'ensure'  => 'present',
-          'require' => 'Anchor[ironic-inspector::config::begin]',
           'content' => /default/,
+          'tag'     => 'ironic-inspector-dnsmasq-file',
         )
         is_expected.to contain_file('/tftpboot/ppc64le/default').with_content(
           /^append initrd=agent.ramdisk ipa-inspection-callback-url=http:\/\/192.168.0.1:5050\/v1\/continue /
