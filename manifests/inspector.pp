@@ -260,7 +260,7 @@ class ironic::inspector (
     file { '/etc/ironic-inspector/dnsmasq.conf':
       ensure  => 'present',
       content => template('ironic/inspector_dnsmasq_tftp.erb'),
-      require => Anchor['ironic-inspector::config::begin'],
+      tag     => 'ironic-inspector-dnsmasq-file',
     }
     file { "${tftp_root_real}/pxelinux.cfg/default":
       ensure  => 'present',
@@ -268,7 +268,7 @@ class ironic::inspector (
       owner   => $::ironic::params::inspector_user,
       group   => $::ironic::params::inspector_group,
       content => template('ironic/inspector_pxelinux_cfg.erb'),
-      require => Anchor['ironic-inspector::config::begin'],
+      tag     => 'ironic-inspector-dnsmasq-file',
     }
   }
 
@@ -276,7 +276,7 @@ class ironic::inspector (
     file { '/etc/ironic-inspector/dnsmasq.conf':
       ensure  => 'present',
       content => template('ironic/inspector_dnsmasq_http.erb'),
-      require => Anchor['ironic-inspector::config::begin'],
+      tag     => 'ironic-inspector-dnsmasq-file',
     }
     file { "${http_root_real}/inspector.ipxe":
       ensure  => 'present',
@@ -284,7 +284,7 @@ class ironic::inspector (
       owner   => $::ironic::params::inspector_user,
       group   => $::ironic::params::inspector_group,
       content => template('ironic/inspector_ipxe.erb'),
-      require => Anchor['ironic-inspector::config::begin'],
+      tag     => 'ironic-inspector-dnsmasq-file',
     }
   }
 
@@ -295,7 +295,7 @@ class ironic::inspector (
       seltype => 'tftpdir_t',
       owner   => $::ironic::params::inspector_user,
       group   => $::ironic::params::inspector_group,
-      require => Anchor['ironic-inspector::config::begin'],
+      tag     => 'ironic-inspector-dnsmasq-file',
     }
     file { "${tftp_root_real}/ppc64le/default":
       ensure  => 'present',
@@ -303,9 +303,13 @@ class ironic::inspector (
       owner   => $::ironic::params::inspector_user,
       group   => $::ironic::params::inspector_group,
       content => template('ironic/inspector_pxelinux_cfg.erb'),
-      require => Anchor['ironic-inspector::config::begin'],
+      tag     => 'ironic-inspector-dnsmasq-file',
     }
   }
+
+  Anchor['ironic-inspector::config::begin']
+  -> File<| tag == 'ironic-inspector-dnsmasq-file' |>
+  -> Anchor['ironic-inspector::config::end']
 
   # Configure inspector.conf
 

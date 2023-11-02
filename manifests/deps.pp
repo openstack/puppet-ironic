@@ -43,8 +43,11 @@ class ironic::deps {
   -> anchor { 'ironic-inspector::dbsync::end': }
   ~> anchor { 'ironic-inspector::service::begin': }
   ~> Service<| tag == 'ironic-inspector-service' |>
-  ~> Service<| tag == 'ironic-inspector-dnsmasq-service' |>
   ~> anchor { 'ironic-inspector::service::end': }
+
+  Anchor['ironic-inspector::service::begin']
+  ~> Service<| tag == 'ironic-inspector-dnsmasq-service' |>
+  ~> Anchor['ironic-inspector::service::end']
 
   Anchor['ironic::db::end']
   -> Anchor['ironic-inspector::dbsync::begin']
