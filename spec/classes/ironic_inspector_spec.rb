@@ -144,40 +144,40 @@ describe 'ironic::inspector' do
         'content' => /pxelinux/,
       )
       is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-        /dhcp-range=192.168.0.100,192.168.0.120,10m/
+        /^dhcp-range=192.168.0.100,192.168.0.120,10m$/
       )
       is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-        /dhcp-option-force=option:mtu,1350/
+        /^dhcp-option-force=option:mtu,1350$/
       )
       is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-        /dhcp-range=set:subnet1,192.168.1.100,192.168.1.200,255.255.255.0,10m/
+        /^dhcp-range=set:subnet1,192.168.1.100,192.168.1.200,255.255.255.0,10m$/
       )
       is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-        /dhcp-option=tag:subnet1,option:router,192.168.1.254/
+        /^dhcp-option=tag:subnet1,option:router,192.168.1.254$/
       )
       is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-        /dhcp-option-force=tag:subnet1,option:mtu,1350/
+        /^dhcp-option-force=tag:subnet1,option:mtu,1350$/
       )
       is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-        /dhcp-range=set:subnet2,192.168.2.100,192.168.2.200,255.255.255.0,10m/
+        /^dhcp-range=set:subnet2,192.168.2.100,192.168.2.200,255.255.255.0,10m$/
       )
       is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-        /dhcp-option=tag:subnet2,option:router,192.168.2.254/
+        /^dhcp-option=tag:subnet2,option:router,192.168.2.254$/
       )
       is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-        /dhcp-option=tag:subnet2,option:classless-static-route,1.2.3.0\/24,192.168.2.1,4.5.6.0\/24,192.168.2.1/
+        /^dhcp-option=tag:subnet2,option:classless-static-route,1.2.3.0\/24,192.168.2.1,4.5.6.0\/24,192.168.2.1$/
       )
       is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-        /dhcp-range=set:subnet3,2001:4888:a03:313a:c0:fe0:0:c200,2001:4888:a03:313a:c0:fe0:0:c2ff,64,10m/
+        /^dhcp-range=set:subnet3,2001:4888:a03:313a:c0:fe0:0:c200,2001:4888:a03:313a:c0:fe0:0:c2ff,64,10m$/
       )
       is_expected.not_to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-        /dhcp-option=tag:subnet3,option:router,2001:4888:a03:313a:c0:fe0:0:c000/
+        /^dhcp-option=tag:subnet3,option:router,2001:4888:a03:313a:c0:fe0:0:c000$/
       )
       is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-        /dhcp-sequential-ip/
+        /^dhcp-sequential-ip$/
       )
       is_expected.not_to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-        /log-facility=.*/
+        /^log-facility=.*$/
       )
     end
     it 'should contain file /tftpboot/pxelinux.cfg/default' do
@@ -238,34 +238,34 @@ describe 'ironic::inspector' do
           'content' => /ipxe/,
         )
         is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-            /dhcp-boot=tag:ipxe,http:\/\/192.168.0.1:3816\/inspector.ipxe/
+          /^dhcp-boot=tag:ipxe,http:\/\/192.168.0.1:3816\/inspector.ipxe$/
         )
         is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-            /dhcp-range=192.168.0.100,192.168.0.120,10m/
+          /^dhcp-range=192.168.0.100,192.168.0.120,10m$/
         )
         is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-            /log-dhcp/
+          /^log-dhcp$/
         )
         is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-            /log-queries/
+          /^log-queries$/
         )
         is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-            /dhcp-userclass=set:ipxe6,iPXE/
+          /^dhcp-userclass=set:ipxe6,iPXE$/
         )
         is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-            /dhcp-option=tag:ipxe6,option6:bootfile-url,http:\/\/.*:3816\/inspector.ipxe/
+          /^dhcp-option=tag:ipxe6,option6:bootfile-url,http:\/\/.*:3816\/inspector.ipxe$/
         )
         is_expected.not_to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-            /dhcp-sequential-ip/
+          /^dhcp-sequential-ip$/
         )
         is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-            /log-facility=\/var\/log\/ironic-inspector\/dnsmasq.log/
+          /^log-facility=\/var\/log\/ironic-inspector\/dnsmasq.log$/
         )
         is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-            /dhcp-boot=tag:efi,tag:!ipxe,otherpxe.efi/
+          /^dhcp-boot=tag:efi,tag:!ipxe,otherpxe.efi$/
         )
         is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-            /dhcp-option=tag:efi6,tag:!ipxe6,option6:bootfile-url,tftp:\/\/.*\/otherpxe.efi/
+          /^dhcp-option=tag:efi6,tag:!ipxe6,option6:bootfile-url,tftp:\/\/.*\/otherpxe.efi$/
         )
 
       end
@@ -323,8 +323,8 @@ describe 'ironic::inspector' do
       end
 
       it 'should contain file /etc/ironic-inspector/dnsmasq.conf' do
-          is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-            /dhcp-match=set:ppc64le,option:client-arch,14/)
+        is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
+          /^dhcp-match=set:ppc64le,option:client-arch,14$/)
       end
       it 'should contain directory /tftpboot/ppc64le with selinux type tftpdir_t' do
         is_expected.to contain_file('/tftpboot/ppc64le').with(
@@ -363,8 +363,8 @@ describe 'ironic::inspector' do
       end
 
       it 'should contain file /etc/ironic-inspector/dnsmasq.conf' do
-          is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
-            /dhcp-match=set:ppc64le,option:client-arch,14/)
+        is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
+          /^dhcp-match=set:ppc64le,option:client-arch,14$/)
       end
       it 'should contain file /tftpboot/ppc64le/default' do
         is_expected.to contain_file('/tftpboot/ppc64le/default').with(
