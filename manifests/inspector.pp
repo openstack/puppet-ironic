@@ -76,11 +76,11 @@
 #
 # [*keep_ports*]
 #   (optional) Which ports to keep after introspection
-#   Defaults to 'all'
+#   Defaults to $facts['os_service_default']
 #
 # [*store_data*]
 #   (optional) Method for storing introspection data
-#   Defaults to 'none'
+#   Defaults to $facts['os_service_default']
 #
 # [*dnsmasq_ip_subnets*]
 #    (optional) List of hashes with keys: 'tag', 'ip_range', 'netmask',
@@ -212,8 +212,8 @@ class ironic::inspector (
   $ramdisk_logs_dir                           = '/var/log/ironic-inspector/ramdisk/',
   $always_store_ramdisk_logs                  = $facts['os_service_default'],
   $add_ports                                  = $facts['os_service_default'],
-  $keep_ports                                 = 'all',
-  $store_data                                 = 'none',
+  $keep_ports                                 = $facts['os_service_default'],
+  $store_data                                 = $facts['os_service_default'],
   Array[Hash] $dnsmasq_ip_subnets             = [],
   $dnsmasq_local_ip                           = '192.168.0.1',
   Boolean $dnsmasq_dhcp_sequential_ip         = true,
