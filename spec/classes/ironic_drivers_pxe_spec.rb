@@ -44,7 +44,6 @@ describe 'ironic::drivers::pxe' do
       is_expected.to contain_ironic_config('pxe/dir_permission').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/file_permission').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/loader_file_paths').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('pxe/ipxe_enabled').with_ensure('absent')
       is_expected.to contain_ironic_config('pxe/pxe_bootfile_name_by_arch').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/ipxe_bootfile_name_by_arch').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('pxe/pxe_config_template_by_arch').with_value('<SERVICE DEFAULT>')
@@ -86,7 +85,6 @@ describe 'ironic::drivers::pxe' do
             'ipxe.efi:/usr/share/ipxe/ipxe-snponly-x86_64.efi',
             'undionly.kpxe:/usr/share/ipxe/undionly.kpxe'
           ],
-          :ip_version                  => 6,
           :pxe_bootfile_name_by_arch   => [
             'aarch64:grubaa64.efi'
           ],
@@ -118,7 +116,6 @@ describe 'ironic::drivers::pxe' do
         is_expected.to contain_ironic_config('pxe/file_permission').with_value('0o644')
         is_expected.to contain_ironic_config('pxe/loader_file_paths')
           .with_value('ipxe.efi:/usr/share/ipxe/ipxe-snponly-x86_64.efi,undionly.kpxe:/usr/share/ipxe/undionly.kpxe')
-        is_expected.to contain_ironic_config('pxe/ip_version').with_value(params[:ip_version])
         is_expected.to contain_ironic_config('pxe/pxe_bootfile_name_by_arch').with_value('aarch64:grubaa64.efi')
         is_expected.to contain_ironic_config('pxe/ipxe_bootfile_name_by_arch').with_value('aarch64:ipxe_aa64.efi')
         is_expected.to contain_ironic_config('pxe/pxe_config_template_by_arch')

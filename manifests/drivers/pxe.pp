@@ -129,13 +129,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*ip_version*]
-#   DEPRECATED: (optional) The IP version that will be used for PXE booting.
-#   Ironic presently attempts both IPv4 and IPv6, this option is effectively
-#   ignored by ironic, and should anticipate being removed in a future
-#   release.
-#   Defaults to $facts['os_service_default'].
-#
 # [*enable_ppc64le*]
 #   (optional) Boolean value to dtermine if ppc64le support should be enabled
 #   Defaults to false (no ppc64le support)
@@ -164,7 +157,6 @@ class ironic::drivers::pxe (
   $ipxe_bootfile_name_by_arch  = $facts['os_service_default'],
   $pxe_config_template_by_arch = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
-  $ip_version                  = undef,
   Boolean $enable_ppc64le      = false,
 ) inherits ironic::params {
 
@@ -175,11 +167,6 @@ class ironic::drivers::pxe (
   $ipxe_timeout_real            = pick($::ironic::pxe::common::ipxe_timeout, $ipxe_timeout)
   $uefi_ipxe_bootfile_name_real = pick($::ironic::pxe::common::uefi_ipxe_bootfile_name, $uefi_ipxe_bootfile_name)
   $uefi_pxe_bootfile_name_real = pick($::ironic::pxe::common::uefi_pxe_bootfile_name, $uefi_pxe_bootfile_name)
-
-  if $ip_version != undef {
-    warning('The ironic::drivers::pxe:ip_version parameter is deprecated and will be removed in the future.')
-  }
-  $ip_version_real = pick($ip_version, $facts['os_service_default'])
 
   $loader_file_paths_real = $loader_file_paths ? {
     Hash    => join(join_keys_to_values($loader_file_paths, ':'), ','),
@@ -207,8 +194,6 @@ class ironic::drivers::pxe (
     'pxe/dir_permission': value            => $dir_permission;
     'pxe/file_permission': value           => $file_permission;
     'pxe/loader_file_paths': value         => $loader_file_paths_real;
-    'pxe/ipxe_enabled': ensure             => absent;
-    'pxe/ip_version': value                => $ip_version_real;
   }
 
   $pxe_bootfile_name_by_arch_real = $pxe_bootfile_name_by_arch ? {

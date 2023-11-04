@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The ``ironic::drivers::pxe::ip_version`` parameter has been removed.
