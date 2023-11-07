@@ -342,6 +342,12 @@ class ironic::inspector (
     'port_physnet/cidr_map':                      value => $port_physnet_cidr_map_real;
   }
 
+  if $dnsmasq_interface != 'br-ctlplane' {
+    warning("The [pxe] dnsmasq_interface option may not be configured by this class \
+in a future release. Make sure the ironic::inspector::pxe_filter::iptables class is \
+included in the manifest")
+  }
+
   # Install package
   package { 'ironic-inspector':
     ensure => $package_ensure,

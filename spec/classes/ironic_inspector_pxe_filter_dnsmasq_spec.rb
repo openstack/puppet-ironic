@@ -28,8 +28,8 @@ describe 'ironic::inspector::pxe_filter::dnsmasq' do
       }"
   end
 
-  shared_examples_for 'ironic inspector pxe_filter dnsmasq' do
-    it 'configure pxe_filter default params' do
+  shared_examples_for 'ironic::inspector::pxe_filter::dnsmasq' do
+    it 'configure dnsmasq pxe filter default params' do
       is_expected.to contain_ironic_inspector_config('dnsmasq_pxe_filter/dhcp_hostsdir').with_value('/etc/ironic-inspector/dhcp-hostsdir')
       is_expected.to contain_ironic_inspector_config('dnsmasq_pxe_filter/dnsmasq_start_command').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('dnsmasq_pxe_filter/dnsmasq_stop_command').with_value('<SERVICE DEFAULT>')
@@ -51,7 +51,7 @@ describe 'ironic::inspector::pxe_filter::dnsmasq' do
         params
       end
 
-      it 'configure pxe_filter dnsmasq specific params' do
+      it 'configure dnsmasq pxe filter specific params' do
         is_expected.to contain_ironic_inspector_config('dnsmasq_pxe_filter/dhcp_hostsdir').with_value('/etc/ironic-inspector/dhcp-hostsdir')
         is_expected.to contain_ironic_inspector_config('dnsmasq_pxe_filter/dnsmasq_start_command').with_value(p[:dnsmasq_start_command])
         is_expected.to contain_ironic_inspector_config('dnsmasq_pxe_filter/dnsmasq_stop_command').with_value(p[:dnsmasq_stop_command])
@@ -71,7 +71,7 @@ describe 'ironic::inspector::pxe_filter::dnsmasq' do
         facts.merge!(OSDefaults.get_facts())
       end
 
-      it_behaves_like 'ironic inspector pxe_filter dnsmasq'
+      it_behaves_like 'ironic::inspector::pxe_filter::dnsmasq'
     end
   end
 

@@ -1,0 +1,10 @@
+---
+features:
+  - |
+    The new ``ironic::inspector::pxe_filter::iptables`` class has been added.
+
+deprecations:
+  - |
+    Configuration of the ``[pxe] dnsmasq_interface`` option by
+    the ``ironic::inspector`` class is deprecated. The option will be
+    managed by only the ``ironic::inspector::pxe_filter::iptables`` class.
