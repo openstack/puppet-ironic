@@ -23,6 +23,6 @@ Puppet::Type.type(:ironic_config).provide(
     properties = [uuid, '--column', 'name']
     openstack = Puppet::Provider::Ironic::OpenstackRequest.new
     res = openstack.openstack_request('project', 'show', properties)
-    return "AUTH_#{res[:name]}"
+    return res[:name]
   end
 end
