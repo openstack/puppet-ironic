@@ -114,7 +114,6 @@ describe 'ironic::inspector' do
       is_expected.to contain_ironic_inspector_config('DEFAULT/listen_address').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('DEFAULT/auth_strategy').with_value(p[:auth_strategy])
       is_expected.to contain_ironic_inspector_config('DEFAULT/timeout').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_inspector_config('DEFAULT/transport_url').with_value('fake://')
       is_expected.to contain_ironic_inspector_config('DEFAULT/api_max_limit').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('capabilities/boot_mode').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('iptables/dnsmasq_interface').with_value(p[:dnsmasq_interface])
@@ -127,6 +126,33 @@ describe 'ironic::inspector' do
       is_expected.to contain_ironic_inspector_config('processing/node_not_found_hook').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('discovery/enroll_node_driver').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('port_physnet/cidr_map').with_value('')
+
+      is_expected.to contain_oslo__messaging__default('ironic_inspector_config').with(
+        :executor_thread_pool_size => '<SERVICE DEFAULT>',
+        :transport_url             => 'fake://',
+        :rpc_response_timeout      => '<SERVICE DEFAULT>',
+        :control_exchange          => '<SERVICE DEFAULT>'
+      )
+
+      is_expected.to contain_oslo__messaging__rabbit('ironic_inspector_config').with(
+        :rabbit_use_ssl                  => '<SERVICE DEFAULT>',
+        :heartbeat_timeout_threshold     => '<SERVICE DEFAULT>',
+        :heartbeat_rate                  => '<SERVICE DEFAULT>',
+        :heartbeat_in_pthread            => '<SERVICE DEFAULT>',
+        :kombu_reconnect_delay           => '<SERVICE DEFAULT>',
+        :kombu_failover_strategy         => '<SERVICE DEFAULT>',
+        :amqp_durable_queues             => '<SERVICE DEFAULT>',
+        :kombu_compression               => '<SERVICE DEFAULT>',
+        :kombu_ssl_ca_certs              => '<SERVICE DEFAULT>',
+        :kombu_ssl_certfile              => '<SERVICE DEFAULT>',
+        :kombu_ssl_keyfile               => '<SERVICE DEFAULT>',
+        :kombu_ssl_version               => '<SERVICE DEFAULT>',
+        :rabbit_ha_queues                => '<SERVICE DEFAULT>',
+        :rabbit_quorum_queue             => '<SERVICE DEFAULT>',
+        :rabbit_quorum_delivery_limit    => '<SERVICE DEFAULT>',
+        :rabbit_quorum_max_memory_length => '<SERVICE DEFAULT>',
+        :rabbit_quorum_max_memory_bytes  => '<SERVICE DEFAULT>',
+      )
     end
 
     it 'should contain file /etc/ironic-inspector/dnsmasq.conf' do
@@ -189,26 +215,46 @@ describe 'ironic::inspector' do
     context 'when overriding parameters' do
       before :each do
         params.merge!(
-          :dhcp_debug                  => true,
-          :listen_address              => '127.0.0.1',
-          :api_max_limit               => 100,
-          :pxe_transfer_protocol       => 'http',
-          :additional_processing_hooks => 'hook1,hook2',
-          :ramdisk_kernel_args         => 'foo=bar',
-          :http_port                   => 3816,
-          :tftp_root                   => '/var/lib/tftpboot',
-          :http_root                   => '/var/www/httpboot',
-          :detect_boot_mode            => true,
-          :node_not_found_hook         => 'enroll',
-          :discovery_default_driver    => 'pxe_ipmitool',
-          :dnsmasq_ip_subnets          => [{'ip_range' => '192.168.0.100,192.168.0.120'}],
-          :dnsmasq_dhcp_sequential_ip  => false,
-          :dnsmasq_log_facility        => '/var/log/ironic-inspector/dnsmasq.log',
-          :add_ports                   => 'all',
-          :always_store_ramdisk_logs   => true,
-          :port_physnet_cidr_map       => {'192.168.20.0/24' => 'physnet_a',
-                                           '2001:db8::/64' => 'physnet_b'},
-          :uefi_ipxe_bootfile_name     => 'otherpxe.efi',
+          :dhcp_debug                         => true,
+          :listen_address                     => '127.0.0.1',
+          :api_max_limit                      => 100,
+          :pxe_transfer_protocol              => 'http',
+          :additional_processing_hooks        => 'hook1,hook2',
+          :ramdisk_kernel_args                => 'foo=bar',
+          :http_port                          => 3816,
+          :tftp_root                          => '/var/lib/tftpboot',
+          :http_root                          => '/var/www/httpboot',
+          :detect_boot_mode                   => true,
+          :node_not_found_hook                => 'enroll',
+          :discovery_default_driver           => 'pxe_ipmitool',
+          :dnsmasq_ip_subnets                 => [{'ip_range' => '192.168.0.100,192.168.0.120'}],
+          :dnsmasq_dhcp_sequential_ip         => false,
+          :dnsmasq_log_facility               => '/var/log/ironic-inspector/dnsmasq.log',
+          :add_ports                          => 'all',
+          :always_store_ramdisk_logs          => true,
+          :port_physnet_cidr_map              => {'192.168.20.0/24' => 'physnet_a',
+                                                  '2001:db8::/64' => 'physnet_b'},
+          :uefi_ipxe_bootfile_name            => 'otherpxe.efi',
+          :executor_thread_pool_size          => '128',
+          :default_transport_url              => 'rabbit://rabbit_user:password@localhost:5673',
+          :rpc_response_timeout               => '30',
+          :control_exchange                   => 'inspector',
+          :rabbit_use_ssl                     => true,
+          :rabbit_heartbeat_timeout_threshold => '60',
+          :rabbit_heartbeat_rate              => '10',
+          :rabbit_heartbeat_in_pthread        => true,
+          :kombu_reconnect_delay              => '5.0',
+          :amqp_durable_queues                => true,
+          :kombu_compression                  => 'gzip',
+          :kombu_ssl_ca_certs                 => '/etc/ca.cert',
+          :kombu_ssl_certfile                 => '/etc/certfile',
+          :kombu_ssl_keyfile                  => '/etc/key',
+          :kombu_ssl_version                  => 'TLSv1',
+          :rabbit_ha_queues                   => true,
+          :rabbit_quorum_queue                => true,
+          :rabbit_quorum_delivery_limit       => 3,
+          :rabbit_quorum_max_memory_length    => 5,
+          :rabbit_quorum_max_memory_bytes     => 1073741824,
         )
       end
       it 'should replace default parameter with new value' do
@@ -221,6 +267,30 @@ describe 'ironic::inspector' do
         is_expected.to contain_ironic_inspector_config('discovery/enroll_node_driver').with_value('pxe_ipmitool')
         is_expected.to contain_ironic_inspector_config('processing/always_store_ramdisk_logs').with_value(true)
         is_expected.to contain_ironic_inspector_config('port_physnet/cidr_map').with_value('192.168.20.0/24:physnet_a,2001:db8::/64:physnet_b')
+        is_expected.to contain_oslo__messaging__default('ironic_inspector_config').with(
+          :executor_thread_pool_size => '128',
+          :transport_url             => 'rabbit://rabbit_user:password@localhost:5673',
+          :rpc_response_timeout      => '30',
+          :control_exchange          => 'inspector',
+        )
+        is_expected.to contain_oslo__messaging__rabbit('ironic_inspector_config').with(
+          :rabbit_use_ssl                  => true,
+          :heartbeat_timeout_threshold     => '60',
+          :heartbeat_rate                  => '10',
+          :heartbeat_in_pthread            => true,
+          :kombu_reconnect_delay           => '5.0',
+          :amqp_durable_queues             => true,
+          :kombu_compression               => 'gzip',
+          :kombu_ssl_ca_certs              => '/etc/ca.cert',
+          :kombu_ssl_certfile              => '/etc/certfile',
+          :kombu_ssl_keyfile               => '/etc/key',
+          :kombu_ssl_version               => 'TLSv1',
+          :rabbit_ha_queues                => true,
+          :rabbit_quorum_queue             => true,
+          :rabbit_quorum_delivery_limit    => 3,
+          :rabbit_quorum_max_memory_length => 5,
+          :rabbit_quorum_max_memory_bytes  => 1073741824,
+        )
       end
 
       it 'should contain file /etc/ironic-inspector/dnsmasq.conf' do
