@@ -31,7 +31,7 @@ describe 'ironic::client' do
       is_expected.to contain_package('python-ironicclient').with(
         :ensure => 'present',
         :name   => platform_params[:client_package],
-        :tag    => ['openstack', 'ironic-support-package']
+        :tag    => ['openstack', 'openstackclient']
       )
     end
 
