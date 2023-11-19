@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The ``ironic::inspector`` class now supports configuring the oslo.messaging
+    library options.
