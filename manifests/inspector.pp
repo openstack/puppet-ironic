@@ -178,12 +178,6 @@
 #   (optional) Boolean value to determine if ppc64le support should be enabled
 #   Defaults to false (no ppc64le support)
 #
-# [*default_transport_url*]
-#    (optional) A URL representing the messaging driver to use and its full
-#    configuration. Transport URLs take the form:F
-#      transport://user:pass@host1:port[,hostN:portN]/virtual_host
-#    Defaults to 'fake://'
-#
 # [*port_physnet_cidr_map*]
 #   (optional) Hash where key's are CIDR and values are physical network.
 #   Mapping of IP subnet CIDR to physical network. When the
@@ -197,6 +191,120 @@
 #   should be consistent with the uefi_ipxe_bootfile_name parameter in pxe
 #   driver.
 #   Defaults to $::ironic::parmas::uefi_ipxe_bootfile_name
+#
+# [*executor_thread_pool_size*]
+#   (optional) Size of executor thread pool when executor is threading or eventlet.
+#   Defaults to $facts['os_service_default'].
+#
+# [*rpc_response_timeout*]
+#   (optional) Seconds to wait for a response from a call. (integer value)
+#   Defaults to $facts['os_service_default'].
+#
+# [*rpc_transport*]
+#   (optional) Defines a remote procedure call transport between conductor and
+#   API processes, such as using a messaging broker or JSON RPC.
+#   Defaults to $facts['os_service_default']
+#
+# [*control_exchange*]
+#   (optional) What RPC queue/exchange to use (string value)
+#   Defaults to $facts['os_service_default']
+#
+# [*default_transport_url*]
+#    (optional) A URL representing the messaging driver to use and its full
+#    configuration. Transport URLs take the form:
+#      transport://user:pass@host1:port[,hostN:portN]/virtual_host
+#    Defaults to 'fake://'
+#
+# [*rabbit_use_ssl*]
+#   (optional) Connect over SSL for RabbitMQ. (boolean value)
+#   Defaults to $facts['os_service_default']
+#
+# [*rabbit_ha_queues*]
+#   (optional) Use HA queues in RabbitMQ. (boolean value)
+#   Defaults to $facts['os_service_default']
+#
+# [*rabbit_heartbeat_timeout_threshold*]
+#   (optional) Number of seconds after which the RabbitMQ broker is considered
+#   down if the heartbeat keepalive fails.  Any value >0 enables heartbeats.
+#   Heartbeating helps to ensure the TCP connection to RabbitMQ isn't silently
+#   closed, resulting in missed or lost messages from the queue.
+#   Requires kombu >= 3.0.7 and amqp >= 1.4.0. (integer value)
+#   Defaults to $facts['os_service_default']
+#
+# [*rabbit_heartbeat_rate*]
+#   (optional) How often during the rabbit_heartbeat_timeout_threshold period
+#   to check the heartbeat on RabbitMQ connection.
+#   i.e. rabbit_heartbeat_rate=2 when rabbit_heartbeat_timeout_threshold=60,
+#   the heartbeat will be checked every 30 seconds. (integer value)
+#   Defaults to $facts['os_service_default']
+#
+# [*rabbit_heartbeat_in_pthread*]
+#   (Optional) EXPERIMENTAL: Run the health check heartbeat thread
+#   through a native python thread. By default if this
+#   option isn't provided the  health check heartbeat will
+#   inherit the execution model from the parent process. By
+#   example if the parent process have monkey patched the
+#   stdlib by using eventlet/greenlet then the heartbeat
+#   will be run through a green thread.
+#   Defaults to $facts['os_service_default']
+#
+# [*rabbit_quorum_queue*]
+#   (Optional) Use quorum queues in RabbitMQ.
+#   Defaults to $facts['os_service_default']
+#
+# [*rabbit_quorum_delivery_limit*]
+#   (Optional) Each time a message is rdelivered to a consumer, a counter is
+#   incremented. Once the redelivery count exceeds the delivery limit
+#   the message gets dropped or dead-lettered.
+#   Defaults to $facts['os_service_default']
+#
+# [*rabbit_quorum_max_memory_length*]
+#   (Optional) Limit the number of messages in the quorum queue.
+#   Defaults to $facts['os_service_default']
+#
+# [*rabbit_quorum_max_memory_bytes*]
+#   (Optional) Limit the number of memory bytes used by the quorum queue.
+#   Defaults to $facts['os_service_default']
+#
+# [*kombu_ssl_ca_certs*]
+#   (optional) SSL certification authority file (valid only if SSL enabled).
+#   (string value)
+#   Defaults to $facts['os_service_default']
+#
+# [*kombu_ssl_certfile*]
+#   (optional) SSL cert file (valid only if SSL enabled). (string value)
+#   Defaults to $facts['os_service_default']
+#
+# [*kombu_ssl_keyfile*]
+#   (optional) SSL key file (valid only if SSL enabled). (string value)
+#   Defaults to $facts['os_service_default']
+#
+# [*kombu_ssl_version*]
+#   (optional) SSL version to use (valid only if SSL enabled).
+#   Valid values are TLSv1, SSLv23 and SSLv3. SSLv2 may be
+#   available on some distributions. (string value)
+#   Defaults to $facts['os_service_default']
+#
+# [*kombu_reconnect_delay*]
+#   (optional) How long to wait before reconnecting in response to an AMQP
+#   consumer cancel notification. (floating point value)
+#   Defaults to $facts['os_service_default']
+#
+# [*kombu_failover_strategy*]
+#   (Optional) Determines how the next RabbitMQ node is chosen in case the one
+#   we are currently connected to becomes unavailable. Takes effect only if
+#   more than one RabbitMQ node is provided in config. (string value)
+#   Defaults to $facts['os_service_default']
+#
+# [*kombu_compression*]
+#   (optional) Possible values are: gzip, bz2. If not set compression will not
+#   be used. This option may notbe available in future versions. EXPERIMENTAL.
+#   (string value)
+#   Defaults to $facts['os_service_default']
+#
+# [*amqp_durable_queues*]
+#   (optional) Define queues as "durable" to rabbitmq. (boolean value)
+#   Defaults to $facts['os_service_default']
 #
 class ironic::inspector (
   $package_ensure                             = 'present',
@@ -233,9 +341,30 @@ class ironic::inspector (
   $node_not_found_hook                        = $facts['os_service_default'],
   $discovery_default_driver                   = $facts['os_service_default'],
   Boolean $enable_ppc64le                     = false,
-  $default_transport_url                      = 'fake://',
   Hash $port_physnet_cidr_map                 = {},
   $uefi_ipxe_bootfile_name                    = $::ironic::params::uefi_ipxe_bootfile_name,
+  $control_exchange                           = $facts['os_service_default'],
+  $executor_thread_pool_size                  = $facts['os_service_default'],
+  $rpc_response_timeout                       = $facts['os_service_default'],
+  $rpc_transport                              = $facts['os_service_default'],
+  $default_transport_url                      = 'fake://',
+  $rabbit_use_ssl                             = $facts['os_service_default'],
+  $rabbit_heartbeat_timeout_threshold         = $facts['os_service_default'],
+  $rabbit_heartbeat_rate                      = $facts['os_service_default'],
+  $rabbit_heartbeat_in_pthread                = $facts['os_service_default'],
+  $rabbit_ha_queues                           = $facts['os_service_default'],
+  $rabbit_quorum_queue                        = $facts['os_service_default'],
+  $rabbit_quorum_delivery_limit               = $facts['os_service_default'],
+  $rabbit_quorum_max_memory_length            = $facts['os_service_default'],
+  $rabbit_quorum_max_memory_bytes             = $facts['os_service_default'],
+  $kombu_ssl_ca_certs                         = $facts['os_service_default'],
+  $kombu_ssl_certfile                         = $facts['os_service_default'],
+  $kombu_ssl_keyfile                          = $facts['os_service_default'],
+  $kombu_ssl_version                          = $facts['os_service_default'],
+  $kombu_reconnect_delay                      = $facts['os_service_default'],
+  $kombu_failover_strategy                    = $facts['os_service_default'],
+  $kombu_compression                          = $facts['os_service_default'],
+  $amqp_durable_queues                        = $facts['os_service_default'],
 ) inherits ironic::params {
 
   include ironic::deps
@@ -325,7 +454,6 @@ class ironic::inspector (
     'DEFAULT/listen_address':                     value => $listen_address;
     'DEFAULT/auth_strategy':                      value => $auth_strategy;
     'DEFAULT/timeout':                            value => $timeout;
-    'DEFAULT/transport_url':                      value => $default_transport_url;
     'DEFAULT/api_max_limit':                      value => $api_max_limit;
     'capabilities/boot_mode':                     value => $detect_boot_mode;
     'iptables/dnsmasq_interface':                 value => $dnsmasq_interface;
@@ -340,6 +468,33 @@ class ironic::inspector (
     'processing/node_not_found_hook':             value => $node_not_found_hook;
     'discovery/enroll_node_driver':               value => $discovery_default_driver;
     'port_physnet/cidr_map':                      value => $port_physnet_cidr_map_real;
+  }
+
+  oslo::messaging::default {'ironic_inspector_config':
+    executor_thread_pool_size => $executor_thread_pool_size,
+    transport_url             => $default_transport_url,
+    rpc_response_timeout      => $rpc_response_timeout,
+    control_exchange          => $control_exchange,
+  }
+
+  oslo::messaging::rabbit {'ironic_inspector_config':
+    rabbit_use_ssl                  => $rabbit_use_ssl,
+    heartbeat_timeout_threshold     => $rabbit_heartbeat_timeout_threshold,
+    heartbeat_rate                  => $rabbit_heartbeat_rate,
+    heartbeat_in_pthread            => $rabbit_heartbeat_in_pthread,
+    kombu_reconnect_delay           => $kombu_reconnect_delay,
+    kombu_failover_strategy         => $kombu_failover_strategy,
+    amqp_durable_queues             => $amqp_durable_queues,
+    kombu_compression               => $kombu_compression,
+    kombu_ssl_ca_certs              => $kombu_ssl_ca_certs,
+    kombu_ssl_certfile              => $kombu_ssl_certfile,
+    kombu_ssl_keyfile               => $kombu_ssl_keyfile,
+    kombu_ssl_version               => $kombu_ssl_version,
+    rabbit_ha_queues                => $rabbit_ha_queues,
+    rabbit_quorum_queue             => $rabbit_quorum_queue,
+    rabbit_quorum_delivery_limit    => $rabbit_quorum_delivery_limit,
+    rabbit_quorum_max_memory_length => $rabbit_quorum_max_memory_length,
+    rabbit_quorum_max_memory_bytes  => $rabbit_quorum_max_memory_bytes,
   }
 
   if $dnsmasq_interface != 'br-ctlplane' {
