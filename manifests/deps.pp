@@ -28,7 +28,8 @@ class ironic::deps {
 
   # all db settings should be applied and all packages should be installed
   # before dbsync starts
-  Oslo::Db<||> -> Anchor['ironic::dbsync::begin']
+  Oslo::Db<| tag == 'ironic' |> -> Anchor['ironic::dbsync::begin']
+  Oslo::Db<| tag == 'ironic-inspector' |> -> Anchor['ironic::dbsync::begin']
 
   # ironic-inspector is supported by this module.  This service uses a
   # specific conf file and uses it's own config provider. Split out install
@@ -39,7 +40,9 @@ class ironic::deps {
   -> anchor { 'ironic-inspector::config::begin': }
   -> Ironic_inspector_config<||>
   ~> anchor { 'ironic-inspector::config::end': }
-  -> anchor { 'ironic-inspector::dbsync::begin': }
+  -> anchor { 'ironic-inspector::db::begin': }
+  -> anchor { 'ironic-inspector::db::end': }
+  ~> anchor { 'ironic-inspector::dbsync::begin': }
   -> anchor { 'ironic-inspector::dbsync::end': }
   ~> anchor { 'ironic-inspector::service::begin': }
   ~> Service<| tag == 'ironic-inspector-service' |>
@@ -48,9 +51,6 @@ class ironic::deps {
   Anchor['ironic-inspector::service::begin']
   ~> Service<| tag == 'ironic-inspector-dnsmasq-service' |>
   ~> Anchor['ironic-inspector::service::end']
-
-  Anchor['ironic::db::end']
-  -> Anchor['ironic-inspector::dbsync::begin']
 
   # On any uwsgi config change, we must restart Ironic API.
   Anchor['ironic::config::begin']

@@ -32,7 +32,7 @@ class ironic::inspector::db::postgresql(
   $privileges = 'ALL',
 ) {
 
-  Class['ironic::inspector::db::postgresql'] -> Service<| title == 'ironic-inspector' |>
+  include ironic::deps
 
   ::openstacklib::db::postgresql { 'ironic-inspector':
     password   => $password,
@@ -42,6 +42,7 @@ class ironic::inspector::db::postgresql(
     privileges => $privileges,
   }
 
-  ::Openstacklib::Db::Postgresql['ironic-inspector'] ~> Exec<| title == 'ironic-inspector-dbsync' |>
-
+  Anchor['ironic-inspector::db::begin']
+  ~> Class['ironic::inspector::db::postgresql']
+  ~> Anchor['ironic-inspector::db::end']
 }
