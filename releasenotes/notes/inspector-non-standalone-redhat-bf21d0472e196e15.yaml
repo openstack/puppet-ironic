@@ -1,0 +1,10 @@
+---
+features:
+  - |
+    The ``ironic::inspector`` class now supports deploying separate services
+    for api and conductor. Now this feature is supported in RHEL and CentOS
+    only. The api service should be run by httpd and mod_wsgi, which can be
+    deployed using the new ``ironic::inspector::wsgi::apache`` class.
+
+  - |
+    The new ``ironic::inspector::coordination`` class has been added.

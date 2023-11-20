@@ -39,35 +39,41 @@ class ironic::params {
 
   case $facts['os']['family'] {
     'RedHat': {
-      $common_package_name       = 'openstack-ironic-common'
-      $api_package               = 'openstack-ironic-api'
-      $api_service               = 'openstack-ironic-api'
-      $conductor_package         = 'openstack-ironic-conductor'
-      $conductor_service         = 'openstack-ironic-conductor'
-      $dnsmasq_tftp_package      = 'openstack-ironic-dnsmasq-tftp-server'
-      $dnsmasq_tftp_service      = 'openstack-ironic-dnsmasq-tftp-server'
-      $inspector_package         = 'openstack-ironic-inspector'
-      $inspector_dnsmasq_package = 'openstack-ironic-inspector-dnsmasq'
-      $inspector_service         = 'openstack-ironic-inspector'
-      $inspector_dnsmasq_service = 'openstack-ironic-inspector-dnsmasq'
-      $staging_drivers_package   = 'openstack-ironic-staging-drivers'
-      $systemd_python_package    = 'systemd-python'
-      $ipxe_rom_dir              = '/usr/share/ipxe'
-      $ipxe_name_base            = 'ipxe-snponly'
-      $uefi_pxe_bootfile_name    = 'bootx64.efi'
-      $uefi_ipxe_bootfile_name   = 'snponly.efi'
-      $ironic_wsgi_script_path   = '/var/www/cgi-bin/ironic'
-      $ironic_wsgi_script_source = '/usr/bin/ironic-api-wsgi'
-      $xinetd_available          = false
-      $tftpd_package             = false
-      $ipxe_package              = 'ipxe-bootimgs'
-      $pxelinux_package          = false
-      $pxelinux_path             = false
-      $syslinux_package          = 'syslinux-tftpboot'
-      $syslinux_path             = '/tftpboot'
-      $syslinux_files            = ['pxelinux.0', 'chain.c32', 'ldlinux.c32']
-      $grub_efi_package          = 'grub2-efi-x64'
-      $shim_package              = 'shim'
+      $common_package_name          = 'openstack-ironic-common'
+      $api_package                  = 'openstack-ironic-api'
+      $api_service                  = 'openstack-ironic-api'
+      $conductor_package            = 'openstack-ironic-conductor'
+      $conductor_service            = 'openstack-ironic-conductor'
+      $dnsmasq_tftp_package         = 'openstack-ironic-dnsmasq-tftp-server'
+      $dnsmasq_tftp_service         = 'openstack-ironic-dnsmasq-tftp-server'
+      $inspector_package            = 'openstack-ironic-inspector'
+      $inspector_service            = 'openstack-ironic-inspector'
+      $inspector_dnsmasq_package    = 'openstack-ironic-inspector-dnsmasq'
+      $inspector_dnsmasq_service    = 'openstack-ironic-inspector-dnsmasq'
+      $inspector_api_package        = 'openstack-ironic-inspector-api'
+      $inspector_api_service        = undef
+      $inspector_conductor_package  = 'openstack-ironic-inspector-conductor'
+      $inspector_conductor_service  = 'openstack-ironic-inspector-conductor'
+      $staging_drivers_package      = 'openstack-ironic-staging-drivers'
+      $systemd_python_package       = 'systemd-python'
+      $ipxe_rom_dir                 = '/usr/share/ipxe'
+      $ipxe_name_base               = 'ipxe-snponly'
+      $uefi_pxe_bootfile_name       = 'bootx64.efi'
+      $uefi_ipxe_bootfile_name      = 'snponly.efi'
+      $ironic_wsgi_script_path      = '/var/www/cgi-bin/ironic'
+      $ironic_wsgi_script_source    = '/usr/bin/ironic-api-wsgi'
+      $inspector_wsgi_script_path   = '/var/www/cgi-bin/ironic-inspector'
+      $inspector_wsgi_script_source = '/usr/bin/ironic-inspector-api-wsgi'
+      $xinetd_available             = false
+      $tftpd_package                = undef
+      $ipxe_package                 = 'ipxe-bootimgs'
+      $pxelinux_package             = undef
+      $pxelinux_path                = undef
+      $syslinux_package             = 'syslinux-tftpboot'
+      $syslinux_path                = '/tftpboot'
+      $syslinux_files               = ['pxelinux.0', 'chain.c32', 'ldlinux.c32']
+      $grub_efi_package             = 'grub2-efi-x64'
+      $shim_package                 = 'shim'
       case $facts['os']['name'] {
         'RedHat': {
           $grub_efi_file = '/boot/efi/EFI/redhat/grubx64.efi'
@@ -80,38 +86,44 @@ class ironic::params {
       }
     }
     'Debian': {
-      $common_package_name       = 'ironic-common'
-      $api_service               = 'ironic-api'
-      $api_package               = 'ironic-api'
-      $conductor_service         = 'ironic-conductor'
-      $conductor_package         = 'ironic-conductor'
-      $dnsmasq_tftp_package      = false
-      $dnsmasq_tftp_service      = false
-      $inspector_package         = 'ironic-inspector'
-      $inspector_dnsmasq_package = false
-      $inspector_service         = 'ironic-inspector'
-      $inspector_dnsmasq_service = false
+      $common_package_name          = 'ironic-common'
+      $api_service                  = 'ironic-api'
+      $api_package                  = 'ironic-api'
+      $conductor_package            = 'ironic-conductor'
+      $conductor_service            = 'ironic-conductor'
+      $dnsmasq_tftp_package         = undef
+      $dnsmasq_tftp_service         = undef
+      $inspector_package            = 'ironic-inspector'
+      $inspector_service            = 'ironic-inspector'
+      $inspector_dnsmasq_package    = undef
+      $inspector_dnsmasq_service    = undef
+      $inspector_api_package        = undef
+      $inspector_api_service        = undef
+      $inspector_conductor_package  = undef
+      $inspector_conductor_service  = undef
       # guessing the name, ironic-staging-drivers is not packaged in debian yet
-      $staging_drivers_package   = 'ironic-staging-drivers'
-      $systemd_python_package    = 'python3-systemd'
-      $ipxe_rom_dir              = '/usr/lib/ipxe'
-      $ipxe_name_base            = 'snponly'
-      $uefi_pxe_bootfile_name    = 'bootx64.efi'
-      $uefi_ipxe_bootfile_name   = 'snponly.efi'
-      $ironic_wsgi_script_path   = '/usr/lib/cgi-bin/ironic'
-      $ironic_wsgi_script_source = '/usr/bin/ironic-api-wsgi'
-      $xinetd_available          = true
-      $tftpd_package             = 'tftpd-hpa'
-      $ipxe_package              = 'ipxe'
-      $pxelinux_package          = 'pxelinux'
-      $pxelinux_path             = '/usr/lib/PXELINUX'
-      $syslinux_package          = 'syslinux-common'
-      $syslinux_path             = '/usr/lib/syslinux/modules/bios'
-      $syslinux_files            = ['chain.c32', 'libcom32.c32', 'libutil.c32']
-      $grub_efi_package          = 'grub-efi-amd64-signed'
-      $grub_efi_file             = '/usr/lib/grub/x86_64-efi-signed/grubnetx64.efi.signed'
-      $shim_package              = 'shim-signed'
-      $shim_file                 = '/usr/lib/shim/shimx64.efi.signed'
+      $staging_drivers_package      = 'ironic-staging-drivers'
+      $systemd_python_package       = 'python3-systemd'
+      $ipxe_rom_dir                 = '/usr/lib/ipxe'
+      $ipxe_name_base               = 'snponly'
+      $uefi_pxe_bootfile_name       = 'bootx64.efi'
+      $uefi_ipxe_bootfile_name      = 'snponly.efi'
+      $ironic_wsgi_script_path      = '/usr/lib/cgi-bin/ironic'
+      $ironic_wsgi_script_source    = '/usr/bin/ironic-api-wsgi'
+      $inspector_wsgi_script_path   = '/usr/lib/cgi-bin/ironic-inspector'
+      $inspector_wsgi_script_source = '/usr/bin/ironic-inspector-api-wsgi'
+      $xinetd_available             = true
+      $tftpd_package                = 'tftpd-hpa'
+      $ipxe_package                 = 'ipxe'
+      $pxelinux_package             = 'pxelinux'
+      $pxelinux_path                = '/usr/lib/PXELINUX'
+      $syslinux_package             = 'syslinux-common'
+      $syslinux_path                = '/usr/lib/syslinux/modules/bios'
+      $syslinux_files               = ['chain.c32', 'libcom32.c32', 'libutil.c32']
+      $grub_efi_package             = 'grub-efi-amd64-signed'
+      $grub_efi_file                = '/usr/lib/grub/x86_64-efi-signed/grubnetx64.efi.signed'
+      $shim_package                 = 'shim-signed'
+      $shim_file                    = '/usr/lib/shim/shimx64.efi.signed'
     }
     default: {
       fail("Unsupported osfamily: ${facts['os']['family']}")

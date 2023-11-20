@@ -306,6 +306,10 @@
 #   (optional) Define queues as "durable" to rabbitmq. (boolean value)
 #   Defaults to $facts['os_service_default']
 #
+# [*standalone*]
+#   (optional) Whether to run ironic-inspector as a standalone service.
+#   Defaults to false
+#
 class ironic::inspector (
   $package_ensure                             = 'present',
   Boolean $manage_service                     = true,
@@ -365,6 +369,7 @@ class ironic::inspector (
   $kombu_failover_strategy                    = $facts['os_service_default'],
   $kombu_compression                          = $facts['os_service_default'],
   $amqp_durable_queues                        = $facts['os_service_default'],
+  Boolean $standalone                         = true,
 ) inherits ironic::params {
 
   include ironic::deps
@@ -374,6 +379,10 @@ class ironic::inspector (
 
   if $auth_strategy == 'keystone' {
     include ironic::inspector::authtoken
+  }
+
+  if !standalone and $facts['os']['family'] != 'RedHat' {
+    fail('Non-standalone mode configuration is not supported in this operating system')
   }
 
   $tftp_root_real               = pick($::ironic::pxe::common::tftp_root, $tftp_root)
@@ -468,6 +477,7 @@ class ironic::inspector (
     'processing/node_not_found_hook':             value => $node_not_found_hook;
     'discovery/enroll_node_driver':               value => $discovery_default_driver;
     'port_physnet/cidr_map':                      value => $port_physnet_cidr_map_real;
+    'DEFAULT/standalone':                         value => $standalone;
   }
 
   oslo::messaging::default {'ironic_inspector_config':
@@ -510,6 +520,19 @@ included in the manifest")
     tag    => ['openstack', 'ironic-inspector-package'],
   }
 
+  if ! $standalone {
+    package { 'ironic-inspector-api':
+      ensure => $package_ensure,
+      name   => $::ironic::params::inspector_api_package,
+      tag    => ['openstack', 'ironic-inspector-package'],
+    }
+    package { 'ironic-inspector-conductor':
+      ensure => $package_ensure,
+      name   => $::ironic::params::inspector_conductor_package,
+      tag    => ['openstack', 'ironic-inspector-package'],
+    }
+  }
+
   if $::ironic::params::inspector_dnsmasq_package {
     package { 'ironic-inspector-dnsmasq':
       ensure => $package_ensure,
@@ -529,15 +552,38 @@ included in the manifest")
       $ensure = 'stopped'
     }
 
-    # Manage services
-    service { 'ironic-inspector':
-      ensure    => $ensure,
-      name      => $::ironic::params::inspector_service,
-      enable    => $enabled,
-      hasstatus => true,
-      tag       => 'ironic-inspector-service',
+    if $standalone {
+      service { 'ironic-inspector':
+        ensure    => $ensure,
+        name      => $::ironic::params::inspector_service,
+        enable    => $enabled,
+        hasstatus => true,
+        tag       => 'ironic-inspector-service',
+      }
+      Keystone_endpoint<||> -> Service['ironic-inspector']
+    } else {
+
+      # NOTE(tkajinam): Ensure ironic-inspector is stopped before starting
+      #                 -api and -conductor.
+      service { 'ironic-inspector':
+        ensure    => 'stopped',
+        name      => $::ironic::params::inspector_service,
+        enable    => false,
+        hasstatus => true,
+        tag       => 'ironic-inspector-service',
+      }
+      Service['ironic-inspector'] -> Service['ironic-inspector-conductor']
+      Service <| title == 'httpd' |> { tag +> 'ironic-inspector-service' }
+
+      service { 'ironic-inspector-conductor':
+        ensure    => $ensure,
+        name      => $::ironic::params::inspector_conductor_service,
+        enable    => $enabled,
+        hasstatus => true,
+        tag       => 'ironic-inspector-service',
+      }
+      Keystone_endpoint<||> -> Service['ironic-inspector-conductor']
     }
-    Keystone_endpoint<||> -> Service['ironic-inspector']
 
     if $::ironic::params::inspector_dnsmasq_service {
       service { 'ironic-inspector-dnsmasq':

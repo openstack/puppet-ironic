@@ -30,6 +30,10 @@ class ironic::deps {
   # before dbsync starts
   Oslo::Db<||> -> Anchor['ironic::dbsync::begin']
 
+  # all coordination settings should be applied and all packages should be
+  # installed before service startup
+  Oslo::Coordination<| tag == 'ironic-inspector' |> -> Anchor['ironic-inspector::service::begin']
+
   # ironic-inspector is supported by this module.  This service uses a
   # specific conf file and uses it's own config provider. Split out install
   # and configure of this service so that other services are not affected.
