@@ -67,6 +67,7 @@ class ironic::inspector::db (
     max_overflow            => $database_max_overflow,
     pool_timeout            => $database_pool_timeout,
     mysql_enable_ndb        => $mysql_enable_ndb,
+    tag                     => 'ironic-inspector',
   }
 
 }

@@ -54,6 +54,8 @@ class ironic::inspector::db::mysql (
   $collate       = 'utf8_general_ci',
 ) {
 
+  include ironic::deps
+
   ::openstacklib::db::mysql { 'ironic-inspector':
     user          => $user,
     password      => $password,
@@ -64,6 +66,7 @@ class ironic::inspector::db::mysql (
     allowed_hosts => $allowed_hosts,
   }
 
-  ::Openstacklib::Db::Mysql['ironic-inspector'] ~> Exec<| title == 'ironic-inspector-dbsync' |>
-
+  Anchor['ironic-inspector::db::begin']
+  ~> Class['ironic::inspector::db::mysql']
+  ~> Anchor['ironic-inspector::db::end']
 }
