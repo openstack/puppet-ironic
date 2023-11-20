@@ -22,259 +22,184 @@ require 'spec_helper'
 
 describe 'ironic' do
 
-  let :params do
-    { :package_ensure              => 'present',
-      :purge_config                => false,
-    }
-  end
-
   shared_examples_for 'ironic' do
 
-    context 'ironic setup' do
-      it_configures 'a ironic base installation'
-      it_configures 'with SSL disabled'
-      it_configures 'with SSL enabled without kombu'
-      it_configures 'with SSL enabled with kombu'
-      it_configures 'with amqp_durable_queues disabled'
-      it_configures 'with amqp_durable_queues enabled'
-      it_configures 'without rabbit HA'
+    context 'with defaults' do
+      it { is_expected.to contain_class('ironic::params') }
+
+      it { is_expected.to contain_class('ironic::glance') }
+      it { is_expected.to contain_class('ironic::neutron') }
+
+      it 'installs ironic-common package' do
+        is_expected.to contain_package('ironic-common').with(
+          :ensure => 'present',
+          :name   => platform_params[:common_package_name],
+          :tag    => ['openstack', 'ironic-package'],
+        )
+      end
+
+      it 'installs ironic-lib package' do
+        is_expected.to contain_package('ironic-lib').with(
+          :ensure => 'present',
+          :name   => platform_params[:lib_package_name],
+          :tag    => ['openstack', 'ironic-package'],
+        )
+      end
+
+      it 'passes purge to resource' do
+        is_expected.to contain_resources('ironic_config').with({
+          :purge => false
+        })
+      end
+
+      it 'configures ironic.conf' do
+        is_expected.to contain_ironic_config('DEFAULT/auth_strategy').with_value('keystone')
+        is_expected.to contain_ironic_config('DEFAULT/my_ip').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('DEFAULT/my_ipv6').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('DEFAULT/default_resource_class').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('DEFAULT/notification_level').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('DEFAULT/versioned_notifications_topics').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('DEFAULT/rpc_transport').with_value('<SERVICE DEFAULT>')
+
+        is_expected.to contain_oslo__messaging__default('ironic_config').with(
+          :executor_thread_pool_size => '<SERVICE DEFAULT>',
+          :transport_url             => '<SERVICE DEFAULT>',
+          :rpc_response_timeout      => '<SERVICE DEFAULT>',
+          :control_exchange          => '<SERVICE DEFAULT>'
+        )
+        is_expected.to contain_oslo__messaging__rabbit('ironic_config').with(
+          :rabbit_use_ssl                  => '<SERVICE DEFAULT>',
+          :heartbeat_timeout_threshold     => '<SERVICE DEFAULT>',
+          :heartbeat_rate                  => '<SERVICE DEFAULT>',
+          :heartbeat_in_pthread            => '<SERVICE DEFAULT>',
+          :kombu_reconnect_delay           => '<SERVICE DEFAULT>',
+          :kombu_failover_strategy         => '<SERVICE DEFAULT>',
+          :amqp_durable_queues             => '<SERVICE DEFAULT>',
+          :kombu_compression               => '<SERVICE DEFAULT>',
+          :kombu_ssl_ca_certs              => '<SERVICE DEFAULT>',
+          :kombu_ssl_certfile              => '<SERVICE DEFAULT>',
+          :kombu_ssl_keyfile               => '<SERVICE DEFAULT>',
+          :kombu_ssl_version               => '<SERVICE DEFAULT>',
+          :rabbit_ha_queues                => '<SERVICE DEFAULT>',
+          :rabbit_quorum_queue             => '<SERVICE DEFAULT>',
+          :rabbit_quorum_delivery_limit    => '<SERVICE DEFAULT>',
+          :rabbit_quorum_max_memory_length => '<SERVICE DEFAULT>',
+          :rabbit_quorum_max_memory_bytes  => '<SERVICE DEFAULT>',
+        )
+        is_expected.to contain_oslo__messaging__amqp('ironic_config').with(
+          :server_request_prefix => '<SERVICE DEFAULT>',
+          :broadcast_prefix      => '<SERVICE DEFAULT>',
+          :group_request_prefix  => '<SERVICE DEFAULT>',
+          :container_name        => '<SERVICE DEFAULT>',
+          :idle_timeout          => '<SERVICE DEFAULT>',
+          :trace                 => '<SERVICE DEFAULT>',
+          :ssl_ca_file           => '<SERVICE DEFAULT>',
+          :ssl_cert_file         => '<SERVICE DEFAULT>',
+          :ssl_key_file          => '<SERVICE DEFAULT>',
+          :sasl_mechanisms       => '<SERVICE DEFAULT>',
+          :sasl_config_dir       => '<SERVICE DEFAULT>',
+          :sasl_config_name      => '<SERVICE DEFAULT>',
+          :username              => '<SERVICE DEFAULT>',
+          :password              => '<SERVICE DEFAULT>',
+        )
+        is_expected.to contain_oslo__messaging__notifications('ironic_config').with(
+          :transport_url => '<SERVICE DEFAULT>',
+          :driver        => '<SERVICE DEFAULT>',
+          :topics        => '<SERVICE DEFAULT>'
+        )
+      end
     end
 
-    context 'ironic setup with rabbit HA' do
-      before { params.merge!( :rabbit_ha_queues => true ) }
-      it_configures 'with rabbit HA'
-    end
+    context 'with parameters' do
+      let :params do
+        {
+          :my_ip                              => '127.0.0.1',
+          :my_ipv6                            => '::1',
+          :default_resource_class             => 'myclass',
+          :notification_level                 => 'warning',
+          :versioned_notifications_topics     => 'ironic_versioned_notifications',
+          :rpc_transport                      => 'oslo',
+          :executor_thread_pool_size          => '128',
+          :default_transport_url              => 'rabbit://rabbit_user:password@localhost:5673',
+          :rpc_response_timeout               => '30',
+          :control_exchange                   => 'ironic',
+          :rabbit_use_ssl                     => true,
+          :rabbit_heartbeat_timeout_threshold => '60',
+          :rabbit_heartbeat_rate              => '10',
+          :rabbit_heartbeat_in_pthread        => true,
+          :kombu_reconnect_delay              => '5.0',
+          :amqp_durable_queues                => true,
+          :kombu_compression                  => 'gzip',
+          :kombu_ssl_ca_certs                 => '/etc/ca.cert',
+          :kombu_ssl_certfile                 => '/etc/certfile',
+          :kombu_ssl_keyfile                  => '/etc/key',
+          :kombu_ssl_version                  => 'TLSv1',
+          :rabbit_ha_queues                   => true,
+          :rabbit_quorum_queue                => true,
+          :rabbit_quorum_delivery_limit       => 3,
+          :rabbit_quorum_max_memory_length    => 5,
+          :rabbit_quorum_max_memory_bytes     => 1073741824,
+          :amqp_idle_timeout                  => '60',
+          :amqp_trace                         => true,
+          :amqp_ssl_ca_file                   => '/etc/ca.cert',
+          :amqp_ssl_cert_file                 => '/etc/certfile',
+          :amqp_ssl_key_file                  => '/etc/key',
+          :amqp_username                      => 'amqp_user',
+          :amqp_password                      => 'password',
+          :notification_transport_url         => 'rabbit://rabbit_user:password@localhost:5673',
+          :notification_driver                => 'messagingv2',
+          :notification_topics                => 'openstack',
+        }
+      end
 
-    context 'with amqp messaging' do
-      it_configures 'amqp support'
-    end
+      it 'configures ironic.conf' do
+        is_expected.to contain_ironic_config('DEFAULT/auth_strategy').with_value('keystone')
+        is_expected.to contain_ironic_config('DEFAULT/my_ip').with_value('127.0.0.1')
+        is_expected.to contain_ironic_config('DEFAULT/my_ipv6').with_value('::1')
+        is_expected.to contain_ironic_config('DEFAULT/default_resource_class').with_value('myclass')
+        is_expected.to contain_ironic_config('DEFAULT/notification_level').with_value('warning')
+        is_expected.to contain_ironic_config('DEFAULT/versioned_notifications_topics').with_value('ironic_versioned_notifications')
+        is_expected.to contain_ironic_config('DEFAULT/rpc_transport').with_value('oslo')
 
-    context 'with oslo messaging notifications' do
-      it_configures 'oslo messaging notifications'
-    end
-
-  end
-
-  shared_examples_for 'a ironic base installation' do
-
-    it { is_expected.to contain_class('ironic::params') }
-
-    it { is_expected.to contain_class('ironic::glance') }
-    it { is_expected.to contain_class('ironic::neutron') }
-
-    it 'installs ironic-common package' do
-      is_expected.to contain_package('ironic-common').with(
-        :ensure => 'present',
-        :name   => platform_params[:common_package_name],
-        :tag    => ['openstack', 'ironic-package'],
-      )
-    end
-
-    it 'installs ironic-lib package' do
-      is_expected.to contain_package('ironic-lib').with(
-        :ensure => 'present',
-        :name   => platform_params[:lib_package_name],
-        :tag    => ['openstack', 'ironic-package'],
-      )
-    end
-
-    it 'passes purge to resource' do
-      is_expected.to contain_resources('ironic_config').with({
-        :purge => false
-      })
-    end
-
-    it 'configures ironic.conf' do
-      is_expected.to contain_ironic_config('DEFAULT/auth_strategy').with_value('keystone')
-      is_expected.to contain_ironic_config('DEFAULT/my_ip').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('DEFAULT/my_ipv6').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('DEFAULT/default_resource_class').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('DEFAULT/notification_level').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('DEFAULT/versioned_notifications_topics').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('DEFAULT/rpc_transport').with_value('<SERVICE DEFAULT>')
-
-      is_expected.to contain_oslo__messaging__default('ironic_config').with(
-        :executor_thread_pool_size => '<SERVICE DEFAULT>',
-        :transport_url             => '<SERVICE DEFAULT>',
-        :rpc_response_timeout      => '<SERVICE DEFAULT>',
-        :control_exchange          => '<SERVICE DEFAULT>'
-      )
-
-      is_expected.to contain_oslo__messaging__rabbit('ironic_config').with(
-        :heartbeat_in_pthread            => '<SERVICE DEFAULT>',
-        :rabbit_quorum_queue             => '<SERVICE DEFAULT>',
-        :kombu_failover_strategy         => '<SERVICE DEFAULT>',
-        :rabbit_quorum_delivery_limit    => '<SERVICE DEFAULT>',
-        :rabbit_quorum_max_memory_length => '<SERVICE DEFAULT>',
-        :rabbit_quorum_max_memory_bytes  => '<SERVICE DEFAULT>',
-      )
-    end
-  end
-
-  shared_examples_for 'without rabbit HA' do
-    it 'in ironic.conf' do
-      is_expected.to contain_oslo__messaging__rabbit('ironic_config').with(
-        :rabbit_ha_queues => '<SERVICE DEFAULT>'
-      )
-    end
-  end
-
-  shared_examples_for 'with rabbit HA' do
-    it 'in ironic.conf' do
-      is_expected.to contain_oslo__messaging__rabbit('ironic_config').with(
-        :rabbit_ha_queues => true
-      )
-    end
-  end
-
-  shared_examples_for 'with SSL enabled with kombu' do
-    before do
-      params.merge!(
-        :rabbit_use_ssl     => true,
-        :kombu_ssl_ca_certs => '/path/to/ssl/ca/certs',
-        :kombu_ssl_certfile => '/path/to/ssl/cert/file',
-        :kombu_ssl_keyfile  => '/path/to/ssl/keyfile',
-        :kombu_ssl_version  => 'TLSv1'
-      )
-    end
-
-    it { is_expected.to contain_oslo__messaging__rabbit('ironic_config').with(
-      :rabbit_use_ssl     => params[:rabbit_use_ssl],
-      :kombu_ssl_ca_certs => params[:kombu_ssl_ca_certs],
-      :kombu_ssl_certfile => params[:kombu_ssl_certfile],
-      :kombu_ssl_keyfile  => params[:kombu_ssl_keyfile],
-      :kombu_ssl_version  => params[:kombu_ssl_version],
-    )}
-  end
-
-  shared_examples_for 'with SSL enabled without kombu' do
-    before do
-      params.merge!(
-        :rabbit_use_ssl => true,
-      )
-    end
-
-    it { is_expected.to contain_oslo__messaging__rabbit('ironic_config').with(
-      :rabbit_use_ssl => params[:rabbit_use_ssl],
-    )}
-  end
-
-  shared_examples_for 'with SSL disabled' do
-    before do
-      params.merge!(
-        :rabbit_use_ssl => false,
-      )
-    end
-
-    it { is_expected.to contain_oslo__messaging__rabbit('ironic_config').with(
-      :rabbit_use_ssl => params[:rabbit_use_ssl],
-    )}
-  end
-
-
-  shared_examples_for 'with amqp_durable_queues disabled' do
-    it { is_expected.to contain_oslo__messaging__rabbit('ironic_config').with(
-      :amqp_durable_queues => '<SERVICE DEFAULT>'
-    ) }
-  end
-
-  shared_examples_for 'with amqp_durable_queues enabled' do
-    before do
-      params.merge!( :amqp_durable_queues => true )
-    end
-
-    it { is_expected.to contain_oslo__messaging__rabbit('ironic_config').with(
-      :amqp_durable_queues => true
-    ) }
-  end
-
-  shared_examples_for 'oslo messaging notifications' do
-    context 'with default parameters' do
-      it { is_expected.to contain_oslo__messaging__notifications('ironic_config').with(
-        :transport_url => '<SERVICE DEFAULT>',
-        :driver        => '<SERVICE DEFAULT>',
-        :topics        => '<SERVICE DEFAULT>',
-      ) }
-    end
-
-    context 'with overridden notification parameters' do
-      before { params.merge!(
-        :notification_driver        => 'messagingv2',
-        :notification_transport_url => 'rabbit://rabbit_user:password@localhost:5673',
-        :notification_topics        => 'notifications'
-      ) }
-
-      it { is_expected.to contain_oslo__messaging__notifications('ironic_config').with(
-        :transport_url => 'rabbit://rabbit_user:password@localhost:5673',
-        :driver        => 'messagingv2',
-        :topics        => 'notifications',
-      ) }
-    end
-  end
-
-  shared_examples_for 'amqp support' do
-    context 'with default parameters' do
-      it { is_expected.to contain_oslo__messaging__amqp('ironic_config').with(
-        :server_request_prefix => '<SERVICE DEFAULT>',
-        :broadcast_prefix      => '<SERVICE DEFAULT>',
-        :group_request_prefix  => '<SERVICE DEFAULT>',
-        :container_name        => '<SERVICE DEFAULT>',
-        :idle_timeout          => '<SERVICE DEFAULT>',
-        :trace                 => '<SERVICE DEFAULT>',
-        :ssl_ca_file           => '<SERVICE DEFAULT>',
-        :ssl_cert_file         => '<SERVICE DEFAULT>',
-        :ssl_key_file          => '<SERVICE DEFAULT>',
-        :ssl_key_password      => '<SERVICE DEFAULT>',
-        :sasl_mechanisms       => '<SERVICE DEFAULT>',
-        :sasl_config_dir       => '<SERVICE DEFAULT>',
-        :sasl_config_name      => '<SERVICE DEFAULT>',
-        :username              => '<SERVICE DEFAULT>',
-        :password              => '<SERVICE DEFAULT>',
-      ) }
-    end 
-
-    context 'with overridden amqp parameters' do
-      before { params.merge!(
-        :amqp_idle_timeout  => '60',
-        :amqp_trace         => true,
-        :amqp_ssl_ca_file   => '/path/to/ca.cert',
-        :amqp_ssl_cert_file => '/path/to/certfile',
-        :amqp_ssl_key_file  => '/path/to/key',
-        :amqp_username      => 'amqp_user',
-        :amqp_password      => 'password',
-      ) }
-
-      it { is_expected.to contain_oslo__messaging__amqp('ironic_config').with(
-        :server_request_prefix => '<SERVICE DEFAULT>',
-        :broadcast_prefix      => '<SERVICE DEFAULT>',
-        :group_request_prefix  => '<SERVICE DEFAULT>',
-        :container_name        => '<SERVICE DEFAULT>',
-        :idle_timeout          => '60',
-        :trace                 => true,
-        :ssl_ca_file           => '/path/to/ca.cert',
-        :ssl_cert_file         => '/path/to/certfile',
-        :ssl_key_file          => '/path/to/key',
-        :ssl_key_password      => '<SERVICE DEFAULT>',
-        :sasl_mechanisms       => '<SERVICE DEFAULT>',
-        :sasl_config_dir       => '<SERVICE DEFAULT>',
-        :sasl_config_name      => '<SERVICE DEFAULT>',
-        :username              => 'amqp_user',
-        :password              => 'password',
-      ) }
-    end
-  end
-
-  shared_examples_for 'oslo messaging remote procedure call' do
-    context 'with overridden rpc parameters' do
-      before { params.merge!(
-        :rpc_transport        => 'pigeons',
-        :rpc_response_timeout => '3628800',
-      ) }
-
-      it { is_expected.to contain_ironic_config('DEFAULT/rpc_transport').with_value('pigeons') }
-      it { is_expected.to contain_oslo__messaging__default('ironic_config').with(
-        :rpc_response_timeout => '3628800',
-      ) }
+        is_expected.to contain_oslo__messaging__default('ironic_config').with(
+          :executor_thread_pool_size => '128',
+          :transport_url             => 'rabbit://rabbit_user:password@localhost:5673',
+          :rpc_response_timeout      => '30',
+          :control_exchange          => 'ironic',
+        )
+        is_expected.to contain_oslo__messaging__rabbit('ironic_config').with(
+          :rabbit_use_ssl                  => true,
+          :heartbeat_timeout_threshold     => '60',
+          :heartbeat_rate                  => '10',
+          :heartbeat_in_pthread            => true,
+          :kombu_reconnect_delay           => '5.0',
+          :amqp_durable_queues             => true,
+          :kombu_compression               => 'gzip',
+          :kombu_ssl_ca_certs              => '/etc/ca.cert',
+          :kombu_ssl_certfile              => '/etc/certfile',
+          :kombu_ssl_keyfile               => '/etc/key',
+          :kombu_ssl_version               => 'TLSv1',
+          :rabbit_ha_queues                => true,
+          :rabbit_quorum_queue             => true,
+          :rabbit_quorum_delivery_limit    => 3,
+          :rabbit_quorum_max_memory_length => 5,
+          :rabbit_quorum_max_memory_bytes  => 1073741824,
+        )
+        is_expected.to contain_oslo__messaging__amqp('ironic_config').with(
+          :idle_timeout  => '60',
+          :trace         => true,
+          :ssl_ca_file   => '/etc/ca.cert',
+          :ssl_cert_file => '/etc/certfile',
+          :ssl_key_file  => '/etc/key',
+          :username      => 'amqp_user',
+          :password      => 'password',
+        )
+        is_expected.to contain_oslo__messaging__notifications('ironic_config').with(
+          :transport_url => 'rabbit://rabbit_user:password@localhost:5673',
+          :driver        => 'messagingv2',
+          :topics        => 'openstack',
+        )
+      end
     end
   end
 
