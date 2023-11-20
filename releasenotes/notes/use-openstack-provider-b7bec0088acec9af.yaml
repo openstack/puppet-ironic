@@ -1,0 +1,16 @@
+---
+features:
+  - |
+    The ``to_project_uuid`` transformer now load credentials from the clouds
+    yaml file. In case the file is not available then it tries to load
+    credential in openrc file or environment variables like the previous
+    version.
+
+deprecations:
+  - |
+    Usage of ``ironic_config`` with ``transform_to => project_uuid`` has been
+    undeprecated.
+
+  - |
+    The ``ironic::glance::swift_account_project_name`` parameter is no longer
+    deprecated.

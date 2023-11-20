@@ -68,6 +68,13 @@
 #   account.
 #   Defaults to $facts['os_service_default']
 #
+# [*swift_account_project_name*]
+#   (optional) The project of account that Glance uses to communicate with Swift.
+#   Will be converted to UUID, and option glance/swift_account will be set in
+#   the "AUTH_uuid" format.
+#   Can not be set together with swift_account.
+#   Defaults to undef, which leaves the configuration intact
+#
 # [*swift_container*]
 #   (optional) Swift container where Glance images are stored. Used for
 #   generating temporary URLs.
@@ -91,15 +98,6 @@
 #   The endpoint URL for requests for this client
 #   Defaults to $facts['os_service_default']
 #
-# DEPRECATED PARAMETERS
-#
-# [*swift_account_project_name*]
-#   (optional) The project of account that Glance uses to communicate with Swift.
-#   Will be converted to UUID, and option glance/swift_account will be set in
-#   the "AUTH_uuid" format.
-#   Can not be set together with swift_account.
-#   Defaults to undef, which leaves the configuration intact
-#
 class ironic::glance (
   $auth_type                  = 'password',
   $auth_url                   = $facts['os_service_default'],
@@ -114,20 +112,15 @@ class ironic::glance (
   $api_insecure               = $facts['os_service_default'],
   $swift_account              = $facts['os_service_default'],
   $swift_account_prefix       = $facts['os_service_default'],
+  $swift_account_project_name = undef,
   $swift_container            = $facts['os_service_default'],
   $swift_endpoint_url         = $facts['os_service_default'],
   $swift_temp_url_key         = $facts['os_service_default'],
   $swift_temp_url_duration    = $facts['os_service_default'],
   $endpoint_override          = $facts['os_service_default'],
-  # DEPRECATED PARAMETERS
-  $swift_account_project_name = undef,
 ) {
 
   include ironic::deps
-
-  if $swift_account_project_name != undef {
-    warning('The swift_account_project_name parameter is deprecated and will be removed in a future release.')
-  }
 
   if ($swift_account_project_name and !is_service_default($swift_account)) {
     fail('swift_account_project_name and swift_account can not be specified in the same time.')
@@ -163,11 +156,11 @@ class ironic::glance (
 
   if $swift_account_project_name {
     ironic_config {
-      'glance/swift_account':           value => $swift_account_project_name, transform_to => 'project_uuid';
+      'glance/swift_account': value => $swift_account_project_name, transform_to => 'project_uuid';
     }
   } else {
     ironic_config {
-      'glance/swift_account':           value => $swift_account;
+      'glance/swift_account': value => $swift_account;
     }
   }
 }
