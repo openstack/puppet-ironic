@@ -82,7 +82,11 @@ class ironic::deps {
   -> Package<| tag == 'ironic-support-package'|>
   -> Anchor['ironic-inspector::install::end']
 
-# Installation or config changes will always restart services.
+  # openstackclient package is needed by transform
+  Package<| tag == 'openstackclient'|>
+  -> Anchor['ironic::config::begin']
+
+  # Installation or config changes will always restart services.
   Anchor['ironic::install::end'] ~> Anchor['ironic::service::begin']
   Anchor['ironic::config::end']  ~> Anchor['ironic::service::begin']
   Anchor['ironic-inspector::install::end'] ~> Anchor['ironic-inspector::service::begin']

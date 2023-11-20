@@ -36,7 +36,7 @@ class ironic::client (
   package { 'python-ironicclient':
     ensure => $package_ensure,
     name   => $::ironic::params::client_package,
-    tag    => ['openstack', 'ironic-support-package'],
+    tag    => ['openstack', 'openstackclient'],
   }
 
   include openstacklib::openstackclient
