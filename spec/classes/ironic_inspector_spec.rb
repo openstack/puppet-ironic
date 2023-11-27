@@ -26,8 +26,7 @@ describe 'ironic::inspector' do
   end
 
   let :params do
-    { :package_ensure        => 'present',
-      :enabled               => true,
+    {
       :pxe_transfer_protocol => 'tftp',
       :auth_strategy         => 'keystone',
       :dnsmasq_interface     => 'br-ctlplane',
@@ -73,39 +72,39 @@ describe 'ironic::inspector' do
     it { is_expected.to contain_class('ironic::params') }
 
     it 'installs ironic inspector package' do
-      if platform_params.has_key?(:inspector_package)
-        is_expected.to contain_package('ironic-inspector').with(
-          :ensure => p[:package_ensure],
-          :name   => platform_params[:inspector_package],
-          :tag    => ['openstack', 'ironic-inspector-package'],
-        )
-        is_expected.to contain_package('ironic-inspector').that_requires('Anchor[ironic-inspector::install::begin]')
-        is_expected.to contain_package('ironic-inspector').that_notifies('Anchor[ironic-inspector::install::end]')
-      end
+      is_expected.to contain_package('ironic-inspector').with(
+        :ensure => 'present',
+        :name   => platform_params[:inspector_package],
+        :tag    => ['openstack', 'ironic-inspector-package'],
+      )
 
       if platform_params.has_key?(:inspector_dnsmasq_package)
         is_expected.to contain_package('ironic-inspector-dnsmasq').with(
-          :ensure => p[:package_ensure],
+          :ensure => 'present',
           :name   => platform_params[:inspector_dnsmasq_package],
           :tag    => ['openstack', 'ironic-inspector-package'],
         )
-        is_expected.to contain_package('ironic-inspector-dnsmasq').that_requires('Anchor[ironic-inspector::install::begin]')
-        is_expected.to contain_package('ironic-inspector-dnsmasq').that_notifies('Anchor[ironic-inspector::install::end]')
       end
     end
 
     it 'ensure ironic inspector service is running' do
       is_expected.to contain_service('ironic-inspector').with(
-        'hasstatus' => true,
-        'tag'       => 'ironic-inspector-service',
+        :ensure    => 'running',
+        :name      => platform_params[:inspector_service],
+        :enable    => true,
+        :hasstatus => true,
+        :tag       => 'ironic-inspector-service',
       )
     end
 
     it 'ensure ironic inspector dnsmasq service is running' do
-      if platform_params.has_key?(:inspector_dnsmasq_package)
+      if platform_params.has_key?(:inspector_dnsmasq_service)
         is_expected.to contain_service('ironic-inspector-dnsmasq').with(
-          'hasstatus' => true,
-          'tag'       => 'ironic-inspector-dnsmasq-service',
+          :ensure    => 'running',
+          :name      => platform_params[:inspector_dnsmasq_service],
+          :enable    => true,
+          :hasstatus => true,
+          :tag       => 'ironic-inspector-dnsmasq-service',
         )
       end
     end
@@ -126,6 +125,7 @@ describe 'ironic::inspector' do
       is_expected.to contain_ironic_inspector_config('processing/node_not_found_hook').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('discovery/enroll_node_driver').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('port_physnet/cidr_map').with_value('')
+      is_expected.to contain_ironic_inspector_config('DEFAULT/standalone').with_value(true)
 
       is_expected.to contain_oslo__messaging__default('ironic_inspector_config').with(
         :executor_thread_pool_size => '<SERVICE DEFAULT>',
@@ -384,10 +384,6 @@ describe 'ironic::inspector' do
     end
 
     context 'when enabling ppc64le support' do
-      let :pre_condition do
-         "class { 'ironic::inspector::authtoken': password       => 'password', }"
-      end
-
       before do
         params.merge!(
           :enable_ppc64le => true,
@@ -421,10 +417,6 @@ describe 'ironic::inspector' do
     end
 
     context 'when enabling ppc64le support with http default transport' do
-      let :pre_condition do
-         "class { 'ironic::inspector::authtoken': password       => 'password', }"
-      end
-
       before do
         params.merge!(
           :enable_ppc64le        => true,
@@ -452,6 +444,56 @@ describe 'ironic::inspector' do
     end
   end
 
+  shared_examples_for 'ironic inspector with non-standalone services' do
+    before do
+      params.merge!(
+        :standalone => false
+      )
+    end
+
+    it 'configures ironic-inspector.conf' do
+      is_expected.to contain_ironic_inspector_config('DEFAULT/standalone').with_value(false)
+    end
+
+    it 'ensure ironic inspector packages are installed' do
+      is_expected.to contain_package('ironic-inspector').with(
+        :ensure => 'present',
+        :name   => platform_params[:inspector_package],
+        :tag    => ['openstack', 'ironic-inspector-package'],
+      )
+      is_expected.to contain_package('ironic-inspector-api').with(
+        :ensure => 'present',
+        :name   => platform_params[:inspector_api_package],
+        :tag    => ['openstack', 'ironic-inspector-package'],
+      )
+      is_expected.to contain_package('ironic-inspector-conductor').with(
+        :ensure => 'present',
+        :name   => platform_params[:inspector_conductor_package],
+        :tag    => ['openstack', 'ironic-inspector-package'],
+      )
+    end
+
+    it 'ensure ironic inspector service is stopped' do
+      is_expected.to contain_service('ironic-inspector').with(
+        :ensure    => 'stopped',
+        :name      => platform_params[:inspector_service],
+        :enable    => false,
+        :hasstatus => true,
+        :tag       => 'ironic-inspector-service',
+      )
+    end
+
+    it 'ensure ironic inspector conductor service is running' do
+      is_expected.to contain_service('ironic-inspector-conductor').with(
+        :ensure    => 'running',
+        :name      => platform_params[:inspector_conductor_service],
+        :enable    => true,
+        :hasstatus => true,
+        :tag       => 'ironic-inspector-service',
+      )
+    end
+  end
+
   on_supported_os({
     :supported_os => OSDefaults.get_supported_os
   }).each do |os,facts|
@@ -463,16 +505,27 @@ describe 'ironic::inspector' do
       let :platform_params do
         case facts[:os]['family']
         when 'Debian'
-          { :inspector_package => 'ironic-inspector',
-            :inspector_service => 'ironic-inspector' }
+          {
+            :inspector_package => 'ironic-inspector',
+            :inspector_service => 'ironic-inspector'
+          }
         when 'RedHat'
-          { :inspector_package         => 'openstack-ironic-inspector',
-            :inspector_dnsmasq_package => 'openstack-ironic-inspector-dnsmasq',
-            :inspector_service         => 'ironic-inspector' }
+          {
+            :inspector_package           => 'openstack-ironic-inspector',
+            :inspector_dnsmasq_package   => 'openstack-ironic-inspector-dnsmasq',
+            :inspector_dnsmasq_service   => 'openstack-ironic-inspector-dnsmasq',
+            :inspector_service           => 'openstack-ironic-inspector',
+            :inspector_api_package       => 'openstack-ironic-inspector-api',
+            :inspector_conductor_package => 'openstack-ironic-inspector-conductor',
+            :inspector_conductor_service => 'openstack-ironic-inspector-conductor'
+          }
         end
       end
 
       it_behaves_like 'ironic inspector'
+      if facts[:os]['family'] == 'RedHat'
+        it_behaves_like 'ironic inspector with non-standalone services'
+      end
     end
   end
 
