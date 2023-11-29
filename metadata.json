@@ -75,5 +75,5 @@
     ],
     "source": "https://opendev.org/openstack/puppet-ironic.git",
     "summary": "Puppet module for OpenStack Ironic",
-    "version": "20.4.1"
+    "version": "20.4.2"
 }
