@@ -73,17 +73,9 @@ class ironic::params {
       $syslinux_path                = '/tftpboot'
       $syslinux_files               = ['pxelinux.0', 'chain.c32', 'ldlinux.c32']
       $grub_efi_package             = 'grub2-efi-x64'
+      $grub_efi_file                = "/boot/efi/EFI/${downcase($facts['os']['name'])}/grubx64.efi"
       $shim_package                 = 'shim'
-      case $facts['os']['name'] {
-        'RedHat': {
-          $grub_efi_file = '/boot/efi/EFI/redhat/grubx64.efi'
-          $shim_file     = '/boot/efi/EFI/redhat/shimx64.efi'
-        }
-        default: {
-          $grub_efi_file = '/boot/efi/EFI/centos/grubx64.efi'
-          $shim_file     = '/boot/efi/EFI/centos/shimx64.efi'
-        }
-      }
+      $shim_file                    = "/boot/efi/EFI/${downcase($facts['os']['name'])}/shimx64.efi"
     }
     'Debian': {
       $common_package_name          = 'ironic-common'
