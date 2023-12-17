@@ -17,28 +17,17 @@ require 'spec_helper'
 
 describe 'ironic::glance' do
 
-  let :default_params do
-    { :auth_type    => 'password',
-      :project_name => 'services',
-      :username     => 'ironic',
-    }
-  end
-
   let :params do
-    {}
+    { :password => 'secret' }
   end
 
   shared_examples_for 'ironic glance configuration' do
-    let :p do
-      default_params.merge(params)
-    end
-
     it 'configures ironic.conf' do
-      is_expected.to contain_ironic_config('glance/auth_type').with_value(p[:auth_type])
-      is_expected.to contain_ironic_config('glance/auth_url').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('glance/project_name').with_value(p[:project_name])
-      is_expected.to contain_ironic_config('glance/username').with_value(p[:username])
-      is_expected.to contain_ironic_config('glance/password').with_value('<SERVICE DEFAULT>').with_secret(true)
+      is_expected.to contain_ironic_config('glance/auth_type').with_value('password')
+      is_expected.to contain_ironic_config('glance/auth_url').with_value('http://127.0.0.1:5000')
+      is_expected.to contain_ironic_config('glance/project_name').with_value('services')
+      is_expected.to contain_ironic_config('glance/username').with_value('ironic')
+      is_expected.to contain_ironic_config('glance/password').with_value('secret').with_secret(true)
       is_expected.to contain_ironic_config('glance/user_domain_name').with_value('Default')
       is_expected.to contain_ironic_config('glance/project_domain_name').with_value('Default')
       is_expected.to contain_ironic_config('glance/system_scope').with_value('<SERVICE DEFAULT>')
@@ -61,7 +50,6 @@ describe 'ironic::glance' do
           :auth_url                => 'http://example.com',
           :project_name            => 'project1',
           :username                => 'admin',
-          :password                => 'pa$$w0rd',
           :user_domain_name        => 'NonDefault',
           :project_domain_name     => 'NonDefault',
           :region_name             => 'regionTwo',
@@ -78,24 +66,23 @@ describe 'ironic::glance' do
       end
 
       it 'should replace default parameter with new value' do
-        is_expected.to contain_ironic_config('glance/auth_type').with_value(p[:auth_type])
-        is_expected.to contain_ironic_config('glance/auth_url').with_value(p[:auth_url])
-        is_expected.to contain_ironic_config('glance/project_name').with_value(p[:project_name])
-        is_expected.to contain_ironic_config('glance/username').with_value(p[:username])
-        is_expected.to contain_ironic_config('glance/password').with_value(p[:password]).with_secret(true)
-        is_expected.to contain_ironic_config('glance/user_domain_name').with_value(p[:user_domain_name])
-        is_expected.to contain_ironic_config('glance/project_domain_name').with_value(p[:project_domain_name])
+        is_expected.to contain_ironic_config('glance/auth_type').with_value(params[:auth_type])
+        is_expected.to contain_ironic_config('glance/auth_url').with_value(params[:auth_url])
+        is_expected.to contain_ironic_config('glance/project_name').with_value(params[:project_name])
+        is_expected.to contain_ironic_config('glance/username').with_value(params[:username])
+        is_expected.to contain_ironic_config('glance/user_domain_name').with_value(params[:user_domain_name])
+        is_expected.to contain_ironic_config('glance/project_domain_name').with_value(params[:project_domain_name])
         is_expected.to contain_ironic_config('glance/system_scope').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_ironic_config('glance/region_name').with_value(p[:region_name])
-        is_expected.to contain_ironic_config('glance/insecure').with_value(p[:api_insecure])
-        is_expected.to contain_ironic_config('glance/num_retries').with_value(p[:num_retries])
-        is_expected.to contain_ironic_config('glance/swift_account').with_value(p[:swift_account])
-        is_expected.to contain_ironic_config('glance/swift_account_prefix').with_value(p[:swift_account_prefix])
-        is_expected.to contain_ironic_config('glance/swift_container').with_value(p[:swift_container])
-        is_expected.to contain_ironic_config('glance/swift_endpoint_url').with_value(p[:swift_endpoint_url])
-        is_expected.to contain_ironic_config('glance/swift_temp_url_key').with_value(p[:swift_temp_url_key]).with_secret(true)
-        is_expected.to contain_ironic_config('glance/swift_temp_url_duration').with_value(p[:swift_temp_url_duration])
-        is_expected.to contain_ironic_config('glance/endpoint_override').with_value(p[:endpoint_override])
+        is_expected.to contain_ironic_config('glance/region_name').with_value(params[:region_name])
+        is_expected.to contain_ironic_config('glance/insecure').with_value(params[:api_insecure])
+        is_expected.to contain_ironic_config('glance/num_retries').with_value(params[:num_retries])
+        is_expected.to contain_ironic_config('glance/swift_account').with_value(params[:swift_account])
+        is_expected.to contain_ironic_config('glance/swift_account_prefix').with_value(params[:swift_account_prefix])
+        is_expected.to contain_ironic_config('glance/swift_container').with_value(params[:swift_container])
+        is_expected.to contain_ironic_config('glance/swift_endpoint_url').with_value(params[:swift_endpoint_url])
+        is_expected.to contain_ironic_config('glance/swift_temp_url_key').with_value(params[:swift_temp_url_key]).with_secret(true)
+        is_expected.to contain_ironic_config('glance/swift_temp_url_duration').with_value(params[:swift_temp_url_duration])
+        is_expected.to contain_ironic_config('glance/endpoint_override').with_value(params[:endpoint_override])
       end
     end
 

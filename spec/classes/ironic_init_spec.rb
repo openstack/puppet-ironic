@@ -24,6 +24,15 @@ describe 'ironic' do
 
   shared_examples_for 'ironic' do
 
+    let :pre_condition do
+      "class { 'ironic::glance':
+         password => 'password',
+       }
+       class { 'ironic::neutron':
+         password => 'password',
+       }"
+    end
+
     context 'with defaults' do
       it { is_expected.to contain_class('ironic::params') }
 

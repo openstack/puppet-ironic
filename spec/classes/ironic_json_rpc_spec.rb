@@ -17,35 +17,22 @@ require 'spec_helper'
 
 describe 'ironic::json_rpc' do
 
-  let :default_params do
-    { :auth_strategy => 'keystone',
-      :auth_type     => 'password',
-      :project_name  => 'services',
-      :use_ssl       => false,
-      :username      => 'ironic',
-    }
-  end
-
   let :params do
-    {}
+    { :password => 'secret' }
   end
 
   shared_examples_for 'ironic json_rpc configuration' do
-    let :p do
-      default_params.merge(params)
-    end
-
     it 'configures ironic.conf' do
-      is_expected.to contain_ironic_config('json_rpc/auth_strategy').with_value(p[:auth_strategy])
+      is_expected.to contain_ironic_config('json_rpc/auth_strategy').with_value('keystone')
       is_expected.to contain_ironic_config('json_rpc/http_basic_auth_user_file').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('json_rpc/host_ip').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('json_rpc/port').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('json_rpc/use_ssl').with_value(p[:use_ssl])
-      is_expected.to contain_ironic_config('json_rpc/auth_type').with_value(p[:auth_type])
-      is_expected.to contain_ironic_config('json_rpc/auth_url').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('json_rpc/project_name').with_value(p[:project_name])
-      is_expected.to contain_ironic_config('json_rpc/username').with_value(p[:username])
-      is_expected.to contain_ironic_config('json_rpc/password').with_value('<SERVICE DEFAULT>').with_secret(true)
+      is_expected.to contain_ironic_config('json_rpc/use_ssl').with_value(false)
+      is_expected.to contain_ironic_config('json_rpc/auth_type').with_value('password')
+      is_expected.to contain_ironic_config('json_rpc/auth_url').with_value('http://127.0.0.1:5000')
+      is_expected.to contain_ironic_config('json_rpc/project_name').with_value('services')
+      is_expected.to contain_ironic_config('json_rpc/username').with_value('ironic')
+      is_expected.to contain_ironic_config('json_rpc/password').with_value('secret').with_secret(true)
       is_expected.to contain_ironic_config('json_rpc/user_domain_name').with_value('Default')
       is_expected.to contain_ironic_config('json_rpc/project_domain_name').with_value('Default')
       is_expected.to contain_ironic_config('json_rpc/system_scope').with_value('<SERVICE DEFAULT>')
@@ -61,21 +48,19 @@ describe 'ironic::json_rpc' do
           :auth_type         => 'http_basic',
           :endpoint_override => 'http://example.com',
           :username          => 'admin',
-          :password          => 'pa$$w0rd',
           :allowed_roles     => ['admin', 'service'],
           :region_name       => 'regionOne',
         )
       end
 
       it 'should replace default parameter with new value' do
-        is_expected.to contain_ironic_config('json_rpc/auth_strategy').with_value(p[:auth_strategy])
-        is_expected.to contain_ironic_config('json_rpc/auth_type').with_value(p[:auth_type])
-        is_expected.to contain_ironic_config('json_rpc/username').with_value(p[:username])
-        is_expected.to contain_ironic_config('json_rpc/password').with_value(p[:password]).with_secret(true)
+        is_expected.to contain_ironic_config('json_rpc/auth_strategy').with_value(params[:auth_strategy])
+        is_expected.to contain_ironic_config('json_rpc/auth_type').with_value(params[:auth_type])
+        is_expected.to contain_ironic_config('json_rpc/username').with_value(params[:username])
         is_expected.to contain_ironic_config('json_rpc/system_scope').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ironic_config('json_rpc/allowed_roles').with_value('admin,service')
-        is_expected.to contain_ironic_config('json_rpc/endpoint_override').with_value(p[:endpoint_override])
-        is_expected.to contain_ironic_config('json_rpc/region_name').with_value(p[:region_name])
+        is_expected.to contain_ironic_config('json_rpc/endpoint_override').with_value(params[:endpoint_override])
+        is_expected.to contain_ironic_config('json_rpc/region_name').with_value(params[:region_name])
       end
     end
 

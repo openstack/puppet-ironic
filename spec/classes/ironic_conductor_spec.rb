@@ -33,6 +33,12 @@ describe 'ironic::conductor' do
   end
 
   shared_examples_for 'ironic conductor' do
+    let :pre_condition do
+      "class { 'ironic::glance':
+         password => 'password',
+       }"
+    end
+
     let :p do
       default_params.merge(params)
     end

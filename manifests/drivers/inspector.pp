@@ -14,32 +14,32 @@
 #
 # Configure how Ironic talks to Ironic Inspector.
 #
+# [*password*]
+#   (Required) The admin password for ironic to connect to ironic-inspector.
+#
 # [*auth_type*]
-#   The authentication plugin to use when connecting to ironic-inspector.
+#   (Optional) The authentication plugin to use when connecting to
+#   ironic-inspector.
 #   Defaults to 'password'
 #
 # [*auth_url*]
-#   The address of the keystone api endpoint.
-#   Defaults to $facts['os_service_default']
+#   (Optional) The address of the keystone api endpoint.
+#   Defaults to 'http://127.0.0.1:5000'
 #
 # [*project_name*]
-#   The Keystone project name.
+#   (Optional) The Keystone project name.
 #   Defaults to 'services'
 #
 # [*username*]
-#   The admin username for ironic to connect to ironic-inspector.
+#   (Optional) The admin username for ironic to connect to ironic-inspector.
 #   Defaults to 'ironic'.
 #
-# [*password*]
-#   The admin password for ironic to connect to ironic-inspector.
-#   Defaults to $facts['os_service_default']
-#
 # [*user_domain_name*]
-#   The name of user's domain (required for Identity V3).
+#   (Optional) The name of user's domain.
 #   Defaults to 'Default'
 #
 # [*project_domain_name*]
-#   The name of project's domain (required for Identity V3).
+#   (Optional) The name of project's domain.
 #   Defaults to 'Default'
 #
 # [*system_scope*]
@@ -47,32 +47,34 @@
 #   Defaults to $facts['os_service_default']
 #
 # [*region_name*]
-#   (optional) Region name for connecting to ironic-inspector in admin context
+#   (Optional) Region name for connecting to ironic-inspector in admin context
 #   through the OpenStack Identity service.
 #   Defaults to $facts['os_service_default']
 #
 # [*endpoint_override*]
-#   The endpoint URL for requests for this client
+#   (Optional) The endpoint URL for requests for this client
 #   Defaults to $facts['os_service_default']
 #
 # [*callback_endpoint_override*]
-#   The endpoint URL to use for ramdisk callback in case of managed boot.
+#   (Optional) The endpoint URL to use for ramdisk callback in case of managed
+#   boot.
 #   Defaults to $facts['os_service_default']
 #
 # [*power_off*]
-#   Whether to power off a node after inspection in case of managed boot.
+#   (Optional) Whether to power off a node after inspection in case of managed
+#   boot.
 #   Defaults to $facts['os_service_default']
 #
 # [*extra_kernel_params*]
-#   Extra kernel parameters to pass in case of managed boot.
+#   (Optional) Extra kernel parameters to pass in case of managed boot.
 #   Defaults to $facts['os_service_default']
 #
 class ironic::drivers::inspector (
+  $password,
   $auth_type                  = 'password',
-  $auth_url                   = $facts['os_service_default'],
+  $auth_url                   = 'http://127.0.0.1:5000',
   $project_name               = 'services',
   $username                   = 'ironic',
-  $password                   = $facts['os_service_default'],
   $user_domain_name           = 'Default',
   $project_domain_name        = 'Default',
   $system_scope               = $facts['os_service_default'],
