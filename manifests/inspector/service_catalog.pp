@@ -12,32 +12,34 @@
 #
 # == Class: ironic::inspector::service_catalog
 #
+# [*password*]
+#   (Required) The admin password for ironic-inspector to connect to the
+#   service catalog.
+#
 # [*auth_type*]
-#   The authentication plugin to use when connecting to the service catalog.
+#   (Optional) The authentication plugin to use when connecting to the service
+#   catalog.
 #   Defaults to 'password'
 #
 # [*auth_url*]
-#   The address of the keystone api endpoint.
-#   Defaults to $facts['os_service_default']
+#   (Optional) The address of the keystone api endpoint.
+#   Defaults to 'http://127.0.0.1:5000'
 #
 # [*project_name*]
-#   The Keystone project name.
+#   (Optional) The Keystone project name.
 #   Defaults to 'services'
 #
 # [*username*]
-#   The admin username for ironic-inspector to connect to the service catalog.
+#   (Optional) The admin username for ironic-inspector to connect to
+#   the service catalog.
 #   Defaults to 'ironic'.
 #
-# [*password*]
-#   The admin password for ironic-inspector to connect to the service catalog.
-#   Defaults to $facts['os_service_default']
-#
 # [*user_domain_name*]
-#   The name of user's domain (required for Identity V3).
+#   (Optional) The name of user's domain.
 #   Defaults to 'Default'
 #
 # [*project_domain_name*]
-#   The name of project's domain (required for Identity V3).
+#   (Optional) The name of project's domain.
 #   Defaults to 'Default'
 #
 # [*system_scope*]
@@ -45,20 +47,20 @@
 #   Defaults to $facts['os_service_default']
 #
 # [*region_name*]
-#   (optional) Region name for accessing Keystone catalog
+#   (Optional) Region name for accessing Keystone catalog
 #   through the OpenStack Identity service.
 #   Defaults to $facts['os_service_default']
 #
 # [*endpoint_override*]
-#   The endpoint URL for requests for this client
+#   (Optional) The endpoint URL for requests for this client
 #   Defaults to $facts['os_service_default']
 #
 class ironic::inspector::service_catalog (
+  $password,
   $auth_type           = 'password',
-  $auth_url            = $facts['os_service_default'],
+  $auth_url            = 'http://127.0.0.1:5000',
   $project_name        = 'services',
   $username            = 'ironic',
-  $password            = $facts['os_service_default'],
   $user_domain_name    = 'Default',
   $project_domain_name = 'Default',
   $system_scope        = $facts['os_service_default'],
