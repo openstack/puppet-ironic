@@ -4,13 +4,12 @@
 #
 # === Parameters
 #
+# [*password*]
+#   (Required) Password to create for the service user
+#
 # [*username*]
 #   (Optional) The name of the service user
 #   Defaults to 'ironic'
-#
-# [*password*]
-#   (Optional) Password to create for the service user
-#   Defaults to $facts['os_service_default']
 #
 # [*auth_url*]
 #   (Optional) The URL to use for authentication.
@@ -197,8 +196,8 @@
 #  authtoken class. Values set here override the individual parameters above.
 #
 class ironic::api::authtoken(
+  String[1] $password,
   $username                       = 'ironic',
-  $password                       = $facts['os_service_default'],
   $auth_url                       = 'http://127.0.0.1:5000',
   $project_name                   = 'services',
   $user_domain_name               = 'Default',
@@ -238,10 +237,6 @@ class ironic::api::authtoken(
 ) {
 
   include ironic::deps
-
-  if is_service_default($password) {
-    fail('Please set password for Ironic API service user')
-  }
 
   keystone::resource::authtoken {
     'ironic_config':
