@@ -16,53 +16,52 @@
 #
 # === Parameters
 #
+# [*password*]
+#   (Required) The admin password for ironic to connect to json_rpc.
+#
 # [*auth_strategy*]
-#   (optional) Authentication strategy used by JSON RPC.
+#   (Optional) Authentication strategy used by JSON RPC.
 #   Defaults to 'keystone'
 #
 # [*http_basic_auth_user_file*]
-#   (optional) Path to Apache format user authentication file used when
+#   (Optional) Path to Apache format user authentication file used when
 #   using auth_strategy=http_basic.
 #   Defaults to $facts['os_service_default']
 #
 # [*host_ip*]
-#   (optional) The IP address or hostname on which JSON RPC will listen.
+#   (Optional) The IP address or hostname on which JSON RPC will listen.
 #   Defaults to $facts['os_service_default']
 #
 # [*port*]
-#   (optional) The port to use for JSON RPC'.
+#   (Optional) The port to use for JSON RPC'.
 #   Defaults to $facts['os_service_default']
 #
 # [*use_ssl*]
-#   (optional) Whether to use TLS for JSON RPC'.
+#   (Optional) Whether to use TLS for JSON RPC'.
 #   Defaults to false
 #
 # [*auth_type*]
-#   (optional) The authentication plugin to use when connecting to json_rpc.
+#   (Optional) The authentication plugin to use when connecting to json_rpc.
 #   Defaults to 'password'
 #
 # [*auth_url*]
-#   (optional) The address of the keystone api endpoint.
-#   Defaults to $facts['os_service_default']
+#   (Optional) The address of the keystone api endpoint.
+#   Defaults to 'http://127.0.0.1:5000'
 #
 # [*project_name*]
-#   (optional) The Keystone project name.
+#   (Optional) The Keystone project name.
 #   Defaults to 'services'
 #
 # [*username*]
-#   (optional) The admin username for ironic to connect to json_rpc.
+#   (Optional) The admin username for ironic to connect to json_rpc.
 #   Defaults to 'ironic'.
 #
-# [*password*]
-#   (optional) The admin password for ironic to connect to json_rpc.
-#   Defaults to $facts['os_service_default']
-#
 # [*user_domain_name*]
-#   (optional) The name of user's domain (required for Identity V3).
+#   (Optional) The name of user's domain (required for Identity V3).
 #   Defaults to 'Default'
 #
 # [*project_domain_name*]
-#   (optional) The name of project's domain (required for Identity V3).
+#   (Optional) The name of project's domain (required for Identity V3).
 #   Defaults to 'Default'
 #
 # [*system_scope*]
@@ -70,29 +69,29 @@
 #   Defaults to $facts['os_service_default']
 #
 # [*allowed_roles*]
-#   (optional) List of roles allowed to use JSON RPC.
+#   (Optional) List of roles allowed to use JSON RPC.
 #   Defaults to $facts['os_service_default']
 #
 # [*endpoint_override*]
-#   (optional) The endpoint URL for requests for this client
+#   (Optional) The endpoint URL for requests for this client
 #   Defaults to $facts['os_service_default']
 #
 # [*region_name*]
-#   (optional) Region name for connecting to swift in admin context
+#   (Optional) Region name for connecting to swift in admin context
 #   through the OpenStack Identity service.
 #   Defaults to $facts['os_service_default']
 #
 class ironic::json_rpc (
+  $password,
   $auth_strategy             = 'keystone',
   $http_basic_auth_user_file = $facts['os_service_default'],
   $host_ip                   = $facts['os_service_default'],
   $port                      = $facts['os_service_default'],
   Boolean $use_ssl           = false,
   $auth_type                 = 'password',
-  $auth_url                  = $facts['os_service_default'],
+  $auth_url                  = 'http://127.0.0.1:5000',
   $project_name              = 'services',
   $username                  = 'ironic',
-  $password                  = $facts['os_service_default'],
   $user_domain_name          = 'Default',
   $project_domain_name       = 'Default',
   $system_scope              = $facts['os_service_default'],
