@@ -70,6 +70,10 @@ class ironic::inspector::service_catalog (
 
   include ironic::deps
 
+  if $username == 'ironic' {
+    warning('The default username will be changed to ironic-inspector in a future release')
+  }
+
   if is_service_default($system_scope) {
     $project_name_real = $project_name
     $project_domain_name_real = $project_domain_name
