@@ -15,6 +15,7 @@ describe 'ironic::healthcheck' do
         is_expected.to contain_oslo__healthcheck('ironic_config').with(
           :detailed              => '<SERVICE DEFAULT>',
           :backends              => '<SERVICE DEFAULT>',
+          :allowed_source_ranges => '<SERVICE DEFAULT>',
           :disable_by_file_path  => '<SERVICE DEFAULT>',
           :disable_by_file_paths => '<SERVICE DEFAULT>',
         )
@@ -27,6 +28,7 @@ describe 'ironic::healthcheck' do
           :enabled               => true,
           :detailed              => true,
           :backends              => ['disable_by_file'],
+          :allowed_source_ranges => ['10.0.0.0/24', '10.0.1.0/24'],
           :disable_by_file_path  => '/etc/ironic/healthcheck/disabled',
           :disable_by_file_paths => ['8042:/etc/ironic/healthcheck/disabled'],
         }
@@ -38,6 +40,7 @@ describe 'ironic::healthcheck' do
         is_expected.to contain_oslo__healthcheck('ironic_config').with(
           :detailed              => true,
           :backends              => ['disable_by_file'],
+          :allowed_source_ranges => ['10.0.0.0/24', '10.0.1.0/24'],
           :disable_by_file_path  => '/etc/ironic/healthcheck/disabled',
           :disable_by_file_paths => ['8042:/etc/ironic/healthcheck/disabled'],
         )
