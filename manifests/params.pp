@@ -22,8 +22,7 @@
 class ironic::params {
   include openstacklib::defaults
 
-  $dbsync_command             =
-    'ironic-dbsync --config-file /etc/ironic/ironic.conf'
+  $dbsync_command             = 'ironic-dbsync'
   $inspector_dbsync_command   =
     'ironic-inspector-dbsync --config-file /etc/ironic-inspector/inspector.conf upgrade'
   $client_package             = 'python3-ironicclient'
