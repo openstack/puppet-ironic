@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    The ``ironic::rabbit_transient_quorum_queue`` parameter and
+    the ``ironic::inspector::rabbit_transient_quorum_queue`` parameter have
+    been added.
