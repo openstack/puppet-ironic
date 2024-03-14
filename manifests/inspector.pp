@@ -252,6 +252,10 @@
 #   (Optional) Use quorum queues in RabbitMQ.
 #   Defaults to $facts['os_service_default']
 #
+# [*rabbit_transient_quorum_queue*]
+#   (Optional) Use quorum queues for transients queues in RabbitMQ.
+#   Defaults to $facts['os_service_default']
+#
 # [*rabbit_quorum_delivery_limit*]
 #   (Optional) Each time a message is rdelivered to a consumer, a counter is
 #   incremented. Once the redelivery count exceeds the delivery limit
@@ -358,6 +362,7 @@ class ironic::inspector (
   $rabbit_heartbeat_in_pthread                = $facts['os_service_default'],
   $rabbit_ha_queues                           = $facts['os_service_default'],
   $rabbit_quorum_queue                        = $facts['os_service_default'],
+  $rabbit_transient_quorum_queue              = $facts['os_service_default'],
   $rabbit_quorum_delivery_limit               = $facts['os_service_default'],
   $rabbit_quorum_max_memory_length            = $facts['os_service_default'],
   $rabbit_quorum_max_memory_bytes             = $facts['os_service_default'],
@@ -502,6 +507,7 @@ class ironic::inspector (
     kombu_ssl_version               => $kombu_ssl_version,
     rabbit_ha_queues                => $rabbit_ha_queues,
     rabbit_quorum_queue             => $rabbit_quorum_queue,
+    rabbit_transient_quorum_queue   => $rabbit_transient_quorum_queue,
     rabbit_quorum_delivery_limit    => $rabbit_quorum_delivery_limit,
     rabbit_quorum_max_memory_length => $rabbit_quorum_max_memory_length,
     rabbit_quorum_max_memory_bytes  => $rabbit_quorum_max_memory_bytes,
