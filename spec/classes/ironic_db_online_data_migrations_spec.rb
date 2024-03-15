@@ -6,7 +6,7 @@ describe 'ironic::db::online_data_migrations' do
 
     it 'runs ironic-db-sync' do
       is_expected.to contain_exec('ironic-db-online-data-migrations').with(
-        :command     => 'ironic-dbsync --config-file /etc/ironic/ironic.conf  online_data_migrations ',
+        :command     => 'ironic-dbsync  online_data_migrations ',
         :path        => '/usr/bin',
         :user        => 'ironic',
         :refreshonly => 'true',
@@ -31,7 +31,7 @@ describe 'ironic::db::online_data_migrations' do
 
       it {
         is_expected.to contain_exec('ironic-db-online-data-migrations').with(
-          :command     => 'ironic-dbsync --config-file /etc/ironic/ironic.conf --config-file /etc/ironic/ironic_01.conf online_data_migrations --max-count 100',
+          :command     => 'ironic-dbsync --config-file /etc/ironic/ironic_01.conf online_data_migrations --max-count 100',
           :path        => '/usr/bin',
           :user        => 'ironic',
           :refreshonly => 'true',
