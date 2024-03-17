@@ -91,23 +91,38 @@
 #   (optional) Set up Apache HTTP Server.
 #   Defaults to true
 #
+# [*vhost_priority*]
+#   (Optional) The priority for the vhost.
+#   Defaults to 10
+#
+# [*vhost_options*]
+#   (Optional) Set the options for the spefieid virtual host.
+#   Defaults to ['-Indexes', '+FollowSymLinks']
+#
+# [*vhost_config*]
+#   (Optional) Additional parameters passed to the apache::vhost defined type.
+#   Defaults to {}
+#
 class ironic::pxe (
-  $package_ensure             = 'present',
-  Boolean $manage_service     = true,
-  Boolean $enabled            = true,
-  $tftp_root                  = '/tftpboot',
-  $http_root                  = '/httpboot',
-  $http_port                  = 8088,
-  $pxelinux_path              = $::ironic::params::pxelinux_path,
-  $syslinux_path              = $::ironic::params::syslinux_path,
-  $syslinux_files             = $::ironic::params::syslinux_files,
-  $tftp_bind_host             = undef,
-  $ipxe_name_base             = $::ironic::params::ipxe_name_base,
-  $uefi_ipxe_bootfile_name    = $::ironic::params::uefi_ipxe_bootfile_name,
-  $uefi_pxe_bootfile_name     = $::ironic::params::uefi_pxe_bootfile_name,
-  Boolean $tftp_use_xinetd    = $::ironic::params::xinetd_available,
-  $dnsmasq_log_facility       = undef,
-  Boolean $manage_http_server = true,
+  $package_ensure              = 'present',
+  Boolean $manage_service      = true,
+  Boolean $enabled             = true,
+  $tftp_root                   = '/tftpboot',
+  $http_root                   = '/httpboot',
+  $http_port                   = 8088,
+  $pxelinux_path               = $::ironic::params::pxelinux_path,
+  $syslinux_path               = $::ironic::params::syslinux_path,
+  $syslinux_files              = $::ironic::params::syslinux_files,
+  $tftp_bind_host              = undef,
+  $ipxe_name_base              = $::ironic::params::ipxe_name_base,
+  $uefi_ipxe_bootfile_name     = $::ironic::params::uefi_ipxe_bootfile_name,
+  $uefi_pxe_bootfile_name      = $::ironic::params::uefi_pxe_bootfile_name,
+  Boolean $tftp_use_xinetd     = $::ironic::params::xinetd_available,
+  $dnsmasq_log_facility        = undef,
+  Boolean $manage_http_server  = true,
+  $vhost_priority              = 10,
+  Array[String] $vhost_options = ['-Indexes', '+FollowSymLinks'],
+  Hash $vhost_config           = {},
 ) inherits ironic::params {
 
   include ironic::deps
@@ -162,7 +177,7 @@ class ironic::pxe (
       tag    => ['openstack', 'ironic-ipxe', 'ironic-support-package'],
     }
 
-    $options = "--map-file ${tftp_root_real}/map-file"
+    $tftp_options = "--map-file ${tftp_root_real}/map-file"
 
     include xinetd
 
@@ -170,7 +185,7 @@ class ironic::pxe (
       port        => '69',
       bind        => $tftp_bind_host,
       protocol    => 'udp',
-      server_args => "${options} ${tftp_root_real}",
+      server_args => "${tftp_options} ${tftp_root_real}",
       server      => '/usr/sbin/in.tftpd',
       socket_type => 'dgram',
       cps         => '100 2',
@@ -347,11 +362,13 @@ class ironic::pxe (
 
     include apache
 
-    apache::vhost { 'ipxe_vhost':
-      priority => 10,
-      options  => ['-Indexes', '+FollowSymLinks'],
-      docroot  => $http_root_real,
-      port     => $http_port_real,
-    }
+    create_resources(apache::vhost, {
+      'ipxe_vhost' => {
+        'priority' => $vhost_priority,
+        'options'  => $vhost_options,
+        'docroot'  => $http_root_real,
+        'port'     => $http_port_real,
+      }
+    }, $vhost_config)
   }
 }
