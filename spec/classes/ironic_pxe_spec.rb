@@ -130,6 +130,11 @@ describe 'ironic::pxe' do
           :http_root      => '/var/www/httpboot',
           :http_port      => 3816,
           :tftp_bind_host => '1.2.3.4',
+          :vhost_priority => 20,
+          :vhost_options  => ['Indexes', '+FollowSymLinks'],
+          :vhost_config   => {
+            'ssl' => true,
+          },
         )
       end
 
@@ -202,10 +207,11 @@ describe 'ironic::pxe' do
       it 'should configure http server' do
         is_expected.to contain_class('apache')
         is_expected.to contain_apache__vhost('ipxe_vhost').with(
-          :priority => 10,
-          :options  => ['-Indexes', '+FollowSymLinks'],
+          :priority => 20,
+          :options  => ['Indexes', '+FollowSymLinks'],
           :docroot  => '/var/www/httpboot',
           :port     => 3816,
+          :ssl      => true,
         )
       end
     end
