@@ -146,7 +146,7 @@
 #
 # [*ipxe_timeout*]
 #   (optional) ipxe timeout in second. Should be an integer.
-#   Defaults to $facts['os_service_default']
+#   Defaults to 0
 #
 # [*http_port*]
 #   (optional) port used by the HTTP service serving introspection images.
@@ -341,7 +341,7 @@ class ironic::inspector (
   String[1] $kernel_filename                  = 'agent.kernel',
   $additional_processing_hooks                = undef,
   String $ramdisk_kernel_args                 = '',
-  $ipxe_timeout                               = $facts['os_service_default'],
+  $ipxe_timeout                               = 0,
   $http_port                                  = '8088',
   $detect_boot_mode                           = $facts['os_service_default'],
   $tftp_root                                  = '/tftpboot',
