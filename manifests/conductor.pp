@@ -215,7 +215,7 @@ class ironic::conductor (
   $enabled_hardware_types              = $facts['os_service_default'],
   $force_power_state_during_sync       = $facts['os_service_default'],
   $http_url                            = $facts['os_service_default'],
-  $http_root                           = '/httpboot',
+  Stdlib::Absolutepath $http_root      = '/httpboot',
   $force_raw_images                    = $facts['os_service_default'],
   $automated_clean                     = $facts['os_service_default'],
   $cleaning_network                    = $facts['os_service_default'],

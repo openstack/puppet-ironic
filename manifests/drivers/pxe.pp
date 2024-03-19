@@ -140,7 +140,7 @@ class ironic::drivers::pxe (
   $ipxe_bootfile_name                = $facts['os_service_default'],
   $ipxe_config_template              = $facts['os_service_default'],
   $tftp_server                       = $facts['os_service_default'],
-  $tftp_root                         = '/tftpboot',
+  Stdlib::Absolutepath $tftp_root    = '/tftpboot',
   $images_path                       = $facts['os_service_default'],
   $tftp_master_path                  = $facts['os_service_default'],
   $instance_master_path              = $facts['os_service_default'],
