@@ -46,12 +46,12 @@
 #   Defaults to undef.
 #
 class ironic::pxe::common (
-  $tftp_root               = undef,
-  $http_root               = undef,
-  $http_port               = undef,
-  $ipxe_timeout            = undef,
-  $uefi_ipxe_bootfile_name = undef,
-  $uefi_pxe_bootfile_name  = undef,
+  $tftp_root                                   = undef,
+  $http_root                                   = undef,
+  $http_port                                   = undef,
+  Optional[Integer[0]] $ipxe_timeout           = undef,
+  Optional[String[1]] $uefi_ipxe_bootfile_name = undef,
+  Optional[String[1]] $uefi_pxe_bootfile_name  = undef,
 ) {
   include ironic::deps
 }

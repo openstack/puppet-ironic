@@ -341,7 +341,7 @@ class ironic::inspector (
   String[1] $kernel_filename                  = 'agent.kernel',
   $additional_processing_hooks                = undef,
   String $ramdisk_kernel_args                 = '',
-  $ipxe_timeout                               = 0,
+  Integer[0] $ipxe_timeout                    = 0,
   $http_port                                  = '8088',
   $detect_boot_mode                           = $facts['os_service_default'],
   $tftp_root                                  = '/tftpboot',
