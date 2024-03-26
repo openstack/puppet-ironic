@@ -262,6 +262,16 @@
 #   (optional) Topics for the versioned notifications issued by Ironic
 #   Defaults to $facts['os_service_default']
 #
+# [*rbac_service_role_elevated_access*]
+#   (optional) Enable elevated access for users with service role belonging
+#   to the 'rbac_service_project_name' project when using the default policy.
+#   Defaults to $facts['os_service_default']
+#
+# [*rbac_service_project_name*]
+#   (optional) The project name utilized for Role Based Access Control checks
+#   for the reserved `service` project.
+#   Defaults to 'services'
+#
 class ironic (
   Boolean $enabled                    = true,
   $package_ensure                     = 'present',
@@ -315,6 +325,8 @@ class ironic (
   $notification_topics                = $facts['os_service_default'],
   $notification_level                 = $facts['os_service_default'],
   $versioned_notifications_topics     = $facts['os_service_default'],
+  $rbac_service_role_elevated_access  = $facts['os_service_default'],
+  $rbac_service_project_name          = 'services',
 ) {
 
   include ironic::deps
@@ -341,13 +353,15 @@ class ironic (
   }
 
   ironic_config {
-    'DEFAULT/auth_strategy':                   value => $auth_strategy;
-    'DEFAULT/my_ip':                           value => $my_ip;
-    'DEFAULT/my_ipv6':                         value => $my_ipv6;
-    'DEFAULT/default_resource_class':          value => $default_resource_class;
-    'DEFAULT/notification_level':              value => $notification_level;
-    'DEFAULT/versioned_notifications_topics':  value => $versioned_notifications_topics;
-    'DEFAULT/rpc_transport':                   value => $rpc_transport;
+    'DEFAULT/auth_strategy':                     value => $auth_strategy;
+    'DEFAULT/my_ip':                             value => $my_ip;
+    'DEFAULT/my_ipv6':                           value => $my_ipv6;
+    'DEFAULT/default_resource_class':            value => $default_resource_class;
+    'DEFAULT/notification_level':                value => $notification_level;
+    'DEFAULT/versioned_notifications_topics':    value => $versioned_notifications_topics;
+    'DEFAULT/rpc_transport':                     value => $rpc_transport;
+    'DEFAULT/rbac_service_role_elevated_access': value => $rbac_service_role_elevated_access;
+    'DEFAULT/rbac_service_project_name':         value => $rbac_service_project_name;
   }
 
   if $sync_db {

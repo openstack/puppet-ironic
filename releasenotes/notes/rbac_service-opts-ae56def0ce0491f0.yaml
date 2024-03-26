@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    The following two parameters have been added to the ``ironic`` class.
+
+    - ``rbac_service_role_elevated_access``
+    - ``rbac_service_project_name``

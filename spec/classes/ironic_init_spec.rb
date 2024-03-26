@@ -69,6 +69,8 @@ describe 'ironic' do
         is_expected.to contain_ironic_config('DEFAULT/notification_level').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ironic_config('DEFAULT/versioned_notifications_topics').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ironic_config('DEFAULT/rpc_transport').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('DEFAULT/rbac_service_role_elevated_access').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('DEFAULT/rbac_service_project_name').with_value('services')
 
         is_expected.to contain_oslo__messaging__default('ironic_config').with(
           :executor_thread_pool_size => '<SERVICE DEFAULT>',
@@ -158,6 +160,8 @@ describe 'ironic' do
           :notification_transport_url         => 'rabbit://rabbit_user:password@localhost:5673',
           :notification_driver                => 'messagingv2',
           :notification_topics                => 'openstack',
+          :rbac_service_role_elevated_access  => true,
+          :rbac_service_project_name          => 'service',
         }
       end
 
@@ -169,6 +173,8 @@ describe 'ironic' do
         is_expected.to contain_ironic_config('DEFAULT/notification_level').with_value('warning')
         is_expected.to contain_ironic_config('DEFAULT/versioned_notifications_topics').with_value('ironic_versioned_notifications')
         is_expected.to contain_ironic_config('DEFAULT/rpc_transport').with_value('oslo')
+        is_expected.to contain_ironic_config('DEFAULT/rbac_service_role_elevated_access').with_value(true)
+        is_expected.to contain_ironic_config('DEFAULT/rbac_service_project_name').with_value('service')
 
         is_expected.to contain_oslo__messaging__default('ironic_config').with(
           :executor_thread_pool_size => '128',
