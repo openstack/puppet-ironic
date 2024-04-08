@@ -16,6 +16,9 @@ class ironic::inspector::coordination (
 
   oslo::coordination{ 'ironic_inspector_config':
     backend_url => $backend_url,
-    tag         => 'ironic-inspector',
   }
+
+  # all coordination settings should be applied and all packages should be
+  # installed before service startup
+  Oslo::Coordination['ironic_inspector_config'] -> Anchor['ironic-inspector::service::begin']
 }

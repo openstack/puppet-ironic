@@ -127,6 +127,8 @@ class ironic::api (
         tag        => 'ironic-service',
       }
       Keystone_endpoint<||> -> Service['ironic-api']
+      Ironic_api_uwsgi_config<||> ~> Service['ironic-api']
+
     } elsif $service_name == 'httpd' {
       service { 'ironic-api':
         ensure => 'stopped',

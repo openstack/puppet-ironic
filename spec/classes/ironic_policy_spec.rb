@@ -33,7 +33,6 @@ describe 'ironic::policy' do
           :file_group   => 'ironic',
           :file_format  => 'yaml',
           :purge_config => false,
-          :tag          => 'ironic',
         )
         is_expected.to contain_oslo__policy('ironic_config').with(
           :enforce_scope        => false,
@@ -64,7 +63,6 @@ describe 'ironic::policy' do
           :file_group   => 'ironic',
           :file_format  => 'yaml',
           :purge_config => true,
-          :tag          => 'ironic',
         )
         is_expected.to contain_oslo__policy('ironic_config').with(
           :enforce_scope        => false,

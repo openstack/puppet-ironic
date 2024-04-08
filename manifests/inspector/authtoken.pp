@@ -283,4 +283,6 @@ class ironic::inspector::authtoken(
       service_type                   => $service_type,
       interface                      => $interface;
   }
+
+  Keystone::Resource::Authtoken['ironic_inspector_config'] -> Anchor['ironic-inspector::config::end']
 }

@@ -26,15 +26,6 @@ class ironic::deps {
   ~> Service<| tag == 'ironic-service' |>
   ~> anchor { 'ironic::service::end': }
 
-  # all db settings should be applied and all packages should be installed
-  # before dbsync starts
-  Oslo::Db<| tag == 'ironic' |> -> Anchor['ironic::dbsync::begin']
-  Oslo::Db<| tag == 'ironic-inspector' |> -> Anchor['ironic::dbsync::begin']
-
-  # all coordination settings should be applied and all packages should be
-  # installed before service startup
-  Oslo::Coordination<| tag == 'ironic-inspector' |> -> Anchor['ironic-inspector::service::begin']
-
   # ironic-inspector is supported by this module.  This service uses a
   # specific conf file and uses it's own config provider. Split out install
   # and configure of this service so that other services are not affected.
@@ -56,19 +47,9 @@ class ironic::deps {
   ~> Service<| tag == 'ironic-inspector-dnsmasq-service' |>
   ~> Anchor['ironic-inspector::service::end']
 
-  # On any uwsgi config change, we must restart Ironic API.
   Anchor['ironic::config::begin']
   -> Ironic_api_uwsgi_config<||>
-  ~> Anchor['ironic::config::end']
-
-  # policy config should occur in the config block also.
-  Anchor['ironic::config::begin']
-  -> Openstacklib::Policy<| tag == 'ironic' |>
   -> Anchor['ironic::config::end']
-
-  Anchor['ironic-inspector::config::begin']
-  -> Openstacklib::Policy<| tag == 'ironic-inspector' |>
-  -> Anchor['ironic-inspector::config::end']
 
   # Support packages need to be installed in the install phase, but we don't
   # put them in the chain above because we don't want any false dependencies

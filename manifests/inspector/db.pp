@@ -55,7 +55,7 @@ class ironic::inspector::db (
   $mysql_enable_ndb                 = $facts['os_service_default'],
 ) {
 
-  include ironic::params
+  include ironic::deps
 
   oslo::db { 'ironic_inspector_config':
     connection              => $database_connection,
@@ -67,7 +67,9 @@ class ironic::inspector::db (
     max_overflow            => $database_max_overflow,
     pool_timeout            => $database_pool_timeout,
     mysql_enable_ndb        => $mysql_enable_ndb,
-    tag                     => 'ironic-inspector',
   }
 
+  # all db settings should be applied and all packages should be installed
+  # before dbsync starts
+  Oslo::Db['ironic_inspector_config'] -> Anchor['ironic-inspector::dbsync::begin']
 }
