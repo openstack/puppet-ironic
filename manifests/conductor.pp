@@ -167,6 +167,18 @@
 #   the default deploy image.
 #   Defaults to $facts['os_service_default']
 #
+# [*deploy_kernel_by_arch*]
+#   (optional) A dictionary of key-value paris of each architecture with
+#   tle Glance ID, http:// or file:// URL of the kernel of the default
+#   deploy image.
+#   Defaults to $facts['os_service_default']
+#
+# [*deploy_ramdisk_by_arch*]
+#   (optional) A dictionary of key-value paris of each architecture with
+#   tle Glance ID, http:// or file:// URL of the initramfs of the default
+#   deploy image.
+#   Defaults to $facts['os_service_default']
+#
 # [*rescue_kernel*]
 #   (optional) Glance UUID, http:// or file:// URL of the kernel of
 #   the default rescue image.
@@ -175,6 +187,18 @@
 # [*rescue_ramdisk*]
 #   (optional) Glance UUID, http:// or file:// URL of the initramfs of
 #   the default rescue image.
+#   Defaults to $facts['os_service_default']
+#
+# [*rescue_kernel_by_arch*]
+#   (optional) A dictionary of key-value paris of each architecture with
+#   tle Glance ID, http:// or file:// URL of the kernel of the default
+#   rescue image.
+#   Defaults to $facts['os_service_default']
+#
+# [*rescue_ramdisk_by_arch*]
+#   (optional) A dictionary of key-value paris of each architecture with
+#   tle Glance ID, http:// or file:// URL of the initramfs of the default
+#   rescue image.
 #   Defaults to $facts['os_service_default']
 #
 # [*bootloader*]
@@ -240,8 +264,12 @@ class ironic::conductor (
   $conductor_group                     = $facts['os_service_default'],
   $deploy_kernel                       = $facts['os_service_default'],
   $deploy_ramdisk                      = $facts['os_service_default'],
+  $deploy_kernel_by_arch               = $facts['os_service_default'],
+  $deploy_ramdisk_by_arch              = $facts['os_service_default'],
   $rescue_kernel                       = $facts['os_service_default'],
   $rescue_ramdisk                      = $facts['os_service_default'],
+  $rescue_kernel_by_arch               = $facts['os_service_default'],
+  $rescue_ramdisk_by_arch              = $facts['os_service_default'],
   $bootloader                          = $facts['os_service_default'],
   $allow_provisioning_in_maintenance   = $facts['os_service_default'],
   $image_download_concurrency          = $facts['os_service_default'],
@@ -282,6 +310,23 @@ class ironic::conductor (
   include ironic::pxe::common
   $http_root_real = pick($::ironic::pxe::common::http_root, $http_root)
 
+  $deploy_kernel_by_arch_real = $deploy_kernel_by_arch ? {
+    Hash    => join(join_keys_to_values($deploy_kernel_by_arch, ':'), ','),
+    default => join(any2array($deploy_kernel_by_arch), ','),
+  }
+  $deploy_ramdisk_by_arch_real = $deploy_ramdisk_by_arch ? {
+    Hash    => join(join_keys_to_values($deploy_ramdisk_by_arch, ':'), ','),
+    default => join(any2array($deploy_ramdisk_by_arch), ','),
+  }
+  $rescue_kernel_by_arch_real = $rescue_kernel_by_arch ? {
+    Hash    => join(join_keys_to_values($rescue_kernel_by_arch, ':'), ','),
+    default => join(any2array($rescue_kernel_by_arch), ','),
+  }
+  $rescue_ramdisk_by_arch_real = $rescue_ramdisk_by_arch ? {
+    Hash    => join(join_keys_to_values($rescue_ramdisk_by_arch, ':'), ','),
+    default => join(any2array($rescue_ramdisk_by_arch), ','),
+  }
+
   # Configure ironic.conf
   ironic_config {
     'DEFAULT/enabled_hardware_types':              value => join(any2array($enabled_hardware_types), ',');
@@ -308,8 +353,12 @@ class ironic::conductor (
     'conductor/conductor_group':                   value => $conductor_group;
     'conductor/deploy_kernel':                     value => $deploy_kernel;
     'conductor/deploy_ramdisk':                    value => $deploy_ramdisk;
+    'conductor/deploy_kernel_by_arch':             value => $deploy_kernel_by_arch_real;
+    'conductor/deploy_ramdisk_by_arch':            value => $deploy_ramdisk_by_arch_real;
     'conductor/rescue_kernel':                     value => $rescue_kernel;
     'conductor/rescue_ramdisk':                    value => $rescue_ramdisk;
+    'conductor/rescue_kernel_by_arch':             value => $rescue_kernel_by_arch_real;
+    'conductor/rescue_ramdisk_by_arch':            value => $rescue_ramdisk_by_arch_real;
     'conductor/bootloader':                        value => $bootloader;
     'conductor/allow_provisioning_in_maintenance': value => $allow_provisioning_in_maintenance;
     'DEFAULT/image_download_concurrency':          value => $image_download_concurrency;

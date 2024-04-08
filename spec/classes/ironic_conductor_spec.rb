@@ -92,8 +92,12 @@ describe 'ironic::conductor' do
       is_expected.to contain_ironic_config('conductor/conductor_group').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/deploy_kernel').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/deploy_ramdisk').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('conductor/deploy_kernel_by_arch').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('conductor/deploy_ramdisk_by_arch').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/rescue_kernel').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/rescue_ramdisk').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('conductor/rescue_kernel_by_arch').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('conductor/rescue_ramdisk_by_arch').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/bootloader').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('DEFAULT/image_download_concurrency').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/deploy_callback_timeout').with(:value => '<SERVICE DEFAULT>')
@@ -130,8 +134,12 @@ describe 'ironic::conductor' do
           :conductor_group                   => 'in-the-closet-to-the-left',
           :deploy_kernel                     => 'http://host/deploy.kernel',
           :deploy_ramdisk                    => 'http://host/deploy.ramdisk',
+          :deploy_kernel_by_arch             => {'x86_64' => 'http://host/deploy.kernel'},
+          :deploy_ramdisk_by_arch            => {'x86_64' => 'http://host/deploy.ramdisk'},
           :rescue_kernel                     => 'http://host/rescue.kernel',
           :rescue_ramdisk                    => 'http://host/rescue.ramdisk',
+          :rescue_kernel_by_arch             => {'x86_64' => 'http://host/rescue.kernel'},
+          :rescue_ramdisk_by_arch            => {'x86_64' => 'http://host/rescue.ramdisk'},
           :bootloader                        => 'http://host/bootloader',
           :allow_provisioning_in_maintenance => false,
           :image_download_concurrency        => 20,
@@ -168,8 +176,12 @@ describe 'ironic::conductor' do
         is_expected.to contain_ironic_config('conductor/conductor_group').with_value(p[:conductor_group])
         is_expected.to contain_ironic_config('conductor/deploy_kernel').with_value(p[:deploy_kernel])
         is_expected.to contain_ironic_config('conductor/deploy_ramdisk').with_value(p[:deploy_ramdisk])
+        is_expected.to contain_ironic_config('conductor/deploy_kernel_by_arch').with_value('x86_64:http://host/deploy.kernel')
+        is_expected.to contain_ironic_config('conductor/deploy_ramdisk_by_arch').with_value('x86_64:http://host/deploy.ramdisk')
         is_expected.to contain_ironic_config('conductor/rescue_kernel').with_value(p[:rescue_kernel])
         is_expected.to contain_ironic_config('conductor/rescue_ramdisk').with_value(p[:rescue_ramdisk])
+        is_expected.to contain_ironic_config('conductor/rescue_kernel_by_arch').with_value('x86_64:http://host/rescue.kernel')
+        is_expected.to contain_ironic_config('conductor/rescue_ramdisk_by_arch').with_value('x86_64:http://host/rescue.ramdisk')
         is_expected.to contain_ironic_config('conductor/bootloader').with_value(p[:bootloader])
         is_expected.to contain_ironic_config('conductor/allow_provisioning_in_maintenance').with_value(p[:allow_provisioning_in_maintenance])
         is_expected.to contain_ironic_config('DEFAULT/image_download_concurrency').with_value(p[:image_download_concurrency])
