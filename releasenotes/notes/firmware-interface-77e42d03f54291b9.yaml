@@ -1,0 +1,8 @@
+---
+features:
+  - |
+    The ``ironic::drivers::interfaces`` class now supports the following new
+    parameters.
+
+    - ``enabled_firmware_interfaces``
+    - ``default_firmware_interface``

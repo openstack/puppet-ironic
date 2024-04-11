@@ -34,6 +34,11 @@
 #   deploy_interface field set.
 #   Defaults to $facts['os_service_default']
 #
+# [*default_firmware_interface*]
+#   (optional) Default deploy interface to be used for nodes that do not have
+#   firmware_interface field set.
+#   Defaults to $facts['os_service_default']
+#
 # [*default_inspect_interface*]
 #   (optional) Default inspect interface to be used for nodes that do not have
 #   inspect_interface field set.
@@ -94,6 +99,11 @@
 #   service initialization.
 #   Defaults to $facts['os_service_default']
 #
+# [*enabled_firmware_interfaces*]
+#   (optional) Specify the list of firmware interfaces to load during
+#   service initialization.
+#   Defaults to $facts['os_service_default']
+#
 # [*enabled_inspect_interfaces*]
 #   (optional) Specify the list of inspect interfaces to load during
 #   service initialization.
@@ -139,6 +149,7 @@ class ironic::drivers::interfaces (
   $default_boot_interface        = $facts['os_service_default'],
   $default_console_interface     = $facts['os_service_default'],
   $default_deploy_interface      = $facts['os_service_default'],
+  $default_firmware_interface    = $facts['os_service_default'],
   $default_inspect_interface     = $facts['os_service_default'],
   $default_management_interface  = $facts['os_service_default'],
   $default_network_interface     = $facts['os_service_default'],
@@ -151,6 +162,7 @@ class ironic::drivers::interfaces (
   $enabled_boot_interfaces       = $facts['os_service_default'],
   $enabled_console_interfaces    = $facts['os_service_default'],
   $enabled_deploy_interfaces     = $facts['os_service_default'],
+  $enabled_firmware_interfaces   = $facts['os_service_default'],
   $enabled_inspect_interfaces    = $facts['os_service_default'],
   $enabled_management_interfaces = $facts['os_service_default'],
   $enabled_network_interfaces    = $facts['os_service_default'],
@@ -170,6 +182,8 @@ class ironic::drivers::interfaces (
                       'default'      => $default_console_interface },
     'deploy'     => { 'enabled_list' => $enabled_deploy_interfaces,
                       'default'      => $default_deploy_interface },
+    'firmware'   => { 'enabled_list' => $enabled_firmware_interfaces,
+                      'default'      => $default_firmware_interface },
     'inspect'    => { 'enabled_list' => $enabled_inspect_interfaces,
                       'default'      => $default_inspect_interface },
     'management' => { 'enabled_list' => $enabled_management_interfaces,
