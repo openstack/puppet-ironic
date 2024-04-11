@@ -280,4 +280,6 @@ class ironic::api::authtoken(
       service_type                   => $service_type,
       interface                      => $interface;
   }
+
+  Keystone::Resource::Authtoken['ironic_config'] -> Anchor['ironic::config::end']
 }

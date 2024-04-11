@@ -70,6 +70,11 @@ class ironic::inspector::policy (
 
   create_resources('openstacklib::policy', { $policy_path => $policy_parameters })
 
+  # policy config should occur in the config block also.
+  Anchor['ironic-inspector::config::begin']
+  -> Openstacklib::Policy[$policy_path]
+  -> Anchor['ironic-inspector::config::end']
+
   oslo::policy { 'ironic_inspector_config':
     enforce_scope        => $enforce_scope,
     enforce_new_defaults => $enforce_new_defaults,

@@ -67,7 +67,9 @@ class ironic::db (
     db_max_retries          => $database_db_max_retries,
     pool_timeout            => $database_pool_timeout,
     mysql_enable_ndb        => $mysql_enable_ndb,
-    tag                     => 'ironic',
   }
 
+  # all db settings should be applied and all packages should be installed
+  # before dbsync starts
+  Oslo::Db['ironic_config'] -> Anchor['ironic::dbsync::begin']
 }
