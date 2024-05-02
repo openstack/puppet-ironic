@@ -127,12 +127,6 @@
 #   (optional) Template file for PXE configuration per node architecture.
 #   Defaults to $facts['os_service_default'].
 #
-# DEPRECATED PARAMETERS
-#
-# [*enable_ppc64le*]
-#   (optional) Boolean value to dtermine if ppc64le support should be enabled
-#   Defaults to false (no ppc64le support)
-#
 class ironic::drivers::pxe (
   $kernel_append_params              = $facts['os_service_default'],
   $pxe_bootfile_name                 = $facts['os_service_default'],
@@ -156,8 +150,6 @@ class ironic::drivers::pxe (
   $pxe_bootfile_name_by_arch         = $facts['os_service_default'],
   $ipxe_bootfile_name_by_arch        = $facts['os_service_default'],
   $pxe_config_template_by_arch       = $facts['os_service_default'],
-  # DEPRECATED PARAMETERS
-  Boolean $enable_ppc64le            = false,
 ) inherits ironic::params {
 
   include ironic::deps
@@ -209,33 +201,10 @@ class ironic::drivers::pxe (
     default => join(any2array($pxe_config_template_by_arch), ',')
   }
 
-  if $enable_ppc64le {
-    warning("The enable_ppc64le parameter is deprecated. \
-Use the pxe_config_template_by_arch parameter and the pxe_bootfile_name_by_arch parameter \
-to configure the required options")
-
-    # FXIME(tonyb): As these are really hash values it would be better to model
-    # them that way.  We can do that later, probably when we add another
-    # architecture
-    ironic_config {
-      # NOTE(tonyb): This first value shouldn't be needed but seems to be?
-      # NOTE(TheJulia): Likely not needed as this just points to the default,
-      # and when the explicit pxe driver is used everything should fall to
-      # it but in the interest of minimizing impact, the output result
-      # is preserved as we now just allow the default for normal template
-      # operation to be used.
-      'pxe/pxe_config_template_by_arch': value => 'ppc64le:$pybasedir/drivers/modules/pxe_config.template';
-      'pxe/pxe_bootfile_name_by_arch': value   => 'ppc64le:config';
-    }
-  } else {
-    ironic_config {
-      'pxe/pxe_config_template_by_arch': value => $pxe_config_template_by_arch_real;
-      'pxe/pxe_bootfile_name_by_arch':   value => $pxe_bootfile_name_by_arch_real;
-    }
-  }
-
   ironic_config {
-    'pxe/ipxe_bootfile_name_by_arch': value => $ipxe_bootfile_name_by_arch_real;
+    'pxe/pxe_config_template_by_arch': value => $pxe_config_template_by_arch_real;
+    'pxe/pxe_bootfile_name_by_arch':   value => $pxe_bootfile_name_by_arch_real;
+    'pxe/ipxe_bootfile_name_by_arch':  value => $ipxe_bootfile_name_by_arch_real;
   }
 
 }

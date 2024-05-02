@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The deprecated ``ironic::drivers::pxe::enable_ppc64le`` parameter has been
+    removed.
