@@ -30,19 +30,23 @@ describe 'ironic::drivers::ipmi' do
         is_expected.to contain_ironic_config('ipmi/use_ipmitool_retries').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ironic_config('ipmi/kill_on_timeout').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ironic_config('ipmi/disable_boot_timeout').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('ipmi/additional_retryable_ipmi_errors').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ironic_config('ipmi/debug').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('ipmi/cipher_suite_versions').with_value('<SERVICE DEFAULT>')
       end
     end
 
     context 'when overriding parameters' do
       let :params do
         {
-          :command_retry_timeout => 50,
-          :min_command_interval  => 5,
-          :use_ipmitool_retries  => false,
-          :kill_on_timeout       => true,
-          :disable_boot_timeout  => true,
-          :debug                 => true,
+          :command_retry_timeout            => 50,
+          :min_command_interval             => 5,
+          :use_ipmitool_retries             => false,
+          :kill_on_timeout                  => true,
+          :disable_boot_timeout             => true,
+          :additional_retryable_ipmi_errors => ['error1', 'error2'],
+          :debug                            => true,
+          :cipher_suite_versions            => ['1', '2'],
         }
       end
 
@@ -52,7 +56,9 @@ describe 'ironic::drivers::ipmi' do
         is_expected.to contain_ironic_config('ipmi/use_ipmitool_retries').with_value(false)
         is_expected.to contain_ironic_config('ipmi/kill_on_timeout').with_value(true)
         is_expected.to contain_ironic_config('ipmi/disable_boot_timeout').with_value(true)
+        is_expected.to contain_ironic_config('ipmi/additional_retryable_ipmi_errors').with_value(['error1', 'error2'])
         is_expected.to contain_ironic_config('ipmi/debug').with_value(true)
+        is_expected.to contain_ironic_config('ipmi/cipher_suite_versions').with_value('1,2')
       end
     end
 
