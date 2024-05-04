@@ -53,7 +53,6 @@ class ironic::params {
       $inspector_api_service        = undef
       $inspector_conductor_package  = 'openstack-ironic-inspector-conductor'
       $inspector_conductor_service  = 'openstack-ironic-inspector-conductor'
-      $staging_drivers_package      = 'openstack-ironic-staging-drivers'
       $systemd_python_package       = 'systemd-python'
       $ipxe_rom_dir                 = '/usr/share/ipxe'
       $ipxe_name_base               = 'ipxe-snponly'
@@ -92,8 +91,6 @@ class ironic::params {
       $inspector_api_service        = undef
       $inspector_conductor_package  = undef
       $inspector_conductor_service  = undef
-      # guessing the name, ironic-staging-drivers is not packaged in debian yet
-      $staging_drivers_package      = 'ironic-staging-drivers'
       $systemd_python_package       = 'python3-systemd'
       $ipxe_rom_dir                 = '/usr/lib/ipxe'
       $ipxe_name_base               = 'snponly'
