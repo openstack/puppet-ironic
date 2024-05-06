@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    Support for the staging driver has been removed.
