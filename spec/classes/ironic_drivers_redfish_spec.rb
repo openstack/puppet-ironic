@@ -39,6 +39,9 @@ describe 'ironic::drivers::redfish' do
       is_expected.to contain_ironic_config('redfish/firmware_update_status_interval').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('redfish/firmware_update_fail_interval').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('redfish/firmware_source').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('redfish/raid_config_status_interval').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('redfish/raid_config_fail_interval').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('redfish/boot_mode_config_timeout').with_value('<SERVICE DEFAULT>')
     end
 
     it 'installs sushy package' do
@@ -62,8 +65,11 @@ describe 'ironic::drivers::redfish' do
           :kernel_append_params            => 'nofb nomodeset vga=normal',
           :file_permission                 => '0o644',
           :firmware_update_status_interval => 60,
-          :firmware_update_fail_interval   => 60,
+          :firmware_update_fail_interval   => 61,
           :firmware_source                 => 'http',
+          :raid_config_status_interval     => 62,
+          :raid_config_fail_interval       => 63,
+          :boot_mode_config_timeout        => 901,
         )
       end
 
@@ -78,8 +84,11 @@ describe 'ironic::drivers::redfish' do
         is_expected.to contain_ironic_config('redfish/kernel_append_params').with_value('nofb nomodeset vga=normal')
         is_expected.to contain_ironic_config('redfish/file_permission').with_value('0o644')
         is_expected.to contain_ironic_config('redfish/firmware_update_status_interval').with_value(60)
-        is_expected.to contain_ironic_config('redfish/firmware_update_fail_interval').with_value(60)
+        is_expected.to contain_ironic_config('redfish/firmware_update_fail_interval').with_value(61)
         is_expected.to contain_ironic_config('redfish/firmware_source').with_value('http')
+        is_expected.to contain_ironic_config('redfish/raid_config_status_interval').with_value(62)
+        is_expected.to contain_ironic_config('redfish/raid_config_fail_interval').with_value(63)
+        is_expected.to contain_ironic_config('redfish/boot_mode_config_timeout').with_value(901)
       end
     end
 

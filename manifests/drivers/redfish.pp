@@ -71,6 +71,21 @@
 #   (optional) Specifies how firmware image should be served.
 #   Defaults to $facts['os_service_default']
 #
+# [*raid_config_status_interval*]
+#   (optional) Number of seconds to wait between checking for completed raid
+#   config tasks.
+#   Defaults to $facts['os_service_default']
+#
+# [*raid_config_fail_interval*]
+#   (optional) Number of seconds to wait between checking for failed raid
+#   config tasks.
+#   Defaults to $facts['os_service_default']
+#
+# [*boot_mode_config_timeout*]
+#   (optional) Number of seconds to wait for boot mode or secure boot status
+#   change to take effect after a reboot.
+#   Defaults to $facts['os_service_default']
+#
 class ironic::drivers::redfish (
   $package_ensure                  = 'present',
   $connection_attempts             = $facts['os_service_default'],
@@ -85,6 +100,9 @@ class ironic::drivers::redfish (
   $firmware_update_status_interval = $facts['os_service_default'],
   $firmware_update_fail_interval   = $facts['os_service_default'],
   $firmware_source                 = $facts['os_service_default'],
+  $raid_config_status_interval     = $facts['os_service_default'],
+  $raid_config_fail_interval       = $facts['os_service_default'],
+  $boot_mode_config_timeout        = $facts['os_service_default'],
 ) {
 
   include ironic::deps
@@ -103,6 +121,9 @@ class ironic::drivers::redfish (
     'redfish/firmware_update_status_interval': value => $firmware_update_status_interval;
     'redfish/firmware_update_fail_interval':   value => $firmware_update_fail_interval;
     'redfish/firmware_source':                 value => $firmware_source;
+    'redfish/raid_config_status_interval':     value => $raid_config_status_interval;
+    'redfish/raid_config_fail_interval':       value => $raid_config_fail_interval;
+    'redfish/boot_mode_config_timeout':        value => $boot_mode_config_timeout;
   }
 
   ensure_packages('python-sushy',

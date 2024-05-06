@@ -1,0 +1,9 @@
+---
+features:
+  - |
+    The following new parameters have been added to
+    the ``ironic::drivers::redfish`` class.
+
+    - ``raid_config_status_interval``
+    - ``raid_config_fail_interval``
+    - ``boot_mode_config_timeout``
