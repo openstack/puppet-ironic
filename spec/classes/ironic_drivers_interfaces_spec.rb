@@ -20,24 +20,51 @@ describe 'ironic::drivers::interfaces' do
   shared_examples_for 'ironic hardware interfaces' do
 
     context 'with default parameters' do
-      it { is_expected.to contain_ironic_config('DEFAULT/enabled_bios_interfaces').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ironic_config('DEFAULT/enabled_boot_interfaces').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ironic_config('DEFAULT/enabled_console_interfaces').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ironic_config('DEFAULT/enabled_console_interfaces').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ironic_config('DEFAULT/enabled_deploy_interfaces').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ironic_config('DEFAULT/enabled_inspect_interfaces').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ironic_config('DEFAULT/enabled_management_interfaces').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ironic_config('DEFAULT/enabled_network_interfaces').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ironic_config('DEFAULT/enabled_power_interfaces').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ironic_config('DEFAULT/enabled_raid_interfaces').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ironic_config('DEFAULT/enabled_rescue_interfaces').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ironic_config('DEFAULT/enabled_storage_interfaces').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_ironic_config('DEFAULT/enabled_vendor_interfaces').with_value('<SERVICE DEFAULT>') }
+      it 'configures the defaults' do
+        is_expected.to contain_ironic_config('DEFAULT/default_bios_interface').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('DEFAULT/default_boot_interface').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('DEFAULT/default_console_interface').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('DEFAULT/default_deploy_interface').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('DEFAULT/default_inspect_interface').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('DEFAULT/default_management_interface').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('DEFAULT/default_network_interface').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('DEFAULT/default_power_interface').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('DEFAULT/default_raid_interface').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('DEFAULT/default_rescue_interface').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('DEFAULT/default_storage_interface').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('DEFAULT/default_vendor_interface').with_value('<SERVICE DEFAULT>')
+
+        is_expected.to contain_ironic_config('DEFAULT/enabled_bios_interfaces').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('DEFAULT/enabled_boot_interfaces').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('DEFAULT/enabled_console_interfaces').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('DEFAULT/enabled_deploy_interfaces').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('DEFAULT/enabled_inspect_interfaces').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('DEFAULT/enabled_management_interfaces').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('DEFAULT/enabled_network_interfaces').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('DEFAULT/enabled_power_interfaces').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('DEFAULT/enabled_raid_interfaces').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('DEFAULT/enabled_rescue_interfaces').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('DEFAULT/enabled_storage_interfaces').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('DEFAULT/enabled_vendor_interfaces').with_value('<SERVICE DEFAULT>')
+      end
     end
 
     context 'when overriding parameters' do
       let :params do
         {
+          :default_bios_interface        => 'no-bios',
+          :default_boot_interface        => 'pxe',
+          :default_console_interface     => 'socat',
+          :default_deploy_interface      => 'iscsi',
+          :default_inspect_interface     => 'inspector',
+          :default_management_interface  => 'ipmitool',
+          :default_network_interface     => 'flat',
+          :default_power_interface       => 'ipmitool',
+          :default_raid_interface        => 'no-raid',
+          :default_rescue_interface      => 'no-rescue',
+          :default_storage_interface     => 'cinder',
+          :default_vendor_interface      => 'no-vendor',
+
           :enabled_bios_interfaces       => ['no-bios'],
           :enabled_boot_interfaces       => ['pxe'],
           :enabled_console_interfaces    => ['socat', 'shellinabox'],
@@ -49,21 +76,37 @@ describe 'ironic::drivers::interfaces' do
           :enabled_raid_interfaces       => ['agent', 'no-raid'],
           :enabled_rescue_interfaces     => ['agent', 'no-rescue'],
           :enabled_storage_interfaces    => ['cinder'],
-          :enabled_vendor_interfaces     => ['no-vendor'] }
+          :enabled_vendor_interfaces     => ['no-vendor']
+        }
       end
 
-      it { is_expected.to contain_ironic_config('DEFAULT/enabled_bios_interfaces').with_value('no-bios') }
-      it { is_expected.to contain_ironic_config('DEFAULT/enabled_boot_interfaces').with_value('pxe') }
-      it { is_expected.to contain_ironic_config('DEFAULT/enabled_console_interfaces').with_value('socat,shellinabox') }
-      it { is_expected.to contain_ironic_config('DEFAULT/enabled_deploy_interfaces').with_value('iscsi') }
-      it { is_expected.to contain_ironic_config('DEFAULT/enabled_inspect_interfaces').with_value('inspector') }
-      it { is_expected.to contain_ironic_config('DEFAULT/enabled_management_interfaces').with_value('ipmitool,irmc') }
-      it { is_expected.to contain_ironic_config('DEFAULT/enabled_network_interfaces').with_value('flat,neutron') }
-      it { is_expected.to contain_ironic_config('DEFAULT/enabled_power_interfaces').with_value('irmc,ipmitool') }
-      it { is_expected.to contain_ironic_config('DEFAULT/enabled_raid_interfaces').with_value('agent,no-raid') }
-      it { is_expected.to contain_ironic_config('DEFAULT/enabled_rescue_interfaces').with_value('agent,no-rescue') }
-      it { is_expected.to contain_ironic_config('DEFAULT/enabled_storage_interfaces').with_value('cinder') }
-      it { is_expected.to contain_ironic_config('DEFAULT/enabled_vendor_interfaces').with_value('no-vendor') }
+      it 'configures the given values' do
+        is_expected.to contain_ironic_config('DEFAULT/default_bios_interface').with_value('no-bios')
+        is_expected.to contain_ironic_config('DEFAULT/default_boot_interface').with_value('pxe')
+        is_expected.to contain_ironic_config('DEFAULT/default_console_interface').with_value('socat')
+        is_expected.to contain_ironic_config('DEFAULT/default_deploy_interface').with_value('iscsi')
+        is_expected.to contain_ironic_config('DEFAULT/default_inspect_interface').with_value('inspector')
+        is_expected.to contain_ironic_config('DEFAULT/default_management_interface').with_value('ipmitool')
+        is_expected.to contain_ironic_config('DEFAULT/default_network_interface').with_value('flat')
+        is_expected.to contain_ironic_config('DEFAULT/default_power_interface').with_value('ipmitool')
+        is_expected.to contain_ironic_config('DEFAULT/default_raid_interface').with_value('no-raid')
+        is_expected.to contain_ironic_config('DEFAULT/default_rescue_interface').with_value('no-rescue')
+        is_expected.to contain_ironic_config('DEFAULT/default_storage_interface').with_value('cinder')
+        is_expected.to contain_ironic_config('DEFAULT/default_vendor_interface').with_value('no-vendor')
+
+        is_expected.to contain_ironic_config('DEFAULT/enabled_bios_interfaces').with_value('no-bios')
+        is_expected.to contain_ironic_config('DEFAULT/enabled_boot_interfaces').with_value('pxe')
+        is_expected.to contain_ironic_config('DEFAULT/enabled_console_interfaces').with_value('socat,shellinabox')
+        is_expected.to contain_ironic_config('DEFAULT/enabled_deploy_interfaces').with_value('iscsi')
+        is_expected.to contain_ironic_config('DEFAULT/enabled_inspect_interfaces').with_value('inspector')
+        is_expected.to contain_ironic_config('DEFAULT/enabled_management_interfaces').with_value('ipmitool,irmc')
+        is_expected.to contain_ironic_config('DEFAULT/enabled_network_interfaces').with_value('flat,neutron')
+        is_expected.to contain_ironic_config('DEFAULT/enabled_power_interfaces').with_value('irmc,ipmitool')
+        is_expected.to contain_ironic_config('DEFAULT/enabled_raid_interfaces').with_value('agent,no-raid')
+        is_expected.to contain_ironic_config('DEFAULT/enabled_rescue_interfaces').with_value('agent,no-rescue')
+        is_expected.to contain_ironic_config('DEFAULT/enabled_storage_interfaces').with_value('cinder')
+        is_expected.to contain_ironic_config('DEFAULT/enabled_vendor_interfaces').with_value('no-vendor')
+      end
     end
 
   end
