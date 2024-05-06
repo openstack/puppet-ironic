@@ -22,36 +22,36 @@ require 'spec_helper'
 
 describe 'ironic::drivers::ipmi' do
 
-  let :default_params do
-    {}
-  end
-
-  let :params do
-    {}
-  end
-
   shared_examples_for 'ironic ipmi driver' do
-    let :p do
-      default_params.merge(params)
-    end
-
-    it 'configures ironic.conf' do
-      is_expected.to contain_ironic_config('ipmi/command_retry_timeout').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('ipmi/min_command_interval').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('ipmi/debug').with_value('<SERVICE DEFAULT>')
+    context 'with defaults' do
+      it 'configures defaults' do
+        is_expected.to contain_ironic_config('ipmi/command_retry_timeout').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('ipmi/min_command_interval').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('ipmi/use_ipmitool_retries').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('ipmi/kill_on_timeout').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('ipmi/disable_boot_timeout').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('ipmi/debug').with_value('<SERVICE DEFAULT>')
+      end
     end
 
     context 'when overriding parameters' do
-      before do
-        params.merge!(
-          :command_retry_timeout => '50',
-          :min_command_interval  => '5',
+      let :params do
+        {
+          :command_retry_timeout => 50,
+          :min_command_interval  => 5,
+          :use_ipmitool_retries  => false,
+          :kill_on_timeout       => true,
+          :disable_boot_timeout  => true,
           :debug                 => true,
-        )
+        }
       end
-      it 'should replace default parameter with new value' do
-        is_expected.to contain_ironic_config('ipmi/command_retry_timeout').with_value('50')
-        is_expected.to contain_ironic_config('ipmi/min_command_interval').with_value('5')
+
+      it 'configures the given values' do
+        is_expected.to contain_ironic_config('ipmi/command_retry_timeout').with_value(50)
+        is_expected.to contain_ironic_config('ipmi/min_command_interval').with_value(5)
+        is_expected.to contain_ironic_config('ipmi/use_ipmitool_retries').with_value(false)
+        is_expected.to contain_ironic_config('ipmi/kill_on_timeout').with_value(true)
+        is_expected.to contain_ironic_config('ipmi/disable_boot_timeout').with_value(true)
         is_expected.to contain_ironic_config('ipmi/debug').with_value(true)
       end
     end
