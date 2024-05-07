@@ -154,6 +154,10 @@ describe 'ironic::inspector' do
       )
     end
 
+    it 'should not contain dhcp hostsdir' do
+      is_expected.not_to contain_file('ironic-inspector-dnsmasq-dhcp-hostsdir')
+    end
+
     it 'should contain file /etc/ironic-inspector/dnsmasq.conf' do
       is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with(
         'ensure'  => 'present',
@@ -196,6 +200,9 @@ describe 'ironic::inspector' do
       is_expected.not_to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
         /^log-facility=.*$/
       )
+      is_expected.not_to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
+        /^dhcp-hostsdir=.*$/
+      )
     end
     it 'should contain file /tftpboot/pxelinux.cfg/default' do
       is_expected.to contain_file('/tftpboot/pxelinux.cfg/default').with(
@@ -229,6 +236,7 @@ describe 'ironic::inspector' do
           :discovery_default_driver           => 'pxe_ipmitool',
           :dnsmasq_ip_subnets                 => [{'ip_range' => '192.168.0.100,192.168.0.120'}],
           :dnsmasq_dhcp_sequential_ip         => false,
+          :dnsmasq_dhcp_hostsdir              => '/etc/ironic-inspector/dhcp-hostsdir',
           :dnsmasq_log_facility               => '/var/log/ironic-inspector/dnsmasq.log',
           :add_ports                          => 'all',
           :always_store_ramdisk_logs          => true,
@@ -293,6 +301,15 @@ describe 'ironic::inspector' do
         )
       end
 
+    it 'should contain dhcp hostsdir' do
+      is_expected.to contain_file('ironic-inspector-dnsmasq-dhcp-hostsdir').with(
+        :ensure => 'directory',
+        :path   => '/etc/ironic-inspector/dhcp-hostsdir',
+        :owner  => 'ironic-inspector',
+        :group  => 'ironic-inspector',
+      )
+    end
+
       it 'should contain file /etc/ironic-inspector/dnsmasq.conf' do
         is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with(
           'ensure'  => 'present',
@@ -328,6 +345,9 @@ describe 'ironic::inspector' do
         )
         is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
           /^dhcp-option=tag:efi6,tag:!ipxe6,option6:bootfile-url,tftp:\/\/.*\/otherpxe.efi$/
+        )
+        is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with_content(
+          /^dhcp-hostsdir=\/etc\/ironic-inspector\/dhcp-hostsdir$/
         )
 
       end
