@@ -1,0 +1,8 @@
+---
+features:
+  - |
+    The ``ironic::drivers::ipmi`` class now supports the following two new
+    parameters.
+
+    - ``additional_retryable_ipmi_errors``
+    - ``cipher_suite_versions``
