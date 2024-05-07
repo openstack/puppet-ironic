@@ -36,13 +36,8 @@ class ironic::inspector::pxe_filter::iptables (
   include ironic::deps
   include ironic::inspector
 
-  # TODO(tkajinam): Remove usage of ensure_resource once we drop the same
-  #                 option from ironic::inspector
-  ensure_resource('ironic_inspector_config', 'iptables/dnsmasq_interface', {
-    value => $::ironic::inspector::dnsmasq_interface
-  })
-
   ironic_inspector_config {
+    'iptables/dnsmasq_interface': value => $::ironic::inspector::dnsmasq_interface;
     'iptables/firewall_chain':    value => $firewall_chain;
     'iptables/ethoib_interfaces': value => join(any2array($ethoib_interfaces), ',');
     'iptables/ip_version':        value => $ip_version;

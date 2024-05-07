@@ -470,7 +470,6 @@ class ironic::inspector (
     'DEFAULT/timeout':                            value => $timeout;
     'DEFAULT/api_max_limit':                      value => $api_max_limit;
     'capabilities/boot_mode':                     value => $detect_boot_mode;
-    'iptables/dnsmasq_interface':                 value => $dnsmasq_interface;
     'processing/ramdisk_logs_dir':                value => $ramdisk_logs_dir;
     'processing/always_store_ramdisk_logs':       value => $always_store_ramdisk_logs;
     'processing/add_ports':                       value => $add_ports;
@@ -511,12 +510,6 @@ class ironic::inspector (
     rabbit_quorum_delivery_limit    => $rabbit_quorum_delivery_limit,
     rabbit_quorum_max_memory_length => $rabbit_quorum_max_memory_length,
     rabbit_quorum_max_memory_bytes  => $rabbit_quorum_max_memory_bytes,
-  }
-
-  if $dnsmasq_interface != 'br-ctlplane' {
-    warning("The [pxe] dnsmasq_interface option may not be configured by this class \
-in a future release. Make sure the ironic::inspector::pxe_filter::iptables class is \
-included in the manifest")
   }
 
   # Install package

@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    Now the ``[pxe] dnsmasq_interface`` option is managed by only
+    the ``ironic::inspector::pxe_filter::iptables`` class.
