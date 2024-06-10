@@ -375,12 +375,10 @@ class ironic::conductor (
   }
 
   # Install package
-  if $::ironic::params::conductor_package {
-    package { 'ironic-conductor':
-      ensure => $package_ensure,
-      name   => $::ironic::params::conductor_package,
-      tag    => ['openstack', 'ironic-package'],
-    }
+  package { 'ironic-conductor':
+    ensure => $package_ensure,
+    name   => $::ironic::params::conductor_package,
+    tag    => ['openstack', 'ironic-package'],
   }
 
   if $manage_service {

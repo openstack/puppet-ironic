@@ -102,12 +102,10 @@ class ironic::api (
   }
 
   # Install package
-  if $::ironic::params::api_package {
-    package { 'ironic-api':
-      ensure => $package_ensure,
-      name   => $::ironic::params::api_package,
-      tag    => ['openstack', 'ironic-package'],
-    }
+  package { 'ironic-api':
+    ensure => $package_ensure,
+    name   => $::ironic::params::api_package,
+    tag    => ['openstack', 'ironic-package'],
   }
 
   if $manage_service {
