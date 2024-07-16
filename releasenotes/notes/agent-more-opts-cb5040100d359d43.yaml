@@ -1,0 +1,16 @@
+---
+features:
+  - |
+    The following parameters have been added to the ``ironic::drivers::agent``
+    class.
+
+    - ``manage_agent_boot``
+    - ``memory_consumed_by_agent``
+    - ``neutron_agent_poll_interval``
+    - ``neutron_agent_max_attempts``
+    - ``neutron_agent_status_retry_interval``
+    - ``require_tls``
+    - ``certificates_path``
+    - ``verify_ca``
+    - ``api_ca_file``
+    - ``allow_md5_checksum``

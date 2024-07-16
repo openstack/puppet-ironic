@@ -9,10 +9,19 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-
+#
 # Configure the IPA-related parameters in Ironic
 #
 # === Parameters
+#
+# [*manage_agent_boot*]
+#   (optional) Whether Ironic will managed booting of the agent ramdisk.
+#   Defaults to $facts['os_service_default']
+#
+# [*memory_consumed_by_agent*]
+#   (optional) The memory size in MIB consumed by agent when it is booted on
+#   a bare metal node.
+#   Defaults to $facts['os_service_default']
 #
 # [*stream_raw_images*]
 #   (optional) Whether to stream raw images directly on the hard drive instead
@@ -78,7 +87,47 @@
 #   commands completion.
 #   Defaults to $facts['os_service_default']
 #
+# [*neutron_agent_poll_interval*]
+#   (optional) The number of seconds Neutron agent will wait between polling
+#   for device changes.
+#   Defaults to $facts['os_service_default']
+#
+# [*neutron_agent_max_attempts*]
+#   (optional) Max number of attempts to validate a Neutron agent status before
+#   raising network error for a dead agent.
+#   Defaults to $facts['os_service_default']
+#
+# [*neutron_agent_status_retry_interval*]
+#   (optional) Wait time in seconds between attempts for validating Neutron
+#   agent status.
+#   Defaults to $facts['os_service_default']
+#
+# [*require_tls*]
+#   (optional) If set to False, callback URLs without https:// will be
+#   permitted by the conductor.
+#   Defaults to $facts['os_service_default']
+#
+# [*certificates_path*]
+#   (optional) Path to store auto-generated TLS certificates used to validate
+#   connections to the ramdisk.
+#   Defaults to $facts['os_service_default']
+#
+# [*verify_ca*]
+#   (optional) Path to the TLS CA to validate connection to the ramdisk.
+#   Defaults to $facts['os_service_default']
+#
+# [*api_ca_file*]
+#   (optional) Path to the TLS CA that is used to start the bare metal API.
+#   Defaults to $facts['os_service_default']
+#
+# [*allow_md5_checksum*]
+#   (optional) When enabled, the agent will be notified it is permitted to
+#   consider MD5 checksums.
+#   Defaults to $facts['os_service_default']
+#
 class ironic::drivers::agent (
+  $manage_agent_boot                            = $facts['os_service_default'],
+  $memory_consumed_by_agent                     = $facts['os_service_default'],
   $stream_raw_images                            = $facts['os_service_default'],
   $image_download_source                        = $facts['os_service_default'],
   $post_deploy_get_power_state_retries          = $facts['os_service_default'],
@@ -92,12 +141,22 @@ class ironic::drivers::agent (
   $max_command_attempts                         = $facts['os_service_default'],
   $command_wait_attempts                        = $facts['os_service_default'],
   $command_wait_interval                        = $facts['os_service_default'],
+  $neutron_agent_poll_interval                  = $facts['os_service_default'],
+  $neutron_agent_max_attempts                   = $facts['os_service_default'],
+  $neutron_agent_status_retry_interval          = $facts['os_service_default'],
+  $require_tls                                  = $facts['os_service_default'],
+  $certificates_path                            = $facts['os_service_default'],
+  $verify_ca                                    = $facts['os_service_default'],
+  $api_ca_file                                  = $facts['os_service_default'],
+  $allow_md5_checksum                           = $facts['os_service_default'],
 ) {
 
   include ironic::deps
 
   # Configure ironic.conf
   ironic_config {
+    'agent/manage_agent_boot':                          value => $manage_agent_boot;
+    'agent/memory_consumed_by_agent':                   value => $memory_consumed_by_agent;
     'agent/stream_raw_images':                          value => $stream_raw_images;
     'agent/image_download_source':                      value => $image_download_source;
     'agent/post_deploy_get_power_state_retries':        value => $post_deploy_get_power_state_retries;
@@ -111,6 +170,13 @@ class ironic::drivers::agent (
     'agent/max_command_attempts':                       value => $max_command_attempts;
     'agent/command_wait_attempts':                      value => $command_wait_attempts;
     'agent/command_wait_interval':                      value => $command_wait_interval;
+    'agent/neutron_agent_poll_interval':                value => $neutron_agent_poll_interval;
+    'agent/neutron_agent_max_attempts':                 value => $neutron_agent_max_attempts;
+    'agent/neutron_agent_status_retry_interval':        value => $neutron_agent_status_retry_interval;
+    'agent/require_tls':                                value => $require_tls;
+    'agent/certificates_path':                          value => $certificates_path;
+    'agent/verify_ca':                                  value => $verify_ca;
+    'agent/api_ca_file':                                value => $api_ca_file;
+    'agent/allow_md5_checksum':                         value => $allow_md5_checksum;
   }
-
 }
