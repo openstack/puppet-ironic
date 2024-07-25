@@ -1,0 +1,8 @@
+---
+features:
+  - |
+    The ``enable_by_file_paths`` parameter has been added to the following
+    classes.
+
+    - ``ironic::healthcheck``
+    - ``ironic::inspector::healthcheck``

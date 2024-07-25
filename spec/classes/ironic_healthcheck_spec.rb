@@ -19,6 +19,7 @@ describe 'ironic::healthcheck' do
           :ignore_proxied_requests => '<SERVICE DEFAULT>',
           :disable_by_file_path    => '<SERVICE DEFAULT>',
           :disable_by_file_paths   => '<SERVICE DEFAULT>',
+          :enable_by_file_paths    => '<SERVICE DEFAULT>',
         )
       end
     end
@@ -33,6 +34,7 @@ describe 'ironic::healthcheck' do
           :ignore_proxied_requests => false,
           :disable_by_file_path    => '/etc/ironic/healthcheck/disabled',
           :disable_by_file_paths   => ['8042:/etc/ironic/healthcheck/disabled'],
+          :enable_by_file_paths    => ['/etc/ironic/healthcheck/enabled'],
         }
       end
 
@@ -46,6 +48,7 @@ describe 'ironic::healthcheck' do
           :ignore_proxied_requests => false,
           :disable_by_file_path    => '/etc/ironic/healthcheck/disabled',
           :disable_by_file_paths   => ['8042:/etc/ironic/healthcheck/disabled'],
+          :enable_by_file_paths    => ['/etc/ironic/healthcheck/enabled'],
         )
       end
     end
