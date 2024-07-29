@@ -13,10 +13,12 @@ describe 'ironic::inspector::healthcheck' do
         is_expected.to contain_ironic_inspector_config('healthcheck/enabled').with_value('<SERVICE DEFAULT>')
 
         is_expected.to contain_oslo__healthcheck('ironic_inspector_config').with(
-          :detailed              => '<SERVICE DEFAULT>',
-          :backends              => '<SERVICE DEFAULT>',
-          :disable_by_file_path  => '<SERVICE DEFAULT>',
-          :disable_by_file_paths => '<SERVICE DEFAULT>',
+          :detailed                => '<SERVICE DEFAULT>',
+          :backends                => '<SERVICE DEFAULT>',
+          :allowed_source_ranges   => '<SERVICE DEFAULT>',
+          :ignore_proxied_requests => '<SERVICE DEFAULT>',
+          :disable_by_file_path    => '<SERVICE DEFAULT>',
+          :disable_by_file_paths   => '<SERVICE DEFAULT>',
         )
       end
     end
@@ -24,11 +26,13 @@ describe 'ironic::inspector::healthcheck' do
     context 'with specific parameters' do
       let :params do
         {
-          :enabled               => true,
-          :detailed              => true,
-          :backends              => ['disable_by_file'],
-          :disable_by_file_path  => '/etc/ironic-inspector/healthcheck/disabled',
-          :disable_by_file_paths => ['5050:/etc/ironic-inspector/healthcheck/disabled'],
+          :enabled                 => true,
+          :detailed                => true,
+          :backends                => ['disable_by_file'],
+          :allowed_source_ranges   => ['10.0.0.0/24', '10.0.1.0/24'],
+          :ignore_proxied_requests => false,
+          :disable_by_file_path    => '/etc/ironic-inspector/healthcheck/disabled',
+          :disable_by_file_paths   => ['5050:/etc/ironic-inspector/healthcheck/disabled'],
         }
       end
 
@@ -36,10 +40,12 @@ describe 'ironic::inspector::healthcheck' do
         is_expected.to contain_ironic_inspector_config('healthcheck/enabled').with_value(true)
 
         is_expected.to contain_oslo__healthcheck('ironic_inspector_config').with(
-          :detailed              => true,
-          :backends              => ['disable_by_file'],
-          :disable_by_file_path  => '/etc/ironic-inspector/healthcheck/disabled',
-          :disable_by_file_paths => ['5050:/etc/ironic-inspector/healthcheck/disabled'],
+          :detailed                => true,
+          :backends                => ['disable_by_file'],
+          :allowed_source_ranges   => ['10.0.0.0/24', '10.0.1.0/24'],
+          :ignore_proxied_requests => false,
+          :disable_by_file_path    => '/etc/ironic-inspector/healthcheck/disabled',
+          :disable_by_file_paths   => ['5050:/etc/ironic-inspector/healthcheck/disabled'],
         )
       end
     end
