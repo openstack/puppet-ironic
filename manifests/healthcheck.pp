@@ -36,6 +36,11 @@
 #   is running on a port. Expects a "port:path" list of strings.
 #   Defaults to $facts['os_service_default']
 #
+# [*enable_by_file_paths*]
+#   (Optional) Check the presence of files. Used by EnableByFilesHealthcheck
+#   plugin.
+#   Defaults to $facts['os_service_default']
+#
 class ironic::healthcheck (
   $enabled                 = $facts['os_service_default'],
   $detailed                = $facts['os_service_default'],
@@ -44,6 +49,7 @@ class ironic::healthcheck (
   $ignore_proxied_requests = $facts['os_service_default'],
   $disable_by_file_path    = $facts['os_service_default'],
   $disable_by_file_paths   = $facts['os_service_default'],
+  $enable_by_file_paths    = $facts['os_service_default'],
 ) {
 
   include ironic::deps
@@ -59,5 +65,6 @@ class ironic::healthcheck (
     ignore_proxied_requests => $ignore_proxied_requests,
     disable_by_file_path    => $disable_by_file_path,
     disable_by_file_paths   => $disable_by_file_paths,
+    enable_by_file_paths    => $enable_by_file_paths,
   }
 }
