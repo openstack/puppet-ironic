@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``ironic::drivers::ipmi::store_cred_in_env`` parameter has been
+    added.

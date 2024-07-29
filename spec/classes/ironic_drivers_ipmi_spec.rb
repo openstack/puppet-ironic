@@ -32,6 +32,7 @@ describe 'ironic::drivers::ipmi' do
         is_expected.to contain_ironic_config('ipmi/disable_boot_timeout').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ironic_config('ipmi/additional_retryable_ipmi_errors').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ironic_config('ipmi/debug').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('ipmi/store_cred_in_env').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ironic_config('ipmi/cipher_suite_versions').with_value('<SERVICE DEFAULT>')
       end
     end
@@ -46,6 +47,7 @@ describe 'ironic::drivers::ipmi' do
           :disable_boot_timeout             => true,
           :additional_retryable_ipmi_errors => ['error1', 'error2'],
           :debug                            => true,
+          :store_cred_in_env                => false,
           :cipher_suite_versions            => ['1', '2'],
         }
       end
@@ -58,6 +60,7 @@ describe 'ironic::drivers::ipmi' do
         is_expected.to contain_ironic_config('ipmi/disable_boot_timeout').with_value(true)
         is_expected.to contain_ironic_config('ipmi/additional_retryable_ipmi_errors').with_value(['error1', 'error2'])
         is_expected.to contain_ironic_config('ipmi/debug').with_value(true)
+        is_expected.to contain_ironic_config('ipmi/store_cred_in_env').with_value(false)
         is_expected.to contain_ironic_config('ipmi/cipher_suite_versions').with_value('1,2')
       end
     end

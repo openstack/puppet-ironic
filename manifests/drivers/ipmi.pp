@@ -51,6 +51,11 @@
 #   (optional) Enables debug outputs of IPMI commands
 #   Defaults to $facts['os_service_default']
 #
+# [*store_cred_in_env*]
+#   (optional) Store IPMI password in an environment variable instead of
+#   a file.
+#   Defaults to $facts['os_service_default']
+#
 # [*cipher_suite_versions*]
 #   (optional) List of possible cipher suites versions that can be supported
 #   by the hardware in case the field `cipher_suite` is not set for the node.
@@ -64,6 +69,7 @@ class ironic::drivers::ipmi (
   $disable_boot_timeout             = $facts['os_service_default'],
   $additional_retryable_ipmi_errors = $facts['os_service_default'],
   $debug                            = $facts['os_service_default'],
+  $store_cred_in_env                = $facts['os_service_default'],
   $cipher_suite_versions            = $facts['os_service_default'],
 ) {
 
@@ -78,6 +84,7 @@ class ironic::drivers::ipmi (
     'ipmi/disable_boot_timeout':             value => $disable_boot_timeout;
     'ipmi/additional_retryable_ipmi_errors': value => $additional_retryable_ipmi_errors;
     'ipmi/debug':                            value => $debug;
+    'ipmi/store_cred_in_env':                value => $store_cred_in_env;
     'ipmi/cipher_suite_versions':            value => join(any2array($cipher_suite_versions), ',');
   }
 
