@@ -232,6 +232,16 @@
 #   a conductor.
 #   Defaults to $facts['os_service_default']
 #
+# [*max_concurrent_deploy*]
+#   (optional) The maximum number of concurrent nodes in deployment which are
+#   permitted in this Ironic system.
+#   Defaults to $facts['os_service_default']
+#
+# [*max_concurrent_clean*]
+#   (optional) The maximum number of concurrent nodes in cleaning which are
+#   permitted in this Ironic system.
+#   Defaults to $facts['os_service_default']
+#
 class ironic::conductor (
   $package_ensure                      = 'present',
   Boolean $enabled                     = true,
@@ -276,6 +286,8 @@ class ironic::conductor (
   $deploy_callback_timeout             = $facts['os_service_default'],
   $heartbeat_interval                  = $facts['os_service_default'],
   $heartbeat_timeout                   = $facts['os_service_default'],
+  $max_concurrent_deploy               = $facts['os_service_default'],
+  $max_concurrent_clean                = $facts['os_service_default'],
 ) {
 
   include ironic::deps
@@ -365,6 +377,8 @@ class ironic::conductor (
     'conductor/deploy_callback_timeout':           value => $deploy_callback_timeout;
     'conductor/heartbeat_interval':                value => $heartbeat_interval;
     'conductor/heartbeat_timeout':                 value => $heartbeat_timeout;
+    'conductor/max_concurrent_deploy':             value => $max_concurrent_deploy;
+    'conductor/max_concurrent_clean':              value => $max_concurrent_clean;
   }
 
   ironic_config {

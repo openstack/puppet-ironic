@@ -103,6 +103,8 @@ describe 'ironic::conductor' do
       is_expected.to contain_ironic_config('conductor/deploy_callback_timeout').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/heartbeat_interval').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/heartbeat_timeout').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('conductor/max_concurrent_deploy').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('conductor/max_concurrent_clean').with(:value => '<SERVICE DEFAULT>')
     end
 
     context 'when overriding parameters' do
@@ -146,6 +148,8 @@ describe 'ironic::conductor' do
           :deploy_callback_timeout           => 1800,
           :heartbeat_interval                => 10,
           :heartbeat_timeout                 => 60,
+          :max_concurrent_deploy             => 250,
+          :max_concurrent_clean              => 50,
         )
       end
       it 'should replace default parameter with new value' do
@@ -188,6 +192,8 @@ describe 'ironic::conductor' do
         is_expected.to contain_ironic_config('conductor/deploy_callback_timeout').with_value(p[:deploy_callback_timeout])
         is_expected.to contain_ironic_config('conductor/heartbeat_interval').with_value(p[:heartbeat_interval])
         is_expected.to contain_ironic_config('conductor/heartbeat_timeout').with_value(p[:heartbeat_timeout])
+        is_expected.to contain_ironic_config('conductor/max_concurrent_deploy').with_value(p[:max_concurrent_deploy])
+        is_expected.to contain_ironic_config('conductor/max_concurrent_clean').with_value(p[:max_concurrent_clean])
       end
     end
   end
