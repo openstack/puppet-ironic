@@ -89,6 +89,7 @@ describe 'ironic::conductor' do
       is_expected.to contain_ironic_config('conductor/sync_power_state_workers').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/power_state_sync_max_retries').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/power_failure_recovery_interval').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('conductor/periodic_max_workers').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/conductor_group').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/deploy_kernel').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/deploy_ramdisk').with(:value => '<SERVICE DEFAULT>')
@@ -131,6 +132,7 @@ describe 'ironic::conductor' do
           :sync_power_state_workers          => 2,
           :power_state_sync_max_retries      => 5,
           :power_failure_recovery_interval   => 120,
+          :periodic_max_workers              => 4,
           :conductor_group                   => 'in-the-closet-to-the-left',
           :deploy_kernel                     => 'http://host/deploy.kernel',
           :deploy_ramdisk                    => 'http://host/deploy.ramdisk',
@@ -173,6 +175,7 @@ describe 'ironic::conductor' do
         is_expected.to contain_ironic_config('conductor/sync_power_state_workers').with_value(p[:sync_power_state_workers])
         is_expected.to contain_ironic_config('conductor/power_state_sync_max_retries').with_value(p[:power_state_sync_max_retries])
         is_expected.to contain_ironic_config('conductor/power_failure_recovery_interval').with_value(p[:power_failure_recovery_interval])
+        is_expected.to contain_ironic_config('conductor/periodic_max_workers').with_value(p[:periodic_max_workers])
         is_expected.to contain_ironic_config('conductor/conductor_group').with_value(p[:conductor_group])
         is_expected.to contain_ironic_config('conductor/deploy_kernel').with_value(p[:deploy_kernel])
         is_expected.to contain_ironic_config('conductor/deploy_ramdisk').with_value(p[:deploy_ramdisk])

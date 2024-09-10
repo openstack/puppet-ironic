@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``ironic::conductor::periodic_max_workers`` parameter has been
+    added.
