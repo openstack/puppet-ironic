@@ -1,0 +1,8 @@
+---
+features:
+  - |
+    The ``ironic::conductor`` class now supports the following conductor
+    options.
+
+    - ``max_concurrent_deploy``
+    - ``max_concurrent_clean``
