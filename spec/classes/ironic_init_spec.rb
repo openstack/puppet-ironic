@@ -63,6 +63,7 @@ describe 'ironic' do
 
       it 'configures ironic.conf' do
         is_expected.to contain_ironic_config('DEFAULT/auth_strategy').with_value('keystone')
+        is_expected.to contain_ironic_config('DEFAULT/host').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ironic_config('DEFAULT/my_ip').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ironic_config('DEFAULT/my_ipv6').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ironic_config('DEFAULT/default_resource_class').with_value('<SERVICE DEFAULT>')
@@ -108,6 +109,7 @@ describe 'ironic' do
     context 'with parameters' do
       let :params do
         {
+          :host                               => 'host.example.com',
           :my_ip                              => '127.0.0.1',
           :my_ipv6                            => '::1',
           :default_resource_class             => 'myclass',
@@ -144,6 +146,7 @@ describe 'ironic' do
 
       it 'configures ironic.conf' do
         is_expected.to contain_ironic_config('DEFAULT/auth_strategy').with_value('keystone')
+        is_expected.to contain_ironic_config('DEFAULT/host').with_value('host.example.com')
         is_expected.to contain_ironic_config('DEFAULT/my_ip').with_value('127.0.0.1')
         is_expected.to contain_ironic_config('DEFAULT/my_ipv6').with_value('::1')
         is_expected.to contain_ironic_config('DEFAULT/default_resource_class').with_value('myclass')

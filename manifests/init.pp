@@ -29,6 +29,10 @@
 #   (optional) The state of the package
 #   Defaults to 'present'
 #
+# [*host*]
+#   (optional) Name of this node.
+#   Defaults to $facts['os_service_default'].
+#
 # [*my_ip*]
 #   (optional) IP address of this host.
 #   If unset, will determine the IP programmatically. If unable to do so, will use
@@ -215,6 +219,7 @@
 class ironic (
   Boolean $enabled                    = true,
   $package_ensure                     = 'present',
+  $host                               = $facts['os_service_default'],
   $my_ip                              = $facts['os_service_default'],
   $my_ipv6                            = $facts['os_service_default'],
   $auth_strategy                      = 'keystone',
@@ -279,6 +284,7 @@ class ironic (
 
   ironic_config {
     'DEFAULT/auth_strategy':                     value => $auth_strategy;
+    'DEFAULT/host':                              value => $host;
     'DEFAULT/my_ip':                             value => $my_ip;
     'DEFAULT/my_ipv6':                           value => $my_ipv6;
     'DEFAULT/default_resource_class':            value => $default_resource_class;
