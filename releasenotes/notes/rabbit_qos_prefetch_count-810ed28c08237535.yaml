@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    The following new parameters have been added.
+
+     - ``ironic::rabbit_qos_prefetch_count``
+     - ``ironic::inspector::rabbit_qos_prefetch_count``
