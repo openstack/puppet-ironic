@@ -312,7 +312,7 @@
 #
 # [*standalone*]
 #   (optional) Whether to run ironic-inspector as a standalone service.
-#   Defaults to false
+#   Defaults to true
 #
 class ironic::inspector (
   $package_ensure                             = 'present',
