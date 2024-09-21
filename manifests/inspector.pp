@@ -459,34 +459,33 @@ class ironic::inspector (
   -> File<| tag == 'ironic-inspector-dnsmasq-file' |>
   -> Anchor['ironic-inspector::config::end']
 
-  # Configure inspector.conf
-
-  #Processing hooks string
-  #Moved here in favor of removing the
-  #140 chars exceeded error in puppet-lint
-  $p_hooks = join(delete_undef_values(['$default_processing_hooks', $additional_processing_hooks]), ',')
-
-  # Convert the hash to comma separated string of <key>:<value> pairs.
-  $port_physnet_cidr_map_real = join($port_physnet_cidr_map.map | $i | { join($i, ':') }, ',')
+  $p_hooks = $additional_processing_hooks ? {
+    undef   => $facts['os_service_default'],
+    default => join(concat(['$default_processing_hooks'], any2array($additional_processing_hooks)), ',')
+  }
+  $port_physnet_cidr_map_real = empty($port_physnet_cidr_map) ? {
+    true    => $facts['os_service_default'],
+    default => join(join_keys_to_values($port_physnet_cidr_map, ':'), ',')
+  }
 
   ironic_inspector_config {
-    'DEFAULT/listen_address':                     value => $listen_address;
-    'DEFAULT/auth_strategy':                      value => $auth_strategy;
-    'DEFAULT/timeout':                            value => $timeout;
-    'DEFAULT/api_max_limit':                      value => $api_max_limit;
-    'capabilities/boot_mode':                     value => $detect_boot_mode;
-    'processing/ramdisk_logs_dir':                value => $ramdisk_logs_dir;
-    'processing/always_store_ramdisk_logs':       value => $always_store_ramdisk_logs;
-    'processing/add_ports':                       value => $add_ports;
-    'processing/keep_ports':                      value => $keep_ports;
-    'processing/store_data':                      value => $store_data;
+    'DEFAULT/listen_address':               value => $listen_address;
+    'DEFAULT/auth_strategy':                value => $auth_strategy;
+    'DEFAULT/timeout':                      value => $timeout;
+    'DEFAULT/api_max_limit':                value => $api_max_limit;
+    'capabilities/boot_mode':               value => $detect_boot_mode;
+    'processing/ramdisk_logs_dir':          value => $ramdisk_logs_dir;
+    'processing/always_store_ramdisk_logs': value => $always_store_ramdisk_logs;
+    'processing/add_ports':                 value => $add_ports;
+    'processing/keep_ports':                value => $keep_ports;
+    'processing/store_data':                value => $store_data;
     # Here we use oslo.config interpolation with another option default_processing_hooks,
     # which we don't change as it might break introspection completely.
-    'processing/processing_hooks':                value => $p_hooks;
-    'processing/node_not_found_hook':             value => $node_not_found_hook;
-    'discovery/enroll_node_driver':               value => $discovery_default_driver;
-    'port_physnet/cidr_map':                      value => $port_physnet_cidr_map_real;
-    'DEFAULT/standalone':                         value => $standalone;
+    'processing/processing_hooks':          value => $p_hooks;
+    'processing/node_not_found_hook':       value => $node_not_found_hook;
+    'discovery/enroll_node_driver':         value => $discovery_default_driver;
+    'port_physnet/cidr_map':                value => $port_physnet_cidr_map_real;
+    'DEFAULT/standalone':                   value => $standalone;
   }
 
   oslo::messaging::default {'ironic_inspector_config':

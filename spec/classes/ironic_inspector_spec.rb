@@ -31,8 +31,6 @@ describe 'ironic::inspector' do
       :auth_strategy         => 'keystone',
       :dnsmasq_interface     => 'br-ctlplane',
       :ramdisk_logs_dir      => '/var/log/ironic-inspector/ramdisk/',
-      :add_ports             => 'pxe',
-      :keep_ports            => 'all',
       :store_data            => 'none',
       :dnsmasq_ip_subnets    => [{ 'ip_range' =>
                                       '192.168.0.100,192.168.0.120',
@@ -117,13 +115,13 @@ describe 'ironic::inspector' do
       is_expected.to contain_ironic_inspector_config('capabilities/boot_mode').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('processing/ramdisk_logs_dir').with_value(p[:ramdisk_logs_dir])
       is_expected.to contain_ironic_inspector_config('processing/always_store_ramdisk_logs').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_inspector_config('processing/add_ports').with_value(p[:add_ports])
-      is_expected.to contain_ironic_inspector_config('processing/keep_ports').with_value(p[:keep_ports])
+      is_expected.to contain_ironic_inspector_config('processing/add_ports').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_inspector_config('processing/keep_ports').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('processing/store_data').with_value(p[:store_data])
-      is_expected.to contain_ironic_inspector_config('processing/processing_hooks').with_value('$default_processing_hooks')
+      is_expected.to contain_ironic_inspector_config('processing/processing_hooks').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('processing/node_not_found_hook').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('discovery/enroll_node_driver').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_inspector_config('port_physnet/cidr_map').with_value('')
+      is_expected.to contain_ironic_inspector_config('port_physnet/cidr_map').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('DEFAULT/standalone').with_value(true)
 
       is_expected.to contain_oslo__messaging__default('ironic_inspector_config').with(
@@ -240,6 +238,7 @@ describe 'ironic::inspector' do
           :dnsmasq_dhcp_hostsdir              => '/etc/ironic-inspector/dhcp-hostsdir',
           :dnsmasq_log_facility               => '/var/log/ironic-inspector/dnsmasq.log',
           :add_ports                          => 'all',
+          :keep_ports                         => 'all',
           :always_store_ramdisk_logs          => true,
           :port_physnet_cidr_map              => {'192.168.20.0/24' => 'physnet_a',
                                                   '2001:db8::/64' => 'physnet_b'},
@@ -274,6 +273,7 @@ describe 'ironic::inspector' do
         is_expected.to contain_ironic_inspector_config('processing/processing_hooks').with_value('$default_processing_hooks,hook1,hook2')
         is_expected.to contain_ironic_inspector_config('processing/node_not_found_hook').with_value('enroll')
         is_expected.to contain_ironic_inspector_config('processing/add_ports').with_value('all')
+        is_expected.to contain_ironic_inspector_config('processing/keep_ports').with_value('all')
         is_expected.to contain_ironic_inspector_config('discovery/enroll_node_driver').with_value('pxe_ipmitool')
         is_expected.to contain_ironic_inspector_config('processing/always_store_ramdisk_logs').with_value(true)
         is_expected.to contain_ironic_inspector_config('port_physnet/cidr_map').with_value('192.168.20.0/24:physnet_a,2001:db8::/64:physnet_b')

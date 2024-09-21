@@ -74,21 +74,40 @@
 #   the node's boot interface.
 #   Defaults to $facts['os_service_default']
 #
+# [*add_ports*]
+#   (Optional)  Which MAC addresses to add as ports during introspection.
+#   Defaults to $facts['os_service_default']
+#
+# [*keep_ports*]
+#   (Optional) Which ports to keep after introspection
+#   Defaults to $facts['os_service_default']
+#
+# [*additional_hooks*]
+#   (Optional) List of processing hooks to append to the default list.
+#   Defaults to undef
+#
+# [*physical_network_cidr_map*]
+#   (Optional) Mapping of IP subnet CIDR to physical network.
+#
 class ironic::drivers::inspector (
   $password,
-  $auth_type                  = 'password',
-  $auth_url                   = 'http://127.0.0.1:5000',
-  $project_name               = 'services',
-  $username                   = 'ironic',
-  $user_domain_name           = 'Default',
-  $project_domain_name        = 'Default',
-  $system_scope               = $facts['os_service_default'],
-  $region_name                = $facts['os_service_default'],
-  $endpoint_override          = $facts['os_service_default'],
-  $callback_endpoint_override = $facts['os_service_default'],
-  $power_off                  = $facts['os_service_default'],
-  $extra_kernel_params        = $facts['os_service_default'],
-  $require_managed_boot       = $facts['os_service_default'],
+  $auth_type                      = 'password',
+  $auth_url                       = 'http://127.0.0.1:5000',
+  $project_name                   = 'services',
+  $username                       = 'ironic',
+  $user_domain_name               = 'Default',
+  $project_domain_name            = 'Default',
+  $system_scope                   = $facts['os_service_default'],
+  $region_name                    = $facts['os_service_default'],
+  $endpoint_override              = $facts['os_service_default'],
+  $callback_endpoint_override     = $facts['os_service_default'],
+  $power_off                      = $facts['os_service_default'],
+  $extra_kernel_params            = $facts['os_service_default'],
+  $require_managed_boot           = $facts['os_service_default'],
+  $add_ports                      = $facts['os_service_default'],
+  $keep_ports                     = $facts['os_service_default'],
+  $additional_hooks               = undef,
+  Hash $physical_network_cidr_map = {},
 ) {
 
   include ironic::deps
@@ -99,6 +118,15 @@ class ironic::drivers::inspector (
   } else {
     $project_name_real = $facts['os_service_default']
     $project_domain_name_real = $facts['os_service_default']
+  }
+
+  $hooks = $additional_hooks ? {
+    undef   => $facts['os_service_default'],
+    default => join(concat(['$default_hooks'], any2array($additional_hooks)), ',')
+  }
+  $physical_network_cidr_map_real = empty($physical_network_cidr_map) ? {
+    true    => $facts['os_service_default'],
+    default => join(join_keys_to_values($physical_network_cidr_map, ':'), ',')
   }
 
   ironic_config {
@@ -116,5 +144,9 @@ class ironic::drivers::inspector (
     'inspector/power_off':                  value => $power_off;
     'inspector/extra_kernel_params':        value => $extra_kernel_params;
     'inspector/require_managed_boot':       value => $require_managed_boot;
+    'inspector/add_ports':                  value => $add_ports;
+    'inspector/keep_ports':                 value => $keep_ports;
+    'inspector/hooks':                      value => $hooks;
+    'inspector/physical_network_cidr_map':  value => $physical_network_cidr_map_real;
   }
 }

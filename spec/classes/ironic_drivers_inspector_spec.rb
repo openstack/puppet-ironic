@@ -34,23 +34,32 @@ describe 'ironic::drivers::inspector' do
       is_expected.to contain_ironic_config('inspector/region_name').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('inspector/endpoint_override').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('inspector/require_managed_boot').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('inspector/add_ports').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('inspector/keep_ports').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('inspector/hooks').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('inspector/physical_network_cidr_map').with_value('<SERVICE DEFAULT>')
     end
 
     context 'when overriding parameters' do
       before :each do
         params.merge!(
-          :auth_type                  => 'noauth',
-          :auth_url                   => 'http://example.com',
-          :project_name               => 'project1',
-          :username                   => 'admin',
-          :user_domain_name           => 'NonDefault',
-          :project_domain_name        => 'NonDefault',
-          :region_name                => 'regionTwo',
-          :endpoint_override          => 'http://example2.com',
-          :callback_endpoint_override => 'http://10.0.0.1/v1/continue',
-          :power_off                  => false,
-          :extra_kernel_params        => 'ipa-inspection-collectors=a,b,c',
-          :require_managed_boot       => true,
+          :auth_type                   => 'noauth',
+          :auth_url                    => 'http://example.com',
+          :project_name                => 'project1',
+          :username                    => 'admin',
+          :user_domain_name            => 'NonDefault',
+          :project_domain_name         => 'NonDefault',
+          :region_name                 => 'regionTwo',
+          :endpoint_override           => 'http://example2.com',
+          :callback_endpoint_override  => 'http://10.0.0.1/v1/continue',
+          :power_off                   => false,
+          :extra_kernel_params         => 'ipa-inspection-collectors=a,b,c',
+          :require_managed_boot        => true,
+          :add_ports                   => 'all',
+          :keep_ports                  => 'all',
+          :additional_hooks            => 'hook1,hook2',
+          :physical_network_cidr_map   => {'192.168.20.0/24' => 'physnet_a',
+                                           '2001:db8::/64' => 'physnet_b'},
         )
       end
 
@@ -68,6 +77,10 @@ describe 'ironic::drivers::inspector' do
         is_expected.to contain_ironic_config('inspector/power_off').with_value(params[:power_off])
         is_expected.to contain_ironic_config('inspector/extra_kernel_params').with_value(params[:extra_kernel_params])
         is_expected.to contain_ironic_config('inspector/require_managed_boot').with_value(true)
+        is_expected.to contain_ironic_config('inspector/add_ports').with_value('all')
+        is_expected.to contain_ironic_config('inspector/keep_ports').with_value('all')
+        is_expected.to contain_ironic_config('inspector/hooks').with_value('$default_hooks,hook1,hook2')
+        is_expected.to contain_ironic_config('inspector/physical_network_cidr_map').with_value('192.168.20.0/24:physnet_a,2001:db8::/64:physnet_b')
       end
     end
 
