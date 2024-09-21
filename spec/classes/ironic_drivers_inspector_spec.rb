@@ -40,10 +40,25 @@ describe 'ironic::drivers::inspector' do
       is_expected.to contain_ironic_config('inspector/physical_network_cidr_map').with_value('<SERVICE DEFAULT>')
     end
 
+    context 'without password' do
+      let :params do
+        {}
+      end
+      it 'configures ironic.conf' do
+        is_expected.to contain_ironic_config('inspector/auth_type').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('inspector/auth_url').with_value('http://127.0.0.1:5000')
+        is_expected.to contain_ironic_config('inspector/project_name').with_value('services')
+        is_expected.to contain_ironic_config('inspector/username').with_value('ironic')
+        is_expected.to contain_ironic_config('inspector/password').with_value('<SERVICE DEFAULT>').with_secret(true)
+        is_expected.to contain_ironic_config('inspector/user_domain_name').with_value('Default')
+        is_expected.to contain_ironic_config('inspector/project_domain_name').with_value('Default')
+      end
+    end
+
     context 'when overriding parameters' do
       before :each do
         params.merge!(
-          :auth_type                   => 'noauth',
+          :auth_type                   => 'v3password',
           :auth_url                    => 'http://example.com',
           :project_name                => 'project1',
           :username                    => 'admin',

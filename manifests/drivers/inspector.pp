@@ -15,7 +15,7 @@
 # Configure how Ironic talks to Ironic Inspector.
 #
 # [*password*]
-#   (Required) The admin password for ironic to connect to ironic-inspector.
+#   (Optional) The admin password for ironic to connect to ironic-inspector.
 #
 # [*auth_type*]
 #   (Optional) The authentication plugin to use when connecting to
@@ -90,8 +90,8 @@
 #   (Optional) Mapping of IP subnet CIDR to physical network.
 #
 class ironic::drivers::inspector (
-  $password,
-  $auth_type                      = 'password',
+  $password                       = undef,
+  $auth_type                      = undef,
   $auth_url                       = 'http://127.0.0.1:5000',
   $project_name                   = 'services',
   $username                       = 'ironic',
@@ -112,6 +112,20 @@ class ironic::drivers::inspector (
 
   include ironic::deps
 
+  if $auth_type {
+    if $password == undef {
+      fail('The password parameter is required to use ironic-inspector')
+    }
+    $auth_type_real = $auth_type
+    $password_real = $password
+  } elsif $password {
+    $auth_type_real = 'password'
+    $password_real = $password
+  } else {
+    $auth_type_real = $facts['os_service_default']
+    $password_real = $facts['os_service_default']
+  }
+
   if is_service_default($system_scope) {
     $project_name_real = $project_name
     $project_domain_name_real = $project_domain_name
@@ -130,9 +144,9 @@ class ironic::drivers::inspector (
   }
 
   ironic_config {
-    'inspector/auth_type':                  value => $auth_type;
+    'inspector/auth_type':                  value => $auth_type_real;
     'inspector/username':                   value => $username;
-    'inspector/password':                   value => $password, secret => true;
+    'inspector/password':                   value => $password_real, secret => true;
     'inspector/auth_url':                   value => $auth_url;
     'inspector/project_name':               value => $project_name_real;
     'inspector/user_domain_name':           value => $user_domain_name;
