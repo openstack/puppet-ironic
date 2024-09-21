@@ -1,0 +1,8 @@
+---
+deprecations:
+  - |
+    The ``ironic::logging::watch_log_file`` parameter has been deprecated.
+
+  - |
+    The ``ironic::inspector::logging::watch_log_file`` parameter has been
+    deprecated.
