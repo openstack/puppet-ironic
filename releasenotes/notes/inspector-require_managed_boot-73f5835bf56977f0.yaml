@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``ironic::inspector::require_managed_boot`` parameter has been
+    added.

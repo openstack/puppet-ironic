@@ -33,6 +33,7 @@ describe 'ironic::drivers::inspector' do
       is_expected.to contain_ironic_config('inspector/system_scope').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('inspector/region_name').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('inspector/endpoint_override').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('inspector/require_managed_boot').with_value('<SERVICE DEFAULT>')
     end
 
     context 'when overriding parameters' do
@@ -49,6 +50,7 @@ describe 'ironic::drivers::inspector' do
           :callback_endpoint_override => 'http://10.0.0.1/v1/continue',
           :power_off                  => false,
           :extra_kernel_params        => 'ipa-inspection-collectors=a,b,c',
+          :require_managed_boot       => true,
         )
       end
 
@@ -65,6 +67,7 @@ describe 'ironic::drivers::inspector' do
         is_expected.to contain_ironic_config('inspector/callback_endpoint_override').with_value(params[:callback_endpoint_override])
         is_expected.to contain_ironic_config('inspector/power_off').with_value(params[:power_off])
         is_expected.to contain_ironic_config('inspector/extra_kernel_params').with_value(params[:extra_kernel_params])
+        is_expected.to contain_ironic_config('inspector/require_managed_boot').with_value(true)
       end
     end
 

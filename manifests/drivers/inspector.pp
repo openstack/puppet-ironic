@@ -69,6 +69,11 @@
 #   (Optional) Extra kernel parameters to pass in case of managed boot.
 #   Defaults to $facts['os_service_default']
 #
+# [*require_managed_boot*]
+#   (Optional) Require that the in-band inspection boot is fully managed by
+#   the node's boot interface.
+#   Defaults to $facts['os_service_default']
+#
 class ironic::drivers::inspector (
   $password,
   $auth_type                  = 'password',
@@ -83,6 +88,7 @@ class ironic::drivers::inspector (
   $callback_endpoint_override = $facts['os_service_default'],
   $power_off                  = $facts['os_service_default'],
   $extra_kernel_params        = $facts['os_service_default'],
+  $require_managed_boot       = $facts['os_service_default'],
 ) {
 
   include ironic::deps
@@ -109,5 +115,6 @@ class ironic::drivers::inspector (
     'inspector/callback_endpoint_override': value => $callback_endpoint_override;
     'inspector/power_off':                  value => $power_off;
     'inspector/extra_kernel_params':        value => $extra_kernel_params;
+    'inspector/require_managed_boot':       value => $require_managed_boot;
   }
 }
