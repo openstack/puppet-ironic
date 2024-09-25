@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    The new ``ironic::rabbit_enable_cancel_on_failover`` parameter and
+    the new ``ironic::inspector::rabbit_enable_cancel_on_failover`` parameter
+    have been added.
