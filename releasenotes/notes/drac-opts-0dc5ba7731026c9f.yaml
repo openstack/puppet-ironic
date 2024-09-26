@@ -1,0 +1,11 @@
+---
+features:
+  - |
+    The ``ironic::drivers::drac`` class now supports the following parameters.
+
+    - ``query_raid_config_job_status_interval``
+    - ``boot_device_job_status_timeout``
+    - ``config_job_max_retries``
+    - ``query_import_config_job_status_interval``
+    - ``bios_factory_reset_timeout``
+    - ``raid_job_timeout``
