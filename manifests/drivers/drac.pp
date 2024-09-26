@@ -15,7 +15,7 @@
 # === Parameters
 #
 # [*package_ensure*]
-#   (optional) The state of the dracclient/sushy-oem-idrac package
+#   (optional) The state of the sushy-oem-idrac package
 #   Defaults to 'present'
 #
 class ironic::drivers::drac (
@@ -25,11 +25,6 @@ class ironic::drivers::drac (
   include ironic::deps
   include ironic::params
 
-  package { 'python-dracclient':
-    ensure => $package_ensure,
-    name   => $::ironic::params::dracclient_package_name,
-    tag    => ['openstack', 'ironic-package'],
-  }
   package { 'python-sushy-oem-idrac':
     ensure => $package_ensure,
     name   => $::ironic::params::sushy_oem_idrac_package_name,

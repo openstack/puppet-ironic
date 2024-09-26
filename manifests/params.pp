@@ -34,7 +34,6 @@ class ironic::params {
   $inspector_group              = 'ironic-inspector'
   $sushy_package_name           = 'python3-sushy'
   $proliantutils_package_name   = 'python3-proliantutils'
-  $dracclient_package_name      = 'python3-dracclient'
   $sushy_oem_idrac_package_name = 'python3-sushy-oem-idrac'
 
   case $facts['os']['family'] {
