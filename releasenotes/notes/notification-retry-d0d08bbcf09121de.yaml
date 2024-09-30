@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The new ``ironic::notification_retry`` parameter has been added.

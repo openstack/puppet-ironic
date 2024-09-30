@@ -103,7 +103,8 @@ describe 'ironic' do
         is_expected.to contain_oslo__messaging__notifications('ironic_config').with(
           :transport_url => '<SERVICE DEFAULT>',
           :driver        => '<SERVICE DEFAULT>',
-          :topics        => '<SERVICE DEFAULT>'
+          :topics        => '<SERVICE DEFAULT>',
+          :retry         => '<SERVICE DEFAULT>',
         )
       end
     end
@@ -143,6 +144,7 @@ describe 'ironic' do
           :notification_transport_url         => 'rabbit://rabbit_user:password@localhost:5673',
           :notification_driver                => 'messagingv2',
           :notification_topics                => 'openstack',
+          :notification_retry                 => 10,
           :rbac_service_role_elevated_access  => true,
           :rbac_service_project_name          => 'service',
         }
@@ -190,6 +192,7 @@ describe 'ironic' do
           :transport_url => 'rabbit://rabbit_user:password@localhost:5673',
           :driver        => 'messagingv2',
           :topics        => 'openstack',
+          :retry         => 10,
         )
       end
     end

@@ -193,7 +193,7 @@
 #   Defaults to false.
 #
 # [*notification_transport_url*]
-#   (optional) A URL representing the messaging driver to use for notifications
+#   (Optional) A URL representing the messaging driver to use for notifications
 #   and its full configuration. Transport URLs take the form:
 #     transport://user:pass@host1:port[,hostN:portN]/virtual_host
 #   Defaults to $facts['os_service_default']
@@ -204,8 +204,13 @@
 #   Defaults to $facts['os_service_default']
 #
 # [*notification_topics*]
-#   (optional) AMQP topic used for OpenStack notifications
+#   (Optional) AMQP topic used for OpenStack notifications
 #   Defaults to $facts['os_service_default']
+#
+# [*notification_retry*]
+#   (Optional) The maximum number of attempts to re-sent a notification
+#   message, which failed to be delivered due to a recoverable error.
+#   Defaults to $facts['os_service_default'].
 #
 # [*notification_level*]
 #   (optional) Notification level for outgoing notifications
@@ -264,6 +269,7 @@ class ironic (
   $notification_transport_url         = $facts['os_service_default'],
   $notification_driver                = $facts['os_service_default'],
   $notification_topics                = $facts['os_service_default'],
+  $notification_retry                 = $facts['os_service_default'],
   $notification_level                 = $facts['os_service_default'],
   $versioned_notifications_topics     = $facts['os_service_default'],
   $rbac_service_role_elevated_access  = $facts['os_service_default'],
@@ -348,5 +354,6 @@ class ironic (
     transport_url => $notification_transport_url,
     driver        => $notification_driver,
     topics        => $notification_topics,
+    retry         => $notification_retry,
   }
 }
