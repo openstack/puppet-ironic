@@ -25,12 +25,19 @@ describe 'ironic::drivers::drac' do
 
     it 'installs dracclient package' do
       is_expected.to contain_package('python-dracclient').with(
-        :ensure => 'installed',
+        :ensure => 'present',
         :name   => platform_params[:dracclient_package_name],
         :tag    => ['openstack', 'ironic-package'],
       )
     end
 
+    it 'installs sushy-oem-idrac package' do
+      is_expected.to contain_package('python-sushy-oem-idrac').with(
+        :ensure => 'present',
+        :name   => platform_params[:sushy_oem_idrac_package_name],
+        :tag    => ['openstack', 'ironic-package'],
+      )
+    end
   end
 
   on_supported_os({
@@ -44,9 +51,11 @@ describe 'ironic::drivers::drac' do
       let (:platform_params) do
         case facts[:os]['family']
         when 'Debian'
-          { :dracclient_package_name => 'python3-dracclient' }
+          { :dracclient_package_name      => 'python3-dracclient',
+            :sushy_oem_idrac_package_name => 'python3-sushy-oem-idrac' }
         when 'RedHat'
-          { :dracclient_package_name => 'python3-dracclient' }
+          { :dracclient_package_name      => 'python3-dracclient',
+            :sushy_oem_idrac_package_name => 'python3-sushy-oem-idrac' }
         end
       end
 

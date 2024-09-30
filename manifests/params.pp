@@ -22,19 +22,20 @@
 class ironic::params {
   include openstacklib::defaults
 
-  $dbsync_command             = 'ironic-dbsync'
-  $inspector_dbsync_command   =
+  $dbsync_command               = 'ironic-dbsync'
+  $inspector_dbsync_command     =
     'ironic-inspector-dbsync --config-file /etc/ironic-inspector/inspector.conf upgrade'
-  $client_package             = 'python3-ironicclient'
-  $inspector_client_package   = 'python3-ironic-inspector-client'
-  $lib_package_name           = 'python3-ironic-lib'
-  $user                       = 'ironic'
-  $group                      = 'ironic'
-  $inspector_user             = 'ironic-inspector'
-  $inspector_group            = 'ironic-inspector'
-  $sushy_package_name         = 'python3-sushy'
-  $proliantutils_package_name = 'python3-proliantutils'
-  $dracclient_package_name    = 'python3-dracclient'
+  $client_package               = 'python3-ironicclient'
+  $inspector_client_package     = 'python3-ironic-inspector-client'
+  $lib_package_name             = 'python3-ironic-lib'
+  $user                         = 'ironic'
+  $group                        = 'ironic'
+  $inspector_user               = 'ironic-inspector'
+  $inspector_group              = 'ironic-inspector'
+  $sushy_package_name           = 'python3-sushy'
+  $proliantutils_package_name   = 'python3-proliantutils'
+  $dracclient_package_name      = 'python3-dracclient'
+  $sushy_oem_idrac_package_name = 'python3-sushy-oem-idrac'
 
   case $facts['os']['family'] {
     'RedHat': {
