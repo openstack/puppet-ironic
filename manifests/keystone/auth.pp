@@ -60,6 +60,10 @@
 #   (Optional) Should the admin role be configured for the service user?
 #   Defaults to true.
 #
+# [*configure_service*]
+#   (Optional) Should the service be configurd?
+#   Defaults to True
+#
 # [*service_name*]
 #   (Optional) Name of the service.
 #   Defaults to the value of 'ironic'.
@@ -110,6 +114,7 @@ class ironic::keystone::auth (
   Boolean $configure_endpoint             = true,
   Boolean $configure_user                 = true,
   Boolean $configure_user_role            = true,
+  Boolean $configure_service              = true,
   String[1] $service_name                 = 'ironic',
   String[1] $service_type                 = 'baremetal',
   String[1] $service_description          = 'Ironic Bare Metal Provisioning Service',
@@ -127,6 +132,7 @@ class ironic::keystone::auth (
     configure_user      => $configure_user,
     configure_user_role => $configure_user_role,
     configure_endpoint  => $configure_endpoint,
+    configure_service   => $configure_service,
     service_name        => $service_name,
     service_type        => $service_type,
     auth_name           => $auth_name,

@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    The following two parameter have been added.
+
+    - ``ironic::keystone::auth::configure_service``
+    - ``ironic::keystone::auth_inspector::configure_service``
