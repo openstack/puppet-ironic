@@ -532,6 +532,13 @@ class ironic::inspector (
   }
 
   if ! $standalone {
+    file { '/etc/ironic-inspector/ironic-inspector.conf':
+      ensure  => 'link',
+      target  => '/etc/ironic-inspector/inspector.conf',
+      require => Anchor['ironic-inspector::install::end'],
+      before  => Anchor['ironic-inspector::service::begin'],
+    }
+
     package { 'ironic-inspector-api':
       ensure => $package_ensure,
       name   => $::ironic::params::inspector_api_package,
