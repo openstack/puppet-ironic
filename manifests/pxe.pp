@@ -259,7 +259,7 @@ class ironic::pxe (
     ironic::pxe::tftpboot_file { 'pxelinux.0':
       source_directory      => $pxelinux_path,
       destination_directory => $tftp_root_real,
-      require               => Anchor['ironic-inspector::install::end'],
+      require               => Anchor['ironic::install::end'],
     }
   }
 
@@ -273,7 +273,7 @@ class ironic::pxe (
     ironic::pxe::tftpboot_file { $syslinux_files:
       source_directory      => $syslinux_path,
       destination_directory => $tftp_root_real,
-      require               => Anchor['ironic-inspector::install::end'],
+      require               => Anchor['ironic::install::end'],
     }
   }
 
@@ -292,7 +292,7 @@ class ironic::pxe (
     source    => "${::ironic::params::ipxe_rom_dir}/undionly.kpxe",
     backup    => false,
     show_diff => false,
-    require   => Anchor['ironic-inspector::install::end'],
+    require   => Anchor['ironic::install::end'],
     tag       => 'ironic-tftp-file',
   }
 
@@ -305,7 +305,7 @@ class ironic::pxe (
     source    => "${::ironic::params::ipxe_rom_dir}/${ipxe_name_base}${arch}.efi",
     backup    => false,
     show_diff => false,
-    require   => Anchor['ironic-inspector::install::end'],
+    require   => Anchor['ironic::install::end'],
     tag       => 'ironic-tftp-file',
   }
 
@@ -324,7 +324,7 @@ class ironic::pxe (
     source    => "${::ironic::params::grub_efi_file}",
     backup    => false,
     show_diff => false,
-    require   => Anchor['ironic-inspector::install::end'],
+    require   => Anchor['ironic::install::end'],
     tag       => 'ironic-tftp-file',
   }
 
@@ -343,7 +343,7 @@ class ironic::pxe (
     source    => "${::ironic::params::shim_file}",
     backup    => false,
     show_diff => false,
-    require   => Anchor['ironic-inspector::install::end'],
+    require   => Anchor['ironic::install::end'],
     tag       => 'ironic-tftp-file',
   }
 

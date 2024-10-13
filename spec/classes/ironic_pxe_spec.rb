@@ -57,7 +57,7 @@ describe 'ironic::pxe' do
       is_expected.to contain_file('/tftpboot/undionly.kpxe').with(
         'owner'     => 'ironic',
         'group'     => 'ironic',
-        'require'   => 'Anchor[ironic-inspector::install::end]',
+        'require'   => 'Anchor[ironic::install::end]',
         'seltype'   => 'tftpdir_t',
         'ensure'    => 'file',
         'show_diff' => false,
@@ -68,7 +68,7 @@ describe 'ironic::pxe' do
       is_expected.to contain_file("/tftpboot/#{platform_params[:uefi_ipxe_bootfile_name]}").with(
         'owner'     => 'ironic',
         'group'     => 'ironic',
-        'require'   => 'Anchor[ironic-inspector::install::end]',
+        'require'   => 'Anchor[ironic::install::end]',
         'seltype'   => 'tftpdir_t',
         'ensure'    => 'file',
         'show_diff' => false,
@@ -87,7 +87,7 @@ describe 'ironic::pxe' do
       is_expected.to contain_file('/tftpboot/bootx64.efi').with(
         'owner'     => 'ironic',
         'group'     => 'ironic',
-        'require'   => 'Anchor[ironic-inspector::install::end]',
+        'require'   => 'Anchor[ironic::install::end]',
         'seltype'   => 'tftpdir_t',
         'ensure'    => 'file',
         'show_diff' => false,
@@ -105,7 +105,7 @@ describe 'ironic::pxe' do
       is_expected.to contain_file('/tftpboot/grubx64.efi').with(
         'owner'     => 'ironic',
         'group'     => 'ironic',
-        'require'   => 'Anchor[ironic-inspector::install::end]',
+        'require'   => 'Anchor[ironic::install::end]',
         'seltype'   => 'tftpdir_t',
         'ensure'    => 'file',
         'show_diff' => false,
@@ -162,7 +162,7 @@ describe 'ironic::pxe' do
         is_expected.to contain_file('/var/lib/tftpboot/undionly.kpxe').with(
           'owner'     => 'ironic',
           'group'     => 'ironic',
-          'require'   => 'Anchor[ironic-inspector::install::end]',
+          'require'   => 'Anchor[ironic::install::end]',
           'seltype'   => 'tftpdir_t',
           'ensure'    => 'file',
           'show_diff' => false,
@@ -173,7 +173,7 @@ describe 'ironic::pxe' do
         is_expected.to contain_file("/var/lib/tftpboot/#{platform_params[:uefi_ipxe_bootfile_name]}").with(
           'owner'     => 'ironic',
           'group'     => 'ironic',
-          'require'   => 'Anchor[ironic-inspector::install::end]',
+          'require'   => 'Anchor[ironic::install::end]',
           'seltype'   => 'tftpdir_t',
           'ensure'    => 'file',
           'show_diff' => false,
@@ -185,7 +185,7 @@ describe 'ironic::pxe' do
         is_expected.to contain_file('/var/lib/tftpboot/bootx64.efi').with(
           'owner'     => 'ironic',
           'group'     => 'ironic',
-          'require'   => 'Anchor[ironic-inspector::install::end]',
+          'require'   => 'Anchor[ironic::install::end]',
           'seltype'   => 'tftpdir_t',
           'ensure'    => 'file',
           'show_diff' => false,
@@ -196,7 +196,7 @@ describe 'ironic::pxe' do
         is_expected.to contain_file('/var/lib/tftpboot/grubx64.efi').with(
           'owner'     => 'ironic',
           'group'     => 'ironic',
-          'require'   => 'Anchor[ironic-inspector::install::end]',
+          'require'   => 'Anchor[ironic::install::end]',
           'seltype'   => 'tftpdir_t',
           'ensure'    => 'file',
           'show_diff' => false,
