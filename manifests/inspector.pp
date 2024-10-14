@@ -393,6 +393,8 @@ class ironic::inspector (
   include ironic::inspector::db
   include ironic::inspector::policy
 
+  warning('Support for ironic-inspector is deprected and will be removed in a future release')
+
   if $auth_strategy == 'keystone' {
     include ironic::inspector::authtoken
   }

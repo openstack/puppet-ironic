@@ -1,0 +1,6 @@
+---
+deprecations:
+  - |
+    Support for ironic-inspector is now deprecated, because
+    the ironic-inspector project iself is now deprecated and in maintenance
+    mode.
