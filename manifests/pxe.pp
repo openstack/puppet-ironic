@@ -223,6 +223,8 @@ class ironic::pxe (
       owner   => 'root',
       group   => 'root',
       content => template('ironic/dnsmasq_tftp_server.erb'),
+      require => Anchor['ironic::config::begin'],
+      before  => Anchor['ironic::config::end'],
     }
 
     if $manage_service {
