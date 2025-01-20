@@ -289,12 +289,6 @@ class ironic (
     tag    => ['openstack', 'ironic-package'],
   })
 
-  package { 'ironic-lib':
-    ensure => $package_ensure,
-    name   => $::ironic::params::lib_package_name,
-    tag    => ['openstack', 'ironic-package'],
-  }
-
   resources { 'ironic_config':
     purge => $purge_config,
   }

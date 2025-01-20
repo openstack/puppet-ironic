@@ -27,7 +27,6 @@ class ironic::params {
     'ironic-inspector-dbsync --config-file /etc/ironic-inspector/inspector.conf upgrade'
   $client_package               = 'python3-ironicclient'
   $inspector_client_package     = 'python3-ironic-inspector-client'
-  $lib_package_name             = 'python3-ironic-lib'
   $user                         = 'ironic'
   $group                        = 'ironic'
   $inspector_user               = 'ironic-inspector'

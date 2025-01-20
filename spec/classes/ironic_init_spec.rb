@@ -47,14 +47,6 @@ describe 'ironic' do
         )
       end
 
-      it 'installs ironic-lib package' do
-        is_expected.to contain_package('ironic-lib').with(
-          :ensure => 'present',
-          :name   => platform_params[:lib_package_name],
-          :tag    => ['openstack', 'ironic-package'],
-        )
-      end
-
       it 'passes purge to resource' do
         is_expected.to contain_resources('ironic_config').with({
           :purge => false
@@ -209,11 +201,9 @@ describe 'ironic' do
       let :platform_params do
         case facts[:os]['family']
         when 'Debian'
-          { :common_package_name => 'ironic-common',
-            :lib_package_name    => 'python3-ironic-lib' }
+          { :common_package_name => 'ironic-common' }
         when 'RedHat'
-          { :common_package_name => 'openstack-ironic-common',
-            :lib_package_name    => 'python3-ironic-lib' }
+          { :common_package_name => 'openstack-ironic-common' }
         end
       end
 
