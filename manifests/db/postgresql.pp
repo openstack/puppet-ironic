@@ -34,7 +34,7 @@ class ironic::db::postgresql(
 
   include ironic::deps
 
-  ::openstacklib::db::postgresql { 'ironic':
+  openstacklib::db::postgresql { 'ironic':
     password   => $password,
     dbname     => $dbname,
     user       => $user,

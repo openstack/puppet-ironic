@@ -164,7 +164,7 @@ class ironic::wsgi::apache (
 
   Anchor['ironic::install::end'] -> Class['apache']
 
-  ::openstacklib::wsgi::apache { 'ironic_wsgi':
+  openstacklib::wsgi::apache { 'ironic_wsgi':
     bind_host                   => $bind_host,
     bind_port                   => $port,
     group                       => $::ironic::params::group,

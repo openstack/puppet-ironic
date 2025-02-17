@@ -56,7 +56,7 @@ class ironic::inspector::db::mysql (
 
   include ironic::deps
 
-  ::openstacklib::db::mysql { 'ironic-inspector':
+  openstacklib::db::mysql { 'ironic-inspector':
     user          => $user,
     password      => $password,
     dbname        => $dbname,

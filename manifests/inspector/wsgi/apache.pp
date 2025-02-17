@@ -162,7 +162,7 @@ class ironic::inspector::wsgi::apache (
 
   Anchor['ironic-inspector::install::end'] -> Class['apache']
 
-  ::openstacklib::wsgi::apache { 'ironic_inspector_wsgi':
+  openstacklib::wsgi::apache { 'ironic_inspector_wsgi':
     bind_host                   => $bind_host,
     bind_port                   => $port,
     group                       => $::ironic::params::inspector_group,

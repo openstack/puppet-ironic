@@ -34,7 +34,7 @@ class ironic::inspector::db::postgresql(
 
   include ironic::deps
 
-  ::openstacklib::db::postgresql { 'ironic-inspector':
+  openstacklib::db::postgresql { 'ironic-inspector':
     password   => $password,
     dbname     => $dbname,
     user       => $user,

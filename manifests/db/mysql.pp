@@ -56,7 +56,7 @@ class ironic::db::mysql (
 
   include ironic::deps
 
-  ::openstacklib::db::mysql { 'ironic':
+  openstacklib::db::mysql { 'ironic':
     user          => $user,
     password      => $password,
     dbname        => $dbname,
