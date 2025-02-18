@@ -238,16 +238,6 @@
 #   the heartbeat will be checked every 30 seconds. (integer value)
 #   Defaults to $facts['os_service_default']
 #
-# [*rabbit_heartbeat_in_pthread*]
-#   (Optional) EXPERIMENTAL: Run the health check heartbeat thread
-#   through a native python thread. By default if this
-#   option isn't provided the  health check heartbeat will
-#   inherit the execution model from the parent process. By
-#   example if the parent process have monkey patched the
-#   stdlib by using eventlet/greenlet then the heartbeat
-#   will be run through a green thread.
-#   Defaults to $facts['os_service_default']
-#
 # [*rabbit_qos_prefetch_count*]
 #   (Optional) Specifies the number of messages to prefetch.
 #   Defaults to $facts['os_service_default']
@@ -323,6 +313,18 @@
 #   (optional) Whether to run ironic-inspector as a standalone service.
 #   Defaults to true
 #
+# DEPRECATED PARAMETERS
+#
+# [*rabbit_heartbeat_in_pthread*]
+#   (Optional) EXPERIMENTAL: Run the health check heartbeat thread
+#   through a native python thread. By default if this
+#   option isn't provided the  health check heartbeat will
+#   inherit the execution model from the parent process. By
+#   example if the parent process have monkey patched the
+#   stdlib by using eventlet/greenlet then the heartbeat
+#   will be run through a green thread.
+#   Defaults to undef
+#
 class ironic::inspector (
   $package_ensure                                       = 'present',
   Boolean $manage_service                               = true,
@@ -368,7 +370,6 @@ class ironic::inspector (
   $rabbit_use_ssl                                       = $facts['os_service_default'],
   $rabbit_heartbeat_timeout_threshold                   = $facts['os_service_default'],
   $rabbit_heartbeat_rate                                = $facts['os_service_default'],
-  $rabbit_heartbeat_in_pthread                          = $facts['os_service_default'],
   $rabbit_qos_prefetch_count                            = $facts['os_service_default'],
   $rabbit_ha_queues                                     = $facts['os_service_default'],
   $rabbit_quorum_queue                                  = $facts['os_service_default'],
@@ -386,6 +387,8 @@ class ironic::inspector (
   $kombu_compression                                    = $facts['os_service_default'],
   $amqp_durable_queues                                  = $facts['os_service_default'],
   Boolean $standalone                                   = true,
+  # DEPRECATED PARAMETERS
+  $rabbit_heartbeat_in_pthread                          = undef,
 ) inherits ironic::params {
 
   include ironic::deps
