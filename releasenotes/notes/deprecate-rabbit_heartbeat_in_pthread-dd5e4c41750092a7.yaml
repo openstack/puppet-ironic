@@ -1,0 +1,6 @@
+---
+deprecations:
+  - |
+    The ``ironic::rabbit_heartbeat_in_pthread`` parameter and
+    the ``ironic::inspector::rabbit_heartbeat_in_pthread`` parameter have been
+    deprecated and will be removed in the future release.
