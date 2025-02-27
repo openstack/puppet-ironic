@@ -42,6 +42,8 @@ class ironic::params {
       $api_service                  = 'openstack-ironic-api'
       $conductor_package            = 'openstack-ironic-conductor'
       $conductor_service            = 'openstack-ironic-conductor'
+      $novncproxy_package           = 'openstack-ironic-novncproxy'
+      $novncproxy_service           = 'openstack-ironic-novncproxy'
       $dnsmasq_tftp_package         = 'openstack-ironic-dnsmasq-tftp-server'
       $dnsmasq_tftp_service         = 'openstack-ironic-dnsmasq-tftp-server'
       $inspector_package            = 'openstack-ironic-inspector'
@@ -80,6 +82,8 @@ class ironic::params {
       $api_package                  = 'ironic-api'
       $conductor_package            = 'ironic-conductor'
       $conductor_service            = 'ironic-conductor'
+      $novncproxy_package           = undef
+      $novncproxy_service           = undef
       $dnsmasq_tftp_package         = undef
       $dnsmasq_tftp_service         = undef
       $inspector_package            = 'ironic-inspector'

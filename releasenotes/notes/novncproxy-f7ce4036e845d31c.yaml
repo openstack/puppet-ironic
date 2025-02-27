@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``ironic::vnc`` class, which manages the ``ironic-novncproxy``
+    service and its options, has been added.
