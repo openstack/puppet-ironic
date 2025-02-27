@@ -47,21 +47,20 @@ describe 'ironic::conductor' do
     it { is_expected.to contain_class('ironic::drivers::agent') }
 
     it 'installs ironic conductor package' do
-      if platform_params.has_key?(:conductor_package)
-        is_expected.to contain_package('ironic-conductor').with(
-          :name   => platform_params[:conductor_package],
-          :ensure => p[:package_ensure],
-          :tag    => ['openstack', 'ironic-package'],
-        )
-        is_expected.to contain_package('ironic-conductor').that_requires('Anchor[ironic::install::begin]')
-        is_expected.to contain_package('ironic-conductor').that_notifies('Anchor[ironic::install::end]')
-      end
+      is_expected.to contain_package('ironic-conductor').with(
+        :name   => platform_params[:conductor_package],
+        :ensure => p[:package_ensure],
+        :tag    => ['openstack', 'ironic-package'],
+      )
     end
 
     it 'ensure ironic conductor service is running' do
       is_expected.to contain_service('ironic-conductor').with(
-        'hasstatus' => true,
-        'tag'       => 'ironic-service',
+        :ensure    => 'running',
+        :name      => platform_params[:conductor_service],
+        :enable    => true,
+        :hasstatus => true,
+        :tag       => 'ironic-service',
       )
     end
 
@@ -208,7 +207,8 @@ describe 'ironic::conductor' do
           end
         when 'RedHat'
           let :platform_params do
-            { :conductor_service => 'ironic-conductor' }
+            { :conductor_package => 'openstack-ironic-conductor',
+              :conductor_service => 'openstack-ironic-conductor' }
           end
         end
 
