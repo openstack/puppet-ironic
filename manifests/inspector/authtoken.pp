@@ -243,7 +243,7 @@ class ironic::inspector::authtoken(
 
   keystone::resource::authtoken {
     'ironic_inspector_config':
-      *                              => $params;
+      * => $params;
     default:
       username                       => $username,
       password                       => $password,

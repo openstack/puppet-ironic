@@ -240,7 +240,7 @@ class ironic::api::authtoken(
 
   keystone::resource::authtoken {
     'ironic_config':
-      *                              => $params;
+      * => $params;
     default:
       username                       => $username,
       password                       => $password,

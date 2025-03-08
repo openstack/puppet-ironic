@@ -167,25 +167,25 @@ class ironic::drivers::pxe (
 
   # Configure ironic.conf
   ironic_config {
-    'pxe/kernel_append_params': value      => $kernel_append_params;
-    'pxe/pxe_bootfile_name': value         => $pxe_bootfile_name;
-    'pxe/pxe_config_template': value       => $pxe_config_template;
-    'pxe/ipxe_bootfile_name': value        => $ipxe_bootfile_name;
-    'pxe/ipxe_config_template': value      => $ipxe_config_template;
-    'pxe/tftp_server': value               => $tftp_server;
-    'pxe/tftp_root': value                 => $tftp_root_real;
-    'pxe/images_path': value               => $images_path;
-    'pxe/tftp_master_path': value          => $tftp_master_path;
-    'pxe/instance_master_path': value      => $instance_master_path;
-    'pxe/uefi_pxe_bootfile_name': value    => $uefi_pxe_bootfile_name_real;
-    'pxe/uefi_pxe_config_template': value  => $uefi_pxe_config_template;
-    'pxe/uefi_ipxe_bootfile_name': value   => $uefi_ipxe_bootfile_name_real;
-    'pxe/ipxe_timeout': value              => $ipxe_timeout_real;
-    'pxe/boot_retry_timeout': value        => $boot_retry_timeout;
+    'pxe/kernel_append_params':      value => $kernel_append_params;
+    'pxe/pxe_bootfile_name':         value => $pxe_bootfile_name;
+    'pxe/pxe_config_template':       value => $pxe_config_template;
+    'pxe/ipxe_bootfile_name':        value => $ipxe_bootfile_name;
+    'pxe/ipxe_config_template':      value => $ipxe_config_template;
+    'pxe/tftp_server':               value => $tftp_server;
+    'pxe/tftp_root':                 value => $tftp_root_real;
+    'pxe/images_path':               value => $images_path;
+    'pxe/tftp_master_path':          value => $tftp_master_path;
+    'pxe/instance_master_path':      value => $instance_master_path;
+    'pxe/uefi_pxe_bootfile_name':    value => $uefi_pxe_bootfile_name_real;
+    'pxe/uefi_pxe_config_template':  value => $uefi_pxe_config_template;
+    'pxe/uefi_ipxe_bootfile_name':   value => $uefi_ipxe_bootfile_name_real;
+    'pxe/ipxe_timeout':              value => $ipxe_timeout_real;
+    'pxe/boot_retry_timeout':        value => $boot_retry_timeout;
     'pxe/boot_retry_check_interval': value => $boot_retry_check_interval;
-    'pxe/dir_permission': value            => $dir_permission;
-    'pxe/file_permission': value           => $file_permission;
-    'pxe/loader_file_paths': value         => $loader_file_paths_real;
+    'pxe/dir_permission':            value => $dir_permission;
+    'pxe/file_permission':           value => $file_permission;
+    'pxe/loader_file_paths':         value => $loader_file_paths_real;
   }
 
   $pxe_bootfile_name_by_arch_real = $pxe_bootfile_name_by_arch ? {

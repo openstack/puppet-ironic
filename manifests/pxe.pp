@@ -208,7 +208,7 @@ class ironic::pxe (
     warning('Any prior xinetd based tftp server should be disabled and removed from the system.')
 
     file { "${tftp_root_real}/map-file":
-      ensure  => 'absent',
+      ensure => 'absent',
     }
 
     package { 'dnsmasq-tftp-server':
