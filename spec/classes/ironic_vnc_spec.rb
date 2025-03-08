@@ -38,21 +38,23 @@ describe 'ironic::vnc' do
         is_expected.to contain_ironic_config('vnc/novnc_record').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ironic_config('vnc/novnc_auth_schemes').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ironic_config('vnc/token_timeout').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_ironic_config('vnc/expire_console_session_interval').with_value('<SERVICE DEFAULT>')
       end
     end
 
     context 'with parameters' do
       let :params do
         {
-          :enabled            => false,
-          :host_ip            => '0.0.0.0',
-          :port               => 6090,
-          :public_url         => 'http://192.0.2.11:6090/vnc_auto.html',
-          :enable_ssl         => false,
-          :novnc_web          => '/usr/share/novnc',
-          :novnc_record       => 'recordfile',
-          :novnc_auth_schemes => 'none',
-          :token_timeout      => 600,
+          :enabled                         => false,
+          :host_ip                         => '0.0.0.0',
+          :port                            => 6090,
+          :public_url                      => 'http://192.0.2.11:6090/vnc_auto.html',
+          :enable_ssl                      => false,
+          :novnc_web                       => '/usr/share/novnc',
+          :novnc_record                    => 'recordfile',
+          :novnc_auth_schemes              => 'none',
+          :token_timeout                   => 600,
+          :expire_console_session_interval => 120,
         }
       end
 
@@ -87,6 +89,7 @@ describe 'ironic::vnc' do
         is_expected.to contain_ironic_config('vnc/novnc_record').with_value('recordfile')
         is_expected.to contain_ironic_config('vnc/novnc_auth_schemes').with_value('none')
         is_expected.to contain_ironic_config('vnc/token_timeout').with_value(600)
+        is_expected.to contain_ironic_config('vnc/expire_console_session_interval').with_value(120)
       end
     end
   end

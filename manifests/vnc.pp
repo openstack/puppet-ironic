@@ -51,32 +51,39 @@
 #  (optional) The lifetime of a console auth token (in seconds).
 #  Defaults to $facts['os_service_default']
 #
+# [*expire_console_session_interval*]
+#  (optional) Interval (in seconds) between periodic checks to determine
+#  whether active console sessions have expired and need to be closed.
+#  Defaults to $facts['os_service_default']
+#
 class ironic::vnc(
-  $package_ensure         = present,
-  Boolean $enabled        = true,
-  Boolean $manage_service = true,
-  $host_ip                = $facts['os_service_default'],
-  $port                   = $facts['os_service_default'],
-  $public_url             = $facts['os_service_default'],
-  $enable_ssl             = $facts['os_service_default'],
-  $novnc_web              = $facts['os_service_default'],
-  $novnc_record           = $facts['os_service_default'],
-  $novnc_auth_schemes     = $facts['os_service_default'],
-  $token_timeout          = $facts['os_service_default'],
+  $package_ensure                  = present,
+  Boolean $enabled                 = true,
+  Boolean $manage_service          = true,
+  $host_ip                         = $facts['os_service_default'],
+  $port                            = $facts['os_service_default'],
+  $public_url                      = $facts['os_service_default'],
+  $enable_ssl                      = $facts['os_service_default'],
+  $novnc_web                       = $facts['os_service_default'],
+  $novnc_record                    = $facts['os_service_default'],
+  $novnc_auth_schemes              = $facts['os_service_default'],
+  $token_timeout                   = $facts['os_service_default'],
+  $expire_console_session_interval = $facts['os_service_default'],
 ) inherits ironic::params {
 
   include ironic::deps
 
   ironic_config {
-    'vnc/enabled':            value => $enabled;
-    'vnc/host_ip':            value => $host_ip;
-    'vnc/port':               value => $port;
-    'vnc/public_url':         value => $public_url;
-    'vnc/enable_ssl':         value => $enable_ssl;
-    'vnc/novnc_web':          value => $novnc_web;
-    'vnc/novnc_record':       value => $novnc_record;
-    'vnc/novnc_auth_schemes': value => join(any2array($novnc_auth_schemes), ',');
-    'vnc/token_timeout':      value => $token_timeout;
+    'vnc/enabled':                         value => $enabled;
+    'vnc/host_ip':                         value => $host_ip;
+    'vnc/port':                            value => $port;
+    'vnc/public_url':                      value => $public_url;
+    'vnc/enable_ssl':                      value => $enable_ssl;
+    'vnc/novnc_web':                       value => $novnc_web;
+    'vnc/novnc_record':                    value => $novnc_record;
+    'vnc/novnc_auth_schemes':              value => join(any2array($novnc_auth_schemes), ',');
+    'vnc/token_timeout':                   value => $token_timeout;
+    'vnc/expire_console_session_interval': value => $expire_console_session_interval;
   }
 
   if $::ironic::params::novncproxy_package {
