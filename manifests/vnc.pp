@@ -56,6 +56,22 @@
 #  whether active console sessions have expired and need to be closed.
 #  Defaults to $facts['os_service_default']
 #
+# [*ssl_cert_file*]
+#  (optional) Certificate file to use when starting the server securely.
+#  Defaults to $facts['os_service_default']
+#
+# [*ssl_key_file*]
+#  (optional) Private key file to use when starting the server securely.
+#  Defaults to $facts['os_service_default']
+#
+# [*ssl_minimum_version*]
+#  (optional) The minimum SSL version to use.
+#  Defaults to $facts['os_service_default']
+#
+# [*ssl_ciphers*]
+#  (optional) List of available ciphers.
+#  Defaults to $facts['os_service_default']
+#
 class ironic::vnc(
   $package_ensure                  = present,
   Boolean $enabled                 = true,
@@ -69,6 +85,10 @@ class ironic::vnc(
   $novnc_auth_schemes              = $facts['os_service_default'],
   $token_timeout                   = $facts['os_service_default'],
   $expire_console_session_interval = $facts['os_service_default'],
+  $ssl_cert_file                   = $facts['os_service_default'],
+  $ssl_key_file                    = $facts['os_service_default'],
+  $ssl_minimum_version             = $facts['os_service_default'],
+  $ssl_ciphers                     = $facts['os_service_default'],
 ) inherits ironic::params {
 
   include ironic::deps
@@ -84,6 +104,10 @@ class ironic::vnc(
     'vnc/novnc_auth_schemes':              value => join(any2array($novnc_auth_schemes), ',');
     'vnc/token_timeout':                   value => $token_timeout;
     'vnc/expire_console_session_interval': value => $expire_console_session_interval;
+    'vnc/ssl_cert_file':                   value => $ssl_cert_file;
+    'vnc/ssl_key_file':                    value => $ssl_key_file;
+    'vnc/ssl_minimum_version':             value => $ssl_minimum_version;
+    'vnc/ssl_ciphers':                     value => join(any2array($ssl_ciphers), ':');
   }
 
   if $::ironic::params::novncproxy_package {
