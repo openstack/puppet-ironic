@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    Add a new ``amqp_auto_delete`` parameter, so that transient queues are
+    automatically deleted. This parameter is available for both the top level
+    ``ironic`` and the ``ironic::inspector`` classes.
