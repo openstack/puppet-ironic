@@ -1,0 +1,6 @@
+---
+upgrade:
+  - |
+    The ``ironic::logging::watch_log_file`` parameter and
+    the ``ironic::inspector::logging::watch_log_file`` parameter have been
+    removed.
