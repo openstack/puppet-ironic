@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The new ``ironic::conductor::bootloader_by_arch`` parameter has been added.

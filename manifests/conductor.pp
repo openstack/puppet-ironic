@@ -211,6 +211,12 @@
 #   image containing EFI boot loader.
 #   Defaults to $facts['os_service_default']
 #
+# [*bootloader_by_arch*]
+#   (optional) A dictionary of key-value paris of each architecture with
+#   tle Glance ID, http:// or file:// URL of the EFI system partition image
+#   containing EFI boot loader.
+#   Defaults to $facts['os_service_default']
+#
 # [*allow_provisioning_in_maintenance*]
 #   (optional) Whether to allow nodes to enter or undergo deploy or cleaning
 #   when in maintenance mode. If this option is set to False, and a node enters
@@ -287,6 +293,7 @@ class ironic::conductor (
   $rescue_kernel_by_arch               = $facts['os_service_default'],
   $rescue_ramdisk_by_arch              = $facts['os_service_default'],
   $bootloader                          = $facts['os_service_default'],
+  $bootloader_by_arch                  = $facts['os_service_default'],
   $allow_provisioning_in_maintenance   = $facts['os_service_default'],
   $image_download_concurrency          = $facts['os_service_default'],
   $deploy_callback_timeout             = $facts['os_service_default'],
@@ -344,6 +351,10 @@ class ironic::conductor (
     Hash    => join(join_keys_to_values($rescue_ramdisk_by_arch, ':'), ','),
     default => join(any2array($rescue_ramdisk_by_arch), ','),
   }
+  $bootloader_by_arch_real = $bootloader_by_arch ? {
+    Hash    => join(join_keys_to_values($bootloader_by_arch, ':'), ','),
+    default => join(any2array($bootloader_by_arch), ','),
+  }
 
   # Configure ironic.conf
   ironic_config {
@@ -379,6 +390,7 @@ class ironic::conductor (
     'conductor/rescue_kernel_by_arch':             value => $rescue_kernel_by_arch_real;
     'conductor/rescue_ramdisk_by_arch':            value => $rescue_ramdisk_by_arch_real;
     'conductor/bootloader':                        value => $bootloader;
+    'conductor/bootloader_by_arch':                value => $bootloader_by_arch_real;
     'conductor/allow_provisioning_in_maintenance': value => $allow_provisioning_in_maintenance;
     'DEFAULT/image_download_concurrency':          value => $image_download_concurrency;
     'conductor/deploy_callback_timeout':           value => $deploy_callback_timeout;
