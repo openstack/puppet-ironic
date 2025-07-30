@@ -101,6 +101,7 @@ describe 'ironic::conductor' do
       is_expected.to contain_ironic_config('conductor/rescue_ramdisk_by_arch').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/bootloader').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/bootloader_by_arch').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('conductor/error_on_ramdisk_config_inconsistency').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('DEFAULT/image_download_concurrency').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/deploy_callback_timeout').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('conductor/heartbeat_interval').with(:value => '<SERVICE DEFAULT>')
@@ -112,49 +113,50 @@ describe 'ironic::conductor' do
     context 'when overriding parameters' do
       before :each do
         params.merge!(
-          :enabled_hardware_types            => ['ipmi', 'irmc'],
-          :force_power_state_during_sync     => false,
-          :automated_clean                   => false,
-          :cleaning_network                  => '00000000-0000-0000-0000-000000000000',
-          :provisioning_network              => '00000000-0000-0000-0000-000000000000',
-          :rescuing_network                  => '00000000-0000-0000-0000-000000000000',
-          :inspection_network                => '00000000-0000-0000-0000-000000000000',
-          :cleaning_disk_erase               => 'metadata',
-          :http_url                          => 'http://host:port',
-          :http_root                         => '/src/www',
-          :force_raw_images                  => false,
-          :configdrive_use_object_store      => true,
-          :configdrive_swift_container       => 'cont',
-          :inspect_wait_timeout              => 600,
-          :default_boot_option               => 'local',
-          :default_boot_mode                 => 'uefi',
-          :port_setup_delay                  => '15',
-          :soft_power_off_timeout            => 600,
-          :power_state_change_timeout        => '300',
-          :sync_power_state_interval         => 120,
-          :sync_power_state_workers          => 2,
-          :power_state_sync_max_retries      => 5,
-          :power_failure_recovery_interval   => 120,
-          :periodic_max_workers              => 4,
-          :graceful_shutdown_timeout         => 60,
-          :conductor_group                   => 'in-the-closet-to-the-left',
-          :deploy_kernel                     => 'http://host/deploy.kernel',
-          :deploy_ramdisk                    => 'http://host/deploy.ramdisk',
-          :deploy_kernel_by_arch             => {'x86_64' => 'http://host/deploy.kernel'},
-          :deploy_ramdisk_by_arch            => {'x86_64' => 'http://host/deploy.ramdisk'},
-          :rescue_kernel                     => 'http://host/rescue.kernel',
-          :rescue_ramdisk                    => 'http://host/rescue.ramdisk',
-          :rescue_kernel_by_arch             => {'x86_64' => 'http://host/rescue.kernel'},
-          :rescue_ramdisk_by_arch            => {'x86_64' => 'http://host/rescue.ramdisk'},
-          :bootloader                        => 'http://host/bootloader',
-          :bootloader_by_arch                => {'x86_64' => 'http://host/bootloader'},
-          :allow_provisioning_in_maintenance => false,
-          :image_download_concurrency        => 20,
-          :deploy_callback_timeout           => 1800,
-          :heartbeat_interval                => 10,
-          :heartbeat_timeout                 => 60,
-          :max_concurrent_deploy             => 250,
-          :max_concurrent_clean              => 50,
+          :enabled_hardware_types                => ['ipmi', 'irmc'],
+          :force_power_state_during_sync         => false,
+          :automated_clean                       => false,
+          :cleaning_network                      => '00000000-0000-0000-0000-000000000000',
+          :provisioning_network                  => '00000000-0000-0000-0000-000000000000',
+          :rescuing_network                      => '00000000-0000-0000-0000-000000000000',
+          :inspection_network                    => '00000000-0000-0000-0000-000000000000',
+          :cleaning_disk_erase                   => 'metadata',
+          :http_url                              => 'http://host:port',
+          :http_root                             => '/src/www',
+          :force_raw_images                      => false,
+          :configdrive_use_object_store          => true,
+          :configdrive_swift_container           => 'cont',
+          :inspect_wait_timeout                  => 600,
+          :default_boot_option                   => 'local',
+          :default_boot_mode                     => 'uefi',
+          :port_setup_delay                      => '15',
+          :soft_power_off_timeout                => 600,
+          :power_state_change_timeout            => '300',
+          :sync_power_state_interval             => 120,
+          :sync_power_state_workers              => 2,
+          :power_state_sync_max_retries          => 5,
+          :power_failure_recovery_interval       => 120,
+          :periodic_max_workers                  => 4,
+          :graceful_shutdown_timeout             => 60,
+          :conductor_group                       => 'in-the-closet-to-the-left',
+          :deploy_kernel                         => 'http://host/deploy.kernel',
+          :deploy_ramdisk                        => 'http://host/deploy.ramdisk',
+          :deploy_kernel_by_arch                 => {'x86_64' => 'http://host/deploy.kernel'},
+          :deploy_ramdisk_by_arch                => {'x86_64' => 'http://host/deploy.ramdisk'},
+          :rescue_kernel                         => 'http://host/rescue.kernel',
+          :rescue_ramdisk                        => 'http://host/rescue.ramdisk',
+          :rescue_kernel_by_arch                 => {'x86_64' => 'http://host/rescue.kernel'},
+          :rescue_ramdisk_by_arch                => {'x86_64' => 'http://host/rescue.ramdisk'},
+          :bootloader                            => 'http://host/bootloader',
+          :bootloader_by_arch                    => {'x86_64' => 'http://host/bootloader'},
+          :error_on_ramdisk_config_inconsistency => false,
+          :allow_provisioning_in_maintenance     => false,
+          :image_download_concurrency            => 20,
+          :deploy_callback_timeout               => 1800,
+          :heartbeat_interval                    => 10,
+          :heartbeat_timeout                     => 60,
+          :max_concurrent_deploy                 => 250,
+          :max_concurrent_clean                  => 50,
         )
       end
       it 'should replace default parameter with new value' do
@@ -195,6 +197,7 @@ describe 'ironic::conductor' do
         is_expected.to contain_ironic_config('conductor/rescue_ramdisk_by_arch').with_value('x86_64:http://host/rescue.ramdisk')
         is_expected.to contain_ironic_config('conductor/bootloader').with_value(p[:bootloader])
         is_expected.to contain_ironic_config('conductor/bootloader_by_arch').with_value('x86_64:http://host/bootloader')
+        is_expected.to contain_ironic_config('conductor/error_on_ramdisk_config_inconsistency').with_value(false)
         is_expected.to contain_ironic_config('conductor/allow_provisioning_in_maintenance').with_value(p[:allow_provisioning_in_maintenance])
         is_expected.to contain_ironic_config('DEFAULT/image_download_concurrency').with_value(p[:image_download_concurrency])
         is_expected.to contain_ironic_config('conductor/deploy_callback_timeout').with_value(p[:deploy_callback_timeout])

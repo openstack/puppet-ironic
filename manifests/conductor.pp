@@ -222,6 +222,11 @@
 #   containing EFI boot loader.
 #   Defaults to $facts['os_service_default']
 #
+# [*error_on_ramdisk_config_inconsistency*]
+#   (optional) Determine if Ironic should fail to boot ramdisk in situation
+#   where configuration is ambiguous.
+#   Defaults to $facts['os_service_default']
+#
 # [*allow_provisioning_in_maintenance*]
 #   (optional) Whether to allow nodes to enter or undergo deploy or cleaning
 #   when in maintenance mode. If this option is set to False, and a node enters
@@ -259,54 +264,55 @@
 #   Defaults to $facts['os_service_default']
 #
 class ironic::conductor (
-  $package_ensure                      = 'present',
-  Boolean $enabled                     = true,
-  Boolean $manage_service              = true,
-  $enabled_hardware_types              = $facts['os_service_default'],
-  $force_power_state_during_sync       = $facts['os_service_default'],
-  $http_url                            = $facts['os_service_default'],
-  Stdlib::Absolutepath $http_root      = '/httpboot',
-  $force_raw_images                    = $facts['os_service_default'],
-  $automated_clean                     = $facts['os_service_default'],
-  $cleaning_network                    = $facts['os_service_default'],
+  $package_ensure                        = 'present',
+  Boolean $enabled                       = true,
+  Boolean $manage_service                = true,
+  $enabled_hardware_types                = $facts['os_service_default'],
+  $force_power_state_during_sync         = $facts['os_service_default'],
+  $http_url                              = $facts['os_service_default'],
+  Stdlib::Absolutepath $http_root        = '/httpboot',
+  $force_raw_images                      = $facts['os_service_default'],
+  $automated_clean                       = $facts['os_service_default'],
+  $cleaning_network                      = $facts['os_service_default'],
   Optional[Enum['full', 'metadata', 'none']] $cleaning_disk_erase
     = undef,
-  $continue_if_disk_secure_erase_fails = $facts['os_service_default'],
-  $provisioning_network                = $facts['os_service_default'],
-  $rescuing_network                    = $facts['os_service_default'],
-  $inspection_network                  = $facts['os_service_default'],
-  $configdrive_use_object_store        = $facts['os_service_default'],
-  $configdrive_swift_container         = $facts['os_service_default'],
-  $inspect_wait_timeout                = $facts['os_service_default'],
-  $default_boot_option                 = $facts['os_service_default'],
-  $default_boot_mode                   = $facts['os_service_default'],
-  $port_setup_delay                    = $facts['os_service_default'],
-  $soft_power_off_timeout              = $facts['os_service_default'],
-  $power_state_change_timeout          = $facts['os_service_default'],
-  $sync_power_state_interval           = $facts['os_service_default'],
-  $sync_power_state_workers            = $facts['os_service_default'],
-  $power_state_sync_max_retries        = $facts['os_service_default'],
-  $power_failure_recovery_interval     = $facts['os_service_default'],
-  $periodic_max_workers                = $facts['os_service_default'],
-  $graceful_shutdown_timeout           = $facts['os_service_default'],
-  $conductor_group                     = $facts['os_service_default'],
-  $deploy_kernel                       = $facts['os_service_default'],
-  $deploy_ramdisk                      = $facts['os_service_default'],
-  $deploy_kernel_by_arch               = $facts['os_service_default'],
-  $deploy_ramdisk_by_arch              = $facts['os_service_default'],
-  $rescue_kernel                       = $facts['os_service_default'],
-  $rescue_ramdisk                      = $facts['os_service_default'],
-  $rescue_kernel_by_arch               = $facts['os_service_default'],
-  $rescue_ramdisk_by_arch              = $facts['os_service_default'],
-  $bootloader                          = $facts['os_service_default'],
-  $bootloader_by_arch                  = $facts['os_service_default'],
-  $allow_provisioning_in_maintenance   = $facts['os_service_default'],
-  $image_download_concurrency          = $facts['os_service_default'],
-  $deploy_callback_timeout             = $facts['os_service_default'],
-  $heartbeat_interval                  = $facts['os_service_default'],
-  $heartbeat_timeout                   = $facts['os_service_default'],
-  $max_concurrent_deploy               = $facts['os_service_default'],
-  $max_concurrent_clean                = $facts['os_service_default'],
+  $continue_if_disk_secure_erase_fails   = $facts['os_service_default'],
+  $provisioning_network                  = $facts['os_service_default'],
+  $rescuing_network                      = $facts['os_service_default'],
+  $inspection_network                    = $facts['os_service_default'],
+  $configdrive_use_object_store          = $facts['os_service_default'],
+  $configdrive_swift_container           = $facts['os_service_default'],
+  $inspect_wait_timeout                  = $facts['os_service_default'],
+  $default_boot_option                   = $facts['os_service_default'],
+  $default_boot_mode                     = $facts['os_service_default'],
+  $port_setup_delay                      = $facts['os_service_default'],
+  $soft_power_off_timeout                = $facts['os_service_default'],
+  $power_state_change_timeout            = $facts['os_service_default'],
+  $sync_power_state_interval             = $facts['os_service_default'],
+  $sync_power_state_workers              = $facts['os_service_default'],
+  $power_state_sync_max_retries          = $facts['os_service_default'],
+  $power_failure_recovery_interval       = $facts['os_service_default'],
+  $periodic_max_workers                  = $facts['os_service_default'],
+  $graceful_shutdown_timeout             = $facts['os_service_default'],
+  $conductor_group                       = $facts['os_service_default'],
+  $deploy_kernel                         = $facts['os_service_default'],
+  $deploy_ramdisk                        = $facts['os_service_default'],
+  $deploy_kernel_by_arch                 = $facts['os_service_default'],
+  $deploy_ramdisk_by_arch                = $facts['os_service_default'],
+  $rescue_kernel                         = $facts['os_service_default'],
+  $rescue_ramdisk                        = $facts['os_service_default'],
+  $rescue_kernel_by_arch                 = $facts['os_service_default'],
+  $rescue_ramdisk_by_arch                = $facts['os_service_default'],
+  $bootloader                            = $facts['os_service_default'],
+  $bootloader_by_arch                    = $facts['os_service_default'],
+  $error_on_ramdisk_config_inconsistency = $facts['os_service_default'],
+  $allow_provisioning_in_maintenance     = $facts['os_service_default'],
+  $image_download_concurrency            = $facts['os_service_default'],
+  $deploy_callback_timeout               = $facts['os_service_default'],
+  $heartbeat_interval                    = $facts['os_service_default'],
+  $heartbeat_timeout                     = $facts['os_service_default'],
+  $max_concurrent_deploy                 = $facts['os_service_default'],
+  $max_concurrent_clean                  = $facts['os_service_default'],
 ) {
 
   include ironic::deps
@@ -364,47 +370,48 @@ class ironic::conductor (
 
   # Configure ironic.conf
   ironic_config {
-    'DEFAULT/enabled_hardware_types':              value => join(any2array($enabled_hardware_types), ',');
-    'conductor/force_power_state_during_sync':     value => $force_power_state_during_sync;
-    'conductor/automated_clean':                   value => $automated_clean;
-    'deploy/http_url':                             value => $http_url;
-    'deploy/http_root':                            value => $http_root_real;
-    'DEFAULT/force_raw_images':                    value => $force_raw_images;
-    'deploy/erase_devices_priority':               value => $erase_devices_priority;
-    'deploy/erase_devices_metadata_priority':      value => $erase_devices_metadata_priority;
-    'deploy/continue_if_disk_secure_erase_fails':  value => $continue_if_disk_secure_erase_fails;
-    'deploy/configdrive_use_object_store':         value => $configdrive_use_object_store;
-    'conductor/configdrive_swift_container':       value => $configdrive_swift_container;
-    'conductor/inspect_wait_timeout':              value => $inspect_wait_timeout;
-    'deploy/default_boot_option':                  value => $default_boot_option;
-    'deploy/default_boot_mode':                    value => $default_boot_mode;
-    'neutron/port_setup_delay':                    value => $port_setup_delay;
-    'conductor/soft_power_off_timeout':            value => $soft_power_off_timeout;
-    'conductor/power_state_change_timeout':        value => $power_state_change_timeout;
-    'conductor/sync_power_state_interval':         value => $sync_power_state_interval;
-    'conductor/sync_power_state_workers':          value => $sync_power_state_workers;
-    'conductor/power_state_sync_max_retries':      value => $power_state_sync_max_retries;
-    'conductor/power_failure_recovery_interval':   value => $power_failure_recovery_interval;
-    'conductor/periodic_max_workers':              value => $periodic_max_workers;
-    'conductor/graceful_shutdown_timeout':         value => $graceful_shutdown_timeout;
-    'conductor/conductor_group':                   value => $conductor_group;
-    'conductor/deploy_kernel':                     value => $deploy_kernel;
-    'conductor/deploy_ramdisk':                    value => $deploy_ramdisk;
-    'conductor/deploy_kernel_by_arch':             value => $deploy_kernel_by_arch_real;
-    'conductor/deploy_ramdisk_by_arch':            value => $deploy_ramdisk_by_arch_real;
-    'conductor/rescue_kernel':                     value => $rescue_kernel;
-    'conductor/rescue_ramdisk':                    value => $rescue_ramdisk;
-    'conductor/rescue_kernel_by_arch':             value => $rescue_kernel_by_arch_real;
-    'conductor/rescue_ramdisk_by_arch':            value => $rescue_ramdisk_by_arch_real;
-    'conductor/bootloader':                        value => $bootloader;
-    'conductor/bootloader_by_arch':                value => $bootloader_by_arch_real;
-    'conductor/allow_provisioning_in_maintenance': value => $allow_provisioning_in_maintenance;
-    'DEFAULT/image_download_concurrency':          value => $image_download_concurrency;
-    'conductor/deploy_callback_timeout':           value => $deploy_callback_timeout;
-    'conductor/heartbeat_interval':                value => $heartbeat_interval;
-    'conductor/heartbeat_timeout':                 value => $heartbeat_timeout;
-    'conductor/max_concurrent_deploy':             value => $max_concurrent_deploy;
-    'conductor/max_concurrent_clean':              value => $max_concurrent_clean;
+    'DEFAULT/enabled_hardware_types':                  value => join(any2array($enabled_hardware_types), ',');
+    'conductor/force_power_state_during_sync':         value => $force_power_state_during_sync;
+    'conductor/automated_clean':                       value => $automated_clean;
+    'deploy/http_url':                                 value => $http_url;
+    'deploy/http_root':                                value => $http_root_real;
+    'DEFAULT/force_raw_images':                        value => $force_raw_images;
+    'deploy/erase_devices_priority':                   value => $erase_devices_priority;
+    'deploy/erase_devices_metadata_priority':          value => $erase_devices_metadata_priority;
+    'deploy/continue_if_disk_secure_erase_fails':      value => $continue_if_disk_secure_erase_fails;
+    'deploy/configdrive_use_object_store':             value => $configdrive_use_object_store;
+    'conductor/configdrive_swift_container':           value => $configdrive_swift_container;
+    'conductor/inspect_wait_timeout':                  value => $inspect_wait_timeout;
+    'deploy/default_boot_option':                      value => $default_boot_option;
+    'deploy/default_boot_mode':                        value => $default_boot_mode;
+    'neutron/port_setup_delay':                        value => $port_setup_delay;
+    'conductor/soft_power_off_timeout':                value => $soft_power_off_timeout;
+    'conductor/power_state_change_timeout':            value => $power_state_change_timeout;
+    'conductor/sync_power_state_interval':             value => $sync_power_state_interval;
+    'conductor/sync_power_state_workers':              value => $sync_power_state_workers;
+    'conductor/power_state_sync_max_retries':          value => $power_state_sync_max_retries;
+    'conductor/power_failure_recovery_interval':       value => $power_failure_recovery_interval;
+    'conductor/periodic_max_workers':                  value => $periodic_max_workers;
+    'conductor/graceful_shutdown_timeout':             value => $graceful_shutdown_timeout;
+    'conductor/conductor_group':                       value => $conductor_group;
+    'conductor/deploy_kernel':                         value => $deploy_kernel;
+    'conductor/deploy_ramdisk':                        value => $deploy_ramdisk;
+    'conductor/deploy_kernel_by_arch':                 value => $deploy_kernel_by_arch_real;
+    'conductor/deploy_ramdisk_by_arch':                value => $deploy_ramdisk_by_arch_real;
+    'conductor/rescue_kernel':                         value => $rescue_kernel;
+    'conductor/rescue_ramdisk':                        value => $rescue_ramdisk;
+    'conductor/rescue_kernel_by_arch':                 value => $rescue_kernel_by_arch_real;
+    'conductor/rescue_ramdisk_by_arch':                value => $rescue_ramdisk_by_arch_real;
+    'conductor/bootloader':                            value => $bootloader;
+    'conductor/bootloader_by_arch':                    value => $bootloader_by_arch_real;
+    'conductor/error_on_ramdisk_config_inconsistency': value => $error_on_ramdisk_config_inconsistency;
+    'conductor/allow_provisioning_in_maintenance':     value => $allow_provisioning_in_maintenance;
+    'DEFAULT/image_download_concurrency':              value => $image_download_concurrency;
+    'conductor/deploy_callback_timeout':               value => $deploy_callback_timeout;
+    'conductor/heartbeat_interval':                    value => $heartbeat_interval;
+    'conductor/heartbeat_timeout':                     value => $heartbeat_timeout;
+    'conductor/max_concurrent_deploy':                 value => $max_concurrent_deploy;
+    'conductor/max_concurrent_clean':                  value => $max_concurrent_clean;
   }
 
   ironic_config {
