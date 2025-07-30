@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``ironic::drivers::redfish::firmware_update_wait_unresponsive_bmc``
+    parameter has been added.

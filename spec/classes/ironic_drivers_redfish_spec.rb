@@ -39,6 +39,7 @@ describe 'ironic::drivers::redfish' do
       is_expected.to contain_ironic_config('redfish/firmware_update_status_interval').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('redfish/firmware_update_fail_interval').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('redfish/firmware_source').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('redfish/firmware_update_wait_unresponsive_bmc').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('redfish/raid_config_status_interval').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('redfish/raid_config_fail_interval').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('redfish/boot_mode_config_timeout').with_value('<SERVICE DEFAULT>')
@@ -55,21 +56,22 @@ describe 'ironic::drivers::redfish' do
     context 'when overriding parameters' do
       before do
         params.merge!(
-          :connection_attempts             => 10,
-          :connection_retry_interval       => 1,
-          :connection_cache_size           => 100,
-          :auth_type                       => 'auto',
-          :use_swift                       => true,
-          :swift_container                 => 'ironic_redfish_container',
-          :swift_object_expiry_timeout     => 900,
-          :kernel_append_params            => 'nofb nomodeset vga=normal',
-          :file_permission                 => '0o644',
-          :firmware_update_status_interval => 60,
-          :firmware_update_fail_interval   => 61,
-          :firmware_source                 => 'http',
-          :raid_config_status_interval     => 62,
-          :raid_config_fail_interval       => 63,
-          :boot_mode_config_timeout        => 901,
+          :connection_attempts                   => 10,
+          :connection_retry_interval             => 1,
+          :connection_cache_size                 => 100,
+          :auth_type                             => 'auto',
+          :use_swift                             => true,
+          :swift_container                       => 'ironic_redfish_container',
+          :swift_object_expiry_timeout           => 900,
+          :kernel_append_params                  => 'nofb nomodeset vga=normal',
+          :file_permission                       => '0o644',
+          :firmware_update_status_interval       => 60,
+          :firmware_update_fail_interval         => 61,
+          :firmware_source                       => 'http',
+          :firmware_update_wait_unresponsive_bmc => 300,
+          :raid_config_status_interval           => 62,
+          :raid_config_fail_interval             => 63,
+          :boot_mode_config_timeout              => 901,
         )
       end
 
@@ -86,6 +88,7 @@ describe 'ironic::drivers::redfish' do
         is_expected.to contain_ironic_config('redfish/firmware_update_status_interval').with_value(60)
         is_expected.to contain_ironic_config('redfish/firmware_update_fail_interval').with_value(61)
         is_expected.to contain_ironic_config('redfish/firmware_source').with_value('http')
+        is_expected.to contain_ironic_config('redfish/firmware_update_wait_unresponsive_bmc').with_value(300)
         is_expected.to contain_ironic_config('redfish/raid_config_status_interval').with_value(62)
         is_expected.to contain_ironic_config('redfish/raid_config_fail_interval').with_value(63)
         is_expected.to contain_ironic_config('redfish/boot_mode_config_timeout').with_value(901)
