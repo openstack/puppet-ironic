@@ -34,6 +34,7 @@ describe 'ironic::neutron' do
       is_expected.to contain_ironic_config('neutron/region_name').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('neutron/endpoint_override').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('neutron/dhcpv6_stateful_address_count').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('neutron/fail_on_port_binding_failure').with_value('<SERVICE DEFAULT>')
     end
 
     context 'when overriding parameters' do
@@ -48,6 +49,7 @@ describe 'ironic::neutron' do
           :region_name                   => 'regionTwo',
           :endpoint_override             => 'http://example2.com',
           :dhcpv6_stateful_address_count => 8,
+          :fail_on_port_binding_failure  => true,
         )
       end
 
@@ -62,6 +64,7 @@ describe 'ironic::neutron' do
         is_expected.to contain_ironic_config('neutron/region_name').with_value(params[:region_name])
         is_expected.to contain_ironic_config('neutron/endpoint_override').with_value(params[:endpoint_override])
         is_expected.to contain_ironic_config('neutron/dhcpv6_stateful_address_count').with_value(params[:dhcpv6_stateful_address_count])
+        is_expected.to contain_ironic_config('neutron/fail_on_port_binding_failure').with_value(true)
       end
     end
 

@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``ironic::neutron::fail_on_port_binding_failure`` parameter has
+    been added.
