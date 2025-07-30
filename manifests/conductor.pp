@@ -157,6 +157,11 @@
 #   simultaneously by a periodic task.
 #   Defaults to $facts['os_service_default']
 #
+# [*graceful_shutdown_timeout*]
+#   (optional) Maximum number of worker threads that can be started
+#   simultaneously by a periodic task.
+#   Defaults to $facts['os_service_default']
+#
 # [*conductor_group*]
 #   (optional) Name of the conductor group to join. This conductor will only
 #   manage nodes with a matching "conductor_group" field set on the node.
@@ -283,6 +288,7 @@ class ironic::conductor (
   $power_state_sync_max_retries        = $facts['os_service_default'],
   $power_failure_recovery_interval     = $facts['os_service_default'],
   $periodic_max_workers                = $facts['os_service_default'],
+  $graceful_shutdown_timeout           = $facts['os_service_default'],
   $conductor_group                     = $facts['os_service_default'],
   $deploy_kernel                       = $facts['os_service_default'],
   $deploy_ramdisk                      = $facts['os_service_default'],
@@ -380,6 +386,7 @@ class ironic::conductor (
     'conductor/power_state_sync_max_retries':      value => $power_state_sync_max_retries;
     'conductor/power_failure_recovery_interval':   value => $power_failure_recovery_interval;
     'conductor/periodic_max_workers':              value => $periodic_max_workers;
+    'conductor/graceful_shutdown_timeout':         value => $graceful_shutdown_timeout;
     'conductor/conductor_group':                   value => $conductor_group;
     'conductor/deploy_kernel':                     value => $deploy_kernel;
     'conductor/deploy_ramdisk':                    value => $deploy_ramdisk;

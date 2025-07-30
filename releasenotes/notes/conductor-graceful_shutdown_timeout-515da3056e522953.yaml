@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``ironic::conductor::graceful_shutdown_timeout`` parameter has
+    been added.
