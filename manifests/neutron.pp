@@ -61,6 +61,10 @@
 #   successfully lease addresses.
 #   Defaults to $facts['os_service_default']
 #
+# [*fail_on_port_binding_failure*]
+#   (Optional) Fail deployment if neutron port binding fails.
+#   Defaults to $facts['os_service_default']
+#
 class ironic::neutron (
   $password,
   $auth_type                     = 'password',
@@ -73,6 +77,7 @@ class ironic::neutron (
   $region_name                   = $facts['os_service_default'],
   $endpoint_override             = $facts['os_service_default'],
   $dhcpv6_stateful_address_count = $facts['os_service_default'],
+  $fail_on_port_binding_failure  = $facts['os_service_default'],
 ) {
 
   if is_service_default($system_scope) {
@@ -95,5 +100,6 @@ class ironic::neutron (
     'neutron/region_name':                   value => $region_name;
     'neutron/endpoint_override':             value => $endpoint_override;
     'neutron/dhcpv6_stateful_address_count': value => $dhcpv6_stateful_address_count;
+    'neutron/fail_on_port_binding_failure':  value => $fail_on_port_binding_failure;
   }
 }
