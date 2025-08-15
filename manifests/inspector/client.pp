@@ -17,7 +17,7 @@ class ironic::inspector::client (
 
   package { 'python-ironic-inspector-client':
     ensure => $package_ensure,
-    name   => $::ironic::params::inspector_client_package,
+    name   => $ironic::params::inspector_client_package,
     tag    => ['openstack', 'ironic-support-package'],
   }
 

@@ -11,7 +11,7 @@
 #
 # [*processes*]
 #   (Optional) Number of processes.
-#   Defaults to $::os_workers.
+#   Defaults to $os_workers.
 #
 # [*threads*]
 #   (Optional) Number of threads.

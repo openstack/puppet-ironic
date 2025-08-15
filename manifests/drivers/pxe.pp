@@ -85,7 +85,7 @@
 #   (optional) Bootfile DHCP parameter for UEFI boot mode for the
 #   ipxe boot interface. No separate configuration template is required
 #   when using ipxe.
-#   Defaults to $::ironic::params::uefi_ipxe_bootfile_name
+#   Defaults to $ironic::params::uefi_ipxe_bootfile_name
 #
 # [*ipxe_timeout*]
 #   (optional) ipxe timeout in second.
@@ -138,9 +138,9 @@ class ironic::drivers::pxe (
   $images_path                       = $facts['os_service_default'],
   $tftp_master_path                  = $facts['os_service_default'],
   $instance_master_path              = $facts['os_service_default'],
-  String[1] $uefi_pxe_bootfile_name  = $::ironic::params::uefi_pxe_bootfile_name,
+  String[1] $uefi_pxe_bootfile_name  = $ironic::params::uefi_pxe_bootfile_name,
   $uefi_pxe_config_template          = $facts['os_service_default'],
-  String[1] $uefi_ipxe_bootfile_name = $::ironic::params::uefi_ipxe_bootfile_name,
+  String[1] $uefi_ipxe_bootfile_name = $ironic::params::uefi_ipxe_bootfile_name,
   $ipxe_timeout                      = $facts['os_service_default'],
   $boot_retry_timeout                = $facts['os_service_default'],
   $boot_retry_check_interval         = $facts['os_service_default'],
@@ -155,10 +155,10 @@ class ironic::drivers::pxe (
   include ironic::deps
 
   include ironic::pxe::common
-  $tftp_root_real               = pick($::ironic::pxe::common::tftp_root, $tftp_root)
-  $ipxe_timeout_real            = pick($::ironic::pxe::common::ipxe_timeout, $ipxe_timeout)
-  $uefi_ipxe_bootfile_name_real = pick($::ironic::pxe::common::uefi_ipxe_bootfile_name, $uefi_ipxe_bootfile_name)
-  $uefi_pxe_bootfile_name_real = pick($::ironic::pxe::common::uefi_pxe_bootfile_name, $uefi_pxe_bootfile_name)
+  $tftp_root_real               = pick($ironic::pxe::common::tftp_root, $tftp_root)
+  $ipxe_timeout_real            = pick($ironic::pxe::common::ipxe_timeout, $ipxe_timeout)
+  $uefi_ipxe_bootfile_name_real = pick($ironic::pxe::common::uefi_ipxe_bootfile_name, $uefi_ipxe_bootfile_name)
+  $uefi_pxe_bootfile_name_real = pick($ironic::pxe::common::uefi_pxe_bootfile_name, $uefi_pxe_bootfile_name)
 
   $loader_file_paths_real = $loader_file_paths ? {
     Hash    => join(join_keys_to_values($loader_file_paths, ':'), ','),

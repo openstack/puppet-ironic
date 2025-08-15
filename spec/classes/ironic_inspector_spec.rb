@@ -162,7 +162,7 @@ describe 'ironic::inspector' do
 
     it 'should contain file /etc/ironic-inspector/dnsmasq.conf' do
       is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with(
-        'ensure'  => 'present',
+        'ensure'  => 'file',
         'content' => /pxelinux/,
         'tag'     => 'ironic-inspector-dnsmasq-file',
       )
@@ -208,10 +208,10 @@ describe 'ironic::inspector' do
     end
     it 'should contain file /tftpboot/pxelinux.cfg/default' do
       is_expected.to contain_file('/tftpboot/pxelinux.cfg/default').with(
+        'ensure'  => 'file',
         'owner'   => 'ironic-inspector',
         'group'   => 'ironic-inspector',
         'seltype' => 'tftpdir_t',
-        'ensure'  => 'present',
         'content' => /default/,
         'tag'     => 'ironic-inspector-dnsmasq-file',
       )
@@ -324,7 +324,7 @@ describe 'ironic::inspector' do
 
       it 'should contain file /etc/ironic-inspector/dnsmasq.conf' do
         is_expected.to contain_file('/etc/ironic-inspector/dnsmasq.conf').with(
-          'ensure'  => 'present',
+          'ensure'  => 'file',
           'content' => /ipxe/,
           'tag'     => 'ironic-inspector-dnsmasq-file',
         )
@@ -365,10 +365,10 @@ describe 'ironic::inspector' do
       end
       it 'should contain file /var/www/httpboot/inspector.ipxe' do
         is_expected.to contain_file('/var/www/httpboot/inspector.ipxe').with(
+          'ensure'  => 'file',
           'owner'   => 'ironic-inspector',
           'group'   => 'ironic-inspector',
           'seltype' => 'httpd_sys_content_t',
-          'ensure'  => 'present',
           'content' => /ipxe/,
         )
         is_expected.to contain_file('/var/www/httpboot/inspector.ipxe').with_content(
@@ -427,18 +427,18 @@ describe 'ironic::inspector' do
       end
       it 'should contain directory /tftpboot/ppc64le with selinux type tftpdir_t' do
         is_expected.to contain_file('/tftpboot/ppc64le').with(
+          'ensure'  => 'directory',
           'owner'   => 'ironic-inspector',
           'group'   => 'ironic-inspector',
-          'ensure'  => 'directory',
           'seltype' => 'tftpdir_t',
         )
       end
       it 'should contain file /tftpboot/ppc64le/default' do
         is_expected.to contain_file('/tftpboot/ppc64le/default').with(
+          'ensure'  => 'file',
           'owner'   => 'ironic-inspector',
           'group'   => 'ironic-inspector',
           'seltype' => 'tftpdir_t',
-          'ensure'  => 'present',
           'content' => /default/,
         )
         is_expected.to contain_file('/tftpboot/ppc64le/default').with_content(
@@ -461,10 +461,10 @@ describe 'ironic::inspector' do
       end
       it 'should contain file /tftpboot/ppc64le/default' do
         is_expected.to contain_file('/tftpboot/ppc64le/default').with(
+          'ensure'  => 'file',
           'owner'   => 'ironic-inspector',
           'group'   => 'ironic-inspector',
           'seltype' => 'tftpdir_t',
-          'ensure'  => 'present',
           'content' => /default/,
           'tag'     => 'ironic-inspector-dnsmasq-file',
         )

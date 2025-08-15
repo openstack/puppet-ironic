@@ -312,7 +312,7 @@ class ironic (
 
   ensure_resource( 'package', 'ironic-common', {
     ensure => $package_ensure,
-    name   => $::ironic::params::common_package_name,
+    name   => $ironic::params::common_package_name,
     tag    => ['openstack', 'ironic-package'],
   })
 

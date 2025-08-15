@@ -21,9 +21,9 @@ class ironic::db::sync(
   include ironic::params
 
   exec { 'ironic-dbsync':
-    command     => "${::ironic::params::dbsync_command} ${extra_params}",
+    command     => "${ironic::params::dbsync_command} ${extra_params}",
     path        => '/usr/bin',
-    user        => $::ironic::params::user,
+    user        => $ironic::params::user,
     refreshonly => true,
     try_sleep   => 5,
     tries       => 10,

@@ -313,7 +313,7 @@ describe 'ironic::pxe' do
 
     it 'should configure dnsmasq-tftp-server' do
       is_expected.to contain_file('/etc/ironic/dnsmasq-tftp-server.conf').with(
-        'ensure' => 'present',
+        'ensure' => 'file',
         'mode'   => '0644',
         'owner'  => 'root',
         'group'  => 'root',

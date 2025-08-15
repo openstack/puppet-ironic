@@ -136,7 +136,7 @@ class ironic::drivers::redfish (
   ensure_packages('python-sushy',
     {
       ensure => $package_ensure,
-      name   => $::ironic::params::sushy_package_name,
+      name   => $ironic::params::sushy_package_name,
       tag    => ['openstack', 'ironic-package'],
     }
   )

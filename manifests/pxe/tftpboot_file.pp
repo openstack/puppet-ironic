@@ -36,10 +36,10 @@ define ironic::pxe::tftpboot_file (
   include ironic::params
 
   file {"${destination_directory}/${file}":
-    ensure  => 'present',
+    ensure  => 'file',
     seltype => 'tftpdir_t',
-    owner   => $::ironic::params::user,
-    group   => $::ironic::params::group,
+    owner   => $ironic::params::user,
+    group   => $ironic::params::group,
     mode    => '0744',
     source  => "${source_directory}/${file}",
     backup  => false,

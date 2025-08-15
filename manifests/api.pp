@@ -58,7 +58,7 @@
 #   service, and you must use another class to configure that
 #   web service. For example, use class { 'ironic::wsgi::apache'...}
 #   to make ironic-api be a web app using apache mod_wsgi.
-#   Defaults to '$::ironic::params::api_service'
+#   Defaults to '$ironic::params::api_service'
 #
 # [*public_endpoint*]
 #   (Optional) Public URL to use when building the links to the API resources
@@ -77,7 +77,7 @@ class ironic::api (
   $package_ensure               = 'present',
   Boolean $manage_service       = true,
   Boolean $enabled              = true,
-  $service_name                 = $::ironic::params::api_service,
+  $service_name                 = $ironic::params::api_service,
   $host_ip                      = $facts['os_service_default'],
   $port                         = $facts['os_service_default'],
   $max_limit                    = $facts['os_service_default'],
@@ -104,7 +104,7 @@ class ironic::api (
   # Install package
   package { 'ironic-api':
     ensure => $package_ensure,
-    name   => $::ironic::params::api_package,
+    name   => $ironic::params::api_package,
     tag    => ['openstack', 'ironic-package'],
   }
 
@@ -115,10 +115,10 @@ class ironic::api (
       $ensure = 'stopped'
     }
 
-    if $service_name == $::ironic::params::api_service {
+    if $service_name == $ironic::params::api_service {
       service { 'ironic-api':
         ensure     => $ensure,
-        name       => $::ironic::params::api_service,
+        name       => $ironic::params::api_service,
         enable     => $enabled,
         hasstatus  => true,
         hasrestart => true,
@@ -130,7 +130,7 @@ class ironic::api (
     } elsif $service_name == 'httpd' {
       service { 'ironic-api':
         ensure => 'stopped',
-        name   => $::ironic::params::api_service,
+        name   => $ironic::params::api_service,
         enable => false,
         tag    => 'ironic-service',
       }

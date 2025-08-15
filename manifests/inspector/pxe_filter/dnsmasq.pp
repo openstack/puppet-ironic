@@ -39,11 +39,11 @@ class ironic::inspector::pxe_filter::dnsmasq (
   include ironic::deps
   include ironic::inspector
 
-  if $::ironic::inspector::dnsmasq_dhcp_hostsdir == undef {
+  if $ironic::inspector::dnsmasq_dhcp_hostsdir == undef {
     warning("The ironic::inspector::dnsmasq_dhcp_hostsdir parameter should be \
 configured properly to use dnsmasq PXE filter.")
   }
-  $hostsdir = pick($::ironic::inspector::dnsmasq_dhcp_hostsdir, $facts['os_service_default'])
+  $hostsdir = pick($ironic::inspector::dnsmasq_dhcp_hostsdir, $facts['os_service_default'])
 
   ironic_inspector_config {
     'dnsmasq_pxe_filter/dhcp_hostsdir':         value => $hostsdir;

@@ -37,7 +37,7 @@ class ironic::inspector::pxe_filter::iptables (
   include ironic::inspector
 
   ironic_inspector_config {
-    'iptables/dnsmasq_interface': value => $::ironic::inspector::dnsmasq_interface;
+    'iptables/dnsmasq_interface': value => $ironic::inspector::dnsmasq_interface;
     'iptables/firewall_chain':    value => $firewall_chain;
     'iptables/ethoib_interfaces': value => join(any2array($ethoib_interfaces), ',');
     'iptables/ip_version':        value => $ip_version;

@@ -110,15 +110,15 @@ class ironic::vnc(
     'vnc/ssl_ciphers':                     value => join(any2array($ssl_ciphers), ':');
   }
 
-  if $::ironic::params::novncproxy_package {
+  if $ironic::params::novncproxy_package {
     package { 'ironic-novncproxy':
       ensure => $package_ensure,
-      name   => $::ironic::params::novncproxy_package,
+      name   => $ironic::params::novncproxy_package,
       tag    => ['openstack', 'ironic-package'],
     }
   }
 
-  if $::ironic::params::novncproxy_service {
+  if $ironic::params::novncproxy_service {
     if $manage_service {
       if $enabled {
         $ensure = 'running'
@@ -129,7 +129,7 @@ class ironic::vnc(
       # Manage service
       service { 'ironic-novncproxy':
         ensure    => $ensure,
-        name      => $::ironic::params::novncproxy_service,
+        name      => $ironic::params::novncproxy_service,
         enable    => $enabled,
         hasstatus => true,
         tag       => 'ironic-service',

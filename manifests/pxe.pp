@@ -45,16 +45,16 @@
 # [*pxelinux_path*]
 #   (optional) Path to directory containing pxelinux.0 .
 #   Setting this to False will skip syslinux related resources.
-#   Defaults to '$::ironic::params::pxelinux_path'
+#   Defaults to '$ironic::params::pxelinux_path'
 #
 # [*syslinux_path*]
 #   (optional) Path to directory containing syslinux files.
 #   Setting this to False will skip syslinux related resources.
-#   Defaults to '$::ironic::params::syslinux_path'
+#   Defaults to '$ironic::params::syslinux_path'
 #
 # [*syslinux_files*]
 #   (optional) Array of PXE boot files to copy from $syslinux_path to $tftp_root.
-#   Defaults to '$::ironic::params::syslinux_files'
+#   Defaults to '$ironic::params::syslinux_files'
 #
 # [*tftp_bind_host*]
 #   (optional) The IP address TFTP server will listen on for TFTP.
@@ -64,19 +64,19 @@
 #   (optional) Beginning of the source file name which is copied to
 #   $tftproot/ipxe.efi. Setting this to 'ipxe-snponly' on CentOS/RHEL would
 #   results in the source file being /usr/share/ipxe/ipxe-snponly-x86_64.efi.
-#   Defaults to $::ironic::params::ipxe_name_base
+#   Defaults to $ironic::params::ipxe_name_base
 #
 # [*uefi_ipxe_bootfile_name*]
 #   (optional) Name of efi file used to boot servers with iPXE + UEFI. This
 #   should be consistent with the uefi_ipxe_bootfile_name parameter in pxe
 #   driver.
-#   Defaults to $::ironic::params::uefi_ipxe_bootfile_name
+#   Defaults to $ironic::params::uefi_ipxe_bootfile_name
 #
 # [*uefi_pxe_bootfile_name*]
 #   (optional) Name of efi file used to boot servers with PXE + UEFI. This
 #   should be consistent with the uefi_pxe_bootfile_name parameter in pxe
 #   driver.
-#   Defaults to $::ironic::params::uefi_pxe_bootfile_name
+#   Defaults to $ironic::params::uefi_pxe_bootfile_name
 #
 # [*tftp_use_xinetd*]
 #   (optional) Override wheter to use xinetd instead of dnsmasq as the tftp
@@ -110,14 +110,14 @@ class ironic::pxe (
   Stdlib::Absolutepath $tftp_root                                 = '/tftpboot',
   Stdlib::Absolutepath $http_root                                 = '/httpboot',
   $http_port                                                      = 8088,
-  Optional[Variant[Stdlib::Absolutepath, Boolean]] $pxelinux_path = $::ironic::params::pxelinux_path,
-  Optional[Variant[Stdlib::Absolutepath, Boolean]] $syslinux_path = $::ironic::params::syslinux_path,
-  Optional[Array[String[1]]] $syslinux_files                      = $::ironic::params::syslinux_files,
+  Optional[Variant[Stdlib::Absolutepath, Boolean]] $pxelinux_path = $ironic::params::pxelinux_path,
+  Optional[Variant[Stdlib::Absolutepath, Boolean]] $syslinux_path = $ironic::params::syslinux_path,
+  Optional[Array[String[1]]] $syslinux_files                      = $ironic::params::syslinux_files,
   $tftp_bind_host                                                 = undef,
-  String[1] $ipxe_name_base                                       = $::ironic::params::ipxe_name_base,
-  String[1] $uefi_ipxe_bootfile_name                              = $::ironic::params::uefi_ipxe_bootfile_name,
-  String[1] $uefi_pxe_bootfile_name                               = $::ironic::params::uefi_pxe_bootfile_name,
-  Boolean $tftp_use_xinetd                                        = $::ironic::params::xinetd_available,
+  String[1] $ipxe_name_base                                       = $ironic::params::ipxe_name_base,
+  String[1] $uefi_ipxe_bootfile_name                              = $ironic::params::uefi_ipxe_bootfile_name,
+  String[1] $uefi_pxe_bootfile_name                               = $ironic::params::uefi_pxe_bootfile_name,
+  Boolean $tftp_use_xinetd                                        = $ironic::params::xinetd_available,
   $dnsmasq_log_facility                                           = undef,
   Boolean $manage_http_server                                     = true,
   $vhost_priority                                                 = 10,
@@ -128,11 +128,11 @@ class ironic::pxe (
   include ironic::deps
   include ironic::pxe::common
 
-  $tftp_root_real = pick($::ironic::pxe::common::tftp_root, $tftp_root)
-  $http_root_real = pick($::ironic::pxe::common::http_root, $http_root)
-  $http_port_real = pick($::ironic::pxe::common::http_port, $http_port)
-  $uefi_ipxe_bootfile_name_real = pick($::ironic::pxe::common::uefi_ipxe_bootfile_name, $uefi_ipxe_bootfile_name)
-  $uefi_pxe_bootfile_name_real = pick($::ironic::pxe::common::uefi_pxe_bootfile_name, $uefi_pxe_bootfile_name)
+  $tftp_root_real = pick($ironic::pxe::common::tftp_root, $tftp_root)
+  $http_root_real = pick($ironic::pxe::common::http_root, $http_root)
+  $http_port_real = pick($ironic::pxe::common::http_port, $http_port)
+  $uefi_ipxe_bootfile_name_real = pick($ironic::pxe::common::uefi_ipxe_bootfile_name, $uefi_ipxe_bootfile_name)
+  $uefi_pxe_bootfile_name_real = pick($ironic::pxe::common::uefi_pxe_bootfile_name, $uefi_pxe_bootfile_name)
 
   if $facts['os']['family'] == 'RedHat' {
     $arch = "-${facts['os']['architecture']}"
@@ -143,8 +143,8 @@ class ironic::pxe (
   file { $tftp_root_real:
     ensure  => 'directory',
     seltype => 'tftpdir_t',
-    owner   => $::ironic::params::user,
-    group   => $::ironic::params::group,
+    owner   => $ironic::params::user,
+    group   => $ironic::params::group,
     require => Anchor['ironic::config::begin'],
     before  => Anchor['ironic::config::end'],
   }
@@ -153,27 +153,27 @@ class ironic::pxe (
   #                 class so here we need ensure_resource
   ensure_resource( 'package', 'ironic-common', {
     ensure => $package_ensure,
-    name   => $::ironic::params::common_package_name,
+    name   => $ironic::params::common_package_name,
     tag    => ['openstack', 'ironic-package'],
   })
 
   file { "${tftp_root_real}/pxelinux.cfg":
     ensure  => 'directory',
     seltype => 'tftpdir_t',
-    owner   => $::ironic::params::user,
-    group   => $::ironic::params::group,
+    owner   => $ironic::params::user,
+    group   => $ironic::params::group,
     require => Anchor['ironic::install::end'],
     tag     => 'ironic-tftp-file',
   }
 
   if $tftp_use_xinetd {
-    if ! $::ironic::params::xinetd_available {
+    if ! $ironic::params::xinetd_available {
       fail('xinetd is not available in this distro. Please use tftp_use_xinetd=false')
     }
 
     package { 'tftp-server':
       ensure => $package_ensure,
-      name   => $::ironic::params::tftpd_package,
+      name   => $ironic::params::tftpd_package,
       tag    => ['openstack', 'ironic-ipxe', 'ironic-support-package'],
     }
 
@@ -195,11 +195,11 @@ class ironic::pxe (
     }
 
     file { "${tftp_root_real}/map-file":
-      ensure  => 'present',
+      ensure  => 'file',
       content => "r ^([^/]) ${tftp_root_real}/\\1",
     }
   } else {
-    if ! $::ironic::params::dnsmasq_tftp_package {
+    if ! $ironic::params::dnsmasq_tftp_package {
       fail('ironic-dnsmasq-tftp-server is not available in this distro. Please use tftp_use_xnetd=true')
     }
 
@@ -213,12 +213,12 @@ class ironic::pxe (
 
     package { 'dnsmasq-tftp-server':
       ensure => $package_ensure,
-      name   => $::ironic::params::dnsmasq_tftp_package,
+      name   => $ironic::params::dnsmasq_tftp_package,
       tag    => ['openstack', 'ironic-ipxe', 'ironic-support-package'],
     }
 
     file { '/etc/ironic/dnsmasq-tftp-server.conf':
-      ensure  => 'present',
+      ensure  => 'file',
       mode    => '0644',
       owner   => 'root',
       group   => 'root',
@@ -236,7 +236,7 @@ class ironic::pxe (
 
       service { 'dnsmasq-tftp-server':
         ensure    => $ensure,
-        name      => $::ironic::params::dnsmasq_tftp_service,
+        name      => $ironic::params::dnsmasq_tftp_service,
         enable    => $enabled,
         hasstatus => true,
         subscribe => File['/etc/ironic/dnsmasq-tftp-server.conf'],
@@ -253,7 +253,7 @@ class ironic::pxe (
     if $ironic::params::pxelinux_package {
       package { 'pxelinux':
         ensure => $package_ensure,
-        name   => $::ironic::params::pxelinux_package,
+        name   => $ironic::params::pxelinux_package,
         tag    => ['openstack', 'ironic-ipxe', 'ironic-support-package'],
       }
     }
@@ -268,7 +268,7 @@ class ironic::pxe (
   if $syslinux_path {
     package { 'syslinux':
       ensure => $package_ensure,
-      name   => $::ironic::params::syslinux_package,
+      name   => $ironic::params::syslinux_package,
       tag    => ['openstack', 'ironic-ipxe', 'ironic-support-package'],
     }
 
@@ -281,17 +281,17 @@ class ironic::pxe (
 
   package { 'ipxe':
     ensure => $package_ensure,
-    name   => $::ironic::params::ipxe_package,
+    name   => $ironic::params::ipxe_package,
     tag    => ['openstack', 'ironic-ipxe', 'ironic-support-package'],
   }
 
   file { "${tftp_root_real}/undionly.kpxe":
     ensure    => 'file',
     seltype   => 'tftpdir_t',
-    owner     => $::ironic::params::user,
-    group     => $::ironic::params::group,
+    owner     => $ironic::params::user,
+    group     => $ironic::params::group,
     mode      => '0744',
-    source    => "${::ironic::params::ipxe_rom_dir}/undionly.kpxe",
+    source    => "${ironic::params::ipxe_rom_dir}/undionly.kpxe",
     backup    => false,
     show_diff => false,
     require   => Anchor['ironic::install::end'],
@@ -301,10 +301,10 @@ class ironic::pxe (
   file { "${tftp_root_real}/${uefi_ipxe_bootfile_name_real}":
     ensure    => 'file',
     seltype   => 'tftpdir_t',
-    owner     => $::ironic::params::user,
-    group     => $::ironic::params::group,
+    owner     => $ironic::params::user,
+    group     => $ironic::params::group,
     mode      => '0744',
-    source    => "${::ironic::params::ipxe_rom_dir}/${ipxe_name_base}${arch}.efi",
+    source    => "${ironic::params::ipxe_rom_dir}/${ipxe_name_base}${arch}.efi",
     backup    => false,
     show_diff => false,
     require   => Anchor['ironic::install::end'],
@@ -313,17 +313,17 @@ class ironic::pxe (
 
   ensure_resource( 'package', 'grub-efi', {
     ensure => $package_ensure,
-    name   => $::ironic::params::grub_efi_package,
+    name   => $ironic::params::grub_efi_package,
     tag    => ['openstack', 'ironic-support-package'],
   })
 
   file { "${tftp_root_real}/grubx64.efi":
     ensure    => 'file',
     seltype   => 'tftpdir_t',
-    owner     => $::ironic::params::user,
-    group     => $::ironic::params::group,
+    owner     => $ironic::params::user,
+    group     => $ironic::params::group,
     mode      => '0744',
-    source    => $::ironic::params::grub_efi_file,
+    source    => $ironic::params::grub_efi_file,
     backup    => false,
     show_diff => false,
     require   => Anchor['ironic::install::end'],
@@ -332,17 +332,17 @@ class ironic::pxe (
 
   ensure_resource( 'package', 'shim', {
     ensure => $package_ensure,
-    name   => $::ironic::params::shim_package,
+    name   => $ironic::params::shim_package,
     tag    => ['openstack', 'ironic-support-package'],
   })
 
   file { "${tftp_root_real}/${uefi_pxe_bootfile_name_real}":
     ensure    => 'file',
     seltype   => 'tftpdir_t',
-    owner     => $::ironic::params::user,
-    group     => $::ironic::params::group,
+    owner     => $ironic::params::user,
+    group     => $ironic::params::group,
     mode      => '0744',
-    source    => $::ironic::params::shim_file,
+    source    => $ironic::params::shim_file,
     backup    => false,
     show_diff => false,
     require   => Anchor['ironic::install::end'],
@@ -356,8 +356,8 @@ class ironic::pxe (
     file { $http_root_real:
       ensure  => 'directory',
       seltype => 'httpd_sys_content_t',
-      owner   => $::ironic::params::user,
-      group   => $::ironic::params::group,
+      owner   => $ironic::params::user,
+      group   => $ironic::params::group,
       require => Anchor['ironic::config::begin'],
       before  => Anchor['ironic::config::end'],
     }

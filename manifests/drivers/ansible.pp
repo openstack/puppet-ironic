@@ -109,7 +109,7 @@ class ironic::drivers::ansible (
   ensure_packages('systemd-python',
     {
       ensure => $package_ensure,
-      name   => $::ironic::params::systemd_python_package,
+      name   => $ironic::params::systemd_python_package,
       tag    => ['openstack', 'ironic-package'],
     }
   )

@@ -190,7 +190,7 @@
 #   (optional) Name of efi file used to boot servers with iPXE + UEFI. This
 #   should be consistent with the uefi_ipxe_bootfile_name parameter in pxe
 #   driver.
-#   Defaults to $::ironic::parmas::uefi_ipxe_bootfile_name
+#   Defaults to $ironic::parmas::uefi_ipxe_bootfile_name
 #
 # [*executor_thread_pool_size*]
 #   (optional) Size of executor thread pool when executor is threading or eventlet.
@@ -373,7 +373,7 @@ class ironic::inspector (
   $discovery_default_driver                             = $facts['os_service_default'],
   Boolean $enable_ppc64le                               = false,
   Hash $port_physnet_cidr_map                           = {},
-  $uefi_ipxe_bootfile_name                              = $::ironic::params::uefi_ipxe_bootfile_name,
+  $uefi_ipxe_bootfile_name                              = $ironic::params::uefi_ipxe_bootfile_name,
   $control_exchange                                     = $facts['os_service_default'],
   $executor_thread_pool_size                            = $facts['os_service_default'],
   $rpc_response_timeout                                 = $facts['os_service_default'],
@@ -420,26 +420,26 @@ class ironic::inspector (
     fail('Non-standalone mode configuration is not supported in this operating system')
   }
 
-  $tftp_root_real               = pick($::ironic::pxe::common::tftp_root, $tftp_root)
-  $http_root_real               = pick($::ironic::pxe::common::http_root, $http_root)
-  $http_port_real               = pick($::ironic::pxe::common::http_port, $http_port)
-  $ipxe_timeout_real            = pick($::ironic::pxe::common::ipxe_timeout, $ipxe_timeout)
-  $uefi_ipxe_bootfile_name_real = pick($::ironic::pxe::common::uefi_ipxe_bootfile_name, $uefi_ipxe_bootfile_name)
+  $tftp_root_real               = pick($ironic::pxe::common::tftp_root, $tftp_root)
+  $http_root_real               = pick($ironic::pxe::common::http_root, $http_root)
+  $http_port_real               = pick($ironic::pxe::common::http_port, $http_port)
+  $ipxe_timeout_real            = pick($ironic::pxe::common::ipxe_timeout, $ipxe_timeout)
+  $uefi_ipxe_bootfile_name_real = pick($ironic::pxe::common::uefi_ipxe_bootfile_name, $uefi_ipxe_bootfile_name)
 
   $dnsmasq_local_ip_real = normalize_ip_for_uri($dnsmasq_local_ip)
   $dnsmasq_ip_subnets_real = ipv6_normalize_dnsmasq_ip_subnets($dnsmasq_ip_subnets)
 
   if $pxe_transfer_protocol == 'tftp' {
     file { '/etc/ironic-inspector/dnsmasq.conf':
-      ensure  => 'present',
+      ensure  => 'file',
       content => template('ironic/inspector_dnsmasq_tftp.erb'),
       tag     => 'ironic-inspector-dnsmasq-file',
     }
     file { "${tftp_root_real}/pxelinux.cfg/default":
-      ensure  => 'present',
+      ensure  => 'file',
       seltype => 'tftpdir_t',
-      owner   => $::ironic::params::inspector_user,
-      group   => $::ironic::params::inspector_group,
+      owner   => $ironic::params::inspector_user,
+      group   => $ironic::params::inspector_group,
       content => template('ironic/inspector_pxelinux_cfg.erb'),
       tag     => 'ironic-inspector-dnsmasq-file',
     }
@@ -447,15 +447,15 @@ class ironic::inspector (
 
   if $pxe_transfer_protocol == 'http' {
     file { '/etc/ironic-inspector/dnsmasq.conf':
-      ensure  => 'present',
+      ensure  => 'file',
       content => template('ironic/inspector_dnsmasq_http.erb'),
       tag     => 'ironic-inspector-dnsmasq-file',
     }
     file { "${http_root_real}/inspector.ipxe":
-      ensure  => 'present',
+      ensure  => 'file',
       seltype => 'httpd_sys_content_t',
-      owner   => $::ironic::params::inspector_user,
-      group   => $::ironic::params::inspector_group,
+      owner   => $ironic::params::inspector_user,
+      group   => $ironic::params::inspector_group,
       content => template('ironic/inspector_ipxe.erb'),
       tag     => 'ironic-inspector-dnsmasq-file',
     }
@@ -466,15 +466,15 @@ class ironic::inspector (
     file { "${tftp_root_real}/ppc64le":
       ensure  => 'directory',
       seltype => 'tftpdir_t',
-      owner   => $::ironic::params::inspector_user,
-      group   => $::ironic::params::inspector_group,
+      owner   => $ironic::params::inspector_user,
+      group   => $ironic::params::inspector_group,
       tag     => 'ironic-inspector-dnsmasq-file',
     }
     file { "${tftp_root_real}/ppc64le/default":
-      ensure  => 'present',
+      ensure  => 'file',
       seltype => 'tftpdir_t',
-      owner   => $::ironic::params::inspector_user,
-      group   => $::ironic::params::inspector_group,
+      owner   => $ironic::params::inspector_user,
+      group   => $ironic::params::inspector_group,
       content => template('ironic/inspector_pxelinux_cfg.erb'),
       tag     => 'ironic-inspector-dnsmasq-file',
     }
@@ -548,7 +548,7 @@ class ironic::inspector (
   # Install package
   package { 'ironic-inspector':
     ensure => $package_ensure,
-    name   => $::ironic::params::inspector_package,
+    name   => $ironic::params::inspector_package,
     tag    => ['openstack', 'ironic-inspector-package'],
   }
 
@@ -562,20 +562,20 @@ class ironic::inspector (
 
     package { 'ironic-inspector-api':
       ensure => $package_ensure,
-      name   => $::ironic::params::inspector_api_package,
+      name   => $ironic::params::inspector_api_package,
       tag    => ['openstack', 'ironic-inspector-package'],
     }
     package { 'ironic-inspector-conductor':
       ensure => $package_ensure,
-      name   => $::ironic::params::inspector_conductor_package,
+      name   => $ironic::params::inspector_conductor_package,
       tag    => ['openstack', 'ironic-inspector-package'],
     }
   }
 
-  if $::ironic::params::inspector_dnsmasq_package {
+  if $ironic::params::inspector_dnsmasq_package {
     package { 'ironic-inspector-dnsmasq':
       ensure => $package_ensure,
-      name   => $::ironic::params::inspector_dnsmasq_package,
+      name   => $ironic::params::inspector_dnsmasq_package,
       tag    => ['openstack', 'ironic-inspector-package'],
     }
   }
@@ -588,11 +588,11 @@ class ironic::inspector (
     file { 'ironic-inspector-dnsmasq-dhcp-hostsdir':
       ensure  => directory,
       path    => $dnsmasq_dhcp_hostsdir,
-      owner   => $::ironic::params::inspector_user,
-      group   => $::ironic::params::inspector_group,
+      owner   => $ironic::params::inspector_user,
+      group   => $ironic::params::inspector_group,
       mode    => '0750',
       require => Anchor['ironic-inspector::config::begin'],
-      before  => Anchor['ironic-inspector::config::end']
+      before  => Anchor['ironic-inspector::config::end'],
     }
   }
 
@@ -606,7 +606,7 @@ class ironic::inspector (
     if $standalone {
       service { 'ironic-inspector':
         ensure    => $ensure,
-        name      => $::ironic::params::inspector_service,
+        name      => $ironic::params::inspector_service,
         enable    => $enabled,
         hasstatus => true,
         tag       => 'ironic-inspector-service',
@@ -618,7 +618,7 @@ class ironic::inspector (
       #                 -api and -conductor.
       service { 'ironic-inspector':
         ensure    => 'stopped',
-        name      => $::ironic::params::inspector_service,
+        name      => $ironic::params::inspector_service,
         enable    => false,
         hasstatus => true,
         tag       => 'ironic-inspector-service',
@@ -628,7 +628,7 @@ class ironic::inspector (
 
       service { 'ironic-inspector-conductor':
         ensure    => $ensure,
-        name      => $::ironic::params::inspector_conductor_service,
+        name      => $ironic::params::inspector_conductor_service,
         enable    => $enabled,
         hasstatus => true,
         tag       => 'ironic-inspector-service',
@@ -636,10 +636,10 @@ class ironic::inspector (
       Keystone_endpoint<||> -> Service['ironic-inspector-conductor']
     }
 
-    if $::ironic::params::inspector_dnsmasq_service {
+    if $ironic::params::inspector_dnsmasq_service {
       service { 'ironic-inspector-dnsmasq':
         ensure    => $ensure,
-        name      => $::ironic::params::inspector_dnsmasq_service,
+        name      => $ironic::params::inspector_dnsmasq_service,
         enable    => $enabled,
         hasstatus => true,
         tag       => 'ironic-inspector-dnsmasq-service',

@@ -70,7 +70,7 @@ class ironic::drivers::drac (
 
   package { 'python-sushy-oem-idrac':
     ensure => $package_ensure,
-    name   => $::ironic::params::sushy_oem_idrac_package_name,
+    name   => $ironic::params::sushy_oem_idrac_package_name,
     tag    => ['openstack', 'ironic-package'],
   }
 }

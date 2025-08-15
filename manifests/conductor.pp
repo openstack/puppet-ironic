@@ -345,7 +345,7 @@ class ironic::conductor (
   }
 
   include ironic::pxe::common
-  $http_root_real = pick($::ironic::pxe::common::http_root, $http_root)
+  $http_root_real = pick($ironic::pxe::common::http_root, $http_root)
 
   $deploy_kernel_by_arch_real = $deploy_kernel_by_arch ? {
     Hash    => join(join_keys_to_values($deploy_kernel_by_arch, ':'), ','),
@@ -424,7 +424,7 @@ class ironic::conductor (
   # Install package
   package { 'ironic-conductor':
     ensure => $package_ensure,
-    name   => $::ironic::params::conductor_package,
+    name   => $ironic::params::conductor_package,
     tag    => ['openstack', 'ironic-package'],
   }
 
@@ -438,7 +438,7 @@ class ironic::conductor (
     # Manage service
     service { 'ironic-conductor':
       ensure    => $ensure,
-      name      => $::ironic::params::conductor_service,
+      name      => $ironic::params::conductor_service,
       enable    => $enabled,
       hasstatus => true,
       tag       => 'ironic-service',

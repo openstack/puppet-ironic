@@ -62,7 +62,7 @@ class ironic::inspector::policy (
     policies     => $policies,
     policy_path  => $policy_path,
     file_user    => 'root',
-    file_group   => $::ironic::params::inspector_group,
+    file_group   => $ironic::params::inspector_group,
     file_format  => 'yaml',
     purge_config => $purge_config,
     tag          => 'ironic-inspector',
