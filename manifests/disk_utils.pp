@@ -44,7 +44,6 @@ class ironic::disk_utils (
   $image_convert_memory_limit   = $facts['os_service_default'],
   $image_convert_attempts       = $facts['os_service_default'],
 ) {
-
   include ironic::deps
   include ironic::params
 
@@ -57,5 +56,4 @@ class ironic::disk_utils (
     'disk_utils/image_convert_memory_limit':   value => $image_convert_memory_limit;
     'disk_utils/image_convert_attempts':       value => $image_convert_attempts;
   }
-
 }

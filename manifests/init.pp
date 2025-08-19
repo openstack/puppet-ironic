@@ -302,7 +302,6 @@ class ironic (
   # DEPRECATED PARAMETERS
   $rabbit_heartbeat_in_pthread        = undef,
 ) {
-
   include ironic::deps
   include ironic::db
   include ironic::params
@@ -341,14 +340,14 @@ class ironic (
     include ironic::db::online_data_migrations
   }
 
-  oslo::messaging::default {'ironic_config':
+  oslo::messaging::default { 'ironic_config':
     executor_thread_pool_size => $executor_thread_pool_size,
     transport_url             => $default_transport_url,
     rpc_response_timeout      => $rpc_response_timeout,
     control_exchange          => $control_exchange,
   }
 
-  oslo::messaging::rabbit {'ironic_config':
+  oslo::messaging::rabbit { 'ironic_config':
     rabbit_use_ssl                  => $rabbit_use_ssl,
     heartbeat_timeout_threshold     => $rabbit_heartbeat_timeout_threshold,
     heartbeat_rate                  => $rabbit_heartbeat_rate,

@@ -54,7 +54,6 @@ class ironic::db (
   $database_pool_timeout            = $facts['os_service_default'],
   $mysql_enable_ndb                 = $facts['os_service_default'],
 ) {
-
   include ironic::deps
 
   oslo::db { 'ironic_config':

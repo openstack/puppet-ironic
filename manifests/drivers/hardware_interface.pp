@@ -34,7 +34,6 @@ define ironic::drivers::hardware_interface (
   $enabled_list   = $facts['os_service_default'],
   $default        = $facts['os_service_default'],
 ) {
-
   include ironic::deps
 
   ironic_config {
@@ -42,4 +41,3 @@ define ironic::drivers::hardware_interface (
     "DEFAULT/default_${interface_type}_interface":  value => $default;
   }
 }
-

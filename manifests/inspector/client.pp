@@ -11,7 +11,6 @@
 class ironic::inspector::client (
   $package_ensure = present
 ) {
-
   include ironic::deps
   include ironic::params
 
@@ -22,5 +21,4 @@ class ironic::inspector::client (
   }
 
   include openstacklib::openstackclient
-
 }

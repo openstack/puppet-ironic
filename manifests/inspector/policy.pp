@@ -54,7 +54,6 @@ class ironic::inspector::policy (
   $policy_dirs          = $facts['os_service_default'],
   Boolean $purge_config = false,
 ) {
-
   include ironic::deps
   include ironic::params
 
@@ -82,5 +81,4 @@ class ironic::inspector::policy (
     policy_default_rule  => $policy_default_rule,
     policy_dirs          => $policy_dirs,
   }
-
 }

@@ -120,5 +120,4 @@ class ironic::params {
       fail("Unsupported osfamily: ${facts['os']['family']}")
     }
   }
-
 }

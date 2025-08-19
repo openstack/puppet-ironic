@@ -86,7 +86,6 @@ class ironic::api (
   $enable_proxy_headers_parsing = $facts['os_service_default'],
   $max_request_body_size        = $facts['os_service_default'],
 ) inherits ironic::params {
-
   include ironic::deps
   include ironic::params
   include ironic::policy
@@ -126,7 +125,6 @@ class ironic::api (
       }
       Keystone_endpoint<||> -> Service['ironic-api']
       Ironic_api_uwsgi_config<||> ~> Service['ironic-api']
-
     } elsif $service_name == 'httpd' {
       service { 'ironic-api':
         ensure => 'stopped',
@@ -148,5 +146,4 @@ standalone service, or httpd for being run by a httpd server")
     enable_proxy_headers_parsing => $enable_proxy_headers_parsing,
     max_request_body_size        => $max_request_body_size,
   }
-
 }

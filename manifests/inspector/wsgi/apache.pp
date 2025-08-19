@@ -152,7 +152,6 @@ class ironic::inspector::wsgi::apache (
   $request_headers             = undef,
   $vhost_custom_fragment       = undef,
 ) {
-
   include ironic::deps
   include ironic::params
 

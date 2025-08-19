@@ -23,7 +23,6 @@
 class ironic::config (
   Hash $ironic_config = {},
 ) {
-
   include ironic::deps
 
   create_resources('ironic_config', $ironic_config)

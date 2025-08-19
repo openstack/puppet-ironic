@@ -79,7 +79,6 @@ class ironic::neutron (
   $dhcpv6_stateful_address_count = $facts['os_service_default'],
   $fail_on_port_binding_failure  = $facts['os_service_default'],
 ) {
-
   if is_service_default($system_scope) {
     $project_name_real = $project_name
     $project_domain_name_real = $project_domain_name

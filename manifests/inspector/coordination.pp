@@ -11,10 +11,9 @@
 class ironic::inspector::coordination (
   $backend_url = $facts['os_service_default'],
 ) {
-
   include ironic::deps
 
-  oslo::coordination{ 'ironic_inspector_config':
+  oslo::coordination { 'ironic_inspector_config':
     backend_url => $backend_url,
   }
 

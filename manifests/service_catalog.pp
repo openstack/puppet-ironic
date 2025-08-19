@@ -65,7 +65,6 @@ class ironic::service_catalog (
   $region_name         = $facts['os_service_default'],
   $endpoint_override   = $facts['os_service_default'],
 ) {
-
   include ironic::deps
 
   if is_service_default($system_scope) {

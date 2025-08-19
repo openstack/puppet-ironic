@@ -13,7 +13,6 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-
 # Common setup for Ironic PXE boot
 #
 #   This class allows to globally override configuration for PXE

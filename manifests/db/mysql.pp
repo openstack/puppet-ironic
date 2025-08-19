@@ -53,7 +53,6 @@ class ironic::db::mysql (
   $charset       = 'utf8',
   $collate       = 'utf8_general_ci',
 ) {
-
   include ironic::deps
 
   openstacklib::db::mysql { 'ironic':

@@ -72,7 +72,7 @@
 #  (optional) List of available ciphers.
 #  Defaults to $facts['os_service_default']
 #
-class ironic::vnc(
+class ironic::vnc (
   $package_ensure                  = present,
   Boolean $enabled                 = true,
   Boolean $manage_service          = true,
@@ -90,7 +90,6 @@ class ironic::vnc(
   $ssl_minimum_version             = $facts['os_service_default'],
   $ssl_ciphers                     = $facts['os_service_default'],
 ) inherits ironic::params {
-
   include ironic::deps
 
   ironic_config {

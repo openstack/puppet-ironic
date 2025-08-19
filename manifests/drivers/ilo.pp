@@ -45,7 +45,6 @@ class ironic::drivers::ilo (
   $default_boot_mode         = $facts['os_service_default'],
   $package_ensure            = 'present',
 ) {
-
   include ironic::deps
   include ironic::params
 
@@ -64,5 +63,4 @@ class ironic::drivers::ilo (
       tag    => ['openstack', 'ironic-package'],
     }
   )
-
 }

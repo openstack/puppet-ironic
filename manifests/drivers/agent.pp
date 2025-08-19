@@ -150,7 +150,6 @@ class ironic::drivers::agent (
   $api_ca_file                                  = $facts['os_service_default'],
   $allow_md5_checksum                           = $facts['os_service_default'],
 ) {
-
   include ironic::deps
 
   # Configure ironic.conf

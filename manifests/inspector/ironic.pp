@@ -74,7 +74,6 @@ class ironic::inspector::ironic (
   $max_retries         = $facts['os_service_default'],
   $retry_interval      = $facts['os_service_default'],
 ) {
-
   if $username == 'ironic' {
     warning('The default username will be changed to ironic-inspector in a future release')
   }

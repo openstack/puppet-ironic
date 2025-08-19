@@ -35,7 +35,6 @@ class ironic::inspector::pxe_filter::dnsmasq (
   $dnsmasq_stop_command  = $facts['os_service_default'],
   $purge_dhcp_hostsdir   = $facts['os_service_default'],
 ) {
-
   include ironic::deps
   include ironic::inspector
 
@@ -51,5 +50,4 @@ configured properly to use dnsmasq PXE filter.")
     'dnsmasq_pxe_filter/dnsmasq_stop_command':  value => $dnsmasq_stop_command;
     'dnsmasq_pxe_filter/purge_dhcp_hostsdir':   value => $purge_dhcp_hostsdir;
   }
-
 }
