@@ -133,7 +133,7 @@ class ironic::drivers::redfish (
     'redfish/boot_mode_config_timeout':              value => $boot_mode_config_timeout;
   }
 
-  ensure_packages('python-sushy',
+  stdlib::ensure_packages('python-sushy',
     {
       ensure => $package_ensure,
       name   => $ironic::params::sushy_package_name,

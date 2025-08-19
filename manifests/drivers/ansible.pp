@@ -99,14 +99,14 @@ class ironic::drivers::ansible (
     'ansible/default_python_interpreter': value => $default_python_interpreter;
   }
 
-  ensure_packages('ansible',
+  stdlib::ensure_packages('ansible',
     {
       ensure => $package_ensure,
       tag    => ['openstack', 'ironic-package'],
     }
   )
 
-  ensure_packages('systemd-python',
+  stdlib::ensure_packages('systemd-python',
     {
       ensure => $package_ensure,
       name   => $ironic::params::systemd_python_package,

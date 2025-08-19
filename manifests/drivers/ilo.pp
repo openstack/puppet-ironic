@@ -57,7 +57,7 @@ class ironic::drivers::ilo (
     'ilo/default_boot_mode':         value => $default_boot_mode;
   }
 
-  ensure_packages('python-proliantutils',
+  stdlib::ensure_packages('python-proliantutils',
     {
       ensure => $package_ensure,
       name   => $ironic::params::proliantutils_package_name,
