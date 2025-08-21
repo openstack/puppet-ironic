@@ -22,6 +22,8 @@
 class ironic::params {
   include openstacklib::defaults
 
+  $pyver3 = $openstacklib::defaults::pyver3
+
   $dbsync_command               = 'ironic-dbsync'
   $inspector_dbsync_command     =
     'ironic-inspector-dbsync --config-file /etc/ironic-inspector/inspector.conf upgrade'
@@ -60,7 +62,7 @@ class ironic::params {
       $uefi_pxe_bootfile_name       = 'bootx64.efi'
       $uefi_ipxe_bootfile_name      = 'snponly.efi'
       $ironic_wsgi_script_path      = '/var/www/cgi-bin/ironic'
-      $ironic_wsgi_script_source    = '/usr/bin/ironic-api-wsgi'
+      $ironic_wsgi_script_source    = "/usr/lib/python${pyver3}/site-packages/ironic/wsgi/__init__.py"
       $inspector_wsgi_script_path   = '/var/www/cgi-bin/ironic-inspector'
       $inspector_wsgi_script_source = '/usr/bin/ironic-inspector-api-wsgi'
       $xinetd_available             = false
