@@ -161,7 +161,7 @@ describe 'ironic::wsgi::apache' do
         when 'RedHat'
             {
               :wsgi_script_path   => '/var/www/cgi-bin/ironic',
-              :wsgi_script_source => '/usr/bin/ironic-api-wsgi',
+              :wsgi_script_source => '/usr/lib/python3.9/site-packages/ironic/wsgi/__init__.py',
             }
         end
       end
