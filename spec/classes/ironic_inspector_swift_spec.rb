@@ -26,7 +26,7 @@ describe 'ironic::inspector::swift' do
       is_expected.to contain_ironic_inspector_config('swift/auth_type').with_value('password')
       is_expected.to contain_ironic_inspector_config('swift/auth_url').with_value('http://127.0.0.1:5000')
       is_expected.to contain_ironic_inspector_config('swift/project_name').with_value('services')
-      is_expected.to contain_ironic_inspector_config('swift/username').with_value('ironic')
+      is_expected.to contain_ironic_inspector_config('swift/username').with_value('ironic-inspector')
       is_expected.to contain_ironic_inspector_config('swift/password').with_value('secret').with_secret(true)
       is_expected.to contain_ironic_inspector_config('swift/user_domain_name').with_value('Default')
       is_expected.to contain_ironic_inspector_config('swift/project_domain_name').with_value('Default')

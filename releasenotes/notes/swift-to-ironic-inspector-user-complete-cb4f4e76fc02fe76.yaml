@@ -1,0 +1,10 @@
+---
+upgrade:
+  - |
+    Default value of the username parameters in the following classes has been
+    changed from ``ironic`` to ``ironic-inspector``.
+
+    - ``ironic::inspector::authtoken``
+    - ``ironic::inspector::ironic``
+    - ``ironic::inspector::service_catalog``
+    - ``ironic::inspector::swift``

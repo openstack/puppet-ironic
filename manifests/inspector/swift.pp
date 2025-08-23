@@ -30,7 +30,7 @@
 #
 # [*username*]
 #   (Optional) The admin username for ironic-inspector to connect to swift.
-#   Defaults to 'ironic'.
+#   Defaults to 'ironic-inspector'.
 #
 # [*user_domain_name*]
 #   (Optional) The name of user's domain.
@@ -68,7 +68,7 @@ class ironic::inspector::swift (
   $auth_type           = 'password',
   $auth_url            = 'http://127.0.0.1:5000',
   $project_name        = 'services',
-  $username            = 'ironic',
+  $username            = 'ironic-inspector',
   $user_domain_name    = 'Default',
   $project_domain_name = 'Default',
   $system_scope        = $facts['os_service_default'],
@@ -77,9 +77,7 @@ class ironic::inspector::swift (
   $container           = $facts['os_service_default'],
   $delete_after        = $facts['os_service_default'],
 ) {
-  if $username == 'ironic' {
-    warning('The default username will be changed to ironic-inspector in a future release')
-  }
+  include ironic::deps
 
   if is_service_default($system_scope) {
     $project_name_real = $project_name

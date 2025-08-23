@@ -32,7 +32,7 @@
 # [*username*]
 #   (Optional) The admin username for ironic-inspector to connect to
 #   the service catalog.
-#   Defaults to 'ironic'.
+#   Defaults to 'ironic-inspector'.
 #
 # [*user_domain_name*]
 #   (Optional) The name of user's domain.
@@ -60,7 +60,7 @@ class ironic::inspector::service_catalog (
   $auth_type           = 'password',
   $auth_url            = 'http://127.0.0.1:5000',
   $project_name        = 'services',
-  $username            = 'ironic',
+  $username            = 'ironic-inspector',
   $user_domain_name    = 'Default',
   $project_domain_name = 'Default',
   $system_scope        = $facts['os_service_default'],
@@ -68,10 +68,6 @@ class ironic::inspector::service_catalog (
   $endpoint_override   = $facts['os_service_default'],
 ) {
   include ironic::deps
-
-  if $username == 'ironic' {
-    warning('The default username will be changed to ironic-inspector in a future release')
-  }
 
   if is_service_default($system_scope) {
     $project_name_real = $project_name

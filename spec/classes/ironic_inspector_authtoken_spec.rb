@@ -12,7 +12,7 @@ describe 'ironic::inspector::authtoken' do
 
       it 'configure keystone_authtoken' do
         is_expected.to contain_keystone__resource__authtoken('ironic_inspector_config').with(
-          :username                       => 'ironic',
+          :username                       => 'ironic-inspector',
           :password                       => 'ironic_password',
           :auth_url                       => 'http://127.0.0.1:5000',
           :project_name                   => 'services',
