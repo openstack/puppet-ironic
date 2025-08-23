@@ -11,8 +11,10 @@ describe 'ironic::audit' do
 
       it 'configures default values' do
         is_expected.to contain_ironic_config('audit/enabled').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_ironic_config('audit/audit_map_file').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_ironic_config('audit/ignore_req_list').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_oslo__audit('ironic_config').with(
+          :audit_map_file  => '<SERVICE DEFAULT>',
+          :ignore_req_list => '<SERVICE DEFAULT>',
+        )
       end
     end
 
@@ -21,26 +23,16 @@ describe 'ironic::audit' do
         {
           :enabled         => true,
           :audit_map_file  => '/etc/ironic/api_audit_map.conf',
-          :ignore_req_list => 'GET,POST',
+          :ignore_req_list => ['GET', 'POST'],
         }
       end
 
       it 'configures specified values' do
         is_expected.to contain_ironic_config('audit/enabled').with_value(true)
-        is_expected.to contain_ironic_config('audit/audit_map_file').with_value('/etc/ironic/api_audit_map.conf')
-        is_expected.to contain_ironic_config('audit/ignore_req_list').with_value('GET,POST')
-      end
-    end
-
-    context 'with ignore_req_list in array' do
-      let :params do
-        {
+        is_expected.to contain_oslo__audit('ironic_config').with(
+          :audit_map_file  => '/etc/ironic/api_audit_map.conf',
           :ignore_req_list => ['GET', 'POST'],
-        }
-      end
-
-      it 'configures ignore_req_list with a comma separated list' do
-        is_expected.to contain_ironic_config('audit/ignore_req_list').with_value('GET,POST')
+        )
       end
     end
   end
