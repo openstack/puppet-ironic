@@ -32,7 +32,6 @@ class ironic::inspector::pxe_filter::iptables (
   $ethoib_interfaces = $facts['os_service_default'],
   $ip_version        = $facts['os_service_default'],
 ) {
-
   include ironic::deps
   include ironic::inspector
 

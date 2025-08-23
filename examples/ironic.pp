@@ -32,7 +32,6 @@ $deploy_kernel  = 'glance://deploy_kernel_uuid'
 $deploy_ramdisk = 'glance://deploy_ramdisk_uuid'
 
 node 'db' {
-
   class { 'mysql::server':
     config_hash => {
       'bind_address' => '0.0.0.0',
@@ -48,11 +47,9 @@ node 'db' {
     host          => $clientcert,
     allowed_hosts => ['controller'],
   }
-
 }
 
 node 'controller' {
-
   class { 'ironic':
     db_password           => $db_password,
     db_name               => $db_name,
@@ -79,5 +76,4 @@ node 'controller' {
     deploy_kernel  => $deploy_kernel,
     deploy_ramdisk => $deploy_ramdisk,
   }
-
 }

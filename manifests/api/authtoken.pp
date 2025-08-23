@@ -195,7 +195,7 @@
 #  (Optional) Hash of additional parameters to pass through to the keystone
 #  authtoken class. Values set here override the individual parameters above.
 #
-class ironic::api::authtoken(
+class ironic::api::authtoken (
   String[1] $password,
   $username                       = 'ironic',
   $auth_url                       = 'http://127.0.0.1:5000',
@@ -235,7 +235,6 @@ class ironic::api::authtoken(
   $interface                      = $facts['os_service_default'],
   $params                         = {},
 ) {
-
   include ironic::deps
 
   keystone::resource::authtoken {

@@ -151,7 +151,6 @@ class ironic::drivers::pxe (
   $ipxe_bootfile_name_by_arch        = $facts['os_service_default'],
   $pxe_config_template_by_arch       = $facts['os_service_default'],
 ) inherits ironic::params {
-
   include ironic::deps
 
   include ironic::pxe::common
@@ -206,5 +205,4 @@ class ironic::drivers::pxe (
     'pxe/pxe_bootfile_name_by_arch':   value => $pxe_bootfile_name_by_arch_real;
     'pxe/ipxe_bootfile_name_by_arch':  value => $ipxe_bootfile_name_by_arch_real;
   }
-
 }

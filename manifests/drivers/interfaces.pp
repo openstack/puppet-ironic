@@ -172,7 +172,6 @@ class ironic::drivers::interfaces (
   $enabled_storage_interfaces    = $facts['os_service_default'],
   $enabled_vendor_interfaces     = $facts['os_service_default'],
 ) {
-
   $interfaces = {
     'bios'       => { 'enabled_list' => $enabled_bios_interfaces,
                       'default'      => $default_bios_interface },

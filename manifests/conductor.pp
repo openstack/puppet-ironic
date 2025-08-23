@@ -314,7 +314,6 @@ class ironic::conductor (
   $max_concurrent_deploy                 = $facts['os_service_default'],
   $max_concurrent_clean                  = $facts['os_service_default'],
 ) {
-
   include ironic::deps
   include ironic::params
 

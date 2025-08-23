@@ -24,14 +24,13 @@
 #    (Optional) Privileges given to the database user.
 #    Default to 'ALL'
 #
-class ironic::inspector::db::postgresql(
+class ironic::inspector::db::postgresql (
   $password,
   $dbname     = 'ironic-inspector',
   $user       = 'ironic-inspector',
   $encoding   = undef,
   $privileges = 'ALL',
 ) {
-
   include ironic::deps
 
   openstacklib::db::postgresql { 'ironic-inspector':

@@ -72,7 +72,6 @@ class ironic::drivers::ipmi (
   $store_cred_in_env                = $facts['os_service_default'],
   $cipher_suite_versions            = $facts['os_service_default'],
 ) {
-
   include ironic::deps
 
   # Configure ironic.conf
@@ -87,5 +86,4 @@ class ironic::drivers::ipmi (
     'ipmi/store_cred_in_env':                value => $store_cred_in_env;
     'ipmi/cipher_suite_versions':            value => join(any2array($cipher_suite_versions), ',');
   }
-
 }

@@ -71,7 +71,6 @@ class ironic::nova (
   $endpoint_override                = $facts['os_service_default'],
   Boolean $send_power_notifications = true,
 ) {
-
   include ironic::deps
 
   ironic_config {

@@ -35,7 +35,7 @@ define ironic::pxe::tftpboot_file (
   include ironic::deps
   include ironic::params
 
-  file {"${destination_directory}/${file}":
+  file { "${destination_directory}/${file}":
     ensure  => 'file',
     seltype => 'tftpdir_t',
     owner   => $ironic::params::user,
@@ -45,4 +45,3 @@ define ironic::pxe::tftpboot_file (
     backup  => false,
   }
 }
-

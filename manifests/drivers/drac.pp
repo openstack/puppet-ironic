@@ -55,7 +55,6 @@ class ironic::drivers::drac (
   $bios_factory_reset_timeout              = $facts['os_service_default'],
   $raid_job_timeout                        = $facts['os_service_default'],
 ) {
-
   include ironic::deps
   include ironic::params
 

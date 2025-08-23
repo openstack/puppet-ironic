@@ -110,7 +110,6 @@ class ironic::drivers::redfish (
   $raid_config_fail_interval             = $facts['os_service_default'],
   $boot_mode_config_timeout              = $facts['os_service_default'],
 ) {
-
   include ironic::deps
   include ironic::params
 
@@ -140,5 +139,4 @@ class ironic::drivers::redfish (
       tag    => ['openstack', 'ironic-package'],
     }
   )
-
 }

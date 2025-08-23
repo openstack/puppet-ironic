@@ -67,7 +67,6 @@ class ironic::inspector::service_catalog (
   $region_name         = $facts['os_service_default'],
   $endpoint_override   = $facts['os_service_default'],
 ) {
-
   include ironic::deps
 
   if $username == 'ironic' {

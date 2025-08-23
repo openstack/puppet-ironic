@@ -27,12 +27,10 @@ class ironic::inspector::pxe_filter (
   $driver      = $facts['os_service_default'],
   $sync_period = $facts['os_service_default'],
 ) {
-
   include ironic::deps
 
   ironic_inspector_config {
     'pxe_filter/driver':      value => $driver;
     'pxe_filter/sync_period': value => $sync_period;
   }
-
 }

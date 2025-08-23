@@ -17,7 +17,6 @@ class ironic::inventory (
   $data_backend         = $facts['os_service_default'],
   $swift_data_container = $facts['os_service_default'],
 ) {
-
   include ironic::deps
   include ironic::params
 
@@ -31,5 +30,4 @@ class ironic::inventory (
     'inventory/data_backend':         value => $data_backend;
     'inventory/swift_data_container': value => $swift_data_container;
   }
-
 }

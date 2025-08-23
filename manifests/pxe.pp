@@ -124,7 +124,6 @@ class ironic::pxe (
   Array[String] $vhost_options                                    = ['-Indexes', '+FollowSymLinks'],
   Hash $vhost_config                                              = {},
 ) inherits ironic::params {
-
   include ironic::deps
   include ironic::pxe::common
 

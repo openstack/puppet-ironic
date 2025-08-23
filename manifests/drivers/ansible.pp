@@ -80,7 +80,6 @@ class ironic::drivers::ansible (
   $default_clean_steps_config = $facts['os_service_default'],
   $default_python_interpreter = $facts['os_service_default'],
 ) {
-
   include ironic::deps
   include ironic::params
 
@@ -113,5 +112,4 @@ class ironic::drivers::ansible (
       tag    => ['openstack', 'ironic-package'],
     }
   )
-
 }

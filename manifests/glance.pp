@@ -118,7 +118,6 @@ class ironic::glance (
   $swift_temp_url_duration    = $facts['os_service_default'],
   $endpoint_override          = $facts['os_service_default'],
 ) {
-
   include ironic::deps
 
   if ($swift_account_project_name and !is_service_default($swift_account)) {

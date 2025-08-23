@@ -23,7 +23,6 @@
 class ironic::inspector::config (
   Hash $ironic_inspector_config = {},
 ) {
-
   include ironic::deps
 
   create_resources('ironic_inspector_config', $ironic_inspector_config)

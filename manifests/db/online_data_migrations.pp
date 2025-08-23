@@ -14,11 +14,10 @@
 #   ironic-dbsync command.
 #   Defaults to undef
 #
-class ironic::db::online_data_migrations(
+class ironic::db::online_data_migrations (
   $extra_params     = undef,
   $migration_params = undef,
 ) {
-
   include ironic::deps
   include ironic::params
 

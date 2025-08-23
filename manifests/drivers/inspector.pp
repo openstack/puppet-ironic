@@ -109,7 +109,6 @@ class ironic::drivers::inspector (
   $additional_hooks               = undef,
   Hash $physical_network_cidr_map = {},
 ) {
-
   include ironic::deps
 
   if $auth_type {

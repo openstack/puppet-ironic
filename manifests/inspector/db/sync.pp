@@ -7,10 +7,9 @@
 #   (Optional) Timeout for the execution of the db_sync
 #   Defaults to 300
 #
-class ironic::inspector::db::sync(
+class ironic::inspector::db::sync (
   $db_sync_timeout = 300,
 ) {
-
   include ironic::deps
   include ironic::params
 

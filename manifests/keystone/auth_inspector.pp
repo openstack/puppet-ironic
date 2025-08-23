@@ -114,7 +114,6 @@ class ironic::keystone::auth_inspector (
   Keystone::EndpointUrl $admin_url        = 'http://127.0.0.1:5050',
   Keystone::EndpointUrl $internal_url     = 'http://127.0.0.1:5050',
 ) {
-
   include ironic::deps
 
   $real_service_name = pick($service_name, $auth_name)
@@ -141,5 +140,4 @@ class ironic::keystone::auth_inspector (
     internal_url        => $internal_url,
     admin_url           => $admin_url,
   }
-
 }

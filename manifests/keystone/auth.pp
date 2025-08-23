@@ -123,7 +123,6 @@ class ironic::keystone::auth (
   Keystone::EndpointUrl $admin_url        = 'http://127.0.0.1:6385',
   Keystone::EndpointUrl $internal_url     = 'http://127.0.0.1:6385',
 ) {
-
   include ironic::deps
 
   Keystone::Resource::Service_identity['ironic'] -> Anchor['ironic::service::end']
@@ -148,5 +147,4 @@ class ironic::keystone::auth (
     internal_url        => $internal_url,
     admin_url           => $admin_url,
   }
-
 }
