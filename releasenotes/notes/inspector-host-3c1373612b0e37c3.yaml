@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The new ``ironic::inspector::host`` parameter has been added.

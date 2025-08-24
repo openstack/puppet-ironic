@@ -29,6 +29,10 @@
 #   (optional) Define if the service must be enabled or not
 #   Defaults to true
 #
+# [*host*]
+#   (optional) Name of this node.
+#   Defaults to $facts['os_service_default'].
+#
 # [*listen_address*]
 #   (optional) The listen IP for the Ironic-inspector API server.
 #   Should be an valid IP address
@@ -341,6 +345,7 @@ class ironic::inspector (
   $package_ensure                                       = 'present',
   Boolean $manage_service                               = true,
   Boolean $enabled                                      = true,
+  $host                                                 = $facts['os_service_default'],
   $listen_address                                       = $facts['os_service_default'],
   Enum['http', 'tftp'] $pxe_transfer_protocol           = 'tftp',
   Boolean $dhcp_debug                                   = false,
@@ -493,6 +498,7 @@ class ironic::inspector (
   }
 
   ironic_inspector_config {
+    'DEFAULT/host':                         value => $host;
     'DEFAULT/listen_address':               value => $listen_address;
     'DEFAULT/auth_strategy':                value => $auth_strategy;
     'DEFAULT/timeout':                      value => $timeout;

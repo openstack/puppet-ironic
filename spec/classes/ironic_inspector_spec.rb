@@ -108,6 +108,7 @@ describe 'ironic::inspector' do
     end
 
     it 'configures inspector.conf' do
+      is_expected.to contain_ironic_inspector_config('DEFAULT/host').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('DEFAULT/listen_address').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_inspector_config('DEFAULT/auth_strategy').with_value(p[:auth_strategy])
       is_expected.to contain_ironic_inspector_config('DEFAULT/timeout').with_value('<SERVICE DEFAULT>')
@@ -224,6 +225,7 @@ describe 'ironic::inspector' do
       before :each do
         params.merge!(
           :dhcp_debug                         => true,
+          :host                               => 'localhost',
           :listen_address                     => '127.0.0.1',
           :api_max_limit                      => 100,
           :pxe_transfer_protocol              => 'http',
@@ -273,6 +275,7 @@ describe 'ironic::inspector' do
         )
       end
       it 'should replace default parameter with new value' do
+        is_expected.to contain_ironic_inspector_config('DEFAULT/host').with_value(p[:host])
         is_expected.to contain_ironic_inspector_config('DEFAULT/listen_address').with_value(p[:listen_address])
         is_expected.to contain_ironic_inspector_config('DEFAULT/api_max_limit').with_value(100)
         is_expected.to contain_ironic_inspector_config('capabilities/boot_mode').with_value(p[:detect_boot_mode])
