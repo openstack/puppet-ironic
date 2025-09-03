@@ -1,4 +1,5 @@
 ---
 upgrade:
   - |
-    The ``ironic::rabbit_heartbeat_in_pthread`` parameter has been removed.
+    The ``ironic::rabbit_heartbeat_in_pthread`` parameter and
+    the ``ironic::inspector::rabbit_heartbeat_in_pthread`` have been removed.
