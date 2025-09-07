@@ -15,20 +15,7 @@
 require 'spec_helper'
 
 describe 'ironic::inspector::client' do
-
- let :params do
-    {}
-  end
-
-  let :default_params do
-    { :package_ensure   => 'present' }
-  end
-
   shared_examples_for 'inspector client' do
-    let :p do
-      default_params.merge(params)
-    end
-
     it { is_expected.to contain_class('ironic::deps') }
     it { is_expected.to contain_class('ironic::params') }
 
@@ -36,7 +23,7 @@ describe 'ironic::inspector::client' do
       is_expected.to contain_package('python-ironic-inspector-client').with(
         :ensure => 'present',
         :name   => platform_params[:inspector_client_package],
-        :tag    => ['openstack', 'ironic-support-package'],
+        :tag    => ['openstack', 'openstackclient'],
       )
     end
 
