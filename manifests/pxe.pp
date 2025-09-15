@@ -348,7 +348,7 @@ class ironic::pxe (
     tag       => 'ironic-tftp-file',
   }
 
-  File["${tftp_root_real}"] -> File<| tag == 'ironic-tftp-file' |>
+  File[$tftp_root_real] -> File<| tag == 'ironic-tftp-file' |>
 
   # HTTP server
   if $manage_http_server {
