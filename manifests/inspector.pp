@@ -330,7 +330,7 @@
 #   Defaults to true
 #
 class ironic::inspector (
-  $package_ensure                                       = 'present',
+  Stdlib::Ensure::Package $package_ensure               = 'present',
   Boolean $manage_service                               = true,
   Boolean $enabled                                      = true,
   $host                                                 = $facts['os_service_default'],

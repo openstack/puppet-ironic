@@ -67,18 +67,18 @@
 #   Defaults to $facts['os_service_default']
 #
 class ironic::drivers::ansible (
-  $package_ensure             = 'present',
-  $ansible_extra_args         = $facts['os_service_default'],
-  $playbooks_path             = $facts['os_service_default'],
-  $config_file_path           = $facts['os_service_default'],
-  $image_store_insecure       = $facts['os_service_default'],
-  $default_username           = $facts['os_service_default'],
-  $default_key_file           = $facts['os_service_default'],
-  $default_deploy_playbook    = $facts['os_service_default'],
-  $default_shutdown_playbook  = $facts['os_service_default'],
-  $default_clean_playbook     = $facts['os_service_default'],
-  $default_clean_steps_config = $facts['os_service_default'],
-  $default_python_interpreter = $facts['os_service_default'],
+  Stdlib::Ensure::Package $package_ensure = 'present',
+  $ansible_extra_args                     = $facts['os_service_default'],
+  $playbooks_path                         = $facts['os_service_default'],
+  $config_file_path                       = $facts['os_service_default'],
+  $image_store_insecure                   = $facts['os_service_default'],
+  $default_username                       = $facts['os_service_default'],
+  $default_key_file                       = $facts['os_service_default'],
+  $default_deploy_playbook                = $facts['os_service_default'],
+  $default_shutdown_playbook              = $facts['os_service_default'],
+  $default_clean_playbook                 = $facts['os_service_default'],
+  $default_clean_steps_config             = $facts['os_service_default'],
+  $default_python_interpreter             = $facts['os_service_default'],
 ) {
   include ironic::deps
   include ironic::params

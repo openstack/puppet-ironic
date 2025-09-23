@@ -104,7 +104,7 @@
 #   Defaults to {}
 #
 class ironic::pxe (
-  $package_ensure                                                 = 'present',
+  Stdlib::Ensure::Package $package_ensure                         = 'present',
   Boolean $manage_service                                         = true,
   Boolean $enabled                                                = true,
   Stdlib::Absolutepath $tftp_root                                 = '/tftpboot',

@@ -47,7 +47,7 @@
 #   Defaults to $facts['os_service_default']
 #
 class ironic::drivers::drac (
-  $package_ensure                          = 'present',
+  Stdlib::Ensure::Package $package_ensure  = 'present',
   $query_raid_config_job_status_interval   = $facts['os_service_default'],
   $boot_device_job_status_timeout          = $facts['os_service_default'],
   $config_job_max_retries                  = $facts['os_service_default'],

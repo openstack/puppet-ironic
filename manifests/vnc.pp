@@ -73,22 +73,22 @@
 #  Defaults to $facts['os_service_default']
 #
 class ironic::vnc (
-  $package_ensure                  = present,
-  Boolean $enabled                 = true,
-  Boolean $manage_service          = true,
-  $host_ip                         = $facts['os_service_default'],
-  $port                            = $facts['os_service_default'],
-  $public_url                      = $facts['os_service_default'],
-  $enable_ssl                      = $facts['os_service_default'],
-  $novnc_web                       = $facts['os_service_default'],
-  $novnc_record                    = $facts['os_service_default'],
-  $novnc_auth_schemes              = $facts['os_service_default'],
-  $token_timeout                   = $facts['os_service_default'],
-  $expire_console_session_interval = $facts['os_service_default'],
-  $ssl_cert_file                   = $facts['os_service_default'],
-  $ssl_key_file                    = $facts['os_service_default'],
-  $ssl_minimum_version             = $facts['os_service_default'],
-  $ssl_ciphers                     = $facts['os_service_default'],
+  Stdlib::Ensure::Package $package_ensure = present,
+  Boolean $enabled                        = true,
+  Boolean $manage_service                 = true,
+  $host_ip                                = $facts['os_service_default'],
+  $port                                   = $facts['os_service_default'],
+  $public_url                             = $facts['os_service_default'],
+  $enable_ssl                             = $facts['os_service_default'],
+  $novnc_web                              = $facts['os_service_default'],
+  $novnc_record                           = $facts['os_service_default'],
+  $novnc_auth_schemes                     = $facts['os_service_default'],
+  $token_timeout                          = $facts['os_service_default'],
+  $expire_console_session_interval        = $facts['os_service_default'],
+  $ssl_cert_file                          = $facts['os_service_default'],
+  $ssl_key_file                           = $facts['os_service_default'],
+  $ssl_minimum_version                    = $facts['os_service_default'],
+  $ssl_ciphers                            = $facts['os_service_default'],
 ) inherits ironic::params {
   include ironic::deps
 
