@@ -39,11 +39,11 @@
 #   Defaults to 'present'
 #
 class ironic::drivers::ilo (
-  $client_timeout            = $facts['os_service_default'],
-  $client_port               = $facts['os_service_default'],
-  $use_web_server_for_images = $facts['os_service_default'],
-  $default_boot_mode         = $facts['os_service_default'],
-  $package_ensure            = 'present',
+  $client_timeout                         = $facts['os_service_default'],
+  $client_port                            = $facts['os_service_default'],
+  $use_web_server_for_images              = $facts['os_service_default'],
+  $default_boot_mode                      = $facts['os_service_default'],
+  Stdlib::Ensure::Package $package_ensure = 'present',
 ) {
   include ironic::deps
   include ironic::params

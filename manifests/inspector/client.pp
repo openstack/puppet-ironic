@@ -9,7 +9,7 @@
 #   Defaults to present
 #
 class ironic::inspector::client (
-  $package_ensure = present
+  Stdlib::Ensure::Package $package_ensure = present,
 ) {
   include ironic::deps
   include ironic::params

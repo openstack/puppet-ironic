@@ -74,17 +74,17 @@
 #   Defaults to $facts['os_service_default'].
 #
 class ironic::api (
-  $package_ensure               = 'present',
-  Boolean $manage_service       = true,
-  Boolean $enabled              = true,
-  $service_name                 = $ironic::params::api_service,
-  $host_ip                      = $facts['os_service_default'],
-  $port                         = $facts['os_service_default'],
-  $max_limit                    = $facts['os_service_default'],
-  $workers                      = $facts['os_service_default'],
-  $public_endpoint              = $facts['os_service_default'],
-  $enable_proxy_headers_parsing = $facts['os_service_default'],
-  $max_request_body_size        = $facts['os_service_default'],
+  Stdlib::Ensure::Package $package_ensure = 'present',
+  Boolean $manage_service                 = true,
+  Boolean $enabled                        = true,
+  $service_name                           = $ironic::params::api_service,
+  $host_ip                                = $facts['os_service_default'],
+  $port                                   = $facts['os_service_default'],
+  $max_limit                              = $facts['os_service_default'],
+  $workers                                = $facts['os_service_default'],
+  $public_endpoint                        = $facts['os_service_default'],
+  $enable_proxy_headers_parsing           = $facts['os_service_default'],
+  $max_request_body_size                  = $facts['os_service_default'],
 ) inherits ironic::params {
   include ironic::deps
   include ironic::params
