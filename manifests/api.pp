@@ -77,7 +77,7 @@ class ironic::api (
   Stdlib::Ensure::Package $package_ensure = 'present',
   Boolean $manage_service                 = true,
   Boolean $enabled                        = true,
-  $service_name                           = $ironic::params::api_service,
+  String[1] $service_name                 = $ironic::params::api_service,
   $host_ip                                = $facts['os_service_default'],
   $port                                   = $facts['os_service_default'],
   $max_limit                              = $facts['os_service_default'],
@@ -108,37 +108,37 @@ class ironic::api (
   }
 
   if $manage_service {
-    if $enabled {
-      $ensure = 'running'
-    } else {
-      $ensure = 'stopped'
-    }
+    case $service_name {
+      'httpd': {
+        Service <| title == 'httpd' |> { tag +> 'ironic-service' }
 
-    if $service_name == $ironic::params::api_service {
-      service { 'ironic-api':
-        ensure     => $ensure,
-        name       => $ironic::params::api_service,
-        enable     => $enabled,
-        hasstatus  => true,
-        hasrestart => true,
-        tag        => 'ironic-service',
-      }
-      Keystone_endpoint<||> -> Service['ironic-api']
-      Ironic_api_uwsgi_config<||> ~> Service['ironic-api']
-    } elsif $service_name == 'httpd' {
-      service { 'ironic-api':
-        ensure => 'stopped',
-        name   => $ironic::params::api_service,
-        enable => false,
-        tag    => 'ironic-service',
-      }
-      Service <| title == 'httpd' |> { tag +> 'ironic-service' }
+        service { 'ironic-api':
+          ensure => 'stopped',
+          name   => $ironic::params::api_service,
+          enable => false,
+          tag    => 'ironic-service',
+        }
 
-      # we need to make sure ironic-api/eventlet is stopped before trying to start apache
-      Service['ironic-api'] -> Service[$service_name]
-    } else {
-      fail("Invalid service_name. Either ironic-api/openstack-ironic-api for running as a \
-standalone service, or httpd for being run by a httpd server")
+        # we need to make sure ironic-api/eventlet is stopped before trying to start apache
+        Service['ironic-api'] -> Service['httpd']
+      }
+      default: {
+        $service_ensure = $enabled ? {
+          true    => 'running',
+          default => 'stopped',
+        }
+
+        service { 'ironic-api':
+          ensure     => $service_ensure,
+          name       => $service_name,
+          enable     => $enabled,
+          hasstatus  => true,
+          hasrestart => true,
+          tag        => 'ironic-service',
+        }
+        Keystone_endpoint<||> -> Service['ironic-api']
+        Ironic_api_uwsgi_config<||> ~> Service['ironic-api']
+      }
     }
   }
 

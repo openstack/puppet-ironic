@@ -132,21 +132,6 @@ describe 'ironic::api' do
         )
       end
     end
-
-    context 'when service_name is not valid' do
-      before do
-        params.merge!({ :service_name => 'foobar' })
-      end
-
-      let :pre_condition do
-        "class { 'ironic::api::authtoken':
-           password => 'password',
-         }
-         include apache"
-      end
-
-      it_raises 'a Puppet::Error', /Invalid service_name/
-    end
   end
 
   on_supported_os({
