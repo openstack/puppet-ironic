@@ -35,7 +35,7 @@
 #
 # [*roles*]
 #   (Optional) List of roles assigned to ironic user.
-#   Defaults to ['admin']
+#   Defaults to ['admin', 'service']
 #
 # [*system_scope*]
 #   (Optional) Scope for system operations.
@@ -99,7 +99,7 @@ class ironic::keystone::auth_inspector (
   String[1] $auth_name                    = 'ironic-inspector',
   String[1] $email                        = 'ironic-inspector@localhost',
   String[1] $tenant                       = 'services',
-  Array[String[1]] $roles                 = ['admin'],
+  Array[String[1]] $roles                 = ['admin', 'service'],
   String[1] $system_scope                 = 'all',
   Array[String[1]] $system_roles          = [],
   Boolean $configure_endpoint             = true,
