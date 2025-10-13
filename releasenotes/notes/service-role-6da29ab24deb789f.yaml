@@ -1,0 +1,9 @@
+---
+features:
+  - |
+    The ``ironic::keystone::auth`` class now adds the ``service`` role by
+    default. Set the ``roles`` parameter not to add the role.
+
+  - |
+    The ``ironic::keystone::auth_inspector`` class now adds the ``service``
+    role by default. Set the ``roles`` parameter not to add the role.
