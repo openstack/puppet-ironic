@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    Support for ironic-inspector has been removed.

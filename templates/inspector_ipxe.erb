@@ -1,7 +1,0 @@
-#!ipxe
-
-:retry_boot
-imgfree
-kernel <% if Integer(@ipxe_timeout_real) != 0 %>--timeout <%= Integer(@ipxe_timeout_real) * 1000 %> <% end %>http://<%= @dnsmasq_local_ip_real %>:<%= @http_port_real %>/<%= @kernel_filename %> ipa-inspection-callback-url=http://<%= @dnsmasq_local_ip_real %>:5050/v1/continue <%if !@ramdisk_collectors.nil? %>ipa-inspection-collectors=<%= @ramdisk_collectors %> <% end %>systemd.journald.forward_to_console=yes BOOTIF=${mac} <%= @ramdisk_kernel_args %> initrd=<%= @ramdisk_filename %> || goto retry_boot
-initrd <% if Integer(@ipxe_timeout_real) != 0 %>--timeout <%= Integer(@ipxe_timeout_real) * 1000 %> <% end %>http://<%= @dnsmasq_local_ip_real %>:<%= @http_port_real %>/<%= @ramdisk_filename %> || goto retry_boot
-boot

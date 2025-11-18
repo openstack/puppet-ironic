@@ -16,7 +16,6 @@ describe 'basic ironic' do
       include openstack_integration::ironic
       EOS
 
-
       # Run it twice and test for idempotency
       apply_manifest(pp, :catch_failures => true)
       apply_manifest(pp, :catch_changes  => true)
@@ -26,10 +25,5 @@ describe 'basic ironic' do
     describe port(6385) do
       it { is_expected.to be_listening }
     end
-    # Inspector API port
-    describe port(5050) do
-      it { is_expected.to be_listening.with('tcp') }
-    end
-
   end
 end

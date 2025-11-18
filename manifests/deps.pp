@@ -26,27 +26,6 @@ class ironic::deps {
   ~> Service<| tag == 'ironic-service' |>
   ~> anchor { 'ironic::service::end': }
 
-  # ironic-inspector is supported by this module.  This service uses a
-  # specific conf file and uses it's own config provider. Split out install
-  # and configure of this service so that other services are not affected.
-  anchor { 'ironic-inspector::install::begin': }
-  -> Package<| tag == 'ironic-inspector-package'|>
-  ~> anchor { 'ironic-inspector::install::end': }
-  -> anchor { 'ironic-inspector::config::begin': }
-  -> Ironic_inspector_config<||>
-  ~> anchor { 'ironic-inspector::config::end': }
-  -> anchor { 'ironic-inspector::db::begin': }
-  -> anchor { 'ironic-inspector::db::end': }
-  ~> anchor { 'ironic-inspector::dbsync::begin': }
-  -> anchor { 'ironic-inspector::dbsync::end': }
-  ~> anchor { 'ironic-inspector::service::begin': }
-  ~> Service<| tag == 'ironic-inspector-service' |>
-  ~> anchor { 'ironic-inspector::service::end': }
-
-  Anchor['ironic-inspector::service::begin']
-  ~> Service<| tag == 'ironic-inspector-dnsmasq-service' |>
-  ~> Anchor['ironic-inspector::service::end']
-
   Anchor['ironic::config::begin']
   -> Ironic_api_uwsgi_config<||>
   -> Anchor['ironic::config::end']
@@ -62,11 +41,6 @@ class ironic::deps {
   -> Package<| tag == 'ironic-support-package'|>
   -> Anchor['ironic::install::end']
 
-  # ironic-inspector depends on support packages in pxe.pp
-  Anchor['ironic-inspector::install::begin']
-  -> Package<| tag == 'ironic-support-package'|>
-  -> Anchor['ironic-inspector::install::end']
-
   # openstackclient package is needed by transform
   Package<| tag == 'openstackclient'|>
   -> Anchor['ironic::config::begin']
@@ -74,6 +48,4 @@ class ironic::deps {
   # Installation or config changes will always restart services.
   Anchor['ironic::install::end'] ~> Anchor['ironic::service::begin']
   Anchor['ironic::config::end']  ~> Anchor['ironic::service::begin']
-  Anchor['ironic-inspector::install::end'] ~> Anchor['ironic-inspector::service::begin']
-  Anchor['ironic-inspector::config::end']  ~> Anchor['ironic-inspector::service::begin']
 }
