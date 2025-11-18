@@ -17,22 +17,10 @@ require 'spec_helper'
 
 describe 'ironic::drivers::inspector' do
 
-  let :params do
-    { :password => 'secret' }
-  end
-
-  shared_examples_for 'ironic ironic-inspector access configuration' do
+  shared_examples_for 'ironic::drivers::inspector' do
     it 'configures ironic.conf' do
-      is_expected.to contain_ironic_config('inspector/auth_type').with_value('password')
-      is_expected.to contain_ironic_config('inspector/auth_url').with_value('http://127.0.0.1:5000')
-      is_expected.to contain_ironic_config('inspector/project_name').with_value('services')
-      is_expected.to contain_ironic_config('inspector/username').with_value('ironic')
-      is_expected.to contain_ironic_config('inspector/password').with_value('secret').with_secret(true)
-      is_expected.to contain_ironic_config('inspector/user_domain_name').with_value('Default')
-      is_expected.to contain_ironic_config('inspector/project_domain_name').with_value('Default')
-      is_expected.to contain_ironic_config('inspector/system_scope').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('inspector/region_name').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_ironic_config('inspector/endpoint_override').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('inspector/power_off').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_ironic_config('inspector/extra_kernel_params').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('inspector/require_managed_boot').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('inspector/add_ports').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_ironic_config('inspector/keep_ports').with_value('<SERVICE DEFAULT>')
@@ -40,55 +28,23 @@ describe 'ironic::drivers::inspector' do
       is_expected.to contain_ironic_config('inspector/physical_network_cidr_map').with_value('<SERVICE DEFAULT>')
     end
 
-    context 'without password' do
-      let :params do
-        {}
-      end
-      it 'configures ironic.conf' do
-        is_expected.to contain_ironic_config('inspector/auth_type').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_ironic_config('inspector/auth_url').with_value('http://127.0.0.1:5000')
-        is_expected.to contain_ironic_config('inspector/project_name').with_value('services')
-        is_expected.to contain_ironic_config('inspector/username').with_value('ironic')
-        is_expected.to contain_ironic_config('inspector/password').with_value('<SERVICE DEFAULT>').with_secret(true)
-        is_expected.to contain_ironic_config('inspector/user_domain_name').with_value('Default')
-        is_expected.to contain_ironic_config('inspector/project_domain_name').with_value('Default')
-      end
-    end
-
     context 'when overriding parameters' do
-      before :each do
-        params.merge!(
-          :auth_type                   => 'v3password',
-          :auth_url                    => 'http://example.com',
-          :project_name                => 'project1',
-          :username                    => 'admin',
-          :user_domain_name            => 'NonDefault',
-          :project_domain_name         => 'NonDefault',
-          :region_name                 => 'regionTwo',
-          :endpoint_override           => 'http://example2.com',
-          :callback_endpoint_override  => 'http://10.0.0.1/v1/continue',
-          :power_off                   => false,
-          :extra_kernel_params         => 'ipa-inspection-collectors=a,b,c',
-          :require_managed_boot        => true,
-          :add_ports                   => 'all',
-          :keep_ports                  => 'all',
-          :additional_hooks            => 'hook1,hook2',
-          :physical_network_cidr_map   => {'192.168.20.0/24' => 'physnet_a',
-                                           '2001:db8::/64' => 'physnet_b'},
-        )
+      let :params do
+        {
+          :power_off                 => false,
+          :extra_kernel_params       => 'ipa-inspection-collectors=a,b,c',
+          :require_managed_boot      => true,
+          :add_ports                 => 'all',
+          :keep_ports                => 'all',
+          :additional_hooks          => 'hook1,hook2',
+          :physical_network_cidr_map => {
+            '192.168.20.0/24' => 'physnet_a',
+            '2001:db8::/64'   => 'physnet_b'
+          },
+        }
       end
 
       it 'should replace default parameter with new value' do
-        is_expected.to contain_ironic_config('inspector/auth_type').with_value(params[:auth_type])
-        is_expected.to contain_ironic_config('inspector/auth_url').with_value(params[:auth_url])
-        is_expected.to contain_ironic_config('inspector/project_name').with_value(params[:project_name])
-        is_expected.to contain_ironic_config('inspector/username').with_value(params[:username])
-        is_expected.to contain_ironic_config('inspector/user_domain_name').with_value(params[:user_domain_name])
-        is_expected.to contain_ironic_config('inspector/project_domain_name').with_value(params[:project_domain_name])
-        is_expected.to contain_ironic_config('inspector/system_scope').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_ironic_config('inspector/region_name').with_value(params[:region_name])
-        is_expected.to contain_ironic_config('inspector/endpoint_override').with_value(params[:endpoint_override])
-        is_expected.to contain_ironic_config('inspector/callback_endpoint_override').with_value(params[:callback_endpoint_override])
         is_expected.to contain_ironic_config('inspector/power_off').with_value(params[:power_off])
         is_expected.to contain_ironic_config('inspector/extra_kernel_params').with_value(params[:extra_kernel_params])
         is_expected.to contain_ironic_config('inspector/require_managed_boot').with_value(true)
@@ -96,20 +52,6 @@ describe 'ironic::drivers::inspector' do
         is_expected.to contain_ironic_config('inspector/keep_ports').with_value('all')
         is_expected.to contain_ironic_config('inspector/hooks').with_value('$default_hooks,hook1,hook2')
         is_expected.to contain_ironic_config('inspector/physical_network_cidr_map').with_value('192.168.20.0/24:physnet_a,2001:db8::/64:physnet_b')
-      end
-    end
-
-    context 'when system_scope is set' do
-      before :each do
-        params.merge!(
-          :system_scope => 'all'
-        )
-      end
-
-      it 'configures system-scoped credential' do
-        is_expected.to contain_ironic_config('inspector/project_name').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_ironic_config('inspector/project_domain_name').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_ironic_config('inspector/system_scope').with_value('all')
       end
     end
   end
@@ -122,7 +64,7 @@ describe 'ironic::drivers::inspector' do
         facts.merge!(OSDefaults.get_facts())
       end
 
-      it_behaves_like 'ironic ironic-inspector access configuration'
+      it_behaves_like 'ironic::drivers::inspector'
     end
   end
 
