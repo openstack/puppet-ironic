@@ -14,52 +14,6 @@
 #
 # Configure how Ironic talks to Ironic Inspector.
 #
-# [*password*]
-#   (Optional) The admin password for ironic to connect to ironic-inspector.
-#
-# [*auth_type*]
-#   (Optional) The authentication plugin to use when connecting to
-#   ironic-inspector.
-#   Defaults to 'password'
-#
-# [*auth_url*]
-#   (Optional) The address of the keystone api endpoint.
-#   Defaults to 'http://127.0.0.1:5000'
-#
-# [*project_name*]
-#   (Optional) The Keystone project name.
-#   Defaults to 'services'
-#
-# [*username*]
-#   (Optional) The admin username for ironic to connect to ironic-inspector.
-#   Defaults to 'ironic'.
-#
-# [*user_domain_name*]
-#   (Optional) The name of user's domain.
-#   Defaults to 'Default'
-#
-# [*project_domain_name*]
-#   (Optional) The name of project's domain.
-#   Defaults to 'Default'
-#
-# [*system_scope*]
-#   (Optional) Scope for system operations
-#   Defaults to $facts['os_service_default']
-#
-# [*region_name*]
-#   (Optional) Region name for connecting to ironic-inspector in admin context
-#   through the OpenStack Identity service.
-#   Defaults to $facts['os_service_default']
-#
-# [*endpoint_override*]
-#   (Optional) The endpoint URL for requests for this client
-#   Defaults to $facts['os_service_default']
-#
-# [*callback_endpoint_override*]
-#   (Optional) The endpoint URL to use for ramdisk callback in case of managed
-#   boot.
-#   Defaults to $facts['os_service_default']
-#
 # [*power_off*]
 #   (Optional) Whether to power off a node after inspection in case of managed
 #   boot.
@@ -89,18 +43,56 @@
 # [*physical_network_cidr_map*]
 #   (Optional) Mapping of IP subnet CIDR to physical network.
 #
+# DEPRECATED PARAMETERS
+#
+# [*password*]
+#   (Optional) The admin password for ironic to connect to ironic-inspector.
+#   Defaults to undef
+#
+# [*auth_type*]
+#   (Optional) The authentication plugin to use when connecting to
+#   ironic-inspector.
+#   Defaults to undef
+#
+# [*auth_url*]
+#   (Optional) The address of the keystone api endpoint.
+#   Defaults to undef
+#
+# [*project_name*]
+#   (Optional) The Keystone project name.
+#   Defaults to undef
+#
+# [*username*]
+#   (Optional) The admin username for ironic to connect to ironic-inspector.
+#   Defaults to undef
+#
+# [*user_domain_name*]
+#   (Optional) The name of user's domain.
+#   Defaults to undef
+#
+# [*project_domain_name*]
+#   (Optional) The name of project's domain.
+#   Defaults to undef
+#
+# [*system_scope*]
+#   (Optional) Scope for system operations
+#   Defaults to undef
+#
+# [*region_name*]
+#   (Optional) Region name for connecting to ironic-inspector in admin context
+#   through the OpenStack Identity service.
+#   Defaults to undef
+#
+# [*endpoint_override*]
+#   (Optional) The endpoint URL for requests for this client
+#   Defaults to undef
+#
+# [*callback_endpoint_override*]
+#   (Optional) The endpoint URL to use for ramdisk callback in case of managed
+#   boot.
+#   Defaults to undef
+#
 class ironic::drivers::inspector (
-  $password                       = undef,
-  $auth_type                      = undef,
-  $auth_url                       = 'http://127.0.0.1:5000',
-  $project_name                   = 'services',
-  $username                       = 'ironic',
-  $user_domain_name               = 'Default',
-  $project_domain_name            = 'Default',
-  $system_scope                   = $facts['os_service_default'],
-  $region_name                    = $facts['os_service_default'],
-  $endpoint_override              = $facts['os_service_default'],
-  $callback_endpoint_override     = $facts['os_service_default'],
   $power_off                      = $facts['os_service_default'],
   $extra_kernel_params            = $facts['os_service_default'],
   $require_managed_boot           = $facts['os_service_default'],
@@ -108,29 +100,37 @@ class ironic::drivers::inspector (
   $keep_ports                     = $facts['os_service_default'],
   $additional_hooks               = undef,
   Hash $physical_network_cidr_map = {},
+  # DEPRECATED PARAMETERS
+  $password                       = undef,
+  $auth_type                      = undef,
+  $auth_url                       = undef,
+  $project_name                   = undef,
+  $username                       = undef,
+  $user_domain_name               = undef,
+  $project_domain_name            = undef,
+  $system_scope                   = undef,
+  $region_name                    = undef,
+  $endpoint_override              = undef,
+  $callback_endpoint_override     = undef,
 ) {
   include ironic::deps
 
-  if $auth_type {
-    if $password == undef {
-      fail('The password parameter is required to use ironic-inspector')
+  [
+    'password',
+    'auth_type',
+    'auth_url',
+    'project_name',
+    'username',
+    'user_domain_name',
+    'project_domain_name',
+    'system_scope',
+    'region_name',
+    'endpoint_override',
+    'callback_endpoint_override',
+  ].each |String $deprecated_opt| {
+    if getvar($deprecated_opt) != undef {
+      warning("The ${deprecated_opt} parameter is deprecated and has no effect.")
     }
-    $auth_type_real = $auth_type
-    $password_real = $password
-  } elsif $password {
-    $auth_type_real = 'password'
-    $password_real = $password
-  } else {
-    $auth_type_real = $facts['os_service_default']
-    $password_real = $facts['os_service_default']
-  }
-
-  if is_service_default($system_scope) {
-    $project_name_real = $project_name
-    $project_domain_name_real = $project_domain_name
-  } else {
-    $project_name_real = $facts['os_service_default']
-    $project_domain_name_real = $facts['os_service_default']
   }
 
   $hooks = $additional_hooks ? {
@@ -143,16 +143,6 @@ class ironic::drivers::inspector (
   }
 
   ironic_config {
-    'inspector/auth_type':                  value => $auth_type_real;
-    'inspector/username':                   value => $username;
-    'inspector/password':                   value => $password_real, secret => true;
-    'inspector/auth_url':                   value => $auth_url;
-    'inspector/project_name':               value => $project_name_real;
-    'inspector/user_domain_name':           value => $user_domain_name;
-    'inspector/project_domain_name':        value => $project_domain_name_real;
-    'inspector/system_scope':               value => $system_scope;
-    'inspector/region_name':                value => $region_name;
-    'inspector/endpoint_override':          value => $endpoint_override;
     'inspector/callback_endpoint_override': value => $callback_endpoint_override;
     'inspector/power_off':                  value => $power_off;
     'inspector/extra_kernel_params':        value => $extra_kernel_params;
@@ -161,5 +151,18 @@ class ironic::drivers::inspector (
     'inspector/keep_ports':                 value => $keep_ports;
     'inspector/hooks':                      value => $hooks;
     'inspector/physical_network_cidr_map':  value => $physical_network_cidr_map_real;
+  }
+
+  ironic_config {
+    'inspector/auth_type':           ensure => absent;
+    'inspector/username':            ensure => absent;
+    'inspector/password':            ensure => absent, secret => true;
+    'inspector/auth_url':            ensure => absent;
+    'inspector/project_name':        ensure => absent;
+    'inspector/user_domain_name':    ensure => absent;
+    'inspector/project_domain_name': ensure => absent;
+    'inspector/system_scope':        ensure => absent;
+    'inspector/region_name':         ensure => absent;
+    'inspector/endpoint_override':   ensure => absent;
   }
 }

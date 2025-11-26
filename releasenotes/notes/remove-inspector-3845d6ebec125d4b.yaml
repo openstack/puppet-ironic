@@ -2,3 +2,20 @@
 upgrade:
   - |
     Support for ironic-inspector has been removed.
+
+deprecations:
+  - |
+    The following parameters of the ``ironic::drivers::inspector`` class have
+    been deprecated and have no effect now.
+
+    - ``password``
+    - ``auth_type``
+    - ``auth_url``
+    - ``project_name``
+    - ``username``
+    - ``user_domain_name``
+    - ``project_domain_name``
+    - ``system_scope``
+    - ``region_name``
+    - ``endpoint_override``
+    - ``callback_endpoint_override``
