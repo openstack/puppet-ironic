@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``ironic::drivers::ilo`` class has been deprecated, and will be removed
+    in a future release, due to deprecation of iLO driver in ironic.

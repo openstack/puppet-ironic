@@ -10,6 +10,9 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+# == Class: ironic::drivers::ilo
+#
+# DEPRECATED !!
 # Configure the iLO driver in Ironic
 #
 # === Parameters
@@ -47,6 +50,8 @@ class ironic::drivers::ilo (
 ) {
   include ironic::deps
   include ironic::params
+
+  warning('iLO driver support is deprecated.')
 
   # Configure ironic.conf
   ironic_config {
