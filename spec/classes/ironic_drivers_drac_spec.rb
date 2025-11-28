@@ -22,9 +22,7 @@ describe 'ironic::drivers::drac' do
       it 'configures drac options' do
         is_expected.to contain_ironic_config('drac/query_raid_config_job_status_interval').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ironic_config('drac/boot_device_job_status_timeout').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_ironic_config('drac/config_job_max_retries').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ironic_config('drac/query_import_config_job_status_interval').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_ironic_config('drac/bios_factory_reset_timeout').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ironic_config('drac/raid_job_timeout').with_value('<SERVICE DEFAULT>')
       end
 
@@ -42,9 +40,7 @@ describe 'ironic::drivers::drac' do
         {
           :query_raid_config_job_status_interval   => 120,
           :boot_device_job_status_timeout          => 30,
-          :config_job_max_retries                  => 240,
           :query_import_config_job_status_interval => 0,
-          :bios_factory_reset_timeout              => 600,
           :raid_job_timeout                        => 300,
         }
       end
@@ -52,9 +48,7 @@ describe 'ironic::drivers::drac' do
       it 'configures drac options' do
         is_expected.to contain_ironic_config('drac/query_raid_config_job_status_interval').with_value(120)
         is_expected.to contain_ironic_config('drac/boot_device_job_status_timeout').with_value(30)
-        is_expected.to contain_ironic_config('drac/config_job_max_retries').with_value(240)
         is_expected.to contain_ironic_config('drac/query_import_config_job_status_interval').with_value(0)
-        is_expected.to contain_ironic_config('drac/bios_factory_reset_timeout').with_value(600)
         is_expected.to contain_ironic_config('drac/raid_job_timeout').with_value(300)
       end
     end

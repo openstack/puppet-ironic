@@ -27,44 +27,60 @@
 #   configuration.
 #   Defaults to $facts['os_service_default']
 #
-# [*config_job_max_retries*]
-#   (optional) Maximum number of retries for the configuration job to
-#   complete successfully
-#   Defaults to $facts['os_service_default']
-#
 # [*query_import_config_job_status_interval*]
 #   (optional) Number of seconds to wait between checking for completed
 #   import configuration task.
-#   Defaults to $facts['os_service_default']
-#
-# [*bios_factory_reset_timeout*]
-#   (optional) Maximum time (in seconds) to wait for factory reset of BIOS
-#   settings to complete.
 #   Defaults to $facts['os_service_default']
 #
 # [*raid_job_timeout*]
 #   (optional) Maximum time (in seconds) to wait for RAID job to complete.
 #   Defaults to $facts['os_service_default']
 #
+# DEPRECATED PARAMETERS
+#
+# [*config_job_max_retries*]
+#   (optional) Maximum number of retries for the configuration job to
+#   complete successfully
+#   Defaults to undef
+#
+# [*bios_factory_reset_timeout*]
+#   (optional) Maximum time (in seconds) to wait for factory reset of BIOS
+#   settings to complete.
+#   Defaults to undef
+#
 class ironic::drivers::drac (
   Stdlib::Ensure::Package $package_ensure  = 'present',
   $query_raid_config_job_status_interval   = $facts['os_service_default'],
   $boot_device_job_status_timeout          = $facts['os_service_default'],
-  $config_job_max_retries                  = $facts['os_service_default'],
   $query_import_config_job_status_interval = $facts['os_service_default'],
-  $bios_factory_reset_timeout              = $facts['os_service_default'],
   $raid_job_timeout                        = $facts['os_service_default'],
+  # DEPRECATED PARAMETERS
+  $config_job_max_retries                  = undef,
+  $bios_factory_reset_timeout              = undef,
 ) {
   include ironic::deps
   include ironic::params
 
+  [
+    'config_job_max_retries',
+    'bios_factory_reset_timeout',
+  ].each |String $deprecated_param| {
+    if getvar($deprecated_param) != undef {
+      warning("The ${deprecated_param} parameter is deprecated and has no effect.")
+    }
+  }
+
   ironic_config {
     'drac/query_raid_config_job_status_interval':   value => $query_raid_config_job_status_interval;
     'drac/boot_device_job_status_timeout':          value => $boot_device_job_status_timeout;
-    'drac/config_job_max_retries':                  value => $config_job_max_retries;
     'drac/query_import_config_job_status_interval': value => $query_import_config_job_status_interval;
-    'drac/bios_factory_reset_timeout':              value => $bios_factory_reset_timeout;
     'drac/raid_job_timeout':                        value => $raid_job_timeout;
+  }
+
+  # TODO(tkajinam): Remove this after 2026.1
+  ironic_config {
+    'drac/config_job_max_retries':     ensure => absent;
+    'drac/bios_factory_reset_timeout': ensure => absent;
   }
 
   package { 'python-sushy-oem-idrac':
