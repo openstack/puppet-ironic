@@ -1,0 +1,8 @@
+---
+deprecations:
+  - |
+    The following parameters of the ``ironic::drivers::drac`` class have been
+    deprecated and have no effect now.
+
+    - ``config_job_max_retries``
+    - ``bios_factory_reset_timeout``
