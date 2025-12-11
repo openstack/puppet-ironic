@@ -25,14 +25,6 @@ describe 'ironic::drivers::drac' do
         is_expected.to contain_ironic_config('drac/query_import_config_job_status_interval').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ironic_config('drac/raid_job_timeout').with_value('<SERVICE DEFAULT>')
       end
-
-      it 'installs sushy-oem-idrac package' do
-        is_expected.to contain_package('python-sushy-oem-idrac').with(
-          :ensure => 'present',
-          :name   => platform_params[:sushy_oem_idrac_package_name],
-          :tag    => ['openstack', 'ironic-package'],
-        )
-      end
     end
 
     context 'with parameters' do
@@ -60,15 +52,6 @@ describe 'ironic::drivers::drac' do
     context "on #{os}" do
       let (:facts) do
         facts.merge!(OSDefaults.get_facts())
-      end
-
-      let (:platform_params) do
-        case facts[:os]['family']
-        when 'Debian'
-          { :sushy_oem_idrac_package_name => 'python3-sushy-oem-idrac' }
-        when 'RedHat'
-          { :sushy_oem_idrac_package_name => 'python3-sushy-oem-idrac' }
-        end
       end
 
       it_behaves_like 'ironic drac driver'

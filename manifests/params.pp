@@ -30,7 +30,6 @@ class ironic::params {
   $group                        = 'ironic'
   $sushy_package_name           = 'python3-sushy'
   $proliantutils_package_name   = 'python3-proliantutils'
-  $sushy_oem_idrac_package_name = 'python3-sushy-oem-idrac'
 
   case $facts['os']['family'] {
     'RedHat': {

@@ -1,0 +1,7 @@
+---
+deprecations:
+  - |
+    The ``ironic::drivers::drac::package_ensure`` parameter is deprecated
+    and has no effect now. The ``ironic::drivers::drac`` class no longer
+    installs the ``python3-sushy-oem-idrac``, because this package is no longer
+    used by ironic.

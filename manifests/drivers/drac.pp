@@ -14,10 +14,6 @@
 #
 # === Parameters
 #
-# [*package_ensure*]
-#   (optional) The state of the sushy-oem-idrac package
-#   Defaults to 'present'
-#
 # [*query_raid_config_job_status_interval*]
 #   (optional) Interval (in seconds) between periodic RAID job status checks.
 #   Defaults to $facts['os_service_default']
@@ -48,8 +44,11 @@
 #   settings to complete.
 #   Defaults to undef
 #
+# [*package_ensure*]
+#   (optional) The state of the sushy-oem-idrac package
+#   Defaults to undef
+#
 class ironic::drivers::drac (
-  Stdlib::Ensure::Package $package_ensure  = 'present',
   $query_raid_config_job_status_interval   = $facts['os_service_default'],
   $boot_device_job_status_timeout          = $facts['os_service_default'],
   $query_import_config_job_status_interval = $facts['os_service_default'],
@@ -57,6 +56,7 @@ class ironic::drivers::drac (
   # DEPRECATED PARAMETERS
   $config_job_max_retries                  = undef,
   $bios_factory_reset_timeout              = undef,
+  $package_ensure                          = undef
 ) {
   include ironic::deps
   include ironic::params
@@ -64,6 +64,7 @@ class ironic::drivers::drac (
   [
     'config_job_max_retries',
     'bios_factory_reset_timeout',
+    'package_ensure',
   ].each |String $deprecated_param| {
     if getvar($deprecated_param) != undef {
       warning("The ${deprecated_param} parameter is deprecated and has no effect.")
@@ -81,11 +82,5 @@ class ironic::drivers::drac (
   ironic_config {
     'drac/config_job_max_retries':     ensure => absent;
     'drac/bios_factory_reset_timeout': ensure => absent;
-  }
-
-  package { 'python-sushy-oem-idrac':
-    ensure => $package_ensure,
-    name   => $ironic::params::sushy_oem_idrac_package_name,
-    tag    => ['openstack', 'ironic-package'],
   }
 }
