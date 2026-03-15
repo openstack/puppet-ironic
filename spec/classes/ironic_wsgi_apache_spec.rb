@@ -156,7 +156,7 @@ describe 'ironic::wsgi::apache' do
         when 'Debian'
             {
               :wsgi_script_path   => '/usr/lib/cgi-bin/ironic',
-              :wsgi_script_source => '/usr/bin/ironic-api-wsgi',
+              :wsgi_script_source => '/usr/lib/python3/dist-packages/ironic/wsgi/__init__.py',
             }
         when 'RedHat'
             {

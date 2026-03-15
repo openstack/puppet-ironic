@@ -78,7 +78,7 @@ class ironic::params {
       $uefi_pxe_bootfile_name       = 'bootx64.efi'
       $uefi_ipxe_bootfile_name      = 'snponly.efi'
       $ironic_wsgi_script_path      = '/usr/lib/cgi-bin/ironic'
-      $ironic_wsgi_script_source    = '/usr/bin/ironic-api-wsgi'
+      $ironic_wsgi_script_source    = '/usr/lib/python3/dist-packages/ironic/wsgi/__init__.py'
       $xinetd_available             = true
       $tftpd_package                = 'tftpd-hpa'
       $ipxe_package                 = 'ipxe'
