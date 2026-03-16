@@ -22,7 +22,7 @@
 class ironic::params {
   include openstacklib::defaults
 
-  $pyver3 = $openstacklib::defaults::pyver3
+  $pybasedir = $openstacklib::defaults::pybasedir
 
   $dbsync_command               = 'ironic-dbsync'
   $client_package               = 'python3-ironicclient'
@@ -48,7 +48,7 @@ class ironic::params {
       $uefi_pxe_bootfile_name       = 'bootx64.efi'
       $uefi_ipxe_bootfile_name      = 'snponly.efi'
       $ironic_wsgi_script_path      = '/var/www/cgi-bin/ironic'
-      $ironic_wsgi_script_source    = "/usr/lib/python${pyver3}/site-packages/ironic/wsgi/__init__.py"
+      $ironic_wsgi_script_source    = "${pybasedir}/ironic/wsgi/__init__.py"
       $xinetd_available             = false
       $tftpd_package                = undef
       $ipxe_package                 = 'ipxe-bootimgs'
@@ -78,7 +78,7 @@ class ironic::params {
       $uefi_pxe_bootfile_name       = 'bootx64.efi'
       $uefi_ipxe_bootfile_name      = 'snponly.efi'
       $ironic_wsgi_script_path      = '/usr/lib/cgi-bin/ironic'
-      $ironic_wsgi_script_source    = '/usr/lib/python3/dist-packages/ironic/wsgi/__init__.py'
+      $ironic_wsgi_script_source    = "${pybasedir}/ironic/wsgi/__init__.py"
       $xinetd_available             = true
       $tftpd_package                = 'tftpd-hpa'
       $ipxe_package                 = 'ipxe'
