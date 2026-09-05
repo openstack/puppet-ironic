@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The ``ironic::drivers::drac::package_ensure`` parameter has been removed.
