@@ -22,7 +22,6 @@ describe 'ironic::drivers::drac' do
       it 'configures drac options' do
         is_expected.to contain_ironic_config('drac/query_raid_config_job_status_interval').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ironic_config('drac/boot_device_job_status_timeout').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_ironic_config('drac/query_import_config_job_status_interval').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_ironic_config('drac/raid_job_timeout').with_value('<SERVICE DEFAULT>')
       end
     end
@@ -30,17 +29,15 @@ describe 'ironic::drivers::drac' do
     context 'with parameters' do
       let :params do
         {
-          :query_raid_config_job_status_interval   => 120,
-          :boot_device_job_status_timeout          => 30,
-          :query_import_config_job_status_interval => 0,
-          :raid_job_timeout                        => 300,
+          :query_raid_config_job_status_interval => 120,
+          :boot_device_job_status_timeout        => 30,
+          :raid_job_timeout                      => 300,
         }
       end
 
       it 'configures drac options' do
         is_expected.to contain_ironic_config('drac/query_raid_config_job_status_interval').with_value(120)
         is_expected.to contain_ironic_config('drac/boot_device_job_status_timeout').with_value(30)
-        is_expected.to contain_ironic_config('drac/query_import_config_job_status_interval').with_value(0)
         is_expected.to contain_ironic_config('drac/raid_job_timeout').with_value(300)
       end
     end

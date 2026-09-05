@@ -23,11 +23,6 @@
 #   configuration.
 #   Defaults to $facts['os_service_default']
 #
-# [*query_import_config_job_status_interval*]
-#   (optional) Number of seconds to wait between checking for completed
-#   import configuration task.
-#   Defaults to $facts['os_service_default']
-#
 # [*raid_job_timeout*]
 #   (optional) Maximum time (in seconds) to wait for RAID job to complete.
 #   Defaults to $facts['os_service_default']
@@ -44,14 +39,19 @@
 #   settings to complete.
 #   Defaults to undef
 #
+# [*query_import_config_job_status_interval*]
+#   (optional) Number of seconds to wait between checking for completed
+#   import configuration task.
+#   Defaults to undef
+#
 class ironic::drivers::drac (
   $query_raid_config_job_status_interval   = $facts['os_service_default'],
   $boot_device_job_status_timeout          = $facts['os_service_default'],
-  $query_import_config_job_status_interval = $facts['os_service_default'],
   $raid_job_timeout                        = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
   $config_job_max_retries                  = undef,
   $bios_factory_reset_timeout              = undef,
+  $query_import_config_job_status_interval = undef,
 ) {
   include ironic::deps
   include ironic::params
@@ -59,6 +59,7 @@ class ironic::drivers::drac (
   [
     'config_job_max_retries',
     'bios_factory_reset_timeout',
+    'query_import_config_job_status_interval',
   ].each |String $deprecated_param| {
     if getvar($deprecated_param) != undef {
       warning("The ${deprecated_param} parameter is deprecated and has no effect.")
@@ -66,15 +67,15 @@ class ironic::drivers::drac (
   }
 
   ironic_config {
-    'drac/query_raid_config_job_status_interval':   value => $query_raid_config_job_status_interval;
-    'drac/boot_device_job_status_timeout':          value => $boot_device_job_status_timeout;
-    'drac/query_import_config_job_status_interval': value => $query_import_config_job_status_interval;
-    'drac/raid_job_timeout':                        value => $raid_job_timeout;
+    'drac/query_raid_config_job_status_interval': value => $query_raid_config_job_status_interval;
+    'drac/boot_device_job_status_timeout':        value => $boot_device_job_status_timeout;
+    'drac/raid_job_timeout':                      value => $raid_job_timeout;
   }
 
   # TODO(tkajinam): Remove this after 2026.1
   ironic_config {
-    'drac/config_job_max_retries':     ensure => absent;
-    'drac/bios_factory_reset_timeout': ensure => absent;
+    'drac/config_job_max_retries':                  ensure => absent;
+    'drac/bios_factory_reset_timeout':              ensure => absent;
+    'drac/query_import_config_job_status_interval': ensure => absent;
   }
 }

@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``ironic::drivers::drac::query_import_config_job_status_interval``
+    parameter has been deprecated and has no effect now.
