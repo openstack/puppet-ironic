@@ -38,10 +38,12 @@
 #   (Optional) If set, use this value for pool_timeout with SQLAlchemy.
 #   Defaults to $facts['os_service_default']
 #
+# DEPRECATED PARAMETERS
+#
 # [*mysql_enable_ndb*]
 #   (Optional) If True, transparently enables support for handling MySQL
 #   Cluster (NDB).
-#   Defaults to $facts['os_service_default']
+#   Defaults to undef
 #
 class ironic::db (
   $database_connection              = 'sqlite:////var/lib/ironic/ovs.sqlite',
@@ -52,7 +54,8 @@ class ironic::db (
   $database_max_overflow            = $facts['os_service_default'],
   $database_db_max_retries          = $facts['os_service_default'],
   $database_pool_timeout            = $facts['os_service_default'],
-  $mysql_enable_ndb                 = $facts['os_service_default'],
+  # DEPRECATED PARAMETERS
+  $mysql_enable_ndb                 = undef,
 ) {
   include ironic::deps
 
