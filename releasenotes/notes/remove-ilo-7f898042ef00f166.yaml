@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The ``ironic::drivers::ilo`` class has been removed.
