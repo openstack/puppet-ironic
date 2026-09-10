@@ -12,7 +12,7 @@ describe 'ironic::db' do
         :max_pool_size           => '<SERVICE DEFAULT>',
         :max_retries             => '<SERVICE DEFAULT>',
         :pool_timeout            => '<SERVICE DEFAULT>',
-        :mysql_enable_ndb        => '<SERVICE DEFAULT>',
+        :mysql_enable_ndb        => nil,
         :retry_interval          => '<SERVICE DEFAULT>',
         :max_overflow            => '<SERVICE DEFAULT>',
       )}
