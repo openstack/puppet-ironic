@@ -1,0 +1,4 @@
+---
+deprecations:
+  - |
+    The ``ironic::policy::enforce_scope`` parameter has been deprecated.
